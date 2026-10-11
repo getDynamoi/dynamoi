@@ -505,16 +505,34 @@ export type GetCampaignAnalyticsJsonData = {
 	/** Count-read completeness; sample identifies the existing demo reader. Independent of spend/status notes. */
 	countsAvailability?: "available" | "incomplete" | "sample" | "not_linked";
 	/**
-	 * YouTube campaigns only, and only when the ad network reported it. The ad
-	 * network's own estimate of viewers who kept watching the artist's videos
-	 * after the ad; it includes the promoted-video watch and is not YouTube's
-	 * organic view count. `daily` appears with DAILY granularity.
+	 * YouTube campaigns only, and only when the ad network reported it. Organic
+	 * views directly attributed: follow-on views the ad account credits to the
+	 * campaign by click date (provisional for two days). The field name predates
+	 * that definition and is kept for compatibility. Whether the credit includes
+	 * the first watch after the click is unconfirmed. `daily` appears with DAILY
+	 * granularity.
 	 */
 	adNetworkReportedContinuedViews?: {
 		daily?: Array<{ date: string; views: number }>;
 		note: string;
 		total: number;
 	};
+	/**
+	 * YouTube campaigns only: present, as "pending", when organic views directly
+	 * attributed and subscribers are not available yet. They are withheld rather
+	 * than reported as zero, so an absent figure with this marker is not zero.
+	 */
+	directCreditAvailability?: { note: string; status: "pending" };
+	/**
+	 * YouTube campaigns only: subscriptions the ad account credits to the
+	 * campaign (all_conversions by click date, provisional for two days).
+	 */
+	subscribersDirectlyAttributed?: { note: string; total: number };
+	/**
+	 * YouTube campaigns only: viewers who clicked the ad through to the YouTube
+	 * watch page (Google Ads clicks). Not interactions and not TrueView views.
+	 */
+	viewsThroughAd?: { note: string; total: number };
 	campaignId: string;
 	contentTitle: string;
 	status: CampaignDisplayStatus;

@@ -34,7 +34,7 @@ const VIEWS_PER_AD_CLICK_SIGNAL =
 const CHEAP_VIEWS_MISLEAD =
 	"A low cost per click or per ad network view with no organic lift is a miss, not a win.";
 const CONTINUED_VIEWS_MISLEAD =
-	"Ad network-reported continued views are the ad network's own estimate. They include the promoted-video watch and are not organic proof.";
+	"Ad network-credited continued views are the organic views directly attributed to the campaign by click date. Do not say whether they include the first watch after the click, and they are not proof of overall organic growth.";
 const TRAFFIC_SOURCE_MISLEAD =
 	"YouTube traffic sources are not organic proof: PLAYLIST and SUBSCRIBER views during the campaign are mostly ad sessions, and only a small share of ad-driven views is tagged ADVERTISING.";
 
@@ -159,7 +159,7 @@ const VOCABULARY = {
 	adNetwork:
 		"Dynamoi YouTube campaigns run on Google's ad network and serve on YouTube. When reporting to users, say 'the ad network' (you may name Google once); do not repeat 'Google Ads'.",
 	adNetworkReportedContinuedViews:
-		"The ad network's own estimate of viewers who kept watching the artist's videos after the ad. It includes the promoted-video watch and is not YouTube's count; use it to understand what the ad network optimizes toward, never as organic views or organic proof.",
+		"Organic views directly attributed: continued views of the artist's videos that the ad account credits to the campaign, by click date and provisional for two days. Do not claim whether the count includes the first watch after the click. It is not YouTube's channel view count and not proof of overall organic growth.",
 	advertisingSourceViews:
 		"Channel views YouTube tags with traffic source ADVERTISING. It undercounts ad-driven views: an ad click that lands in a playlist is credited mostly to PLAYLIST and SUBSCRIBER, not ADVERTISING.",
 	campaignPeriodLift:

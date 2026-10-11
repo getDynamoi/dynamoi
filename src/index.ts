@@ -216,3 +216,18 @@ export type {
 	UpdateSmartLinkData,
 } from "./types";
 export { DYNAMOI_MCP_VERSION } from "./version";
+export {
+	getYouTubeMetric,
+	YOUTUBE_AGENT_KNOWLEDGE,
+	YOUTUBE_CHANNEL_ANALYTICS_LAG_DAYS,
+	YOUTUBE_DIRECT_ORGANIC_VIEWS_NOTE,
+	YOUTUBE_FOLLOW_ON_VIEWS_CONVERSION_ACTION_ID,
+	YOUTUBE_METRIC_DICTIONARY,
+	YOUTUBE_METRIC_IDS,
+	YOUTUBE_PROVISIONAL_CONVERSION_DAYS,
+	YOUTUBE_SUBSCRIBERS_CONVERSION_ACTION_ID,
+	type YouTubeFreshnessClock,
+	type YouTubeMetricClass,
+	type YouTubeMetricDefinition,
+	type YouTubeMetricId,
+} from "./youtube-metrics";

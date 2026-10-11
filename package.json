@@ -59,6 +59,11 @@
 			"types": "./dist/consent.d.ts",
 			"import": "./dist/consent.js",
 			"default": "./dist/consent.js"
+		},
+		"./youtube-metrics": {
+			"types": "./dist/youtube-metrics.d.ts",
+			"import": "./dist/youtube-metrics.js",
+			"default": "./dist/youtube-metrics.js"
 		}
 	},
 	"publishConfig": {

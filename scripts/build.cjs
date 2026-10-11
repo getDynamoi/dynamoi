@@ -79,6 +79,7 @@ async function build({ packageVersion, typescriptCli }) {
 				path.join(sourceRoot, "index.ts"),
 				path.join(sourceRoot, "auth/protected-resource.ts"),
 				path.join(sourceRoot, "consent.ts"),
+				path.join(sourceRoot, "youtube-metrics.ts"),
 			],
 			external: [
 				"@modelcontextprotocol/client",

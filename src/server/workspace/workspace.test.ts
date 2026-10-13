@@ -379,6 +379,9 @@ test("workspace preserves typed rate-limit recovery from readers", async () => {
 });
 
 test("actual pending and unavailable channel contracts retain bounded availability without provider reasons", () => {
+	if (channelFixture.status !== "available") {
+		throw new Error("Expected channelFixture to be available");
+	}
 	const provenance = channelFixture.channelMetrics.provenance;
 	const pending = ChannelResultsSchema.parse({
 		coverage: {
@@ -397,6 +400,9 @@ test("actual pending and unavailable channel contracts retain bounded availabili
 		reason: "private-provider-token",
 		status: "unavailable",
 	});
+	if (pending.status !== "pending" || unavailable.status !== "unavailable") {
+		throw new Error("Unexpected parsed channel status");
+	}
 	for (const channelResults of [pending, unavailable]) {
 		const record = projectRecord("campaign", { channelResults, id: artistId });
 		expect(record.channel).toBeUndefined();

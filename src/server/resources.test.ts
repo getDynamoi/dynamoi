@@ -30,12 +30,19 @@ async function readResource(uri: string) {
 	return result;
 }
 
+function readResourceText(
+	result: Awaited<ReturnType<typeof readResource>>,
+): string {
+	const content = result.contents[0];
+	return content && "text" in content ? content.text : "";
+}
+
 describe("registerDynamoiResources persona playbooks", () => {
 	test("dynamoi://playbooks/spotify-artist returns guidance for Spotify artists", async () => {
 		const result = await readResource("dynamoi://playbooks/spotify-artist");
 		const content = result.contents[0];
 		expect(content?.mimeType).toBe("application/json");
-		const parsed = JSON.parse(String(content?.text ?? ""));
+		const parsed = JSON.parse(readResourceText(result));
 		expect(parsed.fastestPath).toContain(
 			"dynamoi_create_smart_links_from_spotify_artist",
 		);
@@ -45,7 +52,7 @@ describe("registerDynamoiResources persona playbooks", () => {
 
 	test("dynamoi://playbooks/youtube-creator explains goal-based campaign differentiator", async () => {
 		const result = await readResource("dynamoi://playbooks/youtube-creator");
-		const parsed = JSON.parse(String(result.contents[0]?.text ?? ""));
+		const parsed = JSON.parse(readResourceText(result));
 		expect(parsed.differentiator).toContain("organic lift");
 		expect(parsed.differentiator).not.toContain("revenue per country");
 		expect(parsed.channelLinkingPath).toContain(
@@ -58,14 +65,14 @@ describe("registerDynamoiResources persona playbooks", () => {
 
 	test("dynamoi://playbooks/label-or-manager covers organization roles", async () => {
 		const result = await readResource("dynamoi://playbooks/label-or-manager");
-		const parsed = JSON.parse(String(result.contents[0]?.text ?? ""));
+		const parsed = JSON.parse(readResourceText(result));
 		expect(parsed.rolesNote).toContain("admin, editor, and viewer");
 		expect(parsed.persona).toContain("Label");
 	});
 
 	test("dynamoi://playbooks/onboarding-tree mirrors the get_account_overview state branches", async () => {
 		const result = await readResource("dynamoi://playbooks/onboarding-tree");
-		const parsed = JSON.parse(String(result.contents[0]?.text ?? ""));
+		const parsed = JSON.parse(readResourceText(result));
 		expect(Array.isArray(parsed.nodes)).toBe(true);
 		expect(parsed.nodes[0].if).toContain("hasAnyArtist === false");
 		const conditions = parsed.nodes.map(
@@ -84,7 +91,7 @@ describe("registerDynamoiResources persona playbooks", () => {
 
 	test("dynamoi://mcp/tool-answering-rules now includes the empty-state rule", async () => {
 		const result = await readResource("dynamoi://mcp/tool-answering-rules");
-		const parsed = JSON.parse(String(result.contents[0]?.text ?? ""));
+		const parsed = JSON.parse(readResourceText(result));
 		expect(parsed.emptyStateRule).toContain(
 			"If the request identifies an artist, campaign, or Smart Link, use the targeted read directly.",
 		);
@@ -105,7 +112,7 @@ describe("registerDynamoiResources persona playbooks", () => {
 describe("registerDynamoiResources YouTube strategies", () => {
 	test("dynamoi://youtube/campaign-strategies explains every strategy and the playlist waterfall", async () => {
 		const result = await readResource("dynamoi://youtube/campaign-strategies");
-		const parsed = JSON.parse(String(result.contents[0]?.text ?? ""));
+		const parsed = JSON.parse(readResourceText(result));
 		expect(parsed.strategies).toHaveLength(5);
 		expect(parsed.playlistWaterfall.measurementLimits).toContain(
 			"does not follow individual viewers",
@@ -117,7 +124,7 @@ describe("registerDynamoiResources YouTube strategies", () => {
 describe("registerDynamoiResources pricing", () => {
 	test("dynamoi://platform/pricing publishes the enforced budget minimums", async () => {
 		const result = await readResource("dynamoi://platform/pricing");
-		const parsed = JSON.parse(String(result.contents[0]?.text ?? ""));
+		const parsed = JSON.parse(readResourceText(result));
 		expect(parsed.budgetMinimums.smartCampaign).toMatchObject({
 			dailyUsd: 10,
 			totalUsd: 50,

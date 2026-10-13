@@ -2,6 +2,19 @@ import { expect, test } from "bun:test";
 import { Client, InMemoryTransport } from "@modelcontextprotocol/client";
 import { createDynamoiMcpServer, type Phase3Adapter } from "./create-server";
 
+function buildStubAdapter(overrides: Partial<Phase3Adapter>): Phase3Adapter {
+	const stub = async () => ({
+		message: "Adapter method not used in tests.",
+		status: "error" as const,
+	});
+	return new Proxy({} as Phase3Adapter, {
+		get: (_target, property) =>
+			typeof property === "string" && property in overrides
+				? overrides[property as keyof Phase3Adapter]
+				: stub,
+	});
+}
+
 // Public server boundary: the dashboard test verifies safe inner failure propagation.
 test("public search observes one safe failed invocation", async () => {
 	const failure = {
@@ -12,12 +25,12 @@ test("public search observes one safe failed invocation", async () => {
 	const observations: string[] = [];
 	let innerCalls = 0;
 	const server = createDynamoiMcpServer({
-		adapter: {
+		adapter: buildStubAdapter({
 			openAiSearch: async () => {
 				innerCalls += 1;
 				return failure;
 			},
-		} as Phase3Adapter,
+		}),
 		onToolCall: (observation) => {
 			observations.push(observation.toolName);
 		},

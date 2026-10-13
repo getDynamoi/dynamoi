@@ -368,8 +368,8 @@ describe("createDynamoiMcpServer", () => {
 	});
 
 	test("answers a denied tool call with the host's step-up result through the SDK", async () => {
-		const listArtists = mock(async () => ({
-			data: { summary: "Should not run." },
+		const listArtists = mock(async (_input?: unknown) => ({
+			data: { summary: "Should not run.", totalCount: 0 },
 			status: "success" as const,
 		}));
 		const challenge =
@@ -477,6 +477,9 @@ describe("createDynamoiMcpServer", () => {
 
 	test("directory About variant omits pricing, plans, and Shop purchase surfaces", () => {
 		const directory = getDynamoiAbout({ toolProfile: "directory" });
+		if (directory.status !== "success") {
+			throw new Error("Expected directory status to be success");
+		}
 		expect(directory.data.markdown).not.toContain("pricing");
 		expect(directory.data.markdown).not.toContain("Shop");
 		expect(directory.data.markdown).not.toContain("$10/day");
@@ -489,6 +492,9 @@ describe("createDynamoiMcpServer", () => {
 		expect(directory.data.links.pricing).toBeUndefined();
 		expect(directory.data.links.signIn).toBe("https://dynamoi.com");
 		const full = getDynamoiAbout({ toolProfile: "full" });
+		if (full.status !== "success") {
+			throw new Error("Expected full status to be success");
+		}
 		expect(full.data.markdown).toContain("pricing");
 		expect(full.data.markdown).toContain("Shop");
 		expect(full.data.markdown).toContain(
@@ -496,9 +502,11 @@ describe("createDynamoiMcpServer", () => {
 		);
 		expect(full.data.links.pricing).toBe("https://dynamoi.com/pricing");
 		// Missing profile fails closed to the directory variant.
-		expect(getDynamoiAbout().data.markdown).toBe(
-			DYNAMOI_ABOUT_DIRECTORY_MARKDOWN,
-		);
+		const fallback = getDynamoiAbout();
+		if (fallback.status !== "success") {
+			throw new Error("Expected fallback status to be success");
+		}
+		expect(fallback.data.markdown).toBe(DYNAMOI_ABOUT_DIRECTORY_MARKDOWN);
 	});
 
 	test("About copy uses the approved company framing", () => {
@@ -513,7 +521,11 @@ describe("createDynamoiMcpServer", () => {
 
 	test("About copy carries the canonical /about company facts in both variants", () => {
 		for (const toolProfile of ["full", "directory"] as const) {
-			const { data } = getDynamoiAbout({ toolProfile });
+			const about = getDynamoiAbout({ toolProfile });
+			if (about.status !== "success") {
+				throw new Error("Expected about status to be success");
+			}
+			const { data } = about;
 			for (const fact of [
 				"music marketing platform founded in 2021 by Trevor Loucks",
 				"Sioux Falls, South Dakota",
@@ -762,7 +774,9 @@ describe("createDynamoiMcpServer", () => {
 				mimeType: "text/html;profile=mcp-app",
 				uri: SMART_LINK_THEME_PREVIEW_RESOURCE_URI,
 			});
-			const widgetHtml = resource.contents[0]?.text;
+			const firstContent = resource.contents[0];
+			const widgetHtml =
+				firstContent && "text" in firstContent ? firstContent.text : undefined;
 			expect(widgetHtml).toContain("Smart Link themes");
 			expect(widgetHtml).not.toContain(".innerHTML");
 
@@ -1160,10 +1174,10 @@ describe("createDynamoiMcpServer", () => {
 
 		const result = asTextResult(envelope);
 
-		expect(result.content[0].text).toContain(
+		expect(result.content[0]?.text).toContain(
 			"Public URL: https://play.dynamoi.com/92-keys/song",
 		);
-		expect(result.content[0].text).not.toContain(
+		expect(result.content[0]?.text).not.toContain(
 			"11111111-1111-4111-8111-111111111111",
 		);
 		expect(result.structuredContent).toEqual(envelope);

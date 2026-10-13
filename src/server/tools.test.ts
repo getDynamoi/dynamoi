@@ -56,10 +56,10 @@ import {
 } from "./tools";
 import { PHASE_3_TOOL_DEFINITIONS } from "./workflow-tools";
 
-function getToolDefinition(
-	definitions: readonly { description: string; name: string }[],
+function getToolDefinition<T extends { description: string; name: string }>(
+	definitions: readonly T[],
 	name: string,
-) {
+): T {
 	const definition = definitions.find((candidate) => candidate.name === name);
 	if (!definition) {
 		throw new Error(`Missing tool definition: ${name}`);
@@ -558,7 +558,7 @@ describe("mcp/tools phase 2 definitions", () => {
 			"ARCHIVED",
 			"FAILED",
 			"ENDED",
-		]) {
+		] as const) {
 			const parsed = DynamoiUpdateCampaignInputSchema.parse({
 				action: "pause",
 				campaignId: "00000000-0000-0000-0000-000000000000",

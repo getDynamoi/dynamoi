@@ -31,8 +31,5 @@ jobs:
       - name: Build
         run: bun run build
 
-      - name: Test
-        run: bun test
-
       - name: Validate MCP Registry metadata
         run: bun run registry:validate

@@ -904,7 +904,7 @@ function snapshotForObserver(value: unknown) {
 	}
 }
 
-export function asTextResult(envelope: unknown) {
+function asTextResult(envelope: unknown) {
 	const isToolError =
 		Boolean(envelope) &&
 		typeof envelope === "object" &&
@@ -950,7 +950,7 @@ export function asTextResult(envelope: unknown) {
 	return result;
 }
 
-export function asValidatedTextResult(options: {
+function asValidatedTextResult(options: {
 	envelope: unknown;
 	outputSchema: z.ZodType;
 	toolName: string;

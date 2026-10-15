@@ -72,7 +72,7 @@
 	"scripts": {
 		"build": "bun scripts/build.cjs",
 		"dev": "bun scripts/build.cjs --watch",
-		"typecheck": "bun ../../scripts/validate/with-heavy-slot.ts --class typecheck --wait-timeout-minutes 60 -- tsc --noEmit -p tsconfig.json",
+		"typecheck": "tsc --noEmit -p tsconfig.json",
 		"registry:validate": "bun scripts/registry-contract.ts local",
 		"registry:wait:npm": "bun scripts/registry-contract.ts npm --attempts 24 --delay-ms 5000",
 		"registry:wait:official": "bun scripts/registry-contract.ts registry --attempts 24 --delay-ms 5000",

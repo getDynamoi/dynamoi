@@ -7,6 +7,8 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-10-15
+
 ### Added
 
 - **YouTube metric dictionary.** `@dynamoi/mcp/youtube-metrics` is the single owner of what each YouTube number is, its source field, freshness clock and the claims agents must not make. `dynamoi_get_campaign` `analytics` for YouTube campaigns additively returns `viewsThroughAd` (Google Ads clicks) and `subscribersDirectlyAttributed` (credited by the ad account). `totals.clicks` is unchanged.
@@ -24,6 +26,8 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   read it can connect to `https://dynamoi.com/mcp`.
 
 ### Changed
+
+- Publish map-free artifacts with an exact file allowlist (#7717).
 
 - **YouTube strategy names.** The strategies are now labeled Views, Watch Time,
   Subscribers, Channel Growth and Revenue (formerly Maximize Views, Organic

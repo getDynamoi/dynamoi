@@ -1,7 +1,9 @@
 const path = require("node:path");
-const root = path.resolve(__dirname, "..");
+const { policy, checkWorkspace } = require("./inputs.cjs");
+const root = require("node:fs").realpathSync(path.resolve(__dirname, ".."));
 async function buildWorkspace(check = false) {
- const build = await Bun.build({ entrypoints: [path.join(root, "src/server/workspace/browser.ts")], target: "browser", format: "iife", minify: true, splitting: false });
+ checkWorkspace();
+ const build = await Bun.build({ entrypoints: [path.join(root, "src/server/workspace/browser.ts")], plugins: [policy(true).plugin], sourcemap: "none", target: "browser", format: "iife", minify: true, splitting: false });
  if (!build.success || build.outputs.length !== 1) throw new Error(`Workspace bundle failed: ${build.logs.join("\n")}`);
  const script = await build.outputs[0].text();
  const literal = "`" + script.replaceAll("\\", "\\\\").replaceAll("`", "\\`").replaceAll("${", "\\${").replaceAll("\r", "\\r").replaceAll("\n", "\\n").replaceAll("\u2028", "\\u2028").replaceAll("\u2029", "\\u2029") + "`";
@@ -9,6 +11,7 @@ async function buildWorkspace(check = false) {
  const file = Bun.file(path.join(root, "src/server/workspace/workspace-script.generated.ts"));
  if (check) { if (!await file.exists() || await file.text() !== output) throw new Error("Workspace bundle is stale. Run bun scripts/build-workspace.cjs in packages/mcp."); }
  else if (!await file.exists() || await file.text() !== output) await Bun.write(file, output);
+ return script;
 }
 module.exports = { buildWorkspace };
 if (require.main === module) buildWorkspace(process.argv.includes("--check")).catch(error => { console.error(error.message); process.exitCode = 1; });

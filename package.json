@@ -38,11 +38,39 @@
 	"types": "./dist/index.d.ts",
 	"files": [
 		"CAPABILITY_PARITY.md",
-		"dist",
-		"server.json",
-		"README.md",
 		"CHANGELOG.md",
-		"LICENSE"
+		"LICENSE",
+		"README.md",
+		"dist/auth/protected-resource.d.ts",
+		"dist/auth/protected-resource.js",
+		"dist/consent.d.ts",
+		"dist/consent.js",
+		"dist/flow-types.d.ts",
+		"dist/index.d.ts",
+		"dist/index.js",
+		"dist/readiness-types.d.ts",
+		"dist/server/about.d.ts",
+		"dist/server/account-schema.generated.d.ts",
+		"dist/server/channel-results-schema.d.ts",
+		"dist/server/create-server.d.ts",
+		"dist/server/distribution-tools.d.ts",
+		"dist/server/messaging.d.ts",
+		"dist/server/openai-tools.d.ts",
+		"dist/server/output-schemas.d.ts",
+		"dist/server/shop-tools.d.ts",
+		"dist/server/smart-link-tools.d.ts",
+		"dist/server/tools.d.ts",
+		"dist/server/workflow-tools.d.ts",
+		"dist/server/workspace/data.d.ts",
+		"dist/server/workspace/tool.d.ts",
+		"dist/server/youtube-channel-data-schema.d.ts",
+		"dist/server/youtube-strategy-guide.d.ts",
+		"dist/transport/http.d.ts",
+		"dist/types.d.ts",
+		"dist/version.d.ts",
+		"dist/youtube-metrics.d.ts",
+		"dist/youtube-metrics.js",
+		"server.json"
 	],
 	"exports": {
 		".": {
@@ -78,7 +106,8 @@
 		"registry:wait:official": "bun scripts/registry-contract.ts registry --attempts 24 --delay-ms 5000",
 		"changeset": "changeset",
 		"changeset:version": "changeset version",
-		"changeset:publish": "changeset publish"
+		"changeset:publish": "changeset publish",
+		"prepack": "bun scripts/build.cjs"
 	},
 	"dependencies": {
 		"@modelcontextprotocol/server": "2.1.0",
@@ -89,6 +118,7 @@
 		"@modelcontextprotocol/client": "2.1.0",
 		"@modelcontextprotocol/ext-apps": "2.0.3",
 		"@types/node": "25.6.0",
-		"typescript": "7.0.2"
+		"typescript": "7.0.2",
+		"typescript-6-compat": "npm:typescript@6.0.3"
 	}
 }

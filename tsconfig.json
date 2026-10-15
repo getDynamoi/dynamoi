@@ -26,8 +26,8 @@
 		"rootDir": "src",
 		"incremental": false,
 		"declaration": true,
-		"declarationMap": true,
-		"sourceMap": true,
+		"declarationMap": false,
+		"sourceMap": false,
 		"noEmit": false,
 		"skipLibCheck": true,
 		"types": ["node"]

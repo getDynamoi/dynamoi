@@ -1,55 +1,19 @@
 const {
 	existsSync,
 	mkdtempSync,
+	realpathSync,
 	renameSync,
 	rmSync,
 	watch: watchFiles,
 } = require("node:fs");
 const path = require("node:path");
 
-const packageRoot = path.resolve(__dirname, "..");
+const packageRoot = realpathSync(path.resolve(__dirname, ".."));
 const sourceRoot = path.join(packageRoot, "src");
 const outputRoot = path.join(packageRoot, "dist");
 const watch = process.argv.includes("--watch");
+const { metadata, publicRoots, policy, declarations, inventory, packageInventory, fail } = require("./inputs.cjs");
 const { buildWorkspace } = require("./build-workspace.cjs");
-
-async function loadBuildMetadata() {
-	const typescriptPackagePath = Bun.resolveSync(
-		"typescript/package.json",
-		packageRoot,
-	);
-	const [packageMetadata, typescriptPackage] = await Promise.all([
-		Bun.file(path.join(packageRoot, "package.json")).json(),
-		Bun.file(typescriptPackagePath).json(),
-	]);
-
-	return {
-		packageVersion: packageMetadata.version,
-		typescriptCli: path.resolve(
-			path.dirname(typescriptPackagePath),
-			typescriptPackage.bin.tsc,
-		),
-	};
-}
-
-function emitDeclarations(typescriptCli, outdir) {
-	const result = Bun.spawnSync({
-		cmd: [
-			process.execPath,
-			typescriptCli,
-			"--emitDeclarationOnly",
-			"--outDir",
-			outdir,
-		],
-		cwd: packageRoot,
-		stdin: "inherit",
-		stdout: "inherit",
-		stderr: "inherit",
-	});
-	if (result.exitCode !== 0) {
-		throw new Error("TypeScript declaration generation failed");
-	}
-}
 
 function replaceOutput(stagingRoot, nextOutputRoot) {
 	const previousOutputRoot = path.join(stagingRoot, "previous");
@@ -66,32 +30,23 @@ function replaceOutput(stagingRoot, nextOutputRoot) {
 	}
 }
 
-async function build({ packageVersion, typescriptCli }) {
+async function build() {
 	await buildWorkspace();
 	const stagingRoot = mkdtempSync(path.join(packageRoot, ".mcp-build-"));
 	const nextOutputRoot = path.join(stagingRoot, "next");
 	try {
 		const result = await Bun.build({
 			define: {
-				__DYNAMOI_MCP_VERSION__: JSON.stringify(packageVersion),
+				__DYNAMOI_MCP_VERSION__: JSON.stringify(metadata.version),
 			},
-			entrypoints: [
-				path.join(sourceRoot, "index.ts"),
-				path.join(sourceRoot, "auth/protected-resource.ts"),
-				path.join(sourceRoot, "consent.ts"),
-				path.join(sourceRoot, "youtube-metrics.ts"),
-			],
-			external: [
-				"@modelcontextprotocol/client",
-				"@modelcontextprotocol/server",
-				"zod",
-			],
+			entrypoints: publicRoots,
+			plugins: [policy().plugin],
 			format: "esm",
 			minify: false,
 			outdir: nextOutputRoot,
 			root: sourceRoot,
-			sourcemap: "linked",
-			splitting: true,
+			sourcemap: "none",
+			splitting: false,
 			target: "node",
 		});
 
@@ -103,7 +58,13 @@ async function build({ packageVersion, typescriptCli }) {
 		}
 
 		try {
-			emitDeclarations(typescriptCli, nextOutputRoot);
+			const types = declarations(nextOutputRoot);
+			const expected = [...publicRoots.map(file => path.relative(sourceRoot, file).replace(/\.ts$/, ".js")), ...types];
+			inventory(nextOutputRoot, expected);
+			const docs = ["CAPABILITY_PARITY.md", "server.json", "README.md", "CHANGELOG.md", "LICENSE"];
+			if ([...metadata.files].sort().join() !== [...docs, ...expected.map(file => `dist/${file}`)].sort().join()) fail();
+			packageInventory(nextOutputRoot, expected);
+
 		} catch (error) {
 			console.error(error);
 			return false;
@@ -120,8 +81,7 @@ async function build({ packageVersion, typescriptCli }) {
 }
 
 async function main() {
-	const metadata = await loadBuildMetadata();
-	if (!(await build(metadata)) && !watch) {
+	if (!(await build()) && !watch) {
 		process.exitCode = 1;
 		return;
 	}
@@ -141,7 +101,7 @@ async function main() {
 		activeBuild = (async () => {
 			do {
 				rebuildQueued = false;
-				await build(metadata);
+				await build();
 			} while (rebuildQueued);
 		})();
 		try {

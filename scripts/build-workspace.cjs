@@ -1,7 +1,16 @@
 const path = require("node:path");
-const { policy, checkWorkspace } = require("./inputs.cjs");
+const { metadata, policy, checkWorkspace } = require("./inputs.cjs");
 const root = require("node:fs").realpathSync(path.resolve(__dirname, ".."));
 async function buildWorkspace(check = false) {
+ // Bun's bundler output changes between releases, including dependency layout.
+ // Use the package's pinned compiler even when a build owner runs another Bun.
+ if (`bun@${Bun.version}` !== metadata.packageManager) {
+  return require("node:child_process").execFileSync(process.execPath, [
+   "x", metadata.packageManager, "-e",
+   'require(process.argv[1]).buildWorkspace(process.argv[2] === "true").then(script => process.stdout.write(script))',
+   __filename, String(check),
+  ], { encoding: "utf8", maxBuffer: 4 * 1024 * 1024 });
+ }
  checkWorkspace();
  const build = await Bun.build({ entrypoints: [path.join(root, "src/server/workspace/browser.ts")], plugins: [policy(true).plugin], sourcemap: "none", target: "browser", format: "iife", minify: true, splitting: false });
  if (!build.success || build.outputs.length !== 1) throw new Error(`Workspace bundle failed: ${build.logs.join("\n")}`);

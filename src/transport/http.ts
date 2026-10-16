@@ -74,7 +74,7 @@ async function handleLegacyRequest(options: HandleOptions): Promise<Response> {
 		if (!closed) {
 			closed = true;
 			options.request.signal.removeEventListener("abort", close);
-			void server.close().catch(() => undefined);
+			void server.close().catch(console.error);
 		}
 	};
 	options.request.signal.addEventListener("abort", close, { once: true });

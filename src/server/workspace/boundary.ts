@@ -80,7 +80,8 @@ export async function openLinkMessage(
 		if (!result.isError) {
 			return "Public Smart Link opened through your host.";
 		}
-	} catch {
+	} catch (error) {
+		console.error("Workspace host could not open the public link", error);
 		/* A declined or failed host request has the same safe fallback. */
 	}
 	return "The host could not open this link. Copy the displayed public URL to open it yourself.";

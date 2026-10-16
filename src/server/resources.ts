@@ -18,7 +18,7 @@ export function registerDynamoiResources(
 		"dynamoi://platform/pricing",
 		{
 			description:
-				"Dynamoi campaign setup guidance and campaign budget minimums.",
+				"USD reference budget minima. Check artist readiness for the billing currency and applicable minimums.",
 			mimeType: "application/json",
 			title: "Pricing",
 		},
@@ -28,6 +28,7 @@ export function registerDynamoiResources(
 					mimeType: "application/json",
 					text: JSON.stringify({
 						budgetMinimums: {
+							note: "USD reference minima; use artist readiness for actual billing currency and budget minimums.",
 							smartCampaign: {
 								dailyUsd: USD_BUDGET_MINIMUMS.smartCampaign.dailyUsd,
 								note: "Meta Ads for Spotify promotion",

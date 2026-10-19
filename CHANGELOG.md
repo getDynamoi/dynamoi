@@ -7,6 +7,10 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- **AdSense in `dynamoi_get_youtube_channel_data`.** The first page additively carries one `adsense` block (with `windowFromDay`, `windowThroughDay`, `windowDays` for the days it covers, and an `adsenseNote`), the figures the Dynamoi dashboard and app show: long-form versus Shorts AdSense revenue and RPM, each campaign's incremental AdSense and earned back versus billed, and country AdSense per ad playback against similar channels. It is estimated, not a payout; building or unavailable states mean unknown, not zero. It is null outside the YouTube Partner Program, on later pages, or when temporarily unavailable.
+
 ## [1.0.2] - 2026-10-15
 
 ### Added

@@ -131,8 +131,88 @@ const YouTubeChannelDataCampaignSchema = z
 	})
 	.strict();
 
+const nullableNumber = z.number().nullable();
+const nullableInt = z.number().int().nullable();
+
+const YouTubeAdsenseFormatSchema = z
+	.object({
+		revenueUsd: nullableNumber,
+		rpmUsd: nullableNumber,
+		views: nullableInt,
+	})
+	.strict();
+
+/**
+ * The AdSense figures the Dynamoi dashboard and mobile app show, from the same
+ * readers. Estimated, never a payout. Fields outside `state` are null when the
+ * recovery is not ready.
+ */
+const YouTubeAdsenseSchema = z
+	.object({
+		campaigns: z.array(
+			z
+				.object({
+					billedUsd: z.number(),
+					campaignId: z.string(),
+					countsThroughDay: z.string().nullable(),
+					daysToGo: nullableInt,
+					earnedBack: nullableNumber,
+					incrementalUsd: nullableNumber,
+					status: z.enum(["counting", "final", "unmeasured"]),
+					title: z.string().nullable(),
+				})
+				.strict(),
+		),
+		countries: z.array(
+			z
+				.object({
+					adsensePerAdPlaybackUsd: nullableNumber,
+					code: z.string(),
+					name: z.string().nullable(),
+					peerAdsensePerAdPlaybackUsd: nullableNumber,
+					peerDelta: nullableNumber,
+					revenueUsd: z.number(),
+					targeted: z.boolean(),
+				})
+				.strict(),
+		),
+		formats: z
+			.object({
+				longForm: YouTubeAdsenseFormatSchema,
+				shorts: YouTubeAdsenseFormatSchema,
+				throughDay: z.string(),
+			})
+			.strict()
+			.nullable(),
+		recovery: z
+			.object({
+				aboveSwing: z.boolean().nullable(),
+				billedUsd: nullableNumber,
+				daysCounted: nullableInt,
+				daysNeeded: nullableInt,
+				earnedBack: nullableNumber,
+				incrementalUsd: nullableNumber,
+				sinceDay: z.string().nullable(),
+				state: z.enum(["ready", "building", "unavailable"]),
+				swingUsd: nullableNumber,
+				throughDay: z.string().nullable(),
+				unavailableReason: z
+					.enum(["baseline", "billing", "no_campaign", "read_failed"])
+					.nullable(),
+			})
+			.strict()
+			.nullable(),
+		/** The days the figures cover; not always the requested range. */
+		windowDays: z.number().int(),
+		windowFromDay: z.string(),
+		windowThroughDay: z.string(),
+	})
+	.strict();
+
 export const YouTubeChannelDataSchema = z
 	.object({
+		adsense: YouTubeAdsenseSchema.nullable(),
+		adsenseNote: z.string(),
 		artistId: z.string(),
 		campaigns: z.array(YouTubeChannelDataCampaignSchema),
 		channelId: z.string(),

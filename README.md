@@ -145,6 +145,20 @@ Or add the server to `~/.codex/config.toml` and run `codex mcp login dynamoi`:
 url = "https://dynamoi.com/mcp"
 ```
 
+### OpenClaw
+
+```bash
+openclaw mcp add dynamoi --url https://dynamoi.com/mcp --transport streamable-http --auth oauth
+openclaw mcp login dynamoi
+```
+
+OpenClaw registers itself through dynamic client registration, so it signs in
+with Dynamoi's read-only scopes for unreviewed clients.
+
+The [`dynamoi` skill](./skills/dynamoi/SKILL.md) teaches OpenClaw agents the
+Dynamoi workflows and safety rules. Install it from ClawHub with
+`openclaw skills install @getdynamoi/dynamoi`.
+
 ### Other MCP clients
 
 Use `https://dynamoi.com/mcp` as a remote Streamable HTTP server. The client

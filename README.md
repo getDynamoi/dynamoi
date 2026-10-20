@@ -180,10 +180,11 @@ signed in, not from anything the client claims about itself.
 | **Full** | Every other signed-in client on `https://dynamoi.com/mcp`, such as Claude custom connectors, Claude Code, Cursor, VS Code, Gemini CLI, Codex CLI, and custom agents | All 38 tools, plus the Dynamoi prompts and reference resources |
 
 Seeing a tool is not permission to call it. Only reviewed client identities
-(ChatGPT, Claude via its claude.ai client metadata, and OpenClaw via Dynamoi's
-client document) can be granted write scopes. Every other client, including
-Cursor, VS Code, Gemini CLI, Codex CLI, and dynamically registered agents, is
-capped at read-only scopes without refresh: it can read accounts, analytics,
+(client metadata on chatgpt.com or claude.ai, such as ChatGPT, Codex CLI,
+Claude and Claude Code, and OpenClaw via Dynamoi's client document) can be
+granted write scopes. Every other client, including Cursor, VS Code, Gemini
+CLI, and dynamically registered agents, is capped at read-only scopes without
+refresh: it can read accounts, analytics,
 platform status, and distribution eligibility, but its write, launch, apply,
 and billing calls are refused.
 

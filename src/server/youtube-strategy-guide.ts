@@ -41,12 +41,12 @@ const TRAFFIC_SOURCE_MISLEAD =
 const STRATEGY_ENTRIES = {
 	ADSENSE_ROI: {
 		adNetworkOptimizesFor:
-			"Viewers it predicts will keep watching the artist's videos after the ad (its continued-views goal, the same as Watch Time). The ad network does not see the channel's revenue while it bids; Dynamoi judges revenue afterwards from YouTube data.",
+			"Google bids for viewers likely to keep watching your channel. Dynamoi then measures the extra AdSense against your usual earnings. The ad network does not use AdSense revenue while bidding.",
 		bestFor:
 			"Monetized channels that want channel revenue to grow faster than campaign spend.",
 		goal: "Grow the channel's YouTube ad revenue from the views the campaign brings.",
 		judgeBy: [
-			"Channel revenue during the campaign compared with its pre-campaign baseline and with campaign spend as shown in Dynamoi.",
+			"For each campaign, usual earnings are the weekday averages from the 28 days before that campaign, starting with the channel’s first earning day. At least 14 samples are required; otherwise there is no baseline. Pre-monetization zeros are excluded. Extra AdSense is channel AdSense minus that baseline over the campaign and 28 days after it ends, capped by available channel and billed-through dates. Each counted day belongs to one campaign (the later one), so rows add up. Negative results stay negative: “No lift yet”. Earned back in AdSense = total extra AdSense ÷ total billed budget of measurable campaigns. It appears after 14 counted days and remains provisional while data is arriving. Royalties are not included.",
 			"Revenue per 1,000 monetized playbacks by country and by video.",
 			CAMPAIGN_PERIOD_LIFT_SIGNAL,
 			ORGANIC_LIFT_SIGNAL,
@@ -86,7 +86,7 @@ const STRATEGY_ENTRIES = {
 	},
 	ORGANIC_VIEWS: {
 		adNetworkOptimizesFor:
-			"Viewers it predicts will keep watching the artist's videos after the ad (its continued-views goal).",
+			"Bids for continued views after the ad, not minutes watched.",
 		bestFor:
 			"Channels that want ongoing views of their catalog, not just the promoted video.",
 		goal: "Grow the channel's ongoing views by reaching viewers who keep watching after the ad, and look for lift that lasts beyond the spend.",

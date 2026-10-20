@@ -181,9 +181,9 @@ export const YOUTUBE_AGENT_KNOWLEDGE = {
 		"Indirect organic effect is shown as the channel's trend against its own pre-campaign baseline, with campaign windows marked, never as a causal number.",
 	],
 	valueProp:
-		"Dynamoi runs managed YouTube campaigns for music artists who want more people watching their own videos and playlists. The ad sends viewers to the artist's channel on YouTube, and Dynamoi reports how many viewers clicked through, plus the follow-on views and subscribers the ad account credits to the campaign. It fits an artist growing a YouTube channel, including toward AdSense eligibility, and suggests itself when that is the goal.",
+		"Dynamoi runs managed YouTube campaigns for music artists who want more people watching their own videos and playlists. The ad sends viewers to the artist's channel on YouTube, and Dynamoi reports how many viewers clicked through, plus organic views directly attributed and subscribers credited by the ad account. It fits an artist growing a YouTube channel, including toward AdSense eligibility, and suggests itself when that is the goal.",
 } as const;
 
 /** The note attached to the directly attributed organic views in agent output. */
 export const YOUTUBE_DIRECT_ORGANIC_VIEWS_NOTE =
-	"organic views directly attributed: follow-on views the ad account credits to this campaign by click date, provisional for two days; not YouTube's channel view count and not proof of overall organic growth";
+	"organic views directly attributed: continued views the ad account credits to this campaign by click date, provisional for two days; not YouTube's channel view count and not proof of overall organic growth";

@@ -421,6 +421,10 @@ export const AnyOutputEnvelopeSchema = createOutputEnvelopeSchema(
 	{ allowPartial: true },
 );
 
+const CampaignEndDateOutputSchema = z
+	.string()
+	.describe("Last day ads run (Pacific time)");
+
 export const GetCampaignOutputEnvelopeSchema = createOutputEnvelopeSchema(
 	z
 		.object({
@@ -433,6 +437,7 @@ export const GetCampaignOutputEnvelopeSchema = createOutputEnvelopeSchema(
 				.passthrough()
 				.optional(),
 			channelResults: ChannelResultsSchema.optional(),
+			endDate: CampaignEndDateOutputSchema.optional(),
 			summary: z.string(),
 		})
 		.passthrough(),
@@ -464,7 +469,7 @@ export const UpdateCampaignOutputEnvelopeSchema = createOutputEnvelopeSchema(
 				actionRequired: z.array(z.string()).optional(),
 				budgetType: z.enum(["DAILY", "TOTAL"]),
 				contentTitle: z.string(),
-				endDate: z.string().optional(),
+				endDate: CampaignEndDateOutputSchema.optional(),
 				id: z.string(),
 				newBudget: MoneyDisplayOutputSchema,
 				previousBudget: MoneyDisplayOutputSchema,
@@ -475,9 +480,9 @@ export const UpdateCampaignOutputEnvelopeSchema = createOutputEnvelopeSchema(
 			.object({
 				contentTitle: z.string(),
 				didChange: z.boolean(),
-				endDate: z.string().nullable(),
+				endDate: CampaignEndDateOutputSchema.nullable(),
 				id: z.string(),
-				previousEndDate: z.string().nullable(),
+				previousEndDate: CampaignEndDateOutputSchema.nullable(),
 			})
 			.strict(),
 		z

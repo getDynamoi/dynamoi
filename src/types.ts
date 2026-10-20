@@ -450,6 +450,7 @@ export type ListCampaignsJsonData = {
 		budgetType: "DAILY" | "TOTAL";
 		platforms: string[];
 		createdAt: string;
+		/** Last day ads run (Pacific time). */
 		endDate?: string;
 		endDateLabel?: string;
 	}>;
@@ -486,6 +487,7 @@ export type GetCampaignData = {
 	}>;
 	createdAt: string;
 	updatedAt: string;
+	/** Last day ads run (Pacific time). */
 	endDate?: string;
 	endDateLabel?: string;
 	artistId: string;

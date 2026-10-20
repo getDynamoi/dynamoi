@@ -104,6 +104,44 @@ export function isCurrentProspectiveBudgetFundingConsent(input: {
 	);
 }
 
+export const FUNDING_CONSENT_BUDGET_TYPE_MISMATCH_MESSAGE =
+	"The funding consent does not match this budget type. Send acceptedConsentVersion and acceptedConsentCopyHash (with authorizeAutomaticDailyFunding) only for a DAILY budget, and acceptedTotalConsentVersion and acceptedTotalConsentCopyHash only for a TOTAL budget.";
+
+/** Whether a submitted pair is the current one for the budget type (never interchangeable). */
+export function isCurrentFundingConsent(
+	input: { copyHash?: string | undefined; copyVersion?: string | undefined },
+	budgetType: "DAILY" | "TOTAL",
+): boolean {
+	const pair = {
+		copyHash: input.copyHash ?? "",
+		copyVersion: input.copyVersion ?? "",
+	};
+	return budgetType === "TOTAL"
+		? isCurrentTotalBudgetFundingConsent(pair)
+		: isCurrentProspectiveBudgetFundingConsent(pair);
+}
+
+/** The consent fields the handlers read: the TOTAL pair when sent, else the DAILY fields. */
+export function fundingConsentFields(input: {
+	acceptedConsentCopyHash?: string | undefined;
+	acceptedConsentVersion?: string | undefined;
+	acceptedTotalConsentCopyHash?: string | undefined;
+	acceptedTotalConsentVersion?: string | undefined;
+	authorizeAutomaticDailyFunding?: true | undefined;
+}) {
+	return input.acceptedTotalConsentVersion && input.acceptedTotalConsentCopyHash
+		? {
+				acceptedConsentCopyHash: input.acceptedTotalConsentCopyHash,
+				acceptedConsentVersion: input.acceptedTotalConsentVersion,
+				authorizeAutomaticDailyFunding: true as const,
+			}
+		: {
+				acceptedConsentCopyHash: input.acceptedConsentCopyHash,
+				acceptedConsentVersion: input.acceptedConsentVersion,
+				authorizeAutomaticDailyFunding: input.authorizeAutomaticDailyFunding,
+			};
+}
+
 /** Previous exact consent pair; existing receipts remain renewable. */
 export const PROSPECTIVE_BUDGET_FUNDING_CONSENT_V6_VERSION =
 	"managed-ads-prospective-daily-v6";

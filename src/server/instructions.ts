@@ -77,9 +77,10 @@ Common workflows:
   propose next steps
 - Pause/resume: dynamoi_get_campaign (confirm) → dynamoi_update_campaign with action=pause or action=resume; a resume that needs card funding also requires the funding-consent fields (see the tool description).
 - Budget update: dynamoi_get_campaign (confirm) → dynamoi_update_campaign with action=update_budget
-- Launch: dynamoi_list_media_assets → dynamoi_launch_campaign. DAILY budgets require the
-  user's funding consent (authorizeAutomaticDailyFunding plus the exact consent fields);
-  TOTAL budgets use existing credit.
+- Launch: dynamoi_list_media_assets → dynamoi_launch_campaign. every budget is funded from credit, then
+  prepaid funds, then the saved card, so it needs the user's funding consent
+  (DAILY: authorizeAutomaticDailyFunding with acceptedConsentVersion and acceptedConsentCopyHash;
+  TOTAL: acceptedTotalConsentVersion and acceptedTotalConsentCopyHash; neither accepts the other's).
 - Free Smart Link artist catalog creation: dynamoi_create_smart_links_from_spotify_artist; omit artistId for a brand-new user with no Dynamoi artist yet
 - Free Smart Link single-release creation: call dynamoi_create_smart_link_from_spotify
   directly when the artist and release are identified; resolve missing artist

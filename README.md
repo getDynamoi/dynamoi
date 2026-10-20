@@ -259,16 +259,18 @@ confirmation, account, and domain checks.
   web and mobile apps: permissions, promo limits, and repeat-request
   protection. Whether a person approves each call is up to the MCP client's
   tool-approval settings, so keep approval on for tools that change data.
-- **Daily budgets need the user's funding consent.** A `DAILY` budget is
-  funded one 24-hour window at a time. Available credits and campaign funds
-  are used first, then the card the user saved in Dynamoi is charged
-  automatically. The agent must show the user the exact consent text, then send
-  `authorizeAutomaticDailyFunding: true` with the matching
-  `acceptedConsentVersion` and `acceptedConsentCopyHash`. This applies to
-  launches, budget updates, and resumes that need card funding. Without
-  consent the request is refused. The consent values are exported from
+- **Every budget needs the user's funding consent.** A `DAILY` or `TOTAL`
+  budget is funded one window at a time: available credits and campaign funds
+  first, then the card the user saved in Dynamoi is charged automatically (a
+  `TOTAL` budget never beyond its total). The agent must show the user the exact
+  consent text for the budget type, then send, for `DAILY`,
+  `authorizeAutomaticDailyFunding: true` with `acceptedConsentVersion` and
+  `acceptedConsentCopyHash`, or, for `TOTAL`, `acceptedTotalConsentVersion` and
+  `acceptedTotalConsentCopyHash`. This applies to
+  launches, budget updates, and resumes that need card funding. A `DAILY`
+  budget refuses the `TOTAL` consent and the reverse; without consent the
+  request is refused and never charged. The consent values are exported from
   `@dynamoi/mcp/consent`.
-- **Total budgets use existing credit** and need no funding consent.
 - **Agents never handle payment credentials.** Subscriptions, plans, and
   billing setup happen only in the [Dynamoi dashboard](https://dynamoi.com/dashboard),
   where subscriptions start through hosted Stripe Checkout. No tool starts a

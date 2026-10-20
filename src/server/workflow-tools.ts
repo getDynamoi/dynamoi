@@ -2,6 +2,9 @@ import {
 	PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY,
 	PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY_HASH,
 	PROSPECTIVE_BUDGET_FUNDING_CONSENT_VERSION,
+	TOTAL_BUDGET_FUNDING_CONSENT_COPY,
+	TOTAL_BUDGET_FUNDING_CONSENT_COPY_HASH,
+	TOTAL_BUDGET_FUNDING_CONSENT_VERSION,
 } from "../consent";
 import {
 	LaunchCampaignOutputEnvelopeSchema,
@@ -25,7 +28,7 @@ export const PHASE_3_TOOL_DEFINITIONS = [
 		title: "List Media Assets",
 	},
 	{
-		description: `Use this when the user explicitly wants to create a new Smart Campaign or YouTube Campaign and start the launch workflow with provided details. Ads are not necessarily live until the returned delivery state is ACTIVE. DAILY budgets require authorizeAutomaticDailyFunding=true plus the exact acceptedConsentVersion ("${PROSPECTIVE_BUDGET_FUNDING_CONSENT_VERSION}") and acceptedConsentCopyHash ("${PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY_HASH}"); first show the user this exact consent copy: "${PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY}". TOTAL budgets use existing credit and need no consent. YOUTUBE campaigns require youtubeStrategy and either legacy youtubeVideoId/youtubePlaylistId or ordered youtubeEntries (up to 10 videoId/playlistId pairs); playlistId is optional for CHEAPEST_VIEWS, which supports one video. After a successful launch, answer from the returned campaign details directly instead of chaining more tools unless the user explicitly asked for more.`,
+		description: `Use this when the user explicitly wants to create a new Smart Campaign or YouTube Campaign and start the launch workflow with provided details. Ads are not necessarily live until the returned delivery state is ACTIVE. DAILY budgets require authorizeAutomaticDailyFunding=true plus the exact acceptedConsentVersion ("${PROSPECTIVE_BUDGET_FUNDING_CONSENT_VERSION}") and acceptedConsentCopyHash ("${PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY_HASH}"); first show the user this exact consent copy: "${PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY}". A TOTAL budget uses its own consent: show "${TOTAL_BUDGET_FUNDING_CONSENT_COPY}" and send acceptedTotalConsentVersion ("${TOTAL_BUDGET_FUNDING_CONSENT_VERSION}") and acceptedTotalConsentCopyHash ("${TOTAL_BUDGET_FUNDING_CONSENT_COPY_HASH}"), without authorizeAutomaticDailyFunding. Every budget is funded from credit first, then prepaid funds, then the saved card; a budget type refuses the other's consent, and without consent the launch is refused and never charged. YOUTUBE campaigns require youtubeStrategy and either legacy youtubeVideoId/youtubePlaylistId or ordered youtubeEntries (up to 10 videoId/playlistId pairs); playlistId is optional for CHEAPEST_VIEWS, which supports one video. After a successful launch, answer from the returned campaign details directly instead of chaining more tools unless the user explicitly asked for more.`,
 		destructiveHint: true,
 		idempotentHint: true,
 		name: "dynamoi_launch_campaign",

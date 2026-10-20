@@ -7,6 +7,10 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- **TOTAL budgets use the same funding path and consent as the web app.** `dynamoi_launch_campaign`, and `dynamoi_update_campaign` for `resume`, `update_budget` and `update_end_date`, now accept the TOTAL funding consent (`managed-ads-total-daily-v3`, exported from `@dynamoi/mcp/consent`): show the user its copy, then send its version and hash in the new optional `acceptedTotalConsentVersion` and `acceptedTotalConsentCopyHash` fields (the DAILY fields are unchanged). Every budget is funded from credit, then prepaid funds, then the saved card. A DAILY budget refuses the TOTAL consent and the reverse, stale versions are refused, and a TOTAL launch without consent is refused and never charged. The DAILY consent is unchanged.
+
 ### Removed
 
 - Retired the `monetizationQualificationMode` option and readback from `dynamoi_update_campaign`. YouTube goal toggles remain manually editable; existing campaigns retain their current goals.

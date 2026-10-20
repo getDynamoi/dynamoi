@@ -73,6 +73,7 @@ import {
 } from "./instructions";
 import type { OpenAiFetchData, OpenAiSearchData } from "./openai-tools";
 import {
+	type ContactSupportData,
 	type GetResumeFundingData,
 	ResultErrorRecoverySchema,
 } from "./output-schemas";
@@ -94,6 +95,7 @@ import {
 	PHASE_4_TOOL_DEFINITIONS,
 	SMART_LINK_UPDATE_OPERATION_TOOL_DEFINITIONS,
 } from "./smart-link-tools";
+import { SUPPORT_TOOL_DEFINITIONS } from "./support-tools";
 import {
 	PHASE_1_TOOL_DEFINITIONS,
 	PHASE_2_TOOL_DEFINITIONS,
@@ -317,6 +319,7 @@ const DYNAMOI_TOOL_DEFINITIONS = [
 	...PHASE_3_TOOL_DEFINITIONS,
 	...DISTRIBUTION_TOOL_DEFINITIONS,
 	...SHOP_TOOL_DEFINITIONS,
+	...SUPPORT_TOOL_DEFINITIONS,
 	SMART_LINK_THEME_PREVIEW_TOOL_DEFINITION,
 	...PHASE_4_TOOL_DEFINITIONS,
 	...SMART_LINK_UPDATE_OPERATION_TOOL_DEFINITIONS,
@@ -339,6 +342,7 @@ const MUTATING_TOOL_NAMES = new Set<string>(
 );
 
 const DIRECTORY_EXCLUDED_TOOL_NAMES = new Set<string>([
+	"dynamoi_contact_support",
 	"dynamoi_shop_create_checkout",
 	"dynamoi_shop_get_quote",
 	"dynamoi_get_billing",
@@ -502,6 +506,7 @@ export type Phase3Adapter = {
 	shopCreateCheckout(
 		input: unknown,
 	): Promise<ResultEnvelope<DynamoiShopCheckoutData>>;
+	contactSupport(input: unknown): Promise<ResultEnvelope<ContactSupportData>>;
 };
 
 type DynamoiToolDispatcher = (
@@ -756,6 +761,7 @@ const DYNAMOI_TOOL_DISPATCHERS = {
 		Promise.resolve(getDynamoiAbout({ toolProfile })),
 	dynamoi_apply_for_distribution: (adapter, input) =>
 		adapter.applyForDistribution(input),
+	dynamoi_contact_support: (adapter, input) => adapter.contactSupport(input),
 	dynamoi_create_smart_link_from_spotify: (adapter, input) =>
 		adapter.createSmartLinkFromSpotify(input),
 	dynamoi_create_smart_links_from_spotify_artist: (adapter, input) =>

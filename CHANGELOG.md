@@ -9,6 +9,7 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- **`dynamoi_contact_support`** (full profile). After the user approves the message, an agent can send a support request or feedback (category, subject, message, and optionally the failed tool and error) into the Dynamoi support inbox. Dynamoi attaches the signed-in account and the agent's OAuth client, support replies to the account email, and each account can send five requests a day. It needs only `dynamoi:read`, so read-only clients can report problems, changes no account data, and is omitted from the directory profile. The full profile now has 38 tools.
 - **AdSense in `dynamoi_get_youtube_channel_data`.** The first page additively carries one `adsense` block (with `windowFromDay`, `windowThroughDay`, `windowDays` for the days it covers, and an `adsenseNote`), the figures the Dynamoi dashboard and app show: long-form versus Shorts AdSense revenue and RPM, each campaign's incremental AdSense and earned back versus billed, and country AdSense per ad playback against similar channels. It is estimated, not a payout; building or unavailable states mean unknown, not zero. It is null outside the YouTube Partner Program, on later pages, or when temporarily unavailable.
 
 ## [1.0.2] - 2026-10-15

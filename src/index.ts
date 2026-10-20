@@ -45,7 +45,10 @@ export {
 	type OpenAiFetchData,
 	type OpenAiSearchData,
 } from "./server/openai-tools";
-export type { GetResumeFundingData } from "./server/output-schemas";
+export type {
+	ContactSupportData,
+	GetResumeFundingData,
+} from "./server/output-schemas";
 export {
 	DYNAMOI_SHOP_FULL_SCOPE,
 	DYNAMOI_SHOP_MAX_TARGET_COUNTRY_CODES,
@@ -86,6 +89,12 @@ export {
 	parseDynamoiUpdateSmartLinkReleaseSettingsInput,
 	SMART_LINK_UPDATE_OPERATION_TOOL_DEFINITIONS,
 } from "./server/smart-link-tools";
+export {
+	DYNAMOI_SUPPORT_CATEGORIES,
+	type DynamoiContactSupportInput,
+	DynamoiContactSupportInputSchema,
+	SUPPORT_TOOL_DEFINITIONS,
+} from "./server/support-tools";
 export {
 	DateRangeSchema,
 	DynamoiGetArtistAnalyticsInputSchema,

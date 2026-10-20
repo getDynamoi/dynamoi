@@ -17,6 +17,7 @@ export const DYNAMOI_MCP_TOOL_SCOPES = {
 		"dynamoi:read",
 		"dynamoi:distribution.apply",
 	],
+	dynamoi_contact_support: ["dynamoi:read"],
 	dynamoi_create_smart_link_from_spotify: [
 		"dynamoi:read",
 		"dynamoi:smart_links.write",

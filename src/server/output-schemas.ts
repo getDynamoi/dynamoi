@@ -594,6 +594,21 @@ export const CreateSmartLinkFromSpotifyOutputEnvelopeSchema =
 export const CreateSmartLinksFromSpotifyArtistOutputEnvelopeSchema =
 	createOutputEnvelopeSchema(CreateSmartLinksFromSpotifyArtistDataOutputSchema);
 
+export const ContactSupportDataSchema = z
+	.object({
+		kind: z.literal("support_request"),
+		reference: z.string().min(1),
+		replyChannel: z.literal("account_email"),
+		status: z.literal("received"),
+	})
+	.strict();
+
+export type ContactSupportData = z.infer<typeof ContactSupportDataSchema>;
+
+export const ContactSupportOutputEnvelopeSchema = createOutputEnvelopeSchema(
+	ContactSupportDataSchema,
+);
+
 export const ListSmartLinksOutputEnvelopeSchema = createOutputEnvelopeSchema(
 	z.union([ListSmartLinksDataOutputSchema, ListSmartLinksSummaryOutputSchema]),
 );

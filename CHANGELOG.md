@@ -7,6 +7,10 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Removed
+
+- Retired the `monetizationQualificationMode` option and readback from `dynamoi_update_campaign`. YouTube goal toggles remain manually editable; existing campaigns retain their current goals.
+
 ### Added
 
 - **`dynamoi_contact_support`** (full profile). After the user approves the message, an agent can send a support request or feedback (category, subject, message, and optionally the failed tool and error) into the Dynamoi support inbox. Dynamoi attaches the signed-in account and the agent's OAuth client, support replies to the account email, and each account can send five requests a day. It needs only `dynamoi:read`, so read-only clients can report problems, changes no account data, and is omitted from the directory profile. The full profile now has 38 tools.

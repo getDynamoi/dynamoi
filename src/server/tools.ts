@@ -499,9 +499,6 @@ export const DynamoiUpdateCampaignInputSchema = z
 					.strict(),
 			])
 			.optional(),
-		monetizationQualificationMode: z
-			.enum(["STANDARD", "MONETIZATION_QUALIFICATION"])
-			.optional(),
 		optimizeForOrganicViews: z.boolean().optional(),
 		optimizeForSubscribers: z.boolean().optional(),
 		strategy: YouTubeStrategySchema.optional(),
@@ -559,13 +556,11 @@ export const DynamoiUpdateCampaignInputSchema = z
 		if (
 			data.action === "update_goals" &&
 			data.optimizeForOrganicViews === undefined &&
-			data.optimizeForSubscribers === undefined &&
-			data.monetizationQualificationMode === undefined
+			data.optimizeForSubscribers === undefined
 		) {
 			ctx.addIssue({
 				code: "custom",
-				message:
-					"At least one goal or monetizationQualificationMode is required",
+				message: "At least one optimization goal is required",
 				path: ["action"],
 			});
 		}
@@ -601,7 +596,6 @@ export const DynamoiUpdateCampaignInputSchema = z
 			["locationTargets", "update_location"],
 			["optimizeForOrganicViews", "update_goals"],
 			["optimizeForSubscribers", "update_goals"],
-			["monetizationQualificationMode", "update_goals"],
 		] as const) {
 			if (data[field] !== undefined && data.action !== action) {
 				ctx.addIssue({
@@ -1028,7 +1022,7 @@ export const PHASE_2_TOOL_DEFINITIONS = [
 		title: "Manage YouTube Draft",
 	},
 	{
-		description: `Use only when the user explicitly requests a campaign change. Resume isn't available for fixed-flight YouTube campaigns. Duplicate the campaign to relaunch it. Actions: pause, resume, update_budget, update_end_date (DAILY or TOTAL budget; TOTAL end-date extensions may require the same funding consent fields as update_budget or resume), update_location (GLOBAL or catalog-valid countries), change_strategy (managed YouTube Demand Gen), update_goals (YouTube optimization toggles and monetization qualification mode), archive (never deletes). Inspect the campaign first and supply expectedCurrentStatus where possible. For resume, update_budget, or a TOTAL update_end_date that needs automatic daily card funding, first show the user this exact consent copy: "${prospectiveFundingConsentCopy}" — then pass authorizeAutomaticDailyFunding=true with the exact acceptedConsentVersion ("${prospectiveFundingConsentVersion}") and acceptedConsentCopyHash ("${prospectiveFundingConsentCopyHash}") plus the request's clientRequestId. Without them, a resume that needs card funding is refused with: "Review and accept the daily funding authorization to resume this campaign." When retrying the same action, reuse the same clientRequestId.`,
+		description: `Use only when the user explicitly requests a campaign change. Resume isn't available for fixed-flight YouTube campaigns. Duplicate the campaign to relaunch it. Actions: pause, resume, update_budget, update_end_date (DAILY or TOTAL budget; TOTAL end-date extensions may require the same funding consent fields as update_budget or resume), update_location (GLOBAL or catalog-valid countries), change_strategy (managed YouTube Demand Gen), update_goals (YouTube optimization toggles), archive (never deletes). Inspect the campaign first and supply expectedCurrentStatus where possible. For resume, update_budget, or a TOTAL update_end_date that needs automatic daily card funding, first show the user this exact consent copy: "${prospectiveFundingConsentCopy}" — then pass authorizeAutomaticDailyFunding=true with the exact acceptedConsentVersion ("${prospectiveFundingConsentVersion}") and acceptedConsentCopyHash ("${prospectiveFundingConsentCopyHash}") plus the request's clientRequestId. Without them, a resume that needs card funding is refused with: "Review and accept the daily funding authorization to resume this campaign." When retrying the same action, reuse the same clientRequestId.`,
 		destructiveHint: true,
 		idempotentHint: true,
 		name: "dynamoi_update_campaign",

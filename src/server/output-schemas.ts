@@ -514,10 +514,6 @@ export const UpdateCampaignOutputEnvelopeSchema = createOutputEnvelopeSchema(
 		z
 			.object({
 				campaignId: z.string(),
-				monetizationQualificationMode: z.enum([
-					"STANDARD",
-					"MONETIZATION_QUALIFICATION",
-				]),
 				optimizeForOrganicViews: z.boolean(),
 				optimizeForSubscribers: z.boolean(),
 			})

@@ -215,7 +215,6 @@ export type UpdateCampaignData =
 			campaignId: string;
 			optimizeForOrganicViews: boolean;
 			optimizeForSubscribers: boolean;
-			monetizationQualificationMode: "STANDARD" | "MONETIZATION_QUALIFICATION";
 	  };
 
 export type MediaAssetSummary = {

@@ -148,12 +148,15 @@ url = "https://dynamoi.com/mcp"
 ### OpenClaw
 
 ```bash
-openclaw mcp add dynamoi --url https://dynamoi.com/mcp --transport streamable-http --auth oauth
+openclaw mcp add dynamoi --url https://dynamoi.com/mcp --transport streamable-http --auth oauth \
+  --oauth-client-metadata-url https://dynamoi.com/api/oauth/clients/openclaw \
+  --oauth-scope "offline_access dynamoi:read dynamoi:mcp.full dynamoi:billing.read dynamoi:campaign.launch dynamoi:campaign.write dynamoi:distribution.apply dynamoi:distribution.read dynamoi:platform.read dynamoi:platform.write dynamoi:smart_links.write"
 openclaw mcp login dynamoi
 ```
 
-OpenClaw registers itself through dynamic client registration, so it signs in
-with Dynamoi's read-only scopes for unreviewed clients.
+The metadata URL is Dynamoi's reviewed client document for OpenClaw, which
+grants the full tool catalog and refresh. Without it, OpenClaw registers
+dynamically and gets read-only scopes.
 
 The [`dynamoi` skill](./skills/dynamoi/SKILL.md) teaches OpenClaw agents the
 Dynamoi workflows and safety rules. Install it from ClawHub with

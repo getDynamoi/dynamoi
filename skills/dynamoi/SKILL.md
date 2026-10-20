@@ -28,7 +28,9 @@ music-marketing advice needs no Dynamoi tools.
 2. Add the hosted MCP server, sign in in the browser, and check it:
 
    ```bash
-   openclaw mcp add dynamoi --url https://dynamoi.com/mcp --transport streamable-http --auth oauth
+   openclaw mcp add dynamoi --url https://dynamoi.com/mcp --transport streamable-http --auth oauth \
+     --oauth-client-metadata-url https://dynamoi.com/api/oauth/clients/openclaw \
+     --oauth-scope "offline_access dynamoi:read dynamoi:mcp.full dynamoi:billing.read dynamoi:campaign.launch dynamoi:campaign.write dynamoi:distribution.apply dynamoi:distribution.read dynamoi:platform.read dynamoi:platform.write dynamoi:smart_links.write"
    openclaw mcp login dynamoi
    openclaw mcp probe dynamoi
    ```
@@ -41,10 +43,8 @@ Never ask for a password, token or card number. When sign-in is required or
 expired, ask the user to run `openclaw mcp login dynamoi` again. Tools appear as
 `dynamoi__<tool>`, so `dynamoi_about` is `dynamoi__dynamoi_about`.
 
-Dynamoi gives agent apps it has not reviewed **read access**: account, artists,
-campaigns, analytics, Smart Links and distribution status. Creating, changing,
-buying and applying happen at https://dynamoi.com/dashboard, so give the user
-that link. If a write tool returns a permission or scope error, do not retry.
+Without the metadata URL, OpenClaw is read-only. On a scope error, do not
+retry; redo the setup above or use https://dynamoi.com/dashboard instead.
 
 ## Start of a session
 

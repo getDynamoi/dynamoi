@@ -839,6 +839,8 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 		description:
 			"Use this when the user explicitly asks about the signed-in Dynamoi account itself, such as who is logged in, how many organizations or artists it can access, or whether account-level platform connections exist. Pass intent to match that explicit account question; it defaults to account_overview. Do not use this to confirm a specific Meta or YouTube onboarding attempt because this account-level state can span multiple artists; use dynamoi_get_platform_status for the target artist instead. Do not use this to enumerate artists one by one; use dynamoi_list_artists for that. Never use this to 'check context' before answering generic Instagram, lyrics, songwriting, or marketing-advice questions, even if Dynamoi is attached.",
 		destructiveHint: false,
+		fullProfileLead:
+			"Start here when a musician asks to promote a new single, check how a release is doing, make a song link, get music on Spotify, or grow a YouTube channel and the artist is not yet identified.",
 		name: "dynamoi_get_account_overview",
 		openWorldHint: false,
 		outputSchema: AnyOutputEnvelopeSchema,
@@ -895,6 +897,8 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 		description:
 			"Use this when the user wants artist-level performance across all campaigns, including 30-day rollups or daily breakdowns. Pass granularity=DAILY when the user asks for a daily breakdown. Pass format=summary when the user wants a written rollup, a strongest-campaign verdict, or a direct answer you can relay immediately. If this tool already returned the requested strongest-campaign comparison, stop and answer instead of calling more analytics tools. For one campaign's metrics, use dynamoi_get_campaign with includeAnalytics=true.",
 		destructiveHint: false,
+		fullProfileLead:
+			'Use this for "how is my release doing?" and "are my ads working?" questions about an artist\'s Dynamoi campaigns.',
 		name: "dynamoi_get_artist_analytics",
 		openWorldHint: false,
 		outputSchema: AnyOutputEnvelopeSchema,
@@ -939,6 +943,8 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 		description:
 			"Use this to analyze an artist's own connected YouTube channel's estimated ad revenue to inform AdSense strategy and channel growth, alongside subscribers, views, watch time or country, device and subscribed-status breakdowns: paged channel data from the YouTube Analytics warehouse or explicitly qualified synthetic/sample data. Pick one dataset: channel_daily (views, watch time, subscribers gained and lost, likes, shares, playlist starts, estimated revenue, ad revenue, gross revenue, monetized playbacks, CPM and playback-based CPM), video_daily (per-video metrics with titles; filter with videoIds), country_daily, traffic_source_daily, search_term_daily (YouTube search terms for the whole channel), subscribed_status_daily, device_daily, operating_system_daily, playback_location_daily, creator_content_type_daily, or video_catalog (video titles and publish dates). traffic_source_daily rows with source ADVERTISING carry trafficClass=paid and every other source carries trafficClass=organic, but that label only groups sources and is not organic proof: ad clicks that land in a playlist are credited mostly to PLAYLIST and SUBSCRIBER, so trafficClass=organic rows include ad sessions. Organic lift is growth in sources ads do not touch (YT_SEARCH, RELATED_VIDEO, browse features) or lift that persists after spend stops. Warehouse data is observed on the channel, not attributed to any campaign. Preserve the returned source, coverage, freshness, and synthetic/sample qualifications; do not treat synthetic/sample data as observed channel results, campaign attribution, or actual earnings/payouts. Treat returned ad revenue as estimated revenue, not an AdSense payout. The first page of any dataset (including format=summary) also carries one adsense block, the same figures the Dynamoi dashboard and app show: formats (long-form versus Shorts AdSense revenue and RPM), recovery and campaigns (incremental AdSense since each campaign and whether it earned back the billed amount), and countries (AdSense per ad playback against similar channels). It is estimated, not a payout, and covers windowFromDay to windowThroughDay, which is not always the requested range: compare against those fields. recovery.state building or unavailable and null figures mean unknown, never zero; adsense is null outside the YouTube Partner Program, on later pages, or when temporarily unavailable (adsenseNote explains). Compare periods yourself and use the campaigns block (dates, strategy, promoted videos) as context. YouTube data arrives about 2-3 days late and revenue can lag further: check coverage before comparing, and treat placeholderDays and missingDays as unknown, never zero. Not available yet: audience demographics, per-video traffic sources and per-video search terms. Needs a connected channel; a channel that must be reconnected is refused. Returns no ad spend. Before judging a campaign's strategy, read the strategyGuide from dynamoi_get_campaign. Page with nextCursor; format=summary returns only the summary, coverage and adsense.",
 		destructiveHint: false,
+		fullProfileLead:
+			'Use this for "how is my YouTube channel doing?" or "what is growing my channel?" once a channel is linked.',
 		name: "dynamoi_get_youtube_channel_data",
 		openWorldHint: false,
 		outputSchema: GetYouTubeChannelDataOutputEnvelopeSchema,
@@ -992,7 +998,7 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 	},
 	{
 		description:
-			"Use this when the user is planning a campaign and wants to know if the proposed inputs are ready before dynamoi_launch_campaign. This validates readiness and targeting without creating a campaign. Complete budget inputs also return the shared, nonbinding campaign funding preview with known or unavailable credit coverage, card upper bounds and expiry timing. For TOTAL budgets the preview describes total-daily funding for web and native creation; MCP TOTAL launch uses existing credits only, cannot authorize card funding, and does not accept the preview's total-daily consent. Do not use this to create or mutate campaigns.",
+			'Use this when a musician wants to promote a new single or release with ads ("promote my new single", "run ads for my song"): it checks whether a Smart Campaign or YouTube campaign is ready before dynamoi_launch_campaign. This validates readiness and targeting without creating a campaign. Complete budget inputs also return the shared, nonbinding campaign funding preview with known or unavailable credit coverage, card upper bounds and expiry timing. For TOTAL budgets the preview describes total-daily funding for web and native creation; MCP TOTAL launch uses existing credits only, cannot authorize card funding, and does not accept the preview\'s total-daily consent. Do not use this to create or mutate campaigns.',
 		destructiveHint: false,
 		name: "dynamoi_get_campaign_readiness",
 		openWorldHint: false,

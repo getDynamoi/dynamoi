@@ -178,6 +178,14 @@ signed in, not from anything the client claims about itself.
 | **Directory** | Every client on `https://dynamoi.com/mcp/directory` (used by agent-directory listings such as the Dynamoi Claude plugin), the published ChatGPT app on `/mcp`, and requests made before sign-in | 24 review-safe advertised tools: reads, Smart Links, distribution, and About. No billing, campaign launch or campaign changes, platform connection starters, or Shop checkout. |
 | **Full** | Every other signed-in client on `https://dynamoi.com/mcp`, such as Claude custom connectors, Claude Code, Cursor, VS Code, Gemini CLI, Codex CLI, and custom agents | All 38 tools, plus the Dynamoi prompts and reference resources |
 
+Seeing a tool is not permission to call it. Only reviewed client identities
+(ChatGPT, Claude via its claude.ai client metadata, and OpenClaw via Dynamoi's
+client document) can be granted write scopes. Every other client, including
+Cursor, VS Code, Gemini CLI, Codex CLI, and dynamically registered agents, is
+capped at read-only scopes without refresh: it can read accounts, analytics,
+platform status, and distribution eligibility, but its write, launch, apply,
+and billing calls are refused.
+
 Signing in does not skip permission checks. Every tool call still needs its
 OAuth scopes, and the user's role must allow access to the artist, campaign,
 or Smart Link.

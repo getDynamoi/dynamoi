@@ -301,6 +301,8 @@ export type DynamoiMcpToolProfile = "full" | "directory";
 type DynamoiToolRegistrationDescriptor = {
 	description: string;
 	destructiveHint: boolean;
+	/** Full-profile lead naming musician prompts; reviewed directory text stays as-is. */
+	fullProfileLead?: string;
 	idempotentHint?: boolean;
 	name: string;
 	openWorldHint: boolean;
@@ -376,9 +378,16 @@ export function getDynamoiToolDefinitions(options?: {
 	// The split aliases exist only in the directory catalog; full-profile
 	// clients retain the original approved multi-action schema.
 	if (options?.toolProfile === "full") {
-		return definitions.filter(
-			(definition) => !DIRECTORY_ONLY_TOOL_NAMES.has(definition.name),
-		);
+		return definitions
+			.filter((definition) => !DIRECTORY_ONLY_TOOL_NAMES.has(definition.name))
+			.map((definition) =>
+				definition.fullProfileLead
+					? {
+							...definition,
+							description: `${definition.fullProfileLead} ${definition.description}`,
+						}
+					: definition,
+			);
 	}
 	return definitions.filter(
 		(definition) => !DIRECTORY_EXCLUDED_TOOL_NAMES.has(definition.name),

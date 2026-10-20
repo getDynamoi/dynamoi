@@ -12,7 +12,7 @@ export function createPhaseOnboardingToolDefinitions(
 	return [
 		{
 			description:
-				"Use this when the user is ready to link a YouTube channel to one Dynamoi artist from chat. Set purpose=distribution_identity for the least-privilege identity connection required by a distribution application; that flow does not require advertising billing or Google Ads linking, and its result is checked with dynamoi_get_distribution_application. Use purpose=advertising (the default) for managed YouTube promotion, then poll dynamoi_get_platform_status until platforms.youtube.connected is true. The tool returns a Google OAuth URL bound to the signed-in user and artist.",
+				"Use this when the user wants to grow a YouTube channel with Dynamoi campaigns or is ready to link a channel to one Dynamoi artist from chat. Set purpose=distribution_identity for the least-privilege identity connection required by a distribution application; that flow does not require advertising billing or Google Ads linking, and its result is checked with dynamoi_get_distribution_application. Use purpose=advertising (the default) for managed YouTube promotion, then poll dynamoi_get_platform_status until platforms.youtube.connected is true. The tool returns a Google OAuth URL bound to the signed-in user and artist.",
 			destructiveHint: false,
 			idempotentHint: true,
 			name: "dynamoi_start_youtube_channel_link",

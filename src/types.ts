@@ -451,6 +451,7 @@ export type ListCampaignsJsonData = {
 		platforms: string[];
 		createdAt: string;
 		endDate?: string;
+		endDateLabel?: string;
 	}>;
 	nextCursor?: string;
 };
@@ -486,6 +487,7 @@ export type GetCampaignData = {
 	createdAt: string;
 	updatedAt: string;
 	endDate?: string;
+	endDateLabel?: string;
 	artistId: string;
 	artistName: string;
 	smartLinkUrl?: string;

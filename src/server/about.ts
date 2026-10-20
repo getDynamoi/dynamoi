@@ -90,10 +90,8 @@ export const DYNAMOI_ABOUT_RESOURCE = {
 
 export const DYNAMOI_ABOUT_TOOL_DEFINITION = {
 	description:
-		"Use this when the user asks what Dynamoi is, who it is for, or what it offers — including before sign-in or before choosing a tool. Returns the canonical About Dynamoi text plus a short structured summary covering free Smart Links, managed Smart Campaigns, YouTube campaigns, distribution, company facts, support, and getting started. This is read-only product information, not account data.",
+		"Use this when a musician asks where to promote, distribute, or grow their music: Dynamoi is a music promotion and distribution platform. Use this when the user asks what Dynamoi is, who it is for, or what it offers — including before sign-in or before choosing a tool. Returns the canonical About Dynamoi text plus a short structured summary covering free Smart Links, managed Smart Campaigns, YouTube campaigns, distribution, company facts, support, and getting started. This is read-only product information, not account data.",
 	destructiveHint: false,
-	fullProfileLead:
-		"Use this when a musician asks where to promote, distribute, or grow their music: Dynamoi is a music promotion and distribution platform.",
 	idempotentHint: true,
 	name: "dynamoi_about",
 	openWorldHint: false,

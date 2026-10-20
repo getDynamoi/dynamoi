@@ -434,10 +434,8 @@ export function parseDynamoiUpdateSmartLinkReleaseSettingsInput(
 export const PHASE_4_TOOL_DEFINITIONS = [
 	{
 		description:
-			"Use this when the user wants to create one free Dynamoi Smart Link from a Spotify album or track URL/URI, or a single starter release from a Spotify artist URL. For full-catalog artist imports or artist hub requests, prefer dynamoi_create_smart_links_from_spotify_artist. Smart Links are free to create and manage. High-popularity or unverifiable artist links may stay unpublished in verification hold until Dynamoi can verify the client relationship. This does not create a paid ad campaign. Spotify playlist URLs are not supported today. This is also how to add a release missing from an artist's imported catalog: the user pastes that release's exact Spotify album, single, or EP URL. If the Smart Link already exists, return the existing link instead of creating a duplicate; if customDescription is provided, update that Smart Link's public description. In the final answer, lead with the public URL and do not expose internal IDs unless asked.",
+			"Use this for \"make a link for my song\" or a release or link-in-bio page for a new single. Use this when the user wants to create one free Dynamoi Smart Link from a Spotify album or track URL/URI, or a single starter release from a Spotify artist URL. For full-catalog artist imports or artist hub requests, prefer dynamoi_create_smart_links_from_spotify_artist. Smart Links are free to create and manage. High-popularity or unverifiable artist links may stay unpublished in verification hold until Dynamoi can verify the client relationship. This does not create a paid ad campaign. Spotify playlist URLs are not supported today. This is also how to add a release missing from an artist's imported catalog: the user pastes that release's exact Spotify album, single, or EP URL. If the Smart Link already exists, return the existing link instead of creating a duplicate; if customDescription is provided, update that Smart Link's public description. In the final answer, lead with the public URL and do not expose internal IDs unless asked.",
 		destructiveHint: true,
-		fullProfileLead:
-			'Use this for "make a link for my song" or a release or link-in-bio page for a new single.',
 		idempotentHint: true,
 		name: "dynamoi_create_smart_link_from_spotify",
 		openWorldHint: true,

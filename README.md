@@ -10,10 +10,11 @@
 
 The Dynamoi MCP server connects ChatGPT, Claude, Cursor, and other AI agents
 to [Dynamoi](https://dynamoi.com), the music marketing platform for artists,
-labels, and managers. Agents can create free Spotify Smart Links, run managed
-YouTube and Meta promotion campaigns, read campaign and Smart Link analytics,
-check platform status, and apply for music distribution. Use the hosted MCP
-server, or use this package as a library.
+labels, and managers. Agents can create free Spotify Smart Links with Meta,
+TikTok and Google Ads pixels, run managed YouTube and Meta promotion campaigns,
+read campaign and Smart Link analytics, check platform status, and apply for
+music distribution. Campaigns are real ads, never bots or paid playlists. Use
+the hosted MCP server, or use this package as a library.
 
 ```txt
 https://dynamoi.com/mcp

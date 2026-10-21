@@ -1,9 +1,13 @@
 {
 	"$schema": "https://www.schemastore.org/package",
 	"name": "@dynamoi/mcp",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"packageManager": "bun@1.4.3",
 	"mcpName": "io.github.getDynamoi/dynamoi",
+	"workspaces": [
+		".",
+		"cli"
+	],
 	"type": "module",
 	"license": "MIT",
 	"description": "Music distribution and promotion for AI agents: releases, Spotify and YouTube ads, Smart Links.",
@@ -29,10 +33,10 @@
 	"homepage": "https://dynamoi.com",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/getDynamoi/mcp.git"
+		"url": "git+https://github.com/getDynamoi/dynamoi.git"
 	},
 	"bugs": {
-		"url": "https://github.com/getDynamoi/mcp/issues"
+		"url": "https://github.com/getDynamoi/dynamoi/issues"
 	},
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
@@ -101,7 +105,7 @@
 	"scripts": {
 		"build": "bun scripts/build.cjs",
 		"dev": "bun scripts/build.cjs --watch",
-		"typecheck": "tsrs --noEmit -p tsconfig.json",
+		"typecheck": "tsrs --noEmit -p tsconfig.json && tsrs --noEmit -p cli/tsconfig.json",
 		"registry:validate": "bun scripts/registry-contract.ts local",
 		"registry:wait:npm": "bun scripts/registry-contract.ts npm --attempts 24 --delay-ms 5000",
 		"registry:wait:official": "bun scripts/registry-contract.ts registry --attempts 24 --delay-ms 5000",

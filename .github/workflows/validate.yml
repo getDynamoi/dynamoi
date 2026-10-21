@@ -31,5 +31,11 @@ jobs:
       - name: Build
         run: bun run build
 
+      - name: Build and test the dynamoi CLI
+        run: |
+          (cd cli && bun run build)
+          bun test cli
+          node cli/dist/dynamoi.js --version
+
       - name: Validate MCP Registry metadata
         run: bun run registry:validate

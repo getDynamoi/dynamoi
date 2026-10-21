@@ -43,3 +43,8 @@ package consumers or MCP clients under **Breaking changes**.
 
 Versions are bumped by hand, so do not add Changeset files or run
 `changeset version`.
+
+The `dynamoi` CLI lives in `cli/` with its own `package.json` version, and the
+same workflow publishes it (`workspaces` lets `changeset publish` see both
+packages). Bump `cli/package.json` when the CLI changes; it needs no
+`server.json` or `src/version.ts` entry. Test it with `bun test cli`.

@@ -161,6 +161,17 @@ The [`dynamoi` skill](./skills/dynamoi/SKILL.md) teaches OpenClaw agents the
 Dynamoi workflows and safety rules. Install it from ClawHub with
 `openclaw skills install @getdynamoi/dynamoi`.
 
+### Command line
+
+The [`dynamoi` CLI](./cli/README.md) signs in once with OAuth and runs any
+Dynamoi tool as a command, generated from the live tool schemas:
+
+```bash
+npm install --global dynamoi
+dynamoi login
+dynamoi tools
+```
+
 ### Other MCP clients
 
 Use `https://dynamoi.com/mcp` as a remote Streamable HTTP server. The client
@@ -385,7 +396,7 @@ per-request transport.
 | Support | <https://dynamoi.com/support> or support@dynamoi.com (replies within 24 hours) |
 | Pricing | <https://dynamoi.com/pricing> |
 | npm | <https://www.npmjs.com/package/@dynamoi/mcp> |
-| Source and issues | <https://github.com/getDynamoi/mcp> |
+| Source and issues | <https://github.com/getDynamoi/dynamoi> |
 | Changelog | [CHANGELOG.md](./CHANGELOG.md) |
 | Capability map | [CAPABILITY_PARITY.md](./CAPABILITY_PARITY.md) |
 

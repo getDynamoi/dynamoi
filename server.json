@@ -3,10 +3,10 @@
   "name": "io.github.getDynamoi/dynamoi",
   "title": "Dynamoi",
   "description": "Music distribution and promotion for AI agents: releases, Spotify and YouTube ads, Smart Links.",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "websiteUrl": "https://dynamoi.com",
   "repository": {
-    "url": "https://github.com/getDynamoi/mcp",
+    "url": "https://github.com/getDynamoi/dynamoi",
     "source": "github",
     "subfolder": "packages/mcp"
   },

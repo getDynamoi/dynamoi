@@ -7,6 +7,16 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.4] - 2026-10-21
+
+### Added
+
+- **The `dynamoi` CLI** (npm package `dynamoi`, in `cli/` of this repository, released by the same workflow). It signs in with OAuth 2.1 and PKCE over a loopback redirect, stores tokens in the OS keychain or a `0600` file, and generates one command per tool from the live `tools/list` schemas. It never sets `confirm*`, `authorize*` or `accepted*` consent fields itself: a terminal prompt or an explicit flag grants them.
+
+### Changed
+
+- The public repository is now `getDynamoi/dynamoi` (renamed from `getDynamoi/mcp`); `package.json` and `server.json` point there. The MCP tool contract is unchanged.
+
 ## [1.0.3] - 2026-10-21
 
 ### Changed

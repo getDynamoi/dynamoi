@@ -1,0 +1,49 @@
+{
+	"$schema": "https://www.schemastore.org/package",
+	"name": "dynamoi",
+	"version": "0.2.0",
+	"type": "module",
+	"license": "MIT",
+	"description": "Music distribution and promotion, built for AI agents: the Dynamoi command line.",
+	"keywords": [
+		"music-distribution",
+		"music-promotion",
+		"music-marketing",
+		"spotify-promotion",
+		"youtube-promotion",
+		"smart-links",
+		"advertising-management",
+		"music-analytics",
+		"cli",
+		"mcp",
+		"ai-agents"
+	],
+	"homepage": "https://dynamoi.com",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/getDynamoi/dynamoi.git",
+		"directory": "cli"
+	},
+	"bugs": {
+		"url": "https://github.com/getDynamoi/dynamoi/issues"
+	},
+	"bin": {
+		"dynamoi": "./dist/dynamoi.js"
+	},
+	"files": [
+		"LICENSE",
+		"README.md",
+		"dist/dynamoi.js"
+	],
+	"engines": {
+		"node": ">=20"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"scripts": {
+		"build": "bun build src/main.ts --target node --outfile dist/dynamoi.js",
+		"prepack": "bun run build",
+		"typecheck": "tsrs --noEmit -p tsconfig.json"
+	}
+}

@@ -175,7 +175,7 @@ OAuth client signs in with, not from anything the client claims about itself.
 | Tier | Who gets it | What it includes |
 | --- | --- | --- |
 | **Full** | Reviewed clients (Codex CLI, Claude on the web or desktop and Claude Code, OpenClaw via Dynamoi's client document) and any app that signs in on your own computer (loopback or `https://vscode.dev/redirect` return addresses, no device code), such as Claude Code, Codex, OpenClaw, Cursor, VS Code and Gemini CLI | All 38 tools, plus the Dynamoi prompts and reference resources, including campaign launches, budget changes and Shop checkout links |
-| **Directory** | ChatGPT, Claude added from the directory listing (`https://dynamoi.com/mcp/directory`), unreviewed web apps, device-code sign-ins and requests made before sign-in | 24 review-safe tools: reads, Smart Links, distribution and About. No billing, campaign launch or changes, platform connection starters, or Shop checkout, and the scopes they need are never granted. |
+| **Directory** | ChatGPT, Claude added from the directory listing (`https://dynamoi.com/mcp/directory`), unreviewed web apps, device-code sign-ins and requests made before sign-in | 24 review-safe advertised tools: reads, Smart Links, distribution and About. No billing, campaign launch or changes, platform connection starters, or Shop checkout, and the scopes they need are never granted. |
 
 Seeing a tool is not permission to call it. A Full client can approve every
 scope for its tools; a Directory client is never granted the scopes that Full

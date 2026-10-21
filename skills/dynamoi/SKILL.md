@@ -1,14 +1,14 @@
 ---
 name: dynamoi
-description: Music promotion and distribution for independent artists, labels and YouTube creators. Free Smart Links with Meta, TikTok and Google Ads pixels; managed Instagram and Facebook ads for Spotify releases; YouTube music video promotion with real Google ads; distribution to 100+ stores.
+description: Music promotion that works with any distributor, for independent artists, labels and YouTube creators. Free Smart Links with Meta, TikTok and Google Ads pixels; managed Instagram and Facebook ads for Spotify releases; YouTube music video promotion with real Google ads; optional distribution to 100+ stores.
 homepage: https://dynamoi.com
 metadata: {"openclaw":{"emoji":"🎵","homepage":"https://dynamoi.com"}}
 ---
 
-# Dynamoi: music promotion and distribution
+# Dynamoi: music promotion
 
-Dynamoi is a music promotion and distribution platform for independent artists,
-labels, managers and YouTube creators:
+Dynamoi is a music promotion platform for independent artists, labels, managers
+and YouTube creators on any distributor:
 
 - **Free Smart Links:** release pages and artist hubs from Spotify URLs, with
   Meta, TikTok and Google Ads pixels and link analytics at no cost
@@ -16,7 +16,7 @@ labels, managers and YouTube creators:
   Spotify releases; YouTube campaigns run real Google ads for music videos and
   channels. Dynamoi runs the ad accounts; never bots or paid playlists.
 - **Shop:** one-off YouTube video promotion with no account or subscription
-- **Distribution:** releases delivered to 100+ stores, including Spotify,
+- **Distribution (optional):** releases delivered to 100+ stores, including Spotify,
   Apple Music, Amazon Music, YouTube Music, TikTok, Deezer and Tidal
 
 Use this skill to promote a song on Spotify, run Instagram ads for a release,

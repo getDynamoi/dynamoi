@@ -1,10 +1,10 @@
 {
 	"$schema": "https://www.schemastore.org/package",
 	"name": "dynamoi",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"type": "module",
 	"license": "MIT",
-	"description": "Music distribution and promotion, built for AI agents: the Dynamoi command line.",
+	"description": "Music promotion, built for AI agents: the Dynamoi command line.",
 	"keywords": [
 		"music-distribution",
 		"music-promotion",

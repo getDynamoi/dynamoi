@@ -2,8 +2,8 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.getDynamoi/dynamoi",
   "title": "Dynamoi",
-  "description": "Music distribution and promotion for AI agents: releases, Spotify and YouTube ads, Smart Links.",
-  "version": "1.0.4",
+  "description": "Music promotion for AI agents: Spotify and YouTube ads, Smart Links, optional distribution.",
+  "version": "1.0.5",
   "websiteUrl": "https://dynamoi.com",
   "repository": {
     "url": "https://github.com/getDynamoi/dynamoi",

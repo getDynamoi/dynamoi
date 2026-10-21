@@ -1,6 +1,6 @@
 # Dynamoi MCP Server
 
-**Music marketing for AI agents.**
+**Music promotion, built for AI agents.**
 
 [![npm version](https://img.shields.io/npm/v/@dynamoi/mcp?label=npm)](https://www.npmjs.com/package/@dynamoi/mcp)
 [![license](https://img.shields.io/npm/l/@dynamoi/mcp)](./LICENSE)
@@ -8,10 +8,11 @@
 [![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=dynamoi&config=eyJ1cmwiOiJodHRwczovL2R5bmFtb2kuY29tL21jcCJ9)
 [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_Server-0098FF?logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect/mcp/install?name=dynamoi&config=%7B%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fdynamoi.com%2Fmcp%22%7D)
 
-Full-service music distribution and promotion from your AI agent. Connect
-Claude, ChatGPT, Codex or Cursor to check results, manage releases and Smart
-Links, and, where your assistant allows purchases, launch Spotify and YouTube
-campaigns. Use the hosted MCP server, or use this package as a library.
+Music promotion from your AI agent. Connect Claude, ChatGPT, Codex or Cursor
+to check results and manage Smart Links and, where your assistant allows
+purchases, launch and fund Spotify and YouTube campaigns with the artist's
+explicit consent. Artists who distribute with Dynamoi can manage releases there
+too. Use the hosted MCP server, or use this package as a library.
 
 ```txt
 https://dynamoi.com/mcp
@@ -23,10 +24,11 @@ Dynamoi account.
 
 ## About Dynamoi
 
-Dynamoi is a music marketing platform founded in 2021 by Trevor Loucks. It
-runs managed Meta and YouTube ad campaigns, music distribution, and royalty
-analytics for independent artists, labels, managers, and YouTube creators,
-alongside free Smart Links and analytics.
+Dynamoi is a music promotion platform founded in 2021 by Trevor Loucks. It
+runs managed Meta and YouTube ad campaigns for independent artists, labels,
+managers, and YouTube creators on any distributor, alongside free Smart Links
+and analytics. Artists who want everything in one account can also distribute
+through Dynamoi.
 
 - **Free Smart Links:** release pages and artist hubs built from Spotify
   URLs, with link analytics, themes, validated pixel IDs, and team seats.
@@ -34,7 +36,7 @@ alongside free Smart Links and analytics.
   and playlists.
 - **YouTube campaigns:** managed Google Ads campaigns for YouTube channel
   growth.
-- **Music distribution:** opt-in delivery to 100+ stores. Applications are
+- **Music distribution (optional):** delivery to 100+ stores. Applications are
   scored against five requirements, and approval is not guaranteed.
 - **YouTube promotion Shop:** one-off YouTube video promotion with no
   subscription.

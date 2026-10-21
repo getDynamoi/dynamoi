@@ -1,15 +1,15 @@
 # dynamoi
 
-**Music distribution and promotion, built for AI agents.**
+**Music promotion, built for AI agents.**
 
 [![npm version](https://img.shields.io/npm/v/dynamoi?label=npm)](https://www.npmjs.com/package/dynamoi)
 [![license](https://img.shields.io/npm/l/dynamoi)](./LICENSE)
 
-The command line for [Dynamoi](https://dynamoi.com): full-service music
-distribution and promotion under one roof. Release to 100+ stores, run real
-Spotify and YouTube ad campaigns, and see what each one moved. Smart Links,
-analytics and growth audits are free. Use it from a terminal, a script or an
-agent that can run shell commands.
+The command line for [Dynamoi](https://dynamoi.com): music promotion that works
+with any distributor. Run real Spotify and YouTube ad campaigns, and see what
+each one moved. Smart Links, analytics and growth audits are free. Artists who
+want everything in one account can also release to 100+ stores through Dynamoi.
+Use it from a terminal, a script or an agent that can run shell commands.
 
 It is a thin client for Dynamoi's hosted MCP server at
 `https://dynamoi.com/mcp`, so it follows the same account, tools and consent

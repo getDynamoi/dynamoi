@@ -7,6 +7,12 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.5] - 2026-10-21
+
+### Changed
+
+- **The package, registry, README, About and server-instruction copy lead with music promotion.** Dynamoi is described as music promotion that works with any distributor, and distribution is marked optional. The tool contract is unchanged.
+
 ## [1.0.4] - 2026-10-21
 
 ### Added

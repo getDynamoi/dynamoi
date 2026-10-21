@@ -25,7 +25,7 @@ process.stdout.on("error", (error: NodeJS.ErrnoException) => {
 const out = (line: string) => process.stdout.write(`${line}\n`);
 const err = (line: string) => process.stderr.write(`${line}\n`);
 
-const USAGE = `dynamoi ${VERSION}: Music distribution and promotion, built for AI agents.
+const USAGE = `dynamoi ${VERSION}: Music promotion, built for AI agents.
 
 Usage:
   dynamoi login | logout | whoami

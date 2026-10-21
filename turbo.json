@@ -10,6 +10,7 @@
 			"outputs": ["dist/**"],
 			"inputs": [
 				"$TURBO_DEFAULT$",
+				"$TURBO_ROOT$/bun.lock",
 				"src/**",
 				"package.json",
 				"tsconfig.json",

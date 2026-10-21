@@ -7,7 +7,13 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.3] - 2026-10-21
+
 ### Changed
+
+- **Two access tiers: Full and Middle.** The read-only ceiling for unreviewed clients is removed. Unreviewed clients that sign in on the user's own computer (local loopback) get Full; other unreviewed clients get Middle, which keeps the directory tool catalog and scopes and omits campaign launch, budget and checkout. The package and registry descriptions are rewritten to match.
+
+- The README, About text and skill copy describe the two-tier model and the approved pricing.
 
 - **TOTAL budgets use the same funding path and consent as the web app.** `dynamoi_launch_campaign`, and `dynamoi_update_campaign` for `resume`, `update_budget` and `update_end_date`, now accept the TOTAL funding consent (`managed-ads-total-daily-v3`, exported from `@dynamoi/mcp/consent`): show the user its copy, then send its version and hash in the new optional `acceptedTotalConsentVersion` and `acceptedTotalConsentCopyHash` fields (the DAILY fields are unchanged). Every budget is funded from credit, then prepaid funds, then the saved card. A DAILY budget refuses the TOTAL consent and the reverse, stale versions are refused, and a TOTAL launch without consent is refused and never charged. The DAILY consent is unchanged.
 

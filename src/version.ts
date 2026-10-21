@@ -9,4 +9,4 @@ export const DYNAMOI_MCP_VERSION =
 	BUNDLED_DYNAMOI_MCP_VERSION.length > 0 &&
 	!BUNDLED_DYNAMOI_MCP_VERSION.includes("__")
 		? BUNDLED_DYNAMOI_MCP_VERSION
-		: "1.0.2";
+		: "1.0.3";

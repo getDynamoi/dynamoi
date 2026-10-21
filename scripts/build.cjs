@@ -5,14 +5,16 @@ const {
 	renameSync,
 	rmSync,
 	watch: watchFiles,
+	writeFileSync,
 } = require("node:fs");
 const path = require("node:path");
 
 const packageRoot = realpathSync(path.resolve(__dirname, ".."));
 const sourceRoot = path.join(packageRoot, "src");
 const outputRoot = path.join(packageRoot, "dist");
+const worktreeRoot = path.resolve(packageRoot, "../..");
 const watch = process.argv.includes("--watch");
-const { metadata, publicRoots, policy, declarations, inventory, packageInventory, fail } = require("./inputs.cjs");
+const { metadata, publicRoots, policy, declarations, inventory, packageInventory, sourceFingerprint, fail } = require("./inputs.cjs");
 const { buildWorkspace } = require("./build-workspace.cjs");
 
 function replaceOutput(stagingRoot, nextOutputRoot) {
@@ -32,6 +34,7 @@ function replaceOutput(stagingRoot, nextOutputRoot) {
 
 async function build() {
 	await buildWorkspace();
+	const stamp = sourceFingerprint(worktreeRoot);
 	const stagingRoot = mkdtempSync(path.join(packageRoot, ".mcp-build-"));
 	const nextOutputRoot = path.join(stagingRoot, "next");
 	try {
@@ -70,6 +73,10 @@ async function build() {
 			return false;
 		}
 
+		// Never certify a build whose inputs changed while it was running.
+		if (stamp && stamp === sourceFingerprint(worktreeRoot)) {
+			writeFileSync(path.join(nextOutputRoot, ".source-stamp"), `${stamp}\n`);
+		}
 		replaceOutput(stagingRoot, nextOutputRoot);
 		console.log(
 			`Built ${result.outputs.length} JavaScript artifacts and declarations.`,

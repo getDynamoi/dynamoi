@@ -206,4 +206,30 @@ function inventory(dir, expected) {
  walk(dir);
  if (found.sort().join() !== [...expected].sort().join()) fail();
 }
-module.exports = { metadata, publicRoots, policy, checkWorkspace, declarations, inventory, packageInventory, fail };
+// Repository freshness metadata is private; standalone SDK builds have no bun.lock.
+// Keep the UTF-8 byte stream identical to dynamoi-engine's mcp-stamp command.
+function sourceFingerprint(worktreeRoot) {
+ const inputs = [];
+ function collect(dir) {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+   const file = path.join(dir, entry.name);
+   if (entry.isDirectory()) collect(file);
+   else if (entry.isFile()) inputs.push(path.relative(worktreeRoot, file));
+  }
+ }
+ try {
+  collect(path.join(worktreeRoot, "packages/mcp/src"));
+  inputs.push("bun.lock", "packages/mcp/package.json", "packages/mcp/scripts/build.cjs", "packages/mcp/scripts/build-workspace.cjs", "packages/mcp/scripts/inputs.cjs", "packages/mcp/tsconfig.json");
+  inputs.sort((left, right) => Buffer.compare(Buffer.from(left), Buffer.from(right)));
+  const hash = require("node:crypto").createHash("sha256");
+  for (const input of inputs) {
+   hash.update(input); hash.update("\0");
+   hash.update(fs.readFileSync(path.join(worktreeRoot, input))); hash.update("\0");
+  }
+  return hash.digest("hex");
+ } catch (error) {
+  if (error.code === "ENOENT") return null;
+  throw error;
+ }
+}
+module.exports = { metadata, publicRoots, policy, checkWorkspace, declarations, inventory, packageInventory, sourceFingerprint, fail };

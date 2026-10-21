@@ -13,11 +13,11 @@ export const DYNAMOI_MCP_TAGLINE = "Music marketing for AI agents";
  * characters, and `package.json` and `server.json` must equal this exactly.
  */
 export const DYNAMOI_MCP_SHORT_DESCRIPTION =
-	"Music marketing for AI agents: free Smart Links, promotion campaigns, analytics, and distribution.";
+	"Music distribution and promotion for AI agents: releases, Spotify and YouTube ads, Smart Links.";
 
 /** Standard description for docs metadata, listings, and discovery summaries. */
 export const DYNAMOI_MCP_STANDARD_DESCRIPTION =
-	"Connect ChatGPT, Claude, Cursor, and other AI agents to Dynamoi for free Spotify Smart Links, music promotion campaigns, analytics, and distribution.";
+	"Full-service music distribution and promotion from your AI agent. Connect Claude, ChatGPT, Codex or Cursor to check results, manage releases and Smart Links, and, where your assistant allows purchases, launch Spotify and YouTube campaigns.";
 
 /** Registry limit for `server.json` descriptions. */
 export const DYNAMOI_MCP_REGISTRY_DESCRIPTION_MAX_LENGTH = 100;

@@ -6,7 +6,7 @@
 	"mcpName": "io.github.getDynamoi/dynamoi",
 	"type": "module",
 	"license": "MIT",
-	"description": "Music marketing for AI agents: free Smart Links, promotion campaigns, analytics, and distribution.",
+	"description": "Music distribution and promotion for AI agents: releases, Spotify and YouTube ads, Smart Links.",
 	"keywords": [
 		"mcp",
 		"model-context-protocol",

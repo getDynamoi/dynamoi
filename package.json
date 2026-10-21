@@ -101,7 +101,7 @@
 	"scripts": {
 		"build": "bun scripts/build.cjs",
 		"dev": "bun scripts/build.cjs --watch",
-		"typecheck": "tsc --noEmit -p tsconfig.json",
+		"typecheck": "tsrs --noEmit -p tsconfig.json",
 		"registry:validate": "bun scripts/registry-contract.ts local",
 		"registry:wait:npm": "bun scripts/registry-contract.ts npm --attempts 24 --delay-ms 5000",
 		"registry:wait:official": "bun scripts/registry-contract.ts registry --attempts 24 --delay-ms 5000",

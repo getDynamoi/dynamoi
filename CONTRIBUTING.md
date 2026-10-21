@@ -17,7 +17,7 @@ Common commands:
 - Install: `bun install`
 - Build: `bun run build`
 - Test: `bun test`
-- Typecheck: `bun x tsc --noEmit -p tsconfig.json`
+- Typecheck: `bun x tsrs --noEmit -p tsconfig.json`
 - Registry metadata check: `bun run registry:validate`
 
 ## Changelog

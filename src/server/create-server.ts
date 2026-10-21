@@ -1079,6 +1079,7 @@ export function createDynamoiMcpServer(options: {
 			websiteUrl: options.websiteUrl ?? "https://dynamoi.com",
 		},
 		{
+			maxToolInputElements: 10_000,
 			cacheHints: DYNAMOI_CACHE_HINTS,
 			// Every request builds a fresh server, so lists never change mid-connection.
 			capabilities: {

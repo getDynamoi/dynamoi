@@ -52,7 +52,7 @@ ${DYNAMOI_ABOUT_GETTING_STARTED}
 
 ## Pricing
 
-Smart Links are free. In USD, Starter is $25/month with a $50 launch campaign credit, and campaign budgets start at $10/day. Other currencies use their own approved catalog prices and limits; consult the selected account’s billing response. There are no contracts: pause between releases or cancel anytime and keep your free tools. Managed advertising and distribution are paid products — see current plans and pricing at https://dynamoi.com/pricing.`;
+Smart Links are free. In USD, Starter is $25/month per artist, and your plan price becomes ad credit. Eligible new artists get double credit the first month. Campaign budgets start at $10/day. Other currencies use their own approved catalog prices and limits; consult the selected account’s billing response. There are no contracts: pause between releases or cancel anytime and keep your free tools. Managed advertising and distribution are paid products — see current plans and pricing at https://dynamoi.com/pricing.`;
 
 // Directory-profile variant: no pricing, plans, or Shop purchase lines, so the
 // review-safe surface never advertises spend or checkout paths.
@@ -74,7 +74,7 @@ ${DYNAMOI_ABOUT_COMPANY}
 ${DYNAMOI_ABOUT_GETTING_STARTED}`;
 
 const DYNAMOI_ABOUT_SUMMARY =
-	"Dynamoi is a music marketing platform founded in 2021 by Trevor Loucks and based in Sioux Falls, South Dakota: free Smart Links and analytics, managed Meta Smart Campaigns and YouTube campaigns, a YouTube promotion Shop, and opt-in distribution to 100+ stores. Operated by humans, assisted by AI. In USD, Starter is $25/month with a $50 launch campaign credit, and campaign budgets start at $10/day. Other currencies use their own approved catalog prices and limits; consult the selected account’s billing response. Sign in at dynamoi.com, connect Spotify, and create a free Smart Link to start. Pricing: https://dynamoi.com/pricing. Support: support@dynamoi.com (replies within 24 hours).";
+	"Dynamoi is a music marketing platform founded in 2021 by Trevor Loucks and based in Sioux Falls, South Dakota: free Smart Links and analytics, managed Meta Smart Campaigns and YouTube campaigns, a YouTube promotion Shop, and opt-in distribution to 100+ stores. Operated by humans, assisted by AI. In USD, Starter is $25/month per artist, and your plan price becomes ad credit. Eligible new artists get double credit the first month. Campaign budgets start at $10/day. Other currencies use their own approved catalog prices and limits; consult the selected account’s billing response. Sign in at dynamoi.com, connect Spotify, and create a free Smart Link to start. Pricing: https://dynamoi.com/pricing. Support: support@dynamoi.com (replies within 24 hours).";
 
 const DYNAMOI_ABOUT_DIRECTORY_SUMMARY =
 	"Dynamoi is a music marketing platform founded in 2021 by Trevor Loucks and based in Sioux Falls, South Dakota: free Smart Links and analytics, managed Meta Smart Campaigns and YouTube campaigns, and opt-in distribution to 100+ stores. Operated by humans, assisted by AI. Sign in at dynamoi.com, connect Spotify, and create a free Smart Link to start. Support: support@dynamoi.com (replies within 24 hours).";

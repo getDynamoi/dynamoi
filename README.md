@@ -8,13 +8,10 @@
 [![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=dynamoi&config=eyJ1cmwiOiJodHRwczovL2R5bmFtb2kuY29tL21jcCJ9)
 [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_Server-0098FF?logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect/mcp/install?name=dynamoi&config=%7B%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fdynamoi.com%2Fmcp%22%7D)
 
-The Dynamoi MCP server connects ChatGPT, Claude, Cursor, and other AI agents
-to [Dynamoi](https://dynamoi.com), the music marketing platform for artists,
-labels, and managers. Agents can create free Spotify Smart Links with Meta,
-TikTok and Google Ads pixels, run managed YouTube and Meta promotion campaigns,
-read campaign and Smart Link analytics, check platform status, and apply for
-music distribution. Campaigns are real ads, never bots or paid playlists. Use
-the hosted MCP server, or use this package as a library.
+Full-service music distribution and promotion from your AI agent. Connect
+Claude, ChatGPT, Codex or Cursor to check results, manage releases and Smart
+Links, and, where your assistant allows purchases, launch Spotify and YouTube
+campaigns. Use the hosted MCP server, or use this package as a library.
 
 ```txt
 https://dynamoi.com/mcp
@@ -51,8 +48,9 @@ assisted by AI. People make the decisions and are accountable for every
 campaign and support reply. AI helps with ad creative, campaign monitoring,
 reporting, and routine tasks.
 
-Smart Links are free. Starter is $25/month with a $50 launch campaign credit,
-and campaign budgets start at $10/day. See
+Smart Links are free. Starter is $25/month per artist, and your plan
+price becomes ad credit. Eligible new artists get double credit the first month.
+Campaign budgets start at $10/day. See
 [pricing](https://dynamoi.com/pricing).
 
 Agents can read the same overview before sign-in through the `dynamoi_about`
@@ -156,8 +154,8 @@ openclaw mcp login dynamoi
 ```
 
 The metadata URL is Dynamoi's reviewed client document for OpenClaw, which
-grants the full tool catalog and refresh. Without it, OpenClaw registers
-dynamically and gets read-only scopes.
+recognizes OpenClaw by its published identity. OpenClaw gets Full access with
+or without it, because it signs in on your own computer.
 
 The [`dynamoi` skill](./skills/dynamoi/SKILL.md) teaches OpenClaw agents the
 Dynamoi workflows and safety rules. Install it from ClawHub with
@@ -171,22 +169,17 @@ need a remote-to-stdio bridge.
 
 ## Which tools a client sees
 
-The server has two tool catalogs. It picks one from the OAuth client that
-signed in, not from anything the client claims about itself.
+Every client gets one of two tiers. The server picks it from the identity the
+OAuth client signs in with, not from anything the client claims about itself.
 
-| Catalog | Who gets it | What it includes |
+| Tier | Who gets it | What it includes |
 | --- | --- | --- |
-| **Directory** | Every client on `https://dynamoi.com/mcp/directory` (used by agent-directory listings such as the Dynamoi Claude plugin), the published ChatGPT app on `/mcp`, and requests made before sign-in | 24 review-safe advertised tools: reads, Smart Links, distribution, and About. No billing, campaign launch or campaign changes, platform connection starters, or Shop checkout. |
-| **Full** | Every other signed-in client on `https://dynamoi.com/mcp`, such as Claude custom connectors, Claude Code, Cursor, VS Code, Gemini CLI, Codex CLI, and custom agents | All 38 tools, plus the Dynamoi prompts and reference resources |
+| **Full** | Reviewed clients (Codex CLI, Claude on the web or desktop and Claude Code, OpenClaw via Dynamoi's client document) and any app that signs in on your own computer (loopback or `https://vscode.dev/redirect` return addresses, no device code), such as Claude Code, Codex, OpenClaw, Cursor, VS Code and Gemini CLI | All 38 tools, plus the Dynamoi prompts and reference resources, including campaign launches, budget changes and Shop checkout links |
+| **Directory** | ChatGPT, Claude added from the directory listing (`https://dynamoi.com/mcp/directory`), unreviewed web apps, device-code sign-ins and requests made before sign-in | 24 review-safe tools: reads, Smart Links, distribution and About. No billing, campaign launch or changes, platform connection starters, or Shop checkout, and the scopes they need are never granted. |
 
-Seeing a tool is not permission to call it. Only reviewed client identities
-(client metadata on chatgpt.com or claude.ai, such as ChatGPT, Codex CLI,
-Claude and Claude Code, and OpenClaw via Dynamoi's client document) can be
-granted write scopes. Every other client, including Cursor, VS Code, Gemini
-CLI, and dynamically registered agents, is capped at read-only scopes without
-refresh: it can read accounts, analytics,
-platform status, and distribution eligibility, but its write, launch, apply,
-and billing calls are refused.
+Seeing a tool is not permission to call it. A Full client can approve every
+scope for its tools; a Directory client is never granted the scopes that Full
+tools need, so those calls are refused.
 
 Signing in does not skip permission checks. Every tool call still needs its
 OAuth scopes, and the user's role must allow access to the artist, campaign,

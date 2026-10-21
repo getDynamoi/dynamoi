@@ -43,7 +43,7 @@ Never ask for a password, token or card number. When sign-in is required or
 expired, ask the user to run `openclaw mcp login dynamoi` again. Tools appear as
 `dynamoi__<tool>`, so `dynamoi_about` is `dynamoi__dynamoi_about`.
 
-Without the metadata URL, OpenClaw is read-only. On a scope error, do not
+On a scope error, do not
 retry; redo the setup above or use https://dynamoi.com/dashboard instead.
 
 ## Start of a session

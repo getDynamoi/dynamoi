@@ -9,7 +9,7 @@ const DYNAMOI_ABOUT_INTRO =
 
 const DYNAMOI_ABOUT_COMPANY = `## Company
 
-- **Founded** — 2021, by Trevor Loucks (Founder & CEO).
+- **Founded** — 2021, by Trevor Loucks.
 - **Headquarters** — Sioux Falls, South Dakota, United States.
 - **Operating model** — Dynamoi is operated by humans, assisted by AI. People make the decisions and are accountable for every campaign and support reply; AI assists with ad creative, campaign monitoring, reporting, and routine tasks.
 - **Support** — email support@dynamoi.com. The Dynamoi team replies within 24 hours.`;

@@ -97,6 +97,7 @@ export {
 } from "./server/support-tools";
 export {
 	DateRangeSchema,
+	DynamoiAddCampaignFundsInputSchema,
 	DynamoiGetArtistAnalyticsInputSchema,
 	DynamoiGetArtistInputSchema,
 	DynamoiGetAudienceAnalyticsInputSchema,

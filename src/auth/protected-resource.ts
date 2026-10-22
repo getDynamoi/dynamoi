@@ -13,6 +13,7 @@ export const DYNAMOI_BETTER_AUTH_MCP_SCOPES = [
 export const DYNAMOI_MCP_TOOL_SCOPES = {
 	// Public product information; callable before sign-in.
 	dynamoi_about: [],
+	dynamoi_add_campaign_funds: ["dynamoi:read", "dynamoi:mcp.full"],
 	dynamoi_apply_for_distribution: [
 		"dynamoi:read",
 		"dynamoi:distribution.apply",

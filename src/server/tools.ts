@@ -345,6 +345,16 @@ export const DynamoiPauseCampaignInputSchema = z
 	})
 	.strict();
 
+export const DynamoiAddCampaignFundsInputSchema = z
+	.object({
+		amountMinor: z.number().int().positive(),
+		artistId: z.string().uuid(),
+		confirm: z.boolean().optional(),
+		currency: z.string().length(3).optional(),
+		requestId: z.string().uuid(),
+	})
+	.strict();
+
 export const DynamoiGetResumeFundingInputSchema = z
 	.object({
 		campaignId: z.string().uuid(),
@@ -1009,7 +1019,7 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 	},
 	{
 		description:
-			"Use this when the user asks about billing state, credit balance, promo limits, subscription status, or whether billing blocks launches for one artist. This is a read-only status check; it does not create checkout links or collect payment. If billing blocks a launch, starting or restoring managed advertising is not available through this MCP surface; tell the user: 'You can do this in the Dynamoi dashboard at https://dynamoi.com/dashboard.' Then call this tool again to confirm the status. Do not use this for campaign analytics or platform connection troubleshooting.",
+			"Use this when the user asks about billing state, credit balance, promo limits, subscription status, campaign-fund deposits, or whether billing blocks launches for one artist. This is a read-only status check; it does not create checkout links or collect payment. Each deposit in prefundPayments is pending (payment not yet confirmed), cleared (Stripe says paid and the funds are usable), failed (the payment did not complete) or held (paid, but funding is on hold for review and not usable yet). A Checkout link alone is never a deposit. To add campaign funds use dynamoi_add_campaign_funds; for other billing setup tell the user: 'You can do this in the Dynamoi dashboard at https://dynamoi.com/dashboard.' Then call this tool again to confirm the status. Do not use this for campaign analytics or platform connection troubleshooting.",
 		destructiveHint: false,
 		name: "dynamoi_get_billing",
 		openWorldHint: false,
@@ -1071,6 +1081,18 @@ export const PHASE_ONBOARDING_TOOL_DEFINITIONS =
 	});
 
 export const PHASE_2_TOOL_DEFINITIONS = [
+	{
+		description:
+			"Create the same unpaid Stripe Checkout the dashboard's Add campaign funds button creates, in the artist's bound currency, and return its URL for the user to open and pay. Call it first WITHOUT confirm to get the exact amount and currency; show both to the user and obtain their explicit approval, then call again with confirm=true, that currency, the same amountMinor and the same requestId (retrying within 24 hours returns the same session; once a payment exists for that requestId, or after a day, use a new requestId). This never charges anyone or records a deposit: funds count as cleared only after Stripe says paid, which dynamoi_get_billing reports in prefundPayments (pending, cleared, failed or held). Refused when funding is on hold, billing setup is required, the amount is outside the allowed range or the currency is not live.",
+		destructiveHint: false,
+		idempotentHint: true,
+		name: "dynamoi_add_campaign_funds",
+		openWorldHint: true,
+		outputSchema: AnyOutputEnvelopeSchema,
+		readOnlyHint: false,
+		schema: DynamoiAddCampaignFundsInputSchema,
+		title: "Add Campaign Funds",
+	},
 	{
 		description:
 			"Inspect an artist's open YouTube draft with action=inspect after an interrupted launch. Returns completed steps, screening, failure stage, and updatedAt. Use action=discard only when the user explicitly asks to discard that draft, supplying its campaignId, expectedUpdatedAt from inspect, and userIntentSummary. Discard cannot be undone.",

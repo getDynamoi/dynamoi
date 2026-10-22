@@ -232,6 +232,7 @@ start an action with an outside provider.
 | `dynamoi_update_smart_link_release_settings` | Update one Smart Link's release video or destination visibility | Changes data | Full |
 | `dynamoi_update_smart_link_artist_hub_settings` | Update an artist's hub introduction, official profile links or service order | Changes data | Full |
 | `dynamoi_get_billing` | Billing status, credit balance, and promo limits | Reads | Full |
+| `dynamoi_add_campaign_funds` | Create the unpaid Add campaign funds Stripe Checkout link, after the user approves the amount and currency | Changes data | Full |
 | `dynamoi_get_resume_funding` | Campaign resume-funding breakdown, refusal, and consent requirements | Reads | Full |
 | `dynamoi_list_available_countries` | Countries a Smart Campaign or YouTube campaign can target | Reads | Full |
 | `dynamoi_get_campaign_readiness` | Check launch inputs before creating anything | Reads | Full |

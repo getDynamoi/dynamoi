@@ -343,6 +343,7 @@ const MUTATING_TOOL_NAMES = new Set<string>(
 
 const DIRECTORY_EXCLUDED_TOOL_NAMES = new Set<string>([
 	"dynamoi_contact_support",
+	"dynamoi_add_campaign_funds",
 	"dynamoi_shop_create_checkout",
 	"dynamoi_shop_get_quote",
 	"dynamoi_get_billing",
@@ -438,6 +439,9 @@ export type Phase3Adapter = {
 	getCampaign(
 		input: unknown,
 	): Promise<ResultEnvelope<GetCampaignData | GetCampaignSummaryData>>;
+	addCampaignFunds(
+		input: unknown,
+	): Promise<ResultEnvelope<Record<string, unknown>>>;
 	getResumeFunding(
 		input: unknown,
 	): Promise<ResultEnvelope<GetResumeFundingData | { summary: string }>>;
@@ -759,6 +763,8 @@ function normalizeKnownErrorRecovery(
 const DYNAMOI_TOOL_DISPATCHERS = {
 	dynamoi_about: (_adapter, _input, toolProfile) =>
 		Promise.resolve(getDynamoiAbout({ toolProfile })),
+	dynamoi_add_campaign_funds: (adapter, input) =>
+		adapter.addCampaignFunds(input),
 	dynamoi_apply_for_distribution: (adapter, input) =>
 		adapter.applyForDistribution(input),
 	dynamoi_contact_support: (adapter, input) => adapter.contactSupport(input),

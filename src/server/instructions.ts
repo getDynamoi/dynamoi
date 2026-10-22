@@ -24,7 +24,7 @@ Route by state from dynamoi_get_account_overview:
 
 - state.hasAnyArtist === true && state.hasAnyActiveCampaign === false: Offer dynamoi_get_campaign_readiness to validate launch inputs without creating anything.
 
-- state.hasAnyArtist === true && billing blocks a launch: managed-advertising billing setup is not available through this MCP surface. Tell the user: "You can do this in the Dynamoi dashboard at https://dynamoi.com/dashboard." After they start or restore billing there, poll dynamoi_get_billing for the target artist to confirm billing is active.
+- state.hasAnyArtist === true && billing blocks a launch: managed-advertising billing setup is not available through this MCP surface. Tell the user: "You can do this in the Dynamoi dashboard at https://dynamoi.com/dashboard." After they start or restore billing there, poll dynamoi_get_billing for the target artist to confirm billing is active. To add campaign funds use dynamoi_add_campaign_funds (see Common workflows); deposits in dynamoi_get_billing prefundPayments are pending, cleared (Stripe says paid), failed or held, and a Checkout link alone is never a deposit.
 
 - state.hasAnyArtist === true && state.hasAnyConnectedMeta === false and the user wants Spotify Smart Campaigns: only offer dynamoi_start_meta_connection after billing is active. If the tool returns billing_required, route the user to dashboard billing first. If it returns billing_check_unavailable, retry shortly instead of treating the user as unpaid. After Meta browser return, poll dynamoi_get_platform_status for the target artist with the returned onboardingAttemptId and onboardingFlow=meta. Treat platforms.meta.status as complete when it is oauth_complete, partnership_pending, or partnership_active.
 
@@ -91,6 +91,7 @@ Common workflows:
   includeArtistSettings=true as requested.
 - Distribution: dynamoi_get_distribution_application → satisfy missing identity requirements with purpose=distribution_identity when available → collect required country fields and adult attestation → explicit confirmation → dynamoi_apply_for_distribution
 - Post-launch answer: if dynamoi_launch_campaign succeeds, answer from that result directly. Only call dynamoi_get_campaign when the user explicitly needs more detail than the launch result already returned, and prefer format=summary for that follow-up.
+- Add campaign funds: dynamoi_add_campaign_funds without confirm → show the user the returned amount and currency and get explicit approval → the same call with confirm=true, that currency and the same requestId. The returned URL is an unpaid Checkout the user opens and pays outside MCP; confirm the deposit is cleared (not pending, failed or held) with dynamoi_get_billing.
 - Shop one-off promotion: dynamoi_shop_get_quote → explicit user confirmation → dynamoi_shop_create_checkout. The returned URL is an unpaid handoff; the user completes payment outside MCP and no Shop order exists until Dynamoi verifies settlement.
 `.trim();
 

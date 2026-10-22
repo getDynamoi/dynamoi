@@ -31,7 +31,7 @@ work. Everything else is refused.
 | Analytics | Campaign-provider rollups, growth audit (`dynamoi_get_growth_audit`), tracked playlist analytics (`dynamoi_get_playlist_analytics`), streaming audience analytics (`dynamoi_get_audience_analytics`), per-link analytics and observed YouTube channel data (`dynamoi_get_youtube_channel_data`) | Artist-wide Smart Link aggregation |
 | Connections | Meta and YouTube browser OAuth handoffs and status reads | Headless provider login, owner selection or bypass of ownership verification |
 | Distribution | Five scored requirements, application state and explicit adult-attested application submission for manual review | Agreement execution, release intake/catalog, rights/splits, royalties, tax, payout and takedown workflows |
-| Billing and Shop | Managed billing observations and read-only existing-campaign resume funding breakdown (`dynamoi_get_resume_funding`); full-profile Shop quote and unpaid Stripe checkout creation | Managed subscription changes, invoice/funding workflows or agent payment settlement. Shop checkout is not a campaign launch or paid order. |
+| Billing and Shop | Managed billing observations and read-only existing-campaign resume funding breakdown (`dynamoi_get_resume_funding`); unpaid Add campaign funds Checkout creation (`dynamoi_add_campaign_funds`); full-profile Shop quote and unpaid Stripe checkout creation | Managed subscription changes, invoice/funding workflows or agent payment settlement. Shop checkout is not a campaign launch or paid order. |
 
 A real campaign launch, budget edit or pause/resume runs the same shared
 backend functions as web and mobile. Operations that need automatic daily card

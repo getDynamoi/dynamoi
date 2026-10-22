@@ -7,6 +7,12 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.7] - 2026-10-22
+
+### Changed
+
+- **The README is a shorter landing page.** It covers connecting each client, example prompts, money and permissions, the tool table and an FAQ, and links to dynamoi.com/docs for depth. The `dynamoi` CLI README (0.2.3) adds Homebrew install and a commands table. The tool contract is unchanged.
+
 ## [1.0.6] - 2026-10-21
 
 ### Changed

@@ -1,6 +1,6 @@
 # Dynamoi MCP Server
 
-**Music promotion, built for AI agents.**
+**Music promotion and distribution, built for AI agents.**
 
 [![npm version](https://img.shields.io/npm/v/@dynamoi/mcp?label=npm)](https://www.npmjs.com/package/@dynamoi/mcp)
 [![license](https://img.shields.io/npm/l/@dynamoi/mcp)](./LICENSE)
@@ -8,11 +8,11 @@
 [![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=dynamoi&config=eyJ1cmwiOiJodHRwczovL2R5bmFtb2kuY29tL21jcCJ9)
 [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_Server-0098FF?logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect/mcp/install?name=dynamoi&config=%7B%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fdynamoi.com%2Fmcp%22%7D)
 
-Music promotion from your AI agent. Connect Claude, ChatGPT, Codex or Cursor
+Music promotion and distribution from your AI agent. Connect Claude, ChatGPT, Codex or Cursor
 to check results and manage Smart Links and, where your assistant allows
 purchases, launch and fund Spotify and YouTube campaigns with the artist's
-explicit consent. Artists who distribute with Dynamoi can manage releases there
-too. Use the hosted MCP server, or use this package as a library.
+explicit consent. Distribution is optional and application-based: artists who
+distribute with Dynamoi can manage releases there too. Use the hosted MCP server, or use this package as a library.
 
 ```txt
 https://dynamoi.com/mcp

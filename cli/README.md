@@ -1,6 +1,6 @@
 # dynamoi
 
-**Music promotion, built for AI agents.**
+**Music promotion and distribution, built for AI agents.**
 
 [![npm version](https://img.shields.io/npm/v/dynamoi?label=npm)](https://www.npmjs.com/package/dynamoi)
 [![license](https://img.shields.io/npm/l/dynamoi)](./LICENSE)

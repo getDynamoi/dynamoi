@@ -7,6 +7,12 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.6] - 2026-10-21
+
+### Changed
+
+- **The agent-facing tagline and descriptions pair music promotion with distribution.** The tagline, registry description and standard description name promotion and distribution together, promotion first. Distribution stays application-based and optional. The tool contract is unchanged.
+
 ## [1.0.5] - 2026-10-21
 
 ### Changed

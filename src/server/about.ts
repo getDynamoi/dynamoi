@@ -24,7 +24,7 @@ const DYNAMOI_ABOUT_YOUTUBE_BULLET =
 	"- **YouTube campaigns** — managed campaigns on Google's ad network for YouTube channel growth. Each campaign follows a strategy (Views, Watch Time, Subscribers, Channel Growth, or Revenue for monetized channels) and is judged from the channel's own YouTube data. Every strategy except Views starts viewers in a playlist of the artist's own videos.";
 
 const DYNAMOI_ABOUT_DISTRIBUTION_GATE =
-	"Dynamoi scores five requirements before an application can be submitted — including an established audience (at least 10,000 monthly Spotify listeners) and identity verification — and approval is not guaranteed.";
+	"Dynamoi scores five requirements before an application can be submitted — including an established audience (at least 1,000 Spotify followers and 10,000 monthly listeners) and identity verification — and approval is not guaranteed. Promotion has no listener bar.";
 
 const DYNAMOI_ABOUT_GETTING_STARTED = `## How to get started
 

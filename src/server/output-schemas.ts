@@ -421,9 +421,7 @@ export const AnyOutputEnvelopeSchema = createOutputEnvelopeSchema(
 	{ allowPartial: true },
 );
 
-const CampaignEndDateOutputSchema = z
-	.string()
-	.describe("Last day ads run (Pacific time)");
+const CampaignEndDateOutputSchema = z.string().describe("Last day ads run");
 
 export const GetCampaignOutputEnvelopeSchema = createOutputEnvelopeSchema(
 	z

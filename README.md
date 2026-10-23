@@ -180,7 +180,7 @@ including what did not work.
 ## Money and permissions
 
 - **Smart Links are free.** Starter is $25/month per artist, and the plan
-  price becomes ad credit. Campaigns run from $10 a day. See
+  includes monthly campaign credit. Campaigns run from $10 a day. See
   [pricing](https://dynamoi.com/pricing).
 - **Nothing is charged without consent.** Every launch, budget change or
   card-funded resume needs the artist to accept the exact consent text, which

@@ -280,9 +280,7 @@ export const DynamoiGetCampaignReadinessInputSchema = z
 		budgetType: z.enum(["DAILY", "TOTAL"]).optional(),
 		campaignType: z.enum(["SMART_CAMPAIGN", "YOUTUBE"]),
 		contentType: z.enum(["TRACK", "ALBUM", "PLAYLIST", "VIDEO"]).optional(),
-		endDate: IsoCalendarDateSchema.describe(
-			"Last day ads run (Pacific time)",
-		).optional(),
+		endDate: IsoCalendarDateSchema.describe("Last day ads run").optional(),
 		format: ToolFormatSchema.optional(),
 		locationTargets: z.array(LocationTargetSchema).optional(),
 		mediaAssetIds: z.array(z.string().uuid()).optional(),
@@ -469,9 +467,7 @@ export const DynamoiUpdateBudgetInputSchema = z
 			),
 		campaignId: z.string().uuid(),
 		clientRequestId: ClientRequestIdSchema,
-		endDate: IsoCalendarDateSchema.describe(
-			"Last day ads run (Pacific time)",
-		).optional(),
+		endDate: IsoCalendarDateSchema.describe("Last day ads run").optional(),
 		expectedCurrentBudgetAmount: z
 			.number()
 			.finite()
@@ -480,9 +476,8 @@ export const DynamoiUpdateBudgetInputSchema = z
 				"Current budget in the artist's commercial currency (major units).",
 			)
 			.optional(),
-		expectedCurrentEndDate: IsoCalendarDateSchema.describe(
-			"Last day ads run (Pacific time)",
-		).optional(),
+		expectedCurrentEndDate:
+			IsoCalendarDateSchema.describe("Last day ads run").optional(),
 		userIntentSummary: UserIntentSummarySchema,
 	})
 	.strict()
@@ -539,9 +534,7 @@ export const DynamoiUpdateCampaignInputSchema = z
 			.optional(),
 		campaignId: z.string().uuid(),
 		clientRequestId: ClientRequestIdSchema,
-		endDate: IsoCalendarDateSchema.describe(
-			"Last day ads run (Pacific time)",
-		).optional(),
+		endDate: IsoCalendarDateSchema.describe("Last day ads run").optional(),
 		expectedCurrentBudgetAmount: z
 			.number()
 			.finite()
@@ -550,9 +543,8 @@ export const DynamoiUpdateCampaignInputSchema = z
 				"Current budget in the artist's commercial currency (major units).",
 			)
 			.optional(),
-		expectedCurrentEndDate: IsoCalendarDateSchema.describe(
-			"Last day ads run (Pacific time)",
-		).optional(),
+		expectedCurrentEndDate:
+			IsoCalendarDateSchema.describe("Last day ads run").optional(),
 		expectedCurrentStatus: ExpectedCampaignStatusSchema,
 		locationTargets: z
 			.union([
@@ -768,9 +760,7 @@ export const DynamoiLaunchCampaignInputSchema = z
 		// Content
 		contentTitle: z.string().trim().min(1).max(160),
 		contentType: z.enum(["TRACK", "ALBUM", "PLAYLIST", "VIDEO"]),
-		endDate: IsoCalendarDateSchema.describe(
-			"Last day ads run (Pacific time)",
-		).optional(),
+		endDate: IsoCalendarDateSchema.describe("Last day ads run").optional(),
 
 		// Targeting
 		locationTargets: z.array(LocationTargetSchema).optional(),

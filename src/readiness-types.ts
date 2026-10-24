@@ -74,7 +74,6 @@ export type CampaignProposalBlockingCode =
 	| "funding_unavailable"
 	| "invalid_end_date"
 	| "onboarding"
-	| "promo_constraints"
 	| "unsupported_content_type";
 
 export type GetCampaignReadinessBudgetConstraints = {

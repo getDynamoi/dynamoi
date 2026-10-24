@@ -321,7 +321,6 @@ const GetCampaignReadinessDataOutputSchema: z.ZodType<CampaignReadinessOutputWit
 					"funding_unavailable",
 					"invalid_end_date",
 					"onboarding",
-					"promo_constraints",
 					"unsupported_content_type",
 				]),
 			),

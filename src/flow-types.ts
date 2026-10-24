@@ -43,21 +43,14 @@ export type GetBillingData = {
 	 * non-USD accounts; absent means USD.
 	 */
 	currency?: string;
-	isPromoArtist: boolean;
 	/**
 	 * Amounts that have no source in the account currency yet. They are
 	 * reported as null rather than relabeled from another currency.
 	 */
 	moneyUnavailable?: {
 		currency: string;
-		fields: Array<"creditBalance" | "promoLimits.remainingBudget">;
+		fields: Array<"creditBalance">;
 		reason: "no_source_in_account_currency";
-	};
-	promoLimits?: {
-		campaignsUsed: number;
-		campaignsAllowed: number;
-		/** Null only when listed in `moneyUnavailable.fields`. */
-		remainingBudget: MoneyDisplay | null;
 	};
 	warnings?: string[];
 	actionRequired?: string[];

@@ -159,6 +159,27 @@ export const DynamoiGetBillingInputSchema = z
 	})
 	.strict();
 
+export const DynamoiGetTeamInputSchema = z
+	.object({ artistId: z.string().uuid() })
+	.strict();
+export const DynamoiGetAuditLogInputSchema = z
+	.object({
+		artistId: z.string().uuid(),
+		cursor: z.string().min(1).max(128).optional(),
+		scope: z.enum(["artist", "organization"]).default("artist"),
+	})
+	.strict();
+export const DynamoiGetReferralsInputSchema = z
+	.object({
+		artistId: z.string().uuid(),
+		filter: z
+			.enum(["all", "available", "pending", "paid", "void"])
+			.default("all"),
+		page: z.number().int().min(1).max(100_000).default(1),
+		pageSize: z.number().int().min(10).max(100).default(25),
+	})
+	.strict();
+
 export const DynamoiGetActionCenterInputSchema = z
 	.object({ artistId: z.string().uuid() })
 	.strict();
@@ -1062,6 +1083,39 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 		readOnlyHint: true,
 		schema: DynamoiGetEarningsInputSchema,
 		title: "Get Distribution Earnings",
+	},
+	{
+		description:
+			"Read organization members and pending invitations after artist and organization settings authority checks. Artist collaboration alone never grants roster access. No invitation tokens or role mutations. Full profile only.",
+		destructiveHint: false,
+		name: "dynamoi_get_team",
+		openWorldHint: false,
+		outputSchema: AnyOutputEnvelopeSchema,
+		readOnlyHint: true,
+		schema: DynamoiGetTeamInputSchema,
+		title: "Get Team",
+	},
+	{
+		description:
+			"Read sanitized artist or organization settings audit events. Organization scope requires organization settings authority, beyond artist access. Pass nextCursor unchanged within the same scope; cursors are bounded and scope-checked. Full profile only.",
+		destructiveHint: false,
+		name: "dynamoi_get_audit_log",
+		openWorldHint: false,
+		outputSchema: AnyOutputEnvelopeSchema,
+		readOnlyHint: true,
+		schema: DynamoiGetAuditLogInputSchema,
+		title: "Get AuditLog",
+	},
+	{
+		description:
+			"Read the authenticated caller's referral dashboard after artist access, without cookie attribution or commission refresh. USD cents and observed states: PENDING is not yet available; AVAILABLE is eligible, not payout approval; WITHDRAWAL_PENDING is awaiting payout; PAID is paid. Never describe pending or available amounts as approved or paid. Full profile only.",
+		destructiveHint: false,
+		name: "dynamoi_get_referrals",
+		openWorldHint: false,
+		outputSchema: AnyOutputEnvelopeSchema,
+		readOnlyHint: true,
+		schema: DynamoiGetReferralsInputSchema,
+		title: "Get Referrals",
 	},
 	{
 		description:

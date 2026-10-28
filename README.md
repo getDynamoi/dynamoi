@@ -193,7 +193,7 @@ including what did not work.
 - **Each client gets one of two tool sets**, chosen from the identity it signs
   in with. Reviewed clients and apps that sign in on your own computer
   (Claude Code, Codex, Cursor, VS Code, Gemini CLI, OpenClaw and the `dynamoi`
-  CLI) get All 41 tools. ChatGPT, Claude added from its directory listing and
+  CLI) get All 44 tools. ChatGPT, Claude added from its directory listing and
   other web apps get 24 review-safe advertised tools: reads, Smart Links,
   distribution applications and About, with no billing, launches or checkout.
 - **Sign-in is OAuth 2.1**, and every call still checks its scopes and the
@@ -236,6 +236,9 @@ come from `tools/list`.
 | `dynamoi_update_smart_link_artist_hub_settings` | Update an artist's hub introduction, official profile links or service order | Changes data | Full |
 | `dynamoi_get_action_center` | Artist Action Center revision, task states and distinct actions | Reads | Full |
 | `dynamoi_get_earnings` | Authenticated payee own-USD earnings, month axis and bounded detail pages; no payout/tax authority | Reads | Full |
+| `dynamoi_get_team` | Organization members and pending invitations; organization authority required. | Reads | Full |
+| `dynamoi_get_audit_log` | Sanitized artist/organization audit events with scope-bound cursors. | Reads | Full |
+| `dynamoi_get_referrals` | Your referral snapshot; no attribution or commission writes. Pending and available amounts are not approved or paid payouts. | Reads | Full |
 | `dynamoi_get_billing` | Billing status, credit balance, promo limits and masked payment-method display | Reads | Full |
 | `dynamoi_add_campaign_funds` | Create the unpaid Add campaign funds Stripe Checkout link, after the user approves the amount and currency | Changes data | Full |
 | `dynamoi_get_resume_funding` | Campaign resume-funding breakdown, refusal, and consent requirements | Reads | Full |

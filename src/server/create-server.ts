@@ -348,6 +348,9 @@ const DIRECTORY_EXCLUDED_TOOL_NAMES = new Set<string>([
 	"dynamoi_shop_get_quote",
 	"dynamoi_get_billing",
 	"dynamoi_get_action_center",
+	"dynamoi_get_team",
+	"dynamoi_get_audit_log",
+	"dynamoi_get_referrals",
 	"dynamoi_get_earnings",
 	"dynamoi_get_resume_funding",
 	"dynamoi_get_campaign_readiness",
@@ -412,6 +415,9 @@ export function getDynamoiToolCompatibilityDefinitions(options?: {
 
 export type Phase3Adapter = {
 	getActionCenter(input: unknown): Promise<ResultEnvelope<unknown>>;
+	getTeam(input: unknown): Promise<ResultEnvelope<unknown>>;
+	getAuditLog(input: unknown): Promise<ResultEnvelope<unknown>>;
+	getReferrals(input: unknown): Promise<ResultEnvelope<unknown>>;
 	getEarnings(input: unknown): Promise<ResultEnvelope<unknown>>;
 	openWorkspace(
 		input: unknown,
@@ -790,6 +796,7 @@ const DYNAMOI_TOOL_DISPATCHERS = {
 		adapter.getArtistAnalytics(input),
 	dynamoi_get_audience_analytics: (adapter, input) =>
 		adapter.getAudienceAnalytics(input),
+	dynamoi_get_audit_log: (adapter, input) => adapter.getAuditLog(input),
 	dynamoi_get_billing: (adapter, input) => adapter.getBilling(input),
 	dynamoi_get_campaign: (adapter, input) => adapter.getCampaign(input),
 	dynamoi_get_campaign_readiness: (adapter, input) =>
@@ -802,9 +809,11 @@ const DYNAMOI_TOOL_DISPATCHERS = {
 		adapter.getPlatformStatus(input),
 	dynamoi_get_playlist_analytics: (adapter, input) =>
 		adapter.getPlaylistAnalytics(input),
+	dynamoi_get_referrals: (adapter, input) => adapter.getReferrals(input),
 	dynamoi_get_resume_funding: (adapter, input) =>
 		adapter.getResumeFunding(input),
 	dynamoi_get_smart_link: (adapter, input) => adapter.getSmartLink(input),
+	dynamoi_get_team: (adapter, input) => adapter.getTeam(input),
 	dynamoi_get_youtube_channel_data: (adapter, input) =>
 		adapter.getYouTubeChannelData(input),
 	dynamoi_launch_campaign: (adapter, input) => adapter.launchCampaign(input),

@@ -1,5 +1,6 @@
 import { accessToken, MCP_URL, refresh } from "./oauth.ts";
 import { loadCredentials } from "./store.ts";
+import { isToolCommand } from "./tools.ts";
 
 export type Tool = {
 	annotations?: { readOnlyHint?: boolean };
@@ -78,17 +79,17 @@ async function rpc<T>(method: string, params?: unknown): Promise<T> {
 	return body.result as T;
 }
 
-export async function listTools(): Promise<Tool[]> {
+export async function listTools(
+	request: (
+		method: string,
+		params?: unknown,
+	) => Promise<{ nextCursor?: string; tools: Tool[] }> = rpc,
+): Promise<Tool[]> {
 	const tools: Tool[] = [];
 	let cursor: string | undefined;
 	do {
-		const page = await rpc<{ nextCursor?: string; tools: Tool[] }>(
-			"tools/list",
-			cursor ? { cursor } : {},
-		);
-		tools.push(
-			...page.tools.filter((tool) => tool.name.startsWith("dynamoi_")),
-		);
+		const page = await request("tools/list", cursor ? { cursor } : {});
+		tools.push(...page.tools.filter(isToolCommand));
 		cursor = page.nextCursor;
 	} while (cursor);
 	return tools;

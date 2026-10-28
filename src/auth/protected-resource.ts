@@ -1,3 +1,6 @@
+import { AUDIENCE_ANALYTICS_CONTRACT } from "../server/audience-analytics.generated";
+import { PLAYLIST_ANALYTICS_CONTRACT } from "../server/playlist-analytics.generated";
+
 export const DYNAMOI_BETTER_AUTH_MCP_SCOPES = [
 	"dynamoi:read",
 	"dynamoi:mcp.full",
@@ -31,7 +34,8 @@ export const DYNAMOI_MCP_TOOL_SCOPES = {
 	dynamoi_get_account_overview: ["dynamoi:read"],
 	dynamoi_get_action_center: ["dynamoi:read", "dynamoi:platform.read"],
 	dynamoi_get_artist_analytics: ["dynamoi:read"],
-	dynamoi_get_audience_analytics: ["dynamoi:read"],
+	[AUDIENCE_ANALYTICS_CONTRACT.mcp.definition.name]:
+		AUDIENCE_ANALYTICS_CONTRACT.mcp.scopes,
 	dynamoi_get_audit_log: ["dynamoi:read"],
 	dynamoi_get_billing: ["dynamoi:read", "dynamoi:billing.read"],
 	dynamoi_get_campaign: ["dynamoi:read"],
@@ -43,7 +47,8 @@ export const DYNAMOI_MCP_TOOL_SCOPES = {
 	dynamoi_get_earnings: ["dynamoi:read", "dynamoi:distribution.read"],
 	dynamoi_get_growth_audit: ["dynamoi:read"],
 	dynamoi_get_platform_status: ["dynamoi:read", "dynamoi:platform.read"],
-	dynamoi_get_playlist_analytics: ["dynamoi:read"],
+	[PLAYLIST_ANALYTICS_CONTRACT.mcp.definition.name]:
+		PLAYLIST_ANALYTICS_CONTRACT.mcp.scopes,
 	dynamoi_get_referrals: ["dynamoi:read"],
 	dynamoi_get_resume_funding: ["dynamoi:read", "dynamoi:billing.read"],
 	dynamoi_get_smart_link: ["dynamoi:read"],

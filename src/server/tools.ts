@@ -12,6 +12,7 @@ import {
 	DynamoiGetCurrentUserInputSchema,
 	DynamoiListArtistsInputSchema,
 } from "./account-schema.generated";
+import { AUDIENCE_ANALYTICS_CONTRACT } from "./audience-analytics.generated";
 import { createPhaseOnboardingToolDefinitions } from "./onboarding-tool-definitions";
 import { OPENAI_TOOL_DEFINITIONS } from "./openai-tools";
 import {
@@ -24,6 +25,7 @@ import {
 	ManageYoutubeDraftOutputEnvelopeSchema,
 	UpdateCampaignOutputEnvelopeSchema,
 } from "./output-schemas";
+import { PLAYLIST_ANALYTICS_CONTRACT } from "./playlist-analytics.generated";
 import {
 	ClientRequestIdSchema,
 	IsoCalendarDateSchema,
@@ -140,16 +142,11 @@ export const DynamoiGetGrowthAuditInputSchema = z
 	.object({ artistId: z.string().uuid() })
 	.strict();
 
-export const DynamoiGetPlaylistAnalyticsInputSchema = z
-	.object({ artistId: z.string().uuid() })
-	.strict();
+export const DynamoiGetPlaylistAnalyticsInputSchema =
+	PLAYLIST_ANALYTICS_CONTRACT.mcp.definition.schema;
 
-export const DynamoiGetAudienceAnalyticsInputSchema = z
-	.object({
-		artistId: z.string().uuid(),
-		range: z.enum(["7d", "30d", "90d"]).default("30d"),
-	})
-	.strict();
+export const DynamoiGetAudienceAnalyticsInputSchema =
+	AUDIENCE_ANALYTICS_CONTRACT.mcp.definition.schema;
 
 export const DynamoiGetBillingInputSchema = z
 	.object({
@@ -1019,26 +1016,12 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 		title: "Get Spotify Growth Audit",
 	},
 	{
-		description:
-			"Use this when the user asks about an artist's tracked playlist placements, reach, or playlist movement. The response includes freshness and snapshot dates with the playlist and movement rows. These observed placements are not attributed to a paid campaign.",
-		destructiveHint: false,
-		name: "dynamoi_get_playlist_analytics",
-		openWorldHint: false,
+		...PLAYLIST_ANALYTICS_CONTRACT.mcp.definition,
 		outputSchema: AnyOutputEnvelopeSchema,
-		readOnlyHint: true,
-		schema: DynamoiGetPlaylistAnalyticsInputSchema,
-		title: "Get Playlist Analytics",
 	},
 	{
-		description:
-			"Use this when the user asks about an artist's streaming audience by country, service, paid/free tier, or daily trend. Choose range=7d, 30d, or 90d; it defaults to 30d. The response comes from audience analytics and preserves the requested date range. If the source is temporarily unavailable, report that instead of treating it as zero audience.",
-		destructiveHint: false,
-		name: "dynamoi_get_audience_analytics",
-		openWorldHint: false,
+		...AUDIENCE_ANALYTICS_CONTRACT.mcp.definition,
 		outputSchema: AnyOutputEnvelopeSchema,
-		readOnlyHint: true,
-		schema: DynamoiGetAudienceAnalyticsInputSchema,
-		title: "Get Audience Analytics",
 	},
 	{
 		description:

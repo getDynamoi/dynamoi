@@ -308,6 +308,7 @@ type DynamoiToolRegistrationDescriptor = {
 	idempotentHint?: boolean;
 	name: string;
 	openWorldHint: boolean;
+	profiles?: Readonly<Record<DynamoiMcpToolProfile, "advertised" | "excluded">>;
 	outputSchema: z.ZodType & StandardSchemaWithJSON;
 	readOnlyHint: boolean;
 	schema: z.ZodObject<z.ZodRawShape>;
@@ -392,7 +393,11 @@ export function getDynamoiToolDefinitions(options?: {
 	// clients retain the original approved multi-action schema.
 	if (options?.toolProfile === "full") {
 		return definitions
-			.filter((definition) => !DIRECTORY_ONLY_TOOL_NAMES.has(definition.name))
+			.filter((definition) =>
+				definition.profiles
+					? definition.profiles.full === "advertised"
+					: !DIRECTORY_ONLY_TOOL_NAMES.has(definition.name),
+			)
 			.map((definition) =>
 				definition.name === "dynamoi_get_artist_analytics"
 					? {
@@ -402,8 +407,10 @@ export function getDynamoiToolDefinitions(options?: {
 					: definition,
 			);
 	}
-	return definitions.filter(
-		(definition) => !DIRECTORY_EXCLUDED_TOOL_NAMES.has(definition.name),
+	return definitions.filter((definition) =>
+		definition.profiles
+			? definition.profiles.directory === "advertised"
+			: !DIRECTORY_EXCLUDED_TOOL_NAMES.has(definition.name),
 	);
 }
 

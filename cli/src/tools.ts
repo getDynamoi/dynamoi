@@ -1,5 +1,9 @@
 import type { JsonSchema, Tool } from "./mcp.ts";
 
+/** The live catalog and generated coverage use the same command eligibility. */
+export const isToolCommand = (tool: Pick<Tool, "name">): boolean =>
+	tool.name.startsWith("dynamoi_");
+
 /** `dynamoi_get_campaign` is `dynamoi get-campaign`. */
 export const commandName = (tool: Tool): string =>
 	tool.name.replace(/^dynamoi_/u, "").replaceAll("_", "-");

@@ -35,6 +35,10 @@ Usage:
 
 async function main(argv: string[]): Promise<number> {
 	const [command, ...rest] = argv;
+	if (command === "help" && rest.length === 0) {
+		out(USAGE);
+		return 0;
+	}
 	switch (command) {
 		case undefined:
 		case "--help":

@@ -363,6 +363,19 @@ export type GetSmartLinkAnalyticsData = {
 	warnings?: string[];
 };
 
+export type ArtistSmartLinkAnalyticsData = Omit<
+	GetSmartLinkAnalyticsData,
+	"artistId" | "playLinkId" | "releaseTitle" | "breakdowns"
+> & {
+	topLinks: {
+		playLinkId: string;
+		releaseTitle: string;
+		serviceClickEvidence: "available" | "partial" | "unavailable";
+		totals: SmartLinkAnalyticsTotals;
+	}[];
+	reportedLinkCount: number;
+};
+
 export type GetSmartLinkAnalyticsSummaryData = {
 	summary: string;
 	warnings?: string[];
@@ -583,6 +596,8 @@ export type GetCampaignAnalyticsSummaryData = {
 };
 
 export type GetArtistAnalyticsJsonData = {
+	/** Full profile only; canonical artist-wide link aggregate, distinct from campaigns. */
+	smartLinks?: ArtistSmartLinkAnalyticsData;
 	/** Count-read completeness; sample identifies the existing demo reader. */
 	countsAvailability?: "available" | "incomplete" | "sample" | "not_linked";
 	artistId: string;
@@ -630,6 +645,7 @@ export type GetArtistAnalyticsJsonData = {
 };
 
 export type GetArtistAnalyticsSummaryData = {
+	smartLinks?: ArtistSmartLinkAnalyticsData;
 	/** Count-read completeness; sample identifies the existing demo reader. */
 	countsAvailability?: "available" | "incomplete" | "sample" | "not_linked";
 	summary: string;

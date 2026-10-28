@@ -377,9 +377,16 @@ export function getDynamoiToolDefinitions(options?: {
 	// The split aliases exist only in the directory catalog; full-profile
 	// clients retain the original approved multi-action schema.
 	if (options?.toolProfile === "full") {
-		return definitions.filter(
-			(definition) => !DIRECTORY_ONLY_TOOL_NAMES.has(definition.name),
-		);
+		return definitions
+			.filter((definition) => !DIRECTORY_ONLY_TOOL_NAMES.has(definition.name))
+			.map((definition) =>
+				definition.name === "dynamoi_get_artist_analytics"
+					? {
+							...definition,
+							description: `${definition.description} Full-profile responses also include smartLinks: artist-wide link totals, up to ten top links, source freshness and service-click evidence for the requested dates. Unique figures sum daily per-link users, not distinct people across the window. Missing or partial evidence is not zero.`,
+						}
+					: definition,
+			);
 	}
 	return definitions.filter(
 		(definition) => !DIRECTORY_EXCLUDED_TOOL_NAMES.has(definition.name),
@@ -1085,7 +1092,6 @@ export function createDynamoiMcpServer(options: {
 			websiteUrl: options.websiteUrl ?? "https://dynamoi.com",
 		},
 		{
-			maxToolInputElements: 10_000,
 			cacheHints: DYNAMOI_CACHE_HINTS,
 			// Every request builds a fresh server, so lists never change mid-connection.
 			capabilities: {
@@ -1097,6 +1103,7 @@ export function createDynamoiMcpServer(options: {
 				toolProfile === "directory"
 					? DYNAMOI_CHATGPT_APP_INSTRUCTIONS
 					: DYNAMOI_MCP_INSTRUCTIONS,
+			maxToolInputElements: 10_000,
 		},
 	);
 

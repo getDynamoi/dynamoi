@@ -38,7 +38,8 @@ Needs Node 20 or newer. Homebrew installs Node for you.
 | `dynamoi whoami` | Show the signed-in account |
 | `dynamoi logout` | Revoke the session and delete stored tokens |
 | `dynamoi tools` | List every tool your account can use |
-| `dynamoi help <tool>` | Show one tool's flags |
+| `dynamoi tools --query "<intent>"` | Find up to ten matching tools; use `--limit 1..10` and `--json` as needed |
+| `dynamoi help <tool>` | Show one tool's flags; `--json` returns its exact catalog definition |
 | `dynamoi <tool> [--flag value]` | Run a tool. Add `--json` for machine-readable output |
 
 ```bash
@@ -55,6 +56,16 @@ take a JSON string, and `--input '<json>'` passes the whole argument object.
 The CLI has no tool list of its own. Every command is generated from the
 schemas of Dynamoi's hosted MCP server at `https://dynamoi.com/mcp`, so new
 tools appear without an update.
+
+For bounded discovery, start with `dynamoi tools --query "billing payment method" --json`,
+then use the returned `schemaCommand` to load only the selected definition.
+Search reads the current server catalog and returns names, short descriptions,
+and read/write annotations; it never invokes a tool. Matching is by keyword,
+so an unrelated result is not evidence that an operation is supported. The CLI
+still fetches the full catalog over HTTP; the bounded result limits what an
+agent needs to read. Exact schemas, defaults,
+and consent requirements come from `dynamoi help <tool> --json`. Ordinary
+`dynamoi tools --json` still returns the complete input-schema list.
 
 ## How sign-in works
 

@@ -8,7 +8,7 @@ catalog access are authorization capabilities, not evidence of workflow parity.
 The canonical catalog owner is `getDynamoiToolDefinitions` in
 `src/server/create-server.ts`; do not maintain a second availability registry here.
 
-The full profile serves 37 tools. The directory profile advertises 24 tools:
+The full profile serves 39 tools: 37 Dynamoi operations plus `search` and `fetch`. The directory profile advertises 24 tools:
 22 Dynamoi operations and the OpenAI Connector `search` and `fetch` tools.
 It uses separate directory-only tools for Smart Link description and artist
 settings updates. The prior combined schema remains callable for compatibility
@@ -25,13 +25,13 @@ work. Everything else is refused.
 
 | Family | Existing agent surface | Not equivalent or still missing |
 | --- | --- | --- |
-| Account/artist orientation | Account overview, roster and single-artist reads | Organization invites/roles, full artist settings and account deletion |
-| Smart Links | Spotify ingestion, list/detail, description, artist theme/pixels, per-link analytics and theme previews | Full studio/availability controls, every field, aggregate analytics and promotion request workflow |
+| Account/artist orientation | Account overview, roster and single-artist reads | Organization invites/roles, full artist settings and confirmed account profile/deletion bindings |
+| Smart Links | Spotify ingestion, list/detail, description, artist theme/pixels, per-link analytics, full-profile artist-wide link aggregation and theme previews | Full studio/availability controls, every field and promotion request workflow |
 | Campaigns | List/detail, provider analytics, readiness, existing-asset launch, YouTube draft inspect/discard, pause/resume and eligible single-provider budgets | Draft state machines, source uploads, creative generation/selection/approval, screening, existing targeting edits and multi-provider budgets |
-| Analytics | Campaign-provider rollups, growth audit (`dynamoi_get_growth_audit`), tracked playlist analytics (`dynamoi_get_playlist_analytics`), streaming audience analytics (`dynamoi_get_audience_analytics`), per-link analytics and observed YouTube channel data (`dynamoi_get_youtube_channel_data`) | Artist-wide Smart Link aggregation |
+| Analytics | Campaign-provider rollups, growth audit (`dynamoi_get_growth_audit`), tracked playlist analytics (`dynamoi_get_playlist_analytics`), streaming audience analytics (`dynamoi_get_audience_analytics`), per-link analytics and observed YouTube channel data (`dynamoi_get_youtube_channel_data`) | Link unique counts are sums across days and links; requested-window completeness remains unverified |
 | Connections | Meta and YouTube browser OAuth handoffs and status reads | Headless provider login, owner selection or bypass of ownership verification |
 | Distribution | Five scored requirements, application state and explicit adult-attested application submission for manual review | Agreement execution, release intake/catalog, rights/splits, royalties, tax, payout and takedown workflows |
-| Billing and Shop | Managed billing observations and read-only existing-campaign resume funding breakdown (`dynamoi_get_resume_funding`); unpaid Add campaign funds Checkout creation (`dynamoi_add_campaign_funds`); full-profile Shop quote and unpaid Stripe checkout creation | Managed subscription changes, invoice/funding workflows or agent payment settlement. Shop checkout is not a campaign launch or paid order. |
+| Billing and Shop | Managed billing observations including masked payment-method display, and read-only existing-campaign resume funding breakdown (`dynamoi_get_resume_funding`); unpaid Add campaign funds Checkout creation (`dynamoi_add_campaign_funds`); full-profile Shop quote and unpaid Stripe checkout creation | Managed subscription changes, invoice/funding workflows or agent payment settlement. Shop checkout is not a campaign launch or paid order. |
 
 A real campaign launch, budget edit or pause/resume runs the same shared
 backend functions as web and mobile. Operations that need automatic daily card
@@ -64,3 +64,13 @@ Do not advertise universal host compatibility without host journey tests.
 ## Read-only workspace
 
 `dynamoi_open_workspace` exposes a bounded authorized artist roster and an MCP Apps HTML resource with global/thread entrypoints. The view reads existing campaign and Smart Link records through individually registered directory read tools. Selected context is explicit and bounded; only the selected record and artist IDs, displayed name/status and qualified observed results are shared, with no billing fields, raw records or spend. Host support is capability-detected. The existing theme-preview resource is retained. Composer mentions, settings, file viewers, events and public host acceptance are not implemented or claimed.
+
+## Catalog and CLI coverage
+
+The CLI exposes the current catalog's `dynamoi_` tools as schema-derived commands:
+37 in full and 22 in directory at this revision. Connector `search`/`fetch` and
+hidden compatibility handlers are not generated CLI commands. A planned or
+partial MCP row is also a CLI gap; CLI transport availability does not close it.
+`tools --query` returns at most ten keyword matches and `help <tool> --json`
+returns the exact selected definition. Both use `tools/list`; there is no second
+command or capability registry. Top-level help works offline.

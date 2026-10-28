@@ -7,6 +7,16 @@ import type {
 } from "./types";
 
 export type GetBillingData = {
+	/** Safe shared payment display; null means unavailable, absent on older servers. */
+	paymentMethod?: {
+		accountType: string | null;
+		bankName: string | null;
+		brand: string | null;
+		expMonth: number | null;
+		expYear: number | null;
+		last4: string | null;
+		type: string | null;
+	} | null;
 	/** Canonical paid plan evidence; absent on older servers. */
 	plan?:
 		| { state: "NONE" }
@@ -49,7 +59,7 @@ export type GetBillingData = {
 	 */
 	moneyUnavailable?: {
 		currency: string;
-		fields: Array<"creditBalance">;
+		fields: "creditBalance"[];
 		reason: "no_source_in_account_currency";
 	};
 	warnings?: string[];

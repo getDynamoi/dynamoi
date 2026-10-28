@@ -216,7 +216,7 @@ come from `tools/list`.
 | `search` / `fetch` | ChatGPT deep research search and fetch | Reads | Both |
 | `dynamoi_list_campaigns` | An artist's campaigns, with type and status filters | Reads | Both |
 | `dynamoi_get_campaign` | One campaign, with optional analytics, delivery status, and countries | Reads | Both |
-| `dynamoi_get_artist_analytics` | Artist-level analytics across campaigns | Reads | Both |
+| `dynamoi_get_artist_analytics` | Artist campaign analytics; full profile also includes qualified artist-wide Smart Link totals and up to ten top links | Reads | Both |
 | `dynamoi_get_growth_audit` | Spotify growth score, recommendations, listener trends, and playlist reach with status and coverage evidence | Reads | Both |
 | `dynamoi_get_playlist_analytics` | Tracked playlist placements, reach, and movement with freshness and snapshot dates | Reads | Both |
 | `dynamoi_get_audience_analytics` | Streaming audience by date range, country, service, and paid/free tier | Reads | Both |
@@ -234,7 +234,7 @@ come from `tools/list`.
 | `dynamoi_update_smart_link` | Prior multi-action schema for description or artist settings | Changes data | Full |
 | `dynamoi_update_smart_link_release_settings` | Update one Smart Link's release video or destination visibility | Changes data | Full |
 | `dynamoi_update_smart_link_artist_hub_settings` | Update an artist's hub introduction, official profile links or service order | Changes data | Full |
-| `dynamoi_get_billing` | Billing status, credit balance, and promo limits | Reads | Full |
+| `dynamoi_get_billing` | Billing status, credit balance, promo limits and masked payment-method display | Reads | Full |
 | `dynamoi_add_campaign_funds` | Create the unpaid Add campaign funds Stripe Checkout link, after the user approves the amount and currency | Changes data | Full |
 | `dynamoi_get_resume_funding` | Campaign resume-funding breakdown, refusal, and consent requirements | Reads | Full |
 | `dynamoi_list_available_countries` | Countries a Smart Campaign or YouTube campaign can target | Reads | Full |

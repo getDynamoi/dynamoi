@@ -1,5 +1,10 @@
 #!/usr/bin/env node
 import pkg from "../package.json" with { type: "json" };
+import {
+	parseCatalogArgs,
+	renderCatalogSearch,
+	searchCatalog,
+} from "./catalog.ts";
 import { listTools } from "./mcp.ts";
 import { accessToken, login, revoke, userInfo } from "./oauth.ts";
 import { runTool, terminal } from "./run.ts";
@@ -30,12 +35,17 @@ const USAGE = `dynamoi ${VERSION}: Music promotion and distribution, built for A
 Usage:
   dynamoi login | logout | whoami
   dynamoi tools                 List what your account can do
-  dynamoi help <tool>           Show a tool's flags
+  dynamoi tools --query <text> [--limit 1..10] [--json]
+                                Find tools without loading every schema
+  dynamoi help <tool> [--json]  Show flags or the exact catalog schema
   dynamoi <tool> [--flag value] Run a tool; add --json for machine output`;
 
 async function main(argv: string[]): Promise<number> {
 	const [command, ...rest] = argv;
-	if (command === "help" && rest.length === 0) {
+	if (
+		(command === "help" && rest.length === 0) ||
+		(command === "tools" && rest.includes("--help"))
+	) {
 		out(USAGE);
 		return 0;
 	}
@@ -82,6 +92,7 @@ async function main(argv: string[]): Promise<number> {
 			break;
 	}
 
+	const catalogArgs = command === "tools" ? parseCatalogArgs(rest) : undefined;
 	const tools = await listTools();
 	const find = (name: string | undefined) =>
 		tools.find(
@@ -90,7 +101,14 @@ async function main(argv: string[]): Promise<number> {
 				name?.replaceAll("_", "-").replace(/^dynamoi-/u, ""),
 		);
 	if (command === "tools") {
-		if (rest.includes("--json")) {
+		if (catalogArgs?.query !== undefined) {
+			const result = searchCatalog(tools, catalogArgs.query, catalogArgs.limit);
+			out(
+				catalogArgs.json ? JSON.stringify(result) : renderCatalogSearch(result),
+			);
+			return 0;
+		}
+		if (catalogArgs?.json) {
 			out(
 				JSON.stringify(
 					tools.map(({ name, description, inputSchema }) => ({
@@ -120,7 +138,7 @@ async function main(argv: string[]): Promise<number> {
 			out(USAGE);
 			return rest[0] ? 1 : 0;
 		}
-		out(describeTool(tool));
+		out(rest.includes("--json") ? JSON.stringify(tool) : describeTool(tool));
 		return 0;
 	}
 	const tool = find(command);
@@ -132,7 +150,7 @@ async function main(argv: string[]): Promise<number> {
 	}
 	const parsed = parseArgs(tool, rest);
 	if (parsed.global.help) {
-		out(describeTool(tool));
+		out(parsed.global.json ? JSON.stringify(tool) : describeTool(tool));
 		return 0;
 	}
 	const missing = missingRequired(tool, parsed.flags).filter(

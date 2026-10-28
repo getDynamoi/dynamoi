@@ -85,6 +85,7 @@ import { registerDynamoiPrompts } from "./prompts";
 import { registerDynamoiResources } from "./resources";
 import {
 	type DynamoiShopCheckoutData,
+	type DynamoiShopOrdersData,
 	type DynamoiShopQuoteData,
 	SHOP_TOOL_DEFINITIONS,
 } from "./shop-tools";
@@ -356,6 +357,7 @@ const DIRECTORY_EXCLUDED_TOOL_NAMES = new Set<string>([
 	"dynamoi_add_campaign_funds",
 	"dynamoi_shop_create_checkout",
 	"dynamoi_shop_get_quote",
+	"dynamoi_shop_list_orders",
 	"dynamoi_get_billing",
 	"dynamoi_get_action_center",
 	"dynamoi_get_team",
@@ -542,6 +544,9 @@ export type Phase3Adapter = {
 	updateSmartLinkReleaseSettings(
 		input: unknown,
 	): Promise<ResultEnvelope<UpdateSmartLinkData>>;
+	shopListOrders(
+		input: unknown,
+	): Promise<ResultEnvelope<DynamoiShopOrdersData>>;
 	shopGetQuote(input: unknown): Promise<ResultEnvelope<DynamoiShopQuoteData>>;
 	shopCreateCheckout(
 		input: unknown,
@@ -854,6 +859,7 @@ const DYNAMOI_TOOL_DISPATCHERS = {
 	dynamoi_shop_create_checkout: (adapter, input) =>
 		adapter.shopCreateCheckout(input),
 	dynamoi_shop_get_quote: (adapter, input) => adapter.shopGetQuote(input),
+	dynamoi_shop_list_orders: (adapter, input) => adapter.shopListOrders(input),
 	dynamoi_start_meta_connection: (adapter, input) =>
 		adapter.startMetaConnection(input),
 	dynamoi_start_youtube_channel_link: (adapter, input) =>

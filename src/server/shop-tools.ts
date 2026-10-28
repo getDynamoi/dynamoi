@@ -193,7 +193,54 @@ export type DynamoiShopCheckoutData = z.infer<
 	typeof DynamoiShopCheckoutDataSchema
 >;
 
+export const DynamoiShopListOrdersInputSchema = z
+	.object({
+		artistId: z.string().trim().min(1).max(255),
+		limit: z.number().int().min(1).max(20).default(10),
+		orderId: z.string().trim().min(1).max(255).optional(),
+	})
+	.strict();
+export const DynamoiShopOrdersDataSchema = z
+	.object({
+		orders: z
+			.array(
+				z
+					.object({
+						campaignStatus: z.string().nullable(),
+						completedAt: z.string().nullable(),
+						createdAt: z.string(),
+						deploymentCompletedAt: z.string().nullable(),
+						orderId: z.string(),
+						status: z.string(),
+					})
+					.strict(),
+			)
+			.max(20),
+	})
+	.strict();
+export type DynamoiShopOrdersData = z.infer<typeof DynamoiShopOrdersDataSchema>;
+
 export const SHOP_TOOL_DEFINITIONS = [
+	{
+		description:
+			"Read up to 20 newest Shop orders for an authorized artist, optionally filtered by order ID. Returns observed order status, campaign status and fulfillment timestamps. No refunds or fulfillment changes.",
+		destructiveHint: false,
+		idempotentHint: true,
+		name: "dynamoi_shop_list_orders",
+		openWorldHint: false,
+		outputSchema: z.union([
+			z
+				.object({
+					data: DynamoiShopOrdersDataSchema,
+					status: z.literal("success"),
+				})
+				.strict(),
+			ToolErrorEnvelopeSchema,
+		]),
+		readOnlyHint: true,
+		schema: DynamoiShopListOrdersInputSchema,
+		title: "Read Shop Orders",
+	},
 	{
 		description:
 			"Calculate a read-only Dynamoi Shop estimate for a one-off YouTube video promotion. The server derives storefront price, currency, targeting, and estimated views. This does not reserve a price, create checkout, collect payment, create an order, or launch a campaign.",

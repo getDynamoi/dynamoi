@@ -335,6 +335,21 @@ export const DynamoiGetCampaignReadinessInputSchema = z
 	.strict()
 	.superRefine(validateYouTubeEntries);
 
+export const DynamoiSmartCampaignAdCopyInputSchema = z
+	.object({
+		artistId: z.string().uuid(),
+		campaignId: z.string().uuid(),
+		save: z
+			.object({
+				adCopy: z.string(),
+				expectedUpdatedAt: z.string().datetime(),
+				mode: z.enum(["assisted", "preserve"]),
+			})
+			.strict()
+			.optional(),
+	})
+	.strict();
+
 export const DynamoiManageYoutubeDraftInputSchema = z
 	.object({
 		action: z.enum(["inspect", "discard"]),
@@ -1153,6 +1168,17 @@ export const PHASE_ONBOARDING_TOOL_DEFINITIONS =
 	});
 
 export const PHASE_2_TOOL_DEFINITIONS = [
+	{
+		description:
+			"Read ad copy for a Smart Campaign creation draft, or save copy by providing save with the revision read. Full profile only; editor access required. Refuses submitted campaigns. Never launches, submits or publishes.",
+		destructiveHint: false,
+		name: "dynamoi_smart_campaign_ad_copy",
+		openWorldHint: false,
+		outputSchema: AnyOutputEnvelopeSchema,
+		readOnlyHint: false,
+		schema: DynamoiSmartCampaignAdCopyInputSchema,
+		title: "Smart Campaign Ad Copy",
+	},
 	{
 		description:
 			"Create the same unpaid Stripe Checkout the dashboard's Add campaign funds button creates, in the artist's bound currency, and return its URL for the user to open and pay. Call it first WITHOUT confirm to get the exact amount and currency; show both to the user and obtain their explicit approval, then call again with confirm=true, that currency, the same amountMinor and the same requestId (retrying within 24 hours returns the same session; once a payment exists for that requestId, or after a day, use a new requestId). This never charges anyone or records a deposit: funds count as cleared only after Stripe says paid, which dynamoi_get_billing reports in prefundPayments (pending, cleared, failed or held). Refused when funding is on hold, billing setup is required, the amount is outside the allowed range or the currency is not live.",

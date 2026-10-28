@@ -68,6 +68,7 @@ export const DYNAMOI_MCP_TOOL_SCOPES = {
 	dynamoi_shop_create_checkout: ["dynamoi:read", "dynamoi:mcp.full"],
 	dynamoi_shop_get_quote: ["dynamoi:read", "dynamoi:mcp.full"],
 	dynamoi_shop_list_orders: ["dynamoi:read", "dynamoi:mcp.full"],
+	dynamoi_smart_campaign_ad_copy: ["dynamoi:read", "dynamoi:campaign.write"],
 	dynamoi_start_meta_connection: ["dynamoi:read", "dynamoi:platform.write"],
 	dynamoi_start_youtube_channel_link: [
 		"dynamoi:read",

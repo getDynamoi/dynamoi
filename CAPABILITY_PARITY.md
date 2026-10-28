@@ -8,7 +8,7 @@ catalog access are authorization capabilities, not evidence of workflow parity.
 The canonical catalog owner is `getDynamoiToolDefinitions` in
 `src/server/create-server.ts`; do not maintain a second availability registry here.
 
-The full profile serves 48 tools: 46 Dynamoi operations plus `search` and `fetch`. The directory profile advertises 24 tools:
+The full profile serves 49 tools: 47 Dynamoi operations plus `search` and `fetch`. The directory profile advertises 24 tools:
 22 Dynamoi operations and the OpenAI Connector `search` and `fetch` tools.
 It uses separate directory-only tools for Smart Link description and artist
 settings updates. The prior combined schema remains callable for compatibility
@@ -27,7 +27,7 @@ work. Everything else is refused.
 | --- | --- | --- |
 | Account/artist orientation | Account overview, roster and single-artist reads | Organization invites/roles, full artist settings and confirmed account profile/deletion bindings |
 | Smart Links | Spotify ingestion, list/detail, description, artist theme/pixels, per-link analytics, full-profile artist-wide link aggregation and theme previews | Full studio/availability controls, every field and promotion request workflow |
-| Campaigns | List/detail, provider analytics, readiness, existing-asset launch, YouTube draft inspect/discard, pause/resume and eligible single-provider budgets | Draft state machines, source uploads, creative generation/selection/approval, screening, existing targeting edits and multi-provider budgets |
+| Campaigns | List/detail, provider analytics, readiness, existing-asset launch, YouTube draft inspect/discard, Smart Campaign draft ad-copy read/save, pause/resume and eligible single-provider budgets | Draft state machines, source uploads, creative generation/selection/approval, screening, existing targeting edits and multi-provider budgets |
 | Analytics | Campaign-provider rollups, growth audit (`dynamoi_get_growth_audit`), tracked playlist analytics (`dynamoi_get_playlist_analytics`), streaming audience analytics (`dynamoi_get_audience_analytics`), per-link analytics and observed YouTube channel data (`dynamoi_get_youtube_channel_data`) | Link unique counts are sums across days and links; requested-window completeness remains unverified |
 | Connections | Meta and YouTube browser OAuth handoffs, status reads and full-profile Action Center revision/tasks/actions | Headless provider login, owner selection or bypass of ownership verification |
 | Distribution | Five scored requirements, application state and explicit adult-attested application submission for manual review; full-profile payee own-USD totals and bounded detail pages with statement/earned month axis | Agreement execution, release intake/catalog, rights/splits, royalty rankings/exports/filters, tax, payout and takedown workflows |
@@ -68,7 +68,7 @@ Do not advertise universal host compatibility without host journey tests.
 ## Catalog and CLI coverage
 
 The CLI exposes the current catalog's `dynamoi_` tools as schema-derived commands:
-46 in full and 22 in directory at this revision. Connector `search`/`fetch` and
+47 in full and 22 in directory at this revision. Connector `search`/`fetch` and
 hidden compatibility handlers are not generated CLI commands. A planned or
 partial MCP row is also a CLI gap; CLI transport availability does not close it.
 `tools --query` returns at most ten keyword matches and `help <tool> --json`

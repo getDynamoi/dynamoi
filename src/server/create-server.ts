@@ -350,6 +350,7 @@ const MUTATING_TOOL_NAMES = new Set<string>(
 );
 
 const DIRECTORY_EXCLUDED_TOOL_NAMES = new Set<string>([
+	"dynamoi_smart_campaign_ad_copy",
 	"dynamoi_delete_account",
 	"dynamoi_update_account_profile",
 	"dynamoi_set_artist_billing_country",
@@ -509,6 +510,7 @@ export type Phase3Adapter = {
 	): Promise<
 		ResultEnvelope<GetCampaignReadinessData | GetCampaignReadinessSummaryData>
 	>;
+	smartCampaignAdCopy(input: unknown): Promise<ResultEnvelope<unknown>>;
 	manageYoutubeDraft(input: unknown): Promise<ResultEnvelope<unknown>>;
 	updateCampaign(input: unknown): Promise<ResultEnvelope<UpdateCampaignData>>;
 	listMediaAssets(
@@ -860,6 +862,8 @@ const DYNAMOI_TOOL_DISPATCHERS = {
 		adapter.shopCreateCheckout(input),
 	dynamoi_shop_get_quote: (adapter, input) => adapter.shopGetQuote(input),
 	dynamoi_shop_list_orders: (adapter, input) => adapter.shopListOrders(input),
+	dynamoi_smart_campaign_ad_copy: (adapter, input) =>
+		adapter.smartCampaignAdCopy(input),
 	dynamoi_start_meta_connection: (adapter, input) =>
 		adapter.startMetaConnection(input),
 	dynamoi_start_youtube_channel_link: (adapter, input) =>

@@ -136,6 +136,7 @@ export {
 	DynamoiPauseCampaignInputSchema,
 	DynamoiResumeCampaignInputSchema,
 	DynamoiSearchInputSchema,
+	DynamoiSmartCampaignAdCopyInputSchema,
 	DynamoiStartMetaConnectionInputSchema,
 	DynamoiStartYoutubeChannelLinkInputSchema,
 	DynamoiUpdateBudgetInputSchema,

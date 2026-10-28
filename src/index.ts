@@ -98,6 +98,7 @@ export {
 export {
 	DateRangeSchema,
 	DynamoiAddCampaignFundsInputSchema,
+	DynamoiGetActionCenterInputSchema,
 	DynamoiGetArtistAnalyticsInputSchema,
 	DynamoiGetArtistInputSchema,
 	DynamoiGetAudienceAnalyticsInputSchema,
@@ -107,6 +108,7 @@ export {
 	DynamoiGetCampaignInputSchema,
 	DynamoiGetCampaignReadinessInputSchema,
 	DynamoiGetCurrentUserInputSchema,
+	DynamoiGetEarningsInputSchema,
 	DynamoiGetGrowthAuditInputSchema,
 	DynamoiGetOnboardingStatusInputSchema,
 	DynamoiGetPlatformStatusInputSchema,

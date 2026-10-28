@@ -347,6 +347,8 @@ const DIRECTORY_EXCLUDED_TOOL_NAMES = new Set<string>([
 	"dynamoi_shop_create_checkout",
 	"dynamoi_shop_get_quote",
 	"dynamoi_get_billing",
+	"dynamoi_get_action_center",
+	"dynamoi_get_earnings",
 	"dynamoi_get_resume_funding",
 	"dynamoi_get_campaign_readiness",
 	"dynamoi_manage_youtube_draft",
@@ -409,6 +411,8 @@ export function getDynamoiToolCompatibilityDefinitions(options?: {
 }
 
 export type Phase3Adapter = {
+	getActionCenter(input: unknown): Promise<ResultEnvelope<unknown>>;
+	getEarnings(input: unknown): Promise<ResultEnvelope<unknown>>;
 	openWorkspace(
 		input: unknown,
 	): Promise<ResultEnvelope<import("./workspace/data").WorkspaceData>>;
@@ -781,6 +785,7 @@ const DYNAMOI_TOOL_DISPATCHERS = {
 		adapter.createSmartLinksFromSpotifyArtist(input),
 	dynamoi_get_account_overview: (adapter, input) =>
 		adapter.getCurrentUser(input),
+	dynamoi_get_action_center: (adapter, input) => adapter.getActionCenter(input),
 	dynamoi_get_artist_analytics: (adapter, input) =>
 		adapter.getArtistAnalytics(input),
 	dynamoi_get_audience_analytics: (adapter, input) =>
@@ -791,6 +796,7 @@ const DYNAMOI_TOOL_DISPATCHERS = {
 		adapter.getCampaignReadiness(input),
 	dynamoi_get_distribution_application: (adapter, input) =>
 		adapter.getDistributionApplication(input),
+	dynamoi_get_earnings: (adapter, input) => adapter.getEarnings(input),
 	dynamoi_get_growth_audit: (adapter, input) => adapter.getGrowthAudit(input),
 	dynamoi_get_platform_status: (adapter, input) =>
 		adapter.getPlatformStatus(input),

@@ -159,6 +159,29 @@ export const DynamoiGetBillingInputSchema = z
 	})
 	.strict();
 
+export const DynamoiGetActionCenterInputSchema = z
+	.object({ artistId: z.string().uuid() })
+	.strict();
+
+const RoyaltyMonthSchema = z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/);
+export const DynamoiGetEarningsInputSchema = z
+	.object({
+		artistIds: z.array(z.string().uuid()).min(1).max(50).optional(),
+		axis: z.enum(["statement", "earned"]).default("statement"),
+		cursor: z
+			.object({
+				countryCode: z.string().max(10),
+				month: RoyaltyMonthSchema,
+				storeKey: z.string().min(1).max(500),
+				trackKey: z.string().min(1).max(500),
+			})
+			.strict()
+			.optional(),
+		fromMonth: RoyaltyMonthSchema,
+		toMonth: RoyaltyMonthSchema,
+	})
+	.strict();
+
 const LocationTargetSchema = z
 	.object({
 		code: z.string().trim().min(1).max(8),
@@ -1017,6 +1040,28 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 		readOnlyHint: true,
 		schema: DynamoiGetBillingInputSchema,
 		title: "Get Billing",
+	},
+	{
+		description:
+			"Read an artist's platform Action Center after authenticated artist access. Preserve revision, task states, steps and primary/secondary actions: open_url opens a URL; navigate is dashboard navigation. Reading does not complete or approve a task. Unavailable data is an error, not an empty task list. Full profile only.",
+		destructiveHint: false,
+		name: "dynamoi_get_action_center",
+		openWorldHint: false,
+		outputSchema: AnyOutputEnvelopeSchema,
+		readOnlyHint: true,
+		schema: DynamoiGetActionCenterInputSchema,
+		title: "Get Action Center",
+	},
+	{
+		description:
+			"Read distribution earnings for the authenticated payee only, optionally restricted to their artistIds. Team or artist access never grants payee access. Returns the payee's own share in USD, range totals, monthly totals and at most 50 detail rows; pass nextCursor unchanged to continue with the same range, axis and artists. fromMonth/toMonth are inclusive YYYY-MM, at most 60 months. axis=statement groups by statement month; earned groups by royalty month, while payee share always follows statement month. Empty rows mean no matching data; an error means unavailable, never zero earnings. This grants no payout or tax authority and performs no writes. Full profile only.",
+		destructiveHint: false,
+		name: "dynamoi_get_earnings",
+		openWorldHint: false,
+		outputSchema: AnyOutputEnvelopeSchema,
+		readOnlyHint: true,
+		schema: DynamoiGetEarningsInputSchema,
+		title: "Get Distribution Earnings",
 	},
 	{
 		description:

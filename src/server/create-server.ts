@@ -66,6 +66,10 @@ import {
 	DynamoiAccountOverviewDescriptiveDataSchema,
 	DynamoiArtistListDescriptiveDataSchema,
 } from "./account-schema.generated";
+import {
+	ACCOUNT_SETTINGS_TOOL_DEFINITIONS,
+	DELETE_ACCOUNT_TOOL_DEFINITIONS,
+} from "./account-settings-tools";
 import { DISTRIBUTION_TOOL_DEFINITIONS } from "./distribution-tools";
 import {
 	DYNAMOI_CHATGPT_APP_INSTRUCTIONS,
@@ -311,6 +315,8 @@ type DynamoiToolRegistrationDescriptor = {
 };
 
 const DYNAMOI_TOOL_DEFINITIONS = [
+	...ACCOUNT_SETTINGS_TOOL_DEFINITIONS,
+	...DELETE_ACCOUNT_TOOL_DEFINITIONS,
 	WORKSPACE_TOOL_DEFINITION,
 	DYNAMOI_ABOUT_TOOL_DEFINITION,
 	...PHASE_1_TOOL_DEFINITIONS,
@@ -342,6 +348,9 @@ const MUTATING_TOOL_NAMES = new Set<string>(
 );
 
 const DIRECTORY_EXCLUDED_TOOL_NAMES = new Set<string>([
+	"dynamoi_delete_account",
+	"dynamoi_update_account_profile",
+	"dynamoi_set_artist_billing_country",
 	"dynamoi_contact_support",
 	"dynamoi_add_campaign_funds",
 	"dynamoi_shop_create_checkout",
@@ -414,11 +423,14 @@ export function getDynamoiToolCompatibilityDefinitions(options?: {
 }
 
 export type Phase3Adapter = {
+	deleteAccount(input: unknown): Promise<ResultEnvelope<object>>;
 	getActionCenter(input: unknown): Promise<ResultEnvelope<unknown>>;
 	getTeam(input: unknown): Promise<ResultEnvelope<unknown>>;
 	getAuditLog(input: unknown): Promise<ResultEnvelope<unknown>>;
 	getReferrals(input: unknown): Promise<ResultEnvelope<unknown>>;
 	getEarnings(input: unknown): Promise<ResultEnvelope<unknown>>;
+	updateAccountProfile(input: unknown): Promise<ResultEnvelope<object>>;
+	setArtistBillingCountry(input: unknown): Promise<ResultEnvelope<object>>;
 	openWorkspace(
 		input: unknown,
 	): Promise<ResultEnvelope<import("./workspace/data").WorkspaceData>>;
@@ -789,6 +801,7 @@ const DYNAMOI_TOOL_DISPATCHERS = {
 		adapter.createSmartLinkFromSpotify(input),
 	dynamoi_create_smart_links_from_spotify_artist: (adapter, input) =>
 		adapter.createSmartLinksFromSpotifyArtist(input),
+	dynamoi_delete_account: (adapter, input) => adapter.deleteAccount(input),
 	dynamoi_get_account_overview: (adapter, input) =>
 		adapter.getCurrentUser(input),
 	dynamoi_get_action_center: (adapter, input) => adapter.getActionCenter(input),
@@ -829,6 +842,8 @@ const DYNAMOI_TOOL_DISPATCHERS = {
 	dynamoi_preview_smart_link_themes: (_adapter, input) =>
 		Promise.resolve(previewSmartLinkThemes(input)),
 	dynamoi_search: (adapter, input) => adapter.search(input),
+	dynamoi_set_artist_billing_country: (adapter, input) =>
+		adapter.setArtistBillingCountry(input),
 	dynamoi_shop_create_checkout: (adapter, input) =>
 		adapter.shopCreateCheckout(input),
 	dynamoi_shop_get_quote: (adapter, input) => adapter.shopGetQuote(input),
@@ -836,6 +851,8 @@ const DYNAMOI_TOOL_DISPATCHERS = {
 		adapter.startMetaConnection(input),
 	dynamoi_start_youtube_channel_link: (adapter, input) =>
 		adapter.startYoutubeChannelLink(input),
+	dynamoi_update_account_profile: (adapter, input) =>
+		adapter.updateAccountProfile(input),
 	dynamoi_update_campaign: (adapter, input) => adapter.updateCampaign(input),
 	dynamoi_update_smart_link: (adapter, input) => adapter.updateSmartLink(input),
 	dynamoi_update_smart_link_artist_hub_settings: (adapter, input) =>

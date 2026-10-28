@@ -18,6 +18,13 @@ export {
 	DYNAMOI_ABOUT_TOOL_DEFINITION,
 	getDynamoiAbout,
 } from "./server/about";
+export {
+	type AccountEditResult,
+	type AccountSettingsInput,
+	DeleteAccountSchema,
+	SetArtistBillingCountrySchema,
+	UpdateAccountProfileSchema,
+} from "./server/account-settings-tools";
 export type { ChannelResults } from "./server/channel-results-schema";
 export { ChannelResultsSchema } from "./server/channel-results-schema";
 export type { Phase3Adapter } from "./server/create-server";

@@ -8,7 +8,7 @@ catalog access are authorization capabilities, not evidence of workflow parity.
 The canonical catalog owner is `getDynamoiToolDefinitions` in
 `src/server/create-server.ts`; do not maintain a second availability registry here.
 
-The full profile serves 41 tools: 39 Dynamoi operations plus `search` and `fetch`. The directory profile advertises 24 tools:
+The full profile serves 47 tools: 45 Dynamoi operations plus `search` and `fetch`. The directory profile advertises 24 tools:
 22 Dynamoi operations and the OpenAI Connector `search` and `fetch` tools.
 It uses separate directory-only tools for Smart Link description and artist
 settings updates. The prior combined schema remains callable for compatibility

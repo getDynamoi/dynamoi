@@ -27,6 +27,7 @@ export const DYNAMOI_MCP_TOOL_SCOPES = {
 		"dynamoi:read",
 		"dynamoi:smart_links.write",
 	],
+	dynamoi_delete_account: ["dynamoi:read", "dynamoi:mcp.full"],
 	dynamoi_get_account_overview: ["dynamoi:read"],
 	dynamoi_get_action_center: ["dynamoi:read", "dynamoi:platform.read"],
 	dynamoi_get_artist_analytics: ["dynamoi:read"],
@@ -58,6 +59,7 @@ export const DYNAMOI_MCP_TOOL_SCOPES = {
 	dynamoi_open_workspace: ["dynamoi:read"],
 	dynamoi_preview_smart_link_themes: ["dynamoi:read"],
 	dynamoi_search: ["dynamoi:read"],
+	dynamoi_set_artist_billing_country: ["dynamoi:read", "dynamoi:mcp.full"],
 	dynamoi_shop_create_checkout: ["dynamoi:read", "dynamoi:mcp.full"],
 	dynamoi_shop_get_quote: ["dynamoi:read", "dynamoi:mcp.full"],
 	dynamoi_start_meta_connection: ["dynamoi:read", "dynamoi:platform.write"],
@@ -65,6 +67,7 @@ export const DYNAMOI_MCP_TOOL_SCOPES = {
 		"dynamoi:read",
 		"dynamoi:platform.write",
 	],
+	dynamoi_update_account_profile: ["dynamoi:read", "dynamoi:mcp.full"],
 	dynamoi_update_campaign: ["dynamoi:read", "dynamoi:campaign.write"],
 	dynamoi_update_smart_link: ["dynamoi:read", "dynamoi:smart_links.write"],
 	dynamoi_update_smart_link_artist_hub_settings: [

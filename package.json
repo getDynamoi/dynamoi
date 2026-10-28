@@ -64,6 +64,7 @@
 		"dist/server/output-schemas.d.ts",
 		"dist/server/shop-tools.d.ts",
 		"dist/server/smart-link-tools.d.ts",
+		"dist/server/smart-campaign-creative.d.ts",
 		"dist/server/support-tools.d.ts",
 		"dist/server/tools.d.ts",
 		"dist/server/workflow-tools.d.ts",

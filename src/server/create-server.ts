@@ -89,6 +89,7 @@ import {
 	type DynamoiShopQuoteData,
 	SHOP_TOOL_DEFINITIONS,
 } from "./shop-tools";
+import { SMART_CAMPAIGN_CREATIVE_TOOL_DEFINITION } from "./smart-campaign-creative";
 import {
 	previewSmartLinkThemes,
 	registerSmartLinkThemePreviewResource,
@@ -325,6 +326,7 @@ const DYNAMOI_TOOL_DEFINITIONS = [
 	...PHASE_ONBOARDING_TOOL_DEFINITIONS,
 	...PHASE_2_TOOL_DEFINITIONS,
 	...PHASE_3_TOOL_DEFINITIONS,
+	SMART_CAMPAIGN_CREATIVE_TOOL_DEFINITION,
 	...DISTRIBUTION_TOOL_DEFINITIONS,
 	...SHOP_TOOL_DEFINITIONS,
 	...SUPPORT_TOOL_DEFINITIONS,
@@ -368,6 +370,7 @@ const DIRECTORY_EXCLUDED_TOOL_NAMES = new Set<string>([
 	"dynamoi_get_resume_funding",
 	"dynamoi_get_campaign_readiness",
 	"dynamoi_manage_youtube_draft",
+	"dynamoi_manage_smart_campaign_creative",
 	"dynamoi_launch_campaign",
 	"dynamoi_list_available_countries",
 	"dynamoi_list_media_assets",
@@ -511,6 +514,7 @@ export type Phase3Adapter = {
 		ResultEnvelope<GetCampaignReadinessData | GetCampaignReadinessSummaryData>
 	>;
 	smartCampaignAdCopy(input: unknown): Promise<ResultEnvelope<unknown>>;
+	smartCampaignCreative(input: unknown): Promise<ResultEnvelope<unknown>>;
 	manageYoutubeDraft(input: unknown): Promise<ResultEnvelope<unknown>>;
 	updateCampaign(input: unknown): Promise<ResultEnvelope<UpdateCampaignData>>;
 	listMediaAssets(
@@ -600,6 +604,7 @@ const SPOTIFY_ARTIST_CATALOG_ERROR_MESSAGES = new Set([
 
 const REVIEWER_WRITE_TOOL_NAMES = new Set([
 	"dynamoi_manage_youtube_draft",
+	"dynamoi_manage_smart_campaign_creative",
 	"dynamoi_apply_for_distribution",
 	"dynamoi_create_smart_link_from_spotify",
 	"dynamoi_create_smart_links_from_spotify_artist",
@@ -850,6 +855,8 @@ const DYNAMOI_TOOL_DISPATCHERS = {
 	dynamoi_list_campaigns: (adapter, input) => adapter.listCampaigns(input),
 	dynamoi_list_media_assets: (adapter, input) => adapter.listMediaAssets(input),
 	dynamoi_list_smart_links: (adapter, input) => adapter.listSmartLinks(input),
+	dynamoi_manage_smart_campaign_creative: (adapter, input) =>
+		adapter.smartCampaignCreative(input),
 	dynamoi_manage_youtube_draft: (adapter, input) =>
 		adapter.manageYoutubeDraft(input),
 	dynamoi_open_workspace: (adapter, input) => adapter.openWorkspace(input),

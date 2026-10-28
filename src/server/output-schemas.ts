@@ -114,7 +114,7 @@ const MoneyDisplayOutputSchema = z
 		}
 	});
 
-function createOutputEnvelopeSchema(
+export function createOutputEnvelopeSchema(
 	dataSchema: z.ZodType,
 	options?: { allowPartial?: boolean },
 ) {

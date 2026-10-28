@@ -75,6 +75,11 @@ export {
 	SHOP_TOOL_DEFINITIONS,
 } from "./server/shop-tools";
 export {
+	CreativeSelectionSchema,
+	SmartCampaignCreativeInputSchema,
+	SmartCampaignCreativeOutputSchema,
+} from "./server/smart-campaign-creative";
+export {
 	DynamoiCreateSmartLinkFromSpotifyInputSchema,
 	DynamoiCreateSmartLinksFromSpotifyArtistInputSchema,
 	DynamoiGetSmartLinkAnalyticsInputSchema,

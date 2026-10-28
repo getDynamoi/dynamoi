@@ -366,6 +366,7 @@ const DIRECTORY_EXCLUDED_TOOL_NAMES = new Set<string>([
 	"dynamoi_get_team",
 	"dynamoi_get_audit_log",
 	"dynamoi_get_referrals",
+	"dynamoi_get_distribution_status",
 	"dynamoi_get_earnings",
 	"dynamoi_get_resume_funding",
 	"dynamoi_get_campaign_readiness",
@@ -453,6 +454,9 @@ export type Phase3Adapter = {
 	getCurrentUser(
 		input: unknown,
 	): Promise<ResultEnvelope<GetCurrentUserData | GetCurrentUserSummaryData>>;
+	getDistributionStatus(
+		input: unknown,
+	): Promise<ResultEnvelope<Record<string, unknown>>>;
 	getDistributionApplication(
 		input: unknown,
 	): Promise<ResultEnvelope<GetDistributionApplicationData>>;
@@ -835,6 +839,8 @@ const DYNAMOI_TOOL_DISPATCHERS = {
 		adapter.getCampaignReadiness(input),
 	dynamoi_get_distribution_application: (adapter, input) =>
 		adapter.getDistributionApplication(input),
+	dynamoi_get_distribution_status: (adapter, input) =>
+		adapter.getDistributionStatus(input),
 	dynamoi_get_earnings: (adapter, input) => adapter.getEarnings(input),
 	dynamoi_get_growth_audit: (adapter, input) => adapter.getGrowthAudit(input),
 	dynamoi_get_platform_status: (adapter, input) =>

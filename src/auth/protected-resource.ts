@@ -44,6 +44,11 @@ export const DYNAMOI_MCP_TOOL_SCOPES = {
 		"dynamoi:read",
 		"dynamoi:distribution.read",
 	],
+	dynamoi_get_distribution_status: [
+		"dynamoi:read",
+		"dynamoi:distribution.read",
+		"dynamoi:mcp.full",
+	],
 	dynamoi_get_earnings: ["dynamoi:read", "dynamoi:distribution.read"],
 	dynamoi_get_growth_audit: ["dynamoi:read"],
 	dynamoi_get_platform_status: ["dynamoi:read", "dynamoi:platform.read"],

@@ -193,7 +193,7 @@ including what did not work.
 - **Each client gets one of two tool sets**, chosen from the identity it signs
   in with. Reviewed clients and apps that sign in on your own computer
   (Claude Code, Codex, Cursor, VS Code, Gemini CLI, OpenClaw and the `dynamoi`
-  CLI) get All 50 tools. ChatGPT, Claude added from its directory listing and
+  CLI) get All 51 tools. ChatGPT, Claude added from its directory listing and
   other web apps get 24 review-safe advertised tools: reads, Smart Links,
   distribution applications and About, with no billing, launches or checkout.
 - **Sign-in is OAuth 2.1**, and every call still checks its scopes and the
@@ -222,6 +222,7 @@ come from `tools/list`.
 | `dynamoi_get_audience_analytics` | Streaming audience by date range, country, service, and paid/free tier | Reads | Both |
 | `dynamoi_get_youtube_channel_data` | Observed YouTube channel data by dataset, with coverage and campaign dates | Reads | Both |
 | `dynamoi_get_platform_status` | Spotify, Meta, and YouTube connection status and setup blockers | Reads | Both |
+| `dynamoi_get_distribution_status` | Application, agreement, scoped catalog and latest release status; artist attestation and store delivery stay in web/app | Reads | Full |
 | `dynamoi_get_distribution_application` | The five distribution requirements and application status | Reads | Both |
 | `dynamoi_apply_for_distribution` | Submit a distribution application for manual review | Changes data | Both |
 | `dynamoi_preview_smart_link_themes` | Visual preview of the Smart Link themes | Reads | Both |

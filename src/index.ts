@@ -145,6 +145,7 @@ export {
 	DynamoiListAvailableCountriesInputSchema,
 	DynamoiListCampaignsInputSchema,
 	DynamoiListMediaAssetsInputSchema,
+	DynamoiManageTeamInputSchema,
 	DynamoiManageYoutubeDraftInputSchema,
 	DynamoiPauseCampaignInputSchema,
 	DynamoiResumeCampaignInputSchema,

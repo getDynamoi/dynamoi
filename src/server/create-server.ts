@@ -366,6 +366,7 @@ const DIRECTORY_EXCLUDED_TOOL_NAMES = new Set<string>([
 	"dynamoi_get_billing",
 	"dynamoi_get_action_center",
 	"dynamoi_get_team",
+	"dynamoi_manage_team",
 	"dynamoi_get_audit_log",
 	"dynamoi_get_referrals",
 	"dynamoi_get_distribution_status",
@@ -443,6 +444,7 @@ export type Phase3Adapter = {
 	getActionCenter(input: unknown): Promise<ResultEnvelope<unknown>>;
 	getTeam(input: unknown): Promise<ResultEnvelope<unknown>>;
 	getArtistBillingCountry(input: unknown): Promise<ResultEnvelope<object>>;
+	manageTeam(input: unknown): Promise<ResultEnvelope<unknown>>;
 	getAuditLog(input: unknown): Promise<ResultEnvelope<unknown>>;
 	getReferrals(input: unknown): Promise<ResultEnvelope<unknown>>;
 	getEarnings(input: unknown): Promise<ResultEnvelope<unknown>>;
@@ -869,6 +871,7 @@ const DYNAMOI_TOOL_DISPATCHERS = {
 	dynamoi_list_smart_links: (adapter, input) => adapter.listSmartLinks(input),
 	dynamoi_manage_smart_campaign_creative: (adapter, input) =>
 		adapter.smartCampaignCreative(input),
+	dynamoi_manage_team: (adapter, input) => adapter.manageTeam(input),
 	dynamoi_manage_youtube_draft: (adapter, input) =>
 		adapter.manageYoutubeDraft(input),
 	dynamoi_open_workspace: (adapter, input) => adapter.openWorkspace(input),

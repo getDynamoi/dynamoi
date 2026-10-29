@@ -193,7 +193,7 @@ including what did not work.
 - **Each client gets one of two tool sets**, chosen from the identity it signs
   in with. Reviewed clients and apps that sign in on your own computer
   (Claude Code, Codex, Cursor, VS Code, Gemini CLI, OpenClaw and the `dynamoi`
-  CLI) get All 53 tools. ChatGPT, Claude added from its directory listing and other web apps get 24 review-safe advertised tools: reads, Smart Links,
+  CLI) get All 54 tools. ChatGPT, Claude added from its directory listing and other web apps get 24 review-safe advertised tools: reads, Smart Links,
   distribution applications and About, with no billing, launches or checkout.
 - **Sign-in is OAuth 2.1**, and every call still checks its scopes and the
   user's role for that artist. See
@@ -202,8 +202,7 @@ including what did not work.
 ## Tools
 
 "Reads" tools are marked read-only. "Changes data" tools write to Dynamoi or
-start an action with an outside provider. Full descriptions and input schemas
-come from `tools/list`.
+start an action with an outside provider. Full descriptions and input schemas come from `tools/list`.
 
 | Tool | What it does | Access | Catalog |
 | --- | --- | --- | --- |
@@ -239,6 +238,7 @@ come from `tools/list`.
 | `dynamoi_get_earnings` | Authenticated payee own-USD earnings, month axis, filtered detail pages, rankings, geographic views and statement export data; no payout/tax authority | Reads | Full |
 | `dynamoi_get_team` | Organization members and pending invitations; organization authority required. | Reads | Full |
 | `dynamoi_get_artist_billing_country` | Read current billing country; not tax residency. | Reads | Full |
+| `dynamoi_manage_team` | Change organization member roles, remove members or revoke pending invitations with web authority and owner protections. | Changes data | Full |
 | `dynamoi_get_audit_log` | Sanitized artist/organization audit events with scope-bound cursors, plus your 12 recent account activity entries. | Reads | Full |
 | `dynamoi_get_referrals` | Your referral snapshot; no attribution or commission writes. Pending and available amounts are not approved or paid payouts. | Reads | Full |
 | `dynamoi_get_billing` | Billing status, credit balance, promo limits and masked payment-method display | Reads | Full |

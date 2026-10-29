@@ -70,6 +70,7 @@ export const DYNAMOI_MCP_TOOL_SCOPES = {
 		"dynamoi:read",
 		"dynamoi:campaign.write",
 	],
+	dynamoi_manage_team: ["dynamoi:read", "dynamoi:mcp.full"],
 	dynamoi_manage_youtube_draft: ["dynamoi:read", "dynamoi:campaign.write"],
 	dynamoi_open_workspace: ["dynamoi:read"],
 	dynamoi_preview_smart_link_themes: ["dynamoi:read"],

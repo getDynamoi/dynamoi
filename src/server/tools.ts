@@ -156,6 +156,28 @@ export const DynamoiGetBillingInputSchema = z
 	})
 	.strict();
 
+export const DynamoiManageTeamInputSchema = z
+	.object({
+		action: z.enum(["update_role", "remove_member", "revoke_invitation"]),
+		role: z.enum(["admin", "editor", "viewer"]).optional(),
+		targetId: z
+			.string()
+			.uuid()
+			.describe(
+				"Organization membership or pending invitation row ID from dynamoi_get_team.",
+			),
+	})
+	.strict()
+	.superRefine((input, ctx) => {
+		if ((input.action === "update_role") !== (input.role !== undefined)) {
+			ctx.addIssue({
+				code: "custom",
+				message: "role is required only for update_role",
+				path: ["role"],
+			});
+		}
+	});
+
 export const DynamoiGetTeamInputSchema = z
 	.object({ artistId: z.string().uuid() })
 	.strict();
@@ -1102,6 +1124,17 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 		readOnlyHint: true,
 		schema: DynamoiGetTeamInputSchema,
 		title: "Get Team",
+	},
+	{
+		description:
+			"Change an organization member's role, remove a member or revoke a pending organization invitation using the same authority and transactional protections as web. Full profile only. targetId is the organization membership or pending invitation row ID from dynamoi_get_team. Owner and last-admin protections apply; removal can revoke access and pending invitations.",
+		destructiveHint: true,
+		name: "dynamoi_manage_team",
+		openWorldHint: false,
+		outputSchema: AnyOutputEnvelopeSchema,
+		readOnlyHint: false,
+		schema: DynamoiManageTeamInputSchema,
+		title: "Manage Organization Members",
 	},
 	{
 		description:

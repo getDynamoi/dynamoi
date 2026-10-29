@@ -193,7 +193,7 @@ including what did not work.
 - **Each client gets one of two tool sets**, chosen from the identity it signs
   in with. Reviewed clients and apps that sign in on your own computer
   (Claude Code, Codex, Cursor, VS Code, Gemini CLI, OpenClaw and the `dynamoi`
-  CLI) get All 55 tools. ChatGPT, Claude added from its directory listing and other web apps get 24 review-safe advertised tools: reads, Smart Links,
+  CLI) get All 56 tools. ChatGPT, Claude added from its directory listing and other web apps get 24 review-safe advertised tools: reads, Smart Links,
   distribution applications and About, with no billing, launches or checkout.
 - **Sign-in is OAuth 2.1**, and every call still checks its scopes and the
   user's role for that artist. See
@@ -201,8 +201,7 @@ including what did not work.
 
 ## Tools
 
-"Reads" tools are marked read-only. "Changes data" tools write to Dynamoi or
-start an action with an outside provider. Full descriptions and input schemas come from `tools/list`.
+"Reads" tools are read-only; "Changes data" tools write to Dynamoi or start a provider action. Full descriptions and input schemas come from `tools/list`.
 
 | Tool | What it does | Access | Catalog |
 | --- | --- | --- | --- |
@@ -221,6 +220,7 @@ start an action with an outside provider. Full descriptions and input schemas co
 | `dynamoi_get_youtube_channel_data` | Observed YouTube channel data by dataset, with coverage and campaign dates | Reads | Both |
 | `dynamoi_get_platform_status` | Spotify, Meta, and YouTube connection status and setup blockers | Reads | Both |
 | `dynamoi_get_distribution_status` | Application, agreement, scoped catalog and latest release status; artist attestation and store delivery stay in web/app | Reads | Full |
+| `dynamoi_prepare_distribution_release` | Private 30-minute metadata, track and split proposal handoff; the artist reviews and submits on web | Changes data | Full |
 | `dynamoi_get_distribution_application` | The five distribution requirements and application status | Reads | Both |
 | `dynamoi_apply_for_distribution` | Submit a distribution application for manual review | Changes data | Both |
 | `dynamoi_preview_smart_link_themes` | Visual preview of the Smart Link themes | Reads | Both |

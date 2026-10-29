@@ -40,6 +40,7 @@ export {
 	DynamoiApplyForDistributionInputSchema,
 	DynamoiGetDistributionApplicationInputSchema,
 	DynamoiGetDistributionStatusInputSchema,
+	DynamoiPrepareDistributionReleaseInputSchema,
 } from "./server/distribution-tools";
 export {
 	DYNAMOI_MCP_REGISTRY_DESCRIPTION_MAX_LENGTH,

@@ -8,7 +8,7 @@ catalog access are authorization capabilities, not evidence of workflow parity.
 The canonical catalog owner is `getDynamoiToolDefinitions` in
 `src/server/create-server.ts`; do not maintain a second availability registry here.
 
-The full profile serves 51 tools: 49 Dynamoi operations plus `search` and `fetch`. The directory profile advertises 24 tools:
+The full profile serves 56 tools: 54 Dynamoi operations plus `search` and `fetch`. The directory profile advertises 24 tools:
 22 Dynamoi operations and the OpenAI Connector `search` and `fetch` tools.
 It uses separate directory-only tools for Smart Link description and artist
 settings updates. The prior combined schema remains callable for compatibility
@@ -30,7 +30,7 @@ work. Everything else is refused.
 | Campaigns | List/detail, provider analytics, readiness, existing-asset launch, YouTube draft inspect/discard, Smart Campaign draft ad-copy read/save, Smart Campaign generation/source-audio reads, asynchronous generation start/retry/clear (poll with read), generated selection, direct source-audio multipart upload with status/abort and public Dropbox source-MP3 import on a draft, pause/resume and eligible single-provider budgets | Draft state machines, Google Drive import (unsupported: Google API key required), artist approval/submission, screening, existing targeting edits and multi-provider budgets |
 | Analytics | Campaign-provider rollups, growth audit (`dynamoi_get_growth_audit`), tracked playlist analytics (`dynamoi_get_playlist_analytics`), streaming audience analytics (`dynamoi_get_audience_analytics`), per-link analytics and observed YouTube channel data (`dynamoi_get_youtube_channel_data`) | Link unique counts are sums across days and links; requested-window completeness remains unverified |
 | Connections | Meta and YouTube browser OAuth handoffs, status reads and full-profile Action Center revision/tasks/actions | Headless provider login, owner selection or bypass of ownership verification |
-| Distribution | Five scored requirements, application, agreement, scoped catalog and latest release status (`dynamoi_get_distribution_status`, full only), and explicit adult-attested application submission for manual review; full-profile payee own-USD totals, bounded filtered detail pages, rankings with filtered totals, geographic views and statement export data with statement/earned month axis | Rights and agreement attestation and sending releases to stores stay with the artist in web/app; tax, payout and takedown workflows |
+| Distribution | Five scored requirements, application, agreement, scoped catalog and latest release status (`dynamoi_get_distribution_status`, full only), private expiring release preparation handoffs (`dynamoi_prepare_distribution_release`), and explicit adult-attested application submission for manual review; full-profile payee own-USD totals, bounded filtered detail pages, rankings with filtered totals, geographic views and statement export data with statement/earned month axis | Rights and agreement attestation and sending releases to stores stay with the artist in web/app; tax, payout and takedown workflows |
 | Billing and Shop | Managed billing observations including masked payment-method display, and read-only existing-campaign resume funding breakdown (`dynamoi_get_resume_funding`); unpaid Add campaign funds Checkout creation (`dynamoi_add_campaign_funds`); full-profile Shop quote, unpaid Stripe checkout creation and bounded authorized-artist order status/fulfillment reads | Managed subscription changes, invoice/funding workflows or agent payment settlement. Shop checkout is not a campaign launch or paid order. |
 
 A real campaign launch, budget edit or pause/resume runs the same shared
@@ -43,8 +43,6 @@ consent copy for the budget type (the TOTAL consent only on a TOTAL budget);
 without them the shared path refuses before any provider call.
 Existing owners retain RBAC, spending authority and idempotency checks. Demo
 responses remain simulations with no provider, billing or campaign effects.
-
-Smart Campaign creative actions share one tool, so counts remain 51 full and 24 directory. The full-profile creative capability covers all 9 native draft operations with no exclusions.
 
 The native parity manifest is itself incomplete: planned/partial entries must
 not be presented as completed mobile behavior. StoreKit, Play Billing, APNs and

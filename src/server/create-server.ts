@@ -371,6 +371,7 @@ const DIRECTORY_EXCLUDED_TOOL_NAMES = new Set<string>([
 	"dynamoi_get_audit_log",
 	"dynamoi_get_referrals",
 	"dynamoi_get_distribution_status",
+	"dynamoi_prepare_distribution_release",
 	"dynamoi_get_earnings",
 	"dynamoi_get_resume_funding",
 	"dynamoi_get_campaign_readiness",
@@ -461,6 +462,9 @@ export type Phase3Adapter = {
 	getCurrentUser(
 		input: unknown,
 	): Promise<ResultEnvelope<GetCurrentUserData | GetCurrentUserSummaryData>>;
+	prepareDistributionRelease(
+		input: unknown,
+	): Promise<ResultEnvelope<Record<string, unknown>>>;
 	getDistributionStatus(
 		input: unknown,
 	): Promise<ResultEnvelope<Record<string, unknown>>>;
@@ -879,6 +883,8 @@ const DYNAMOI_TOOL_DISPATCHERS = {
 	dynamoi_manage_youtube_draft: (adapter, input) =>
 		adapter.manageYoutubeDraft(input),
 	dynamoi_open_workspace: (adapter, input) => adapter.openWorkspace(input),
+	dynamoi_prepare_distribution_release: (adapter, input) =>
+		adapter.prepareDistributionRelease(input),
 	dynamoi_preview_smart_link_themes: (_adapter, input) =>
 		Promise.resolve(previewSmartLinkThemes(input)),
 	dynamoi_search: (adapter, input) => adapter.search(input),

@@ -53,6 +53,11 @@ export const DYNAMOI_MCP_TOOL_SCOPES = {
 	dynamoi_get_earnings: ["dynamoi:read", "dynamoi:distribution.read"],
 	dynamoi_get_growth_audit: ["dynamoi:read"],
 	dynamoi_get_platform_status: ["dynamoi:read", "dynamoi:platform.read"],
+	dynamoi_prepare_distribution_release: [
+		"dynamoi:read",
+		"dynamoi:distribution.apply",
+		"dynamoi:mcp.full",
+	],
 	[PLAYLIST_ANALYTICS_CONTRACT.mcp.definition.name]:
 		PLAYLIST_ANALYTICS_CONTRACT.mcp.scopes,
 	dynamoi_claim_referral_code: ["dynamoi:read", "dynamoi:mcp.full"],

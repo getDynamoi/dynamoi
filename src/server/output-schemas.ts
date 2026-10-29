@@ -591,7 +591,7 @@ export const ManageYoutubeDraftOutputEnvelopeSchema =
 				})
 				.strict(),
 		]),
-	);
+	).safeExtend({ stepResult: z.object({}).passthrough().optional() });
 
 export const ListAvailableCountriesOutputEnvelopeSchema =
 	createOutputEnvelopeSchema(

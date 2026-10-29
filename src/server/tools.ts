@@ -391,14 +391,80 @@ export const DynamoiSmartCampaignAdCopyInputSchema = z
 
 export const DynamoiManageYoutubeDraftInputSchema = z
 	.object({
-		action: z.enum(["inspect", "discard"]),
+		action: z.enum([
+			"inspect",
+			"discard",
+			"setup",
+			"videos",
+			"screen",
+			"save_content",
+			"save_location",
+			"save_ad_copy",
+			"save_budget",
+		]),
+		adCopySave: z
+			.strictObject({
+				adCopy: z.string(),
+				campaignId: z.uuid(),
+				mode: z.enum(["assisted", "preserve"]),
+			})
+			.optional(),
 		artistId: z.string().uuid(),
+		budgetSave: z
+			.strictObject({
+				budgetAmountCents: z.number().int().positive(),
+				budgetAmountMinor: z.number().int().positive().optional(),
+				budgetType: z.enum(["DAILY", "TOTAL"]),
+				campaignId: z.uuid(),
+				currency: z.string().length(3).optional(),
+				endDate: z
+					.union([IsoCalendarDateSchema, z.string().datetime()])
+					.nullable(),
+			})
+			.optional(),
 		campaignId: z.string().uuid().optional(),
+		contentSave: z
+			.strictObject({
+				campaignId: z.uuid(),
+				playlistId: z.string().trim().min(1).max(128).nullable().optional(),
+				strategy: YouTubeStrategySchema,
+				videoId: z.string().trim().min(1).max(100),
+			})
+			.optional(),
 		expectedUpdatedAt: z.string().datetime().optional(),
+		locationSave: z
+			.strictObject({
+				campaignId: z.uuid(),
+				targeting: z.union([
+					z.strictObject({ mode: z.literal("GLOBAL") }),
+					z.strictObject({
+						countries: z.array(z.string().trim().length(2)).min(1).max(250),
+						mode: z.literal("COUNTRIES"),
+					}),
+				]),
+			})
+			.optional(),
+		pageToken: z.string().trim().min(1).max(512).nullable().optional(),
 		userIntentSummary: UserIntentSummarySchema.optional(),
+		videoId: z.string().trim().min(1).max(100).optional(),
 	})
 	.strict()
 	.superRefine((data, ctx) => {
+		for (const [action, field] of [
+			["screen", "videoId"],
+			["save_content", "contentSave"],
+			["save_location", "locationSave"],
+			["save_ad_copy", "adCopySave"],
+			["save_budget", "budgetSave"],
+		] as const) {
+			if (data.action === action && !data[field]) {
+				ctx.addIssue({
+					code: "custom",
+					message: `${field} is required for ${action}`,
+					path: [field],
+				});
+			}
+		}
 		if (data.action === "discard" && !data.campaignId) {
 			ctx.addIssue({
 				code: "custom",
@@ -1254,7 +1320,7 @@ export const PHASE_2_TOOL_DEFINITIONS = [
 	},
 	{
 		description:
-			"Inspect an artist's open YouTube draft with action=inspect after an interrupted launch. Returns completed steps, screening, failure stage, and updatedAt. Use action=discard only when the user explicitly asks to discard that draft, supplying its campaignId, expectedUpdatedAt from inspect, and userIntentSummary. Discard cannot be undone.",
+			"Full profile; editor access required. Returns the current draft summary in data and the native operation response in stepResult. Read native setup with setup, browse videos with videos and optional pageToken, screen with screen and videoId. Save draft steps with save_content/contentSave={campaignId,videoId,playlistId,strategy}, save_location/locationSave={campaignId,targeting:{mode:GLOBAL}|{mode:COUNTRIES,countries:[US]}}, save_ad_copy/adCopySave={campaignId,adCopy,mode:assisted|preserve}, or save_budget/budgetSave={campaignId,budgetAmountCents,budgetType,endDate,currency?,budgetAmountMinor?}. Amounts are exact minor units in the artist currency; use the setup budget policy. Reuse the campaignId when retrying. Saves use native last-write-wins semantics; re-read setup after ambiguous outcomes. Draft saves never launch, change live campaigns or call Google Ads; launch stays on dynamoi_launch_campaign. Inspect a recoverable draft with inspect. Use discard only on explicit user request with campaignId, expectedUpdatedAt from inspect and userIntentSummary. Discard cannot be undone.",
 		destructiveHint: true,
 		name: "dynamoi_manage_youtube_draft",
 		openWorldHint: false,

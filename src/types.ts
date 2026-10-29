@@ -248,6 +248,7 @@ export type SmartLinkSummary = {
  * Never present in the directory profile.
  */
 export type SmartLinkArtistHubReadback = {
+	version?: string | undefined;
 	hubDescription: string | null;
 	profileLinks: Array<{
 		isHidden: boolean;

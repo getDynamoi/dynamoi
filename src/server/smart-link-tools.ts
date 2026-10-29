@@ -301,6 +301,7 @@ const ArtistStudioSettingsHandlerInputSchema = z
 	.object({
 		artistId: z.string().uuid(),
 		clientRequestId: ClientRequestIdSchema,
+		expectedVersion: z.string().min(1).max(128).optional(),
 		googleAdsConversionId: z.string().trim().max(32).nullable().optional(),
 		metaPixelId: z.string().trim().max(32).nullable().optional(),
 		...ArtistHubSettingsShape,
@@ -328,28 +329,8 @@ const ArtistStudioSettingsHandlerInputSchema = z
 		}
 	});
 
-export const DynamoiUpdateSmartLinkArtistHubSettingsInputSchema = z
-	.object({
-		artistId: z.string().uuid(),
-		clientRequestId: ClientRequestIdSchema,
-		...ArtistHubSettingsShape,
-		userIntentSummary: UserIntentSummarySchema,
-	})
-	.strict()
-	.superRefine((data, ctx) => {
-		if (
-			data.hubDescription === undefined &&
-			data.profileLinks === undefined &&
-			data.servicePriority === undefined &&
-			data.servicePriorityMode === undefined
-		) {
-			ctx.addIssue({
-				code: "custom",
-				message: "Provide at least one Artist Hub setting to update",
-				path: ["hubDescription"],
-			});
-		}
-	});
+export const DynamoiUpdateSmartLinkArtistHubSettingsInputSchema =
+	ArtistStudioSettingsHandlerInputSchema;
 
 export const DynamoiUpdateSmartLinkReleaseSettingsInputSchema = z
 	.object({
@@ -525,7 +506,7 @@ export const SMART_LINK_UPDATE_OPERATION_TOOL_DEFINITIONS = [
 export const FULL_SMART_LINK_STUDIO_TOOL_DEFINITIONS = [
 	{
 		description:
-			"Use this when the user wants to change the artist-level Smart Link introduction, official profile links or service order. Omitted fields preserve stored values; null explicitly clears supported fields. Theme and pixel changes belong to dynamoi_update_smart_link_artist_settings. Confirm the requested settings before calling. The result includes the saved artistHub readback. A partial save is reported truthfully; read the current introduction, profile links and service order with dynamoi_get_smart_link (artistId, includeArtistSettings=true; see artistHub) before retrying.",
+			"Use this when the user wants to change artist Smart Link theme, pixels, introduction, official profile links or service order. Pass the read artistHub.version as expectedVersion. Omitted fields preserve stored values; null explicitly clears supported fields. Confirm the requested settings before calling. The result includes the saved artistHub readback. If the theme applies but other changes are refused, reload with dynamoi_get_smart_link (artistId, includeArtistSettings=true) before retrying.",
 		destructiveHint: true,
 		idempotentHint: true,
 		name: "dynamoi_update_smart_link_artist_hub_settings",

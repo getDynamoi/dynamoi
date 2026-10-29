@@ -6,10 +6,36 @@ export const CreativeSelectionSchema = z.strictObject({
 	expectedUpdatedAt: z.iso.datetime(),
 	selectedCreativeIds: z.array(z.uuid()).min(1).max(100),
 });
+export const SourceAudioUploadSchema = z.strictObject({
+	campaignId: z.uuid(),
+	expectedUpdatedAt: z.iso.datetime(),
+	fileSizeBytes: z.number().int().positive().max(262_144_000),
+	hookSeconds: z.array(z.number().int().nonnegative()).max(2),
+	trackDurationSeconds: z.number().positive(),
+});
+export const SourceAudioUploadCompleteSchema = SourceAudioUploadSchema.extend({
+	parts: z
+		.array(
+			z.strictObject({
+				etag: z.string().min(1).max(200),
+				partNumber: z.number().int().min(1).max(10_000),
+			}),
+		)
+		.min(1)
+		.max(10_000),
+	uploadId: z.string().min(1).max(2048),
+	uploadSessionId: z.uuid(),
+});
 export const SmartCampaignCreativeInputSchema = z.strictObject({
-	action: z.enum(["read", "select"]),
+	action: z.enum([
+		"read",
+		"select",
+		"start_source_audio_upload",
+		"complete_source_audio_upload",
+	]),
 	artistId: z.uuid(),
 	...CreativeSelectionSchema.partial().shape,
+	...SourceAudioUploadCompleteSchema.partial().shape,
 });
 
 const GeneratedCreativeSchema = z.strictObject({
@@ -40,12 +66,31 @@ export const SmartCampaignCreativeOutputSchema = z.strictObject({
 		})
 		.nullable(),
 	selectedCreativeIds: z.array(z.uuid()).max(100),
+	sourceAudio: z
+		.strictObject({
+			fileName: z.string().nullable(),
+			fileSizeBytes: z.number().nullable(),
+			hookSeconds: z.array(z.number()),
+			isUploaded: z.boolean(),
+			trackDurationSeconds: z.number().nullable(),
+		})
+		.optional(),
 	updatedAt: z.iso.datetime().nullable(),
+	upload: z
+		.strictObject({
+			campaignId: z.uuid(),
+			expiresAt: z.iso.datetime(),
+			partSizeBytes: z.number(),
+			presignedPartUrls: z.array(z.string()),
+			uploadId: z.string(),
+			uploadSessionId: z.uuid(),
+		})
+		.optional(),
 });
 
 export const SMART_CAMPAIGN_CREATIVE_TOOL_DEFINITION = {
 	description:
-		"Read generation progress, generated creatives and current selection with action=read. Use action=select to save generated creative IDs on the draft with campaignId and expectedUpdatedAt from read. Selection never attests artist approval and never submits the campaign. Upload your source audio yourself in the app or web; agents can read generation progress and pick generated creatives.",
+		"Read generation progress, generated creatives and current selection with action=read. Use action=select to save generated creative IDs on the draft with campaignId and expectedUpdatedAt from read. Selection never attests artist approval and never submits the campaign. Attach source MP3 audio to a draft with start_source_audio_upload, PUT each returned presigned part URL, then complete_source_audio_upload with the returned uploadId/uploadSessionId and part ETags. Both actions require campaignId, expectedUpdatedAt, fileSizeBytes, trackDurationSeconds and 0–2 hookSeconds. Read sourceAudio to confirm. Import from a Dropbox link is in progress; Google Drive is unsupported.",
 	destructiveHint: false,
 	name: "dynamoi_manage_smart_campaign_creative",
 	openWorldHint: false,

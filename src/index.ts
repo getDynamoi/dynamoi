@@ -79,6 +79,8 @@ export {
 	CreativeSelectionSchema,
 	SmartCampaignCreativeInputSchema,
 	SmartCampaignCreativeOutputSchema,
+	SourceAudioUploadCompleteSchema,
+	SourceAudioUploadSchema,
 } from "./server/smart-campaign-creative";
 export {
 	DynamoiCreateSmartLinkFromSpotifyInputSchema,

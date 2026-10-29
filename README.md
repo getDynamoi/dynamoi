@@ -249,7 +249,7 @@ come from `tools/list`.
 | `dynamoi_launch_campaign` | Launch a Smart Campaign or YouTube campaign | Changes data | Full |
 | `dynamoi_update_campaign` | Pause, resume, or change a campaign's budget or end date | Changes data | Full |
 | `dynamoi_smart_campaign_ad_copy` | Read/save Smart Campaign creation-draft copy with shared validation and revision checks; never submits or launches | Changes data | Full |
-| `dynamoi_manage_smart_campaign_creative` | Read generation and save generated creative selection on a draft; uploads stay in app/web; no approval or submission | Changes data | Full |
+| `dynamoi_manage_smart_campaign_creative` | Read generation/source audio, select creatives, and start/complete direct MP3 multipart upload on a draft; Dropbox import in progress; no approval or submission | Changes data | Full |
 | `dynamoi_manage_youtube_draft` | Inspect an interrupted YouTube launch draft, or discard it when the user asks | Changes data | Full |
 | `dynamoi_start_meta_connection` | Start the Facebook Page and Instagram connection in the browser | Changes data | Full |
 | `dynamoi_start_youtube_channel_link` | Start the YouTube channel connection in the browser | Changes data | Full |

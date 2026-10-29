@@ -356,6 +356,7 @@ export const DynamoiUpdateSmartLinkReleaseSettingsInputSchema = z
 		clientRequestId: ClientRequestIdSchema,
 		customDescription: z.string().max(500).nullable().optional(),
 		expectedUpdatedAt: z.string().datetime().optional(),
+		expectedVersion: z.string().min(1).max(128).optional(),
 		playLinkId: z.string().uuid(),
 		serviceOverrides: z
 			.array(
@@ -536,7 +537,7 @@ export const FULL_SMART_LINK_STUDIO_TOOL_DEFINITIONS = [
 	},
 	{
 		description:
-			"Use this when the user wants to change one Smart Link's release video or catalog destination visibility. Set any of customDescription, youtubeUrl or serviceOverrides; omitted fields preserve stored values and null explicitly clears supported fields. Public availability is artist-wide in the dashboard; this tool does not publish or unpublish individual links. Confirm the requested settings before calling. The result includes the saved releaseSettings readback; after an ambiguous failure, read it with dynamoi_get_smart_link (playLinkId; see releaseSettings) before retrying. A description or video change may queue background rendering.",
+			"Use this when the user wants to change one Smart Link's release video or catalog destination visibility. Pass the read version as expectedVersion. Set any of customDescription, youtubeUrl or serviceOverrides; omitted fields preserve stored values and null explicitly clears supported fields. Public availability is artist-wide in the dashboard; this tool does not publish or unpublish individual links. Confirm the requested settings before calling. The result includes the saved releaseSettings readback; after an ambiguous failure, read it with dynamoi_get_smart_link (playLinkId; see releaseSettings) before retrying. A description or video change may queue background rendering.",
 		destructiveHint: true,
 		idempotentHint: true,
 		name: "dynamoi_update_smart_link_release_settings",

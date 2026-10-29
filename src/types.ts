@@ -240,6 +240,7 @@ export type SmartLinkSummary = {
 	theme: SmartLinkTheme;
 	createdAt: string;
 	updatedAt: string;
+	version?: string;
 };
 
 /**
@@ -312,6 +313,7 @@ export type GetSmartLinkData = SmartLinkSummary & {
 };
 
 export type GetSmartLinkSummaryData = {
+	version?: string;
 	summary: string;
 	warnings?: string[];
 	actionRequired?: string[];

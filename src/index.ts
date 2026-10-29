@@ -92,6 +92,7 @@ export {
 	SourceAudioUploadSchema,
 	SourceAudioUploadStatusSchema,
 } from "./server/smart-campaign-creative";
+export { DynamoiPreviewSmartLinkThemesInputSchema } from "./server/smart-link-theme-preview";
 export {
 	DynamoiCreateSmartLinkFromSpotifyInputSchema,
 	DynamoiCreateSmartLinksFromSpotifyArtistInputSchema,

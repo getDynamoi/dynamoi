@@ -92,7 +92,6 @@ import {
 } from "./shop-tools";
 import { SMART_CAMPAIGN_CREATIVE_TOOL_DEFINITION } from "./smart-campaign-creative";
 import {
-	previewSmartLinkThemes,
 	registerSmartLinkThemePreviewResource,
 	SMART_LINK_THEME_PREVIEW_RESOURCE_URI,
 	SMART_LINK_THEME_PREVIEW_TOOL_DEFINITION,
@@ -546,6 +545,7 @@ export type Phase3Adapter = {
 	createSmartLinksFromSpotifyArtist(
 		input: unknown,
 	): Promise<ResultEnvelope<CreateSmartLinksFromSpotifyArtistData>>;
+	previewSmartLinkThemes(input: unknown): Promise<ResultEnvelope<unknown>>;
 	listSmartLinks(
 		input: unknown,
 	): Promise<ResultEnvelope<ListSmartLinksData | ListSmartLinksSummaryData>>;
@@ -890,8 +890,8 @@ const DYNAMOI_TOOL_DISPATCHERS = {
 	dynamoi_open_workspace: (adapter, input) => adapter.openWorkspace(input),
 	dynamoi_prepare_distribution_release: (adapter, input) =>
 		adapter.prepareDistributionRelease(input),
-	dynamoi_preview_smart_link_themes: (_adapter, input) =>
-		Promise.resolve(previewSmartLinkThemes(input)),
+	dynamoi_preview_smart_link_themes: (adapter, input) =>
+		adapter.previewSmartLinkThemes(input),
 	dynamoi_search: (adapter, input) => adapter.search(input),
 	dynamoi_set_artist_billing_country: (adapter, input) =>
 		adapter.setArtistBillingCountry(input),

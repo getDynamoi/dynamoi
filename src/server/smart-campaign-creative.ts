@@ -6,6 +6,13 @@ export const CreativeSelectionSchema = z.strictObject({
 	expectedUpdatedAt: z.iso.datetime(),
 	selectedCreativeIds: z.array(z.uuid()).min(1).max(100),
 });
+export const CreativeGenerationSchema = CreativeSelectionSchema.omit({
+	selectedCreativeIds: true,
+});
+export const SourceAudioUploadStatusSchema = CreativeGenerationSchema.extend({
+	uploadId: z.string().min(1),
+	uploadSessionId: z.uuid(),
+});
 export const SourceAudioUploadSchema = z.strictObject({
 	campaignId: z.uuid(),
 	expectedUpdatedAt: z.iso.datetime(),
@@ -32,6 +39,11 @@ export const SourceAudioUploadCompleteSchema = SourceAudioUploadSchema.extend({
 export const SmartCampaignCreativeInputSchema = z.strictObject({
 	action: z.enum([
 		"read",
+		"start_generation",
+		"retry_generation",
+		"clear_generation",
+		"source_audio_upload_status",
+		"abort_source_audio_upload",
 		"select",
 		"import_source_audio",
 		"start_source_audio_upload",
@@ -70,6 +82,7 @@ export const SmartCampaignCreativeOutputSchema = z.strictObject({
 			]),
 		})
 		.nullable(),
+	generationJobId: z.uuid().optional(),
 	selectedCreativeIds: z.array(z.uuid()).max(100),
 	sourceAudio: z
 		.strictObject({
@@ -91,16 +104,28 @@ export const SmartCampaignCreativeOutputSchema = z.strictObject({
 			uploadSessionId: z.uuid(),
 		})
 		.optional(),
+	uploadStatus: z
+		.strictObject({
+			campaignId: z.uuid(),
+			uploadedParts: z.array(
+				z.strictObject({
+					etag: z.string().min(1),
+					partNumber: z.number().int().positive(),
+					sizeBytes: z.number().int().nonnegative(),
+				}),
+			),
+		})
+		.optional(),
 });
 
 export const SMART_CAMPAIGN_CREATIVE_TOOL_DEFINITION = {
 	description:
-		"Read generation progress, generated creatives and current selection with action=read. Use action=select to save generated creative IDs on the draft with campaignId and expectedUpdatedAt from read. Selection never attests artist approval and never submits the campaign. Attach source MP3 audio to a draft with start_source_audio_upload, PUT each returned presigned part URL, then complete_source_audio_upload with the returned uploadId/uploadSessionId and part ETags. Both actions require campaignId, expectedUpdatedAt, fileSizeBytes, trackDurationSeconds and 0–2 hookSeconds. Read sourceAudio to confirm. Use import_source_audio with a public Dropbox share url, campaignId, expectedUpdatedAt, trackDurationSeconds and 0–2 hookSeconds (250 MiB maximum). Google Drive is unsupported because it requires a Google API key. On timeout or an ambiguous result, re-read sourceAudio before retrying.",
+		"Read generation progress, generated creatives and current selection with action=read. Use start_generation, retry_generation or clear_generation with campaignId and expectedUpdatedAt from read. Generation runs asynchronously; poll with read. Use source_audio_upload_status or abort_source_audio_upload with campaignId, expectedUpdatedAt, uploadId and uploadSessionId to inspect uploaded parts or abort the direct upload. Agents never approve or submit. Use action=select to save generated creative IDs on the draft with campaignId and expectedUpdatedAt from read. Selection never attests artist approval and never submits the campaign. Attach source MP3 audio to a draft with start_source_audio_upload, PUT each returned presigned part URL, then complete_source_audio_upload with the returned uploadId/uploadSessionId and part ETags. Both actions require campaignId, expectedUpdatedAt, fileSizeBytes, trackDurationSeconds and 0–2 hookSeconds. Read sourceAudio to confirm. Use import_source_audio with a public Dropbox share url, campaignId, expectedUpdatedAt, trackDurationSeconds and 0–2 hookSeconds (250 MiB maximum). Google Drive is unsupported because it requires a Google API key. On timeout or an ambiguous result, re-read sourceAudio before retrying.",
 	destructiveHint: false,
 	name: "dynamoi_manage_smart_campaign_creative",
 	openWorldHint: false,
 	outputSchema: createOutputEnvelopeSchema(SmartCampaignCreativeOutputSchema),
 	readOnlyHint: false,
 	schema: SmartCampaignCreativeInputSchema,
-	title: "Read or Select Smart Campaign Creative",
+	title: "Manage Smart Campaign Draft Creative",
 } as const;

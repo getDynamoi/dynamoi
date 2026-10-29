@@ -76,12 +76,14 @@ export {
 	SHOP_TOOL_DEFINITIONS,
 } from "./server/shop-tools";
 export {
+	CreativeGenerationSchema,
 	CreativeSelectionSchema,
 	SmartCampaignCreativeInputSchema,
 	SmartCampaignCreativeOutputSchema,
 	SourceAudioImportSchema,
 	SourceAudioUploadCompleteSchema,
 	SourceAudioUploadSchema,
+	SourceAudioUploadStatusSchema,
 } from "./server/smart-campaign-creative";
 export {
 	DynamoiCreateSmartLinkFromSpotifyInputSchema,

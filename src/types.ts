@@ -6,6 +6,9 @@ export type ResultEnvelope<T> =
 	| { status: "partial_success"; data: T; message: string }
 	| {
 			status: "error";
+			recovery?: import("./server/output-schemas").SmartCampaignLaunchProjection["recovery"];
+			validationCode?: string | undefined;
+			validationStage?: string | undefined;
 			message: string;
 			kind?: "validation" | "business" | "platform" | "unknown";
 			code?: ResultErrorCode;

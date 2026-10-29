@@ -56,9 +56,13 @@ export {
 	type OpenAiFetchData,
 	type OpenAiSearchData,
 } from "./server/openai-tools";
-export type {
-	ContactSupportData,
-	GetResumeFundingData,
+export {
+	type ContactSupportData,
+	type GetResumeFundingData,
+	type SmartCampaignLaunchProjection,
+	SmartCampaignLaunchProjectionSchema,
+	SmartCampaignRecoverySchema,
+	SmartCampaignRecoverySelectionSchema,
 } from "./server/output-schemas";
 export {
 	DYNAMOI_SHOP_FULL_SCOPE,

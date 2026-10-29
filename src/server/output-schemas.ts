@@ -4,6 +4,28 @@ import { ChannelResultsSchema } from "./channel-results-schema";
 import { CampaignFundingPreviewOutputSchema } from "./funding-preview-schema.generated";
 import { YouTubeChannelDataSchema } from "./youtube-channel-data-schema";
 
+export const SmartCampaignRecoverySelectionSchema = z.object({
+	id: z.string(),
+	kind: z.string(),
+});
+export const SmartCampaignRecoverySchema = z.object({
+	actions: z.array(z.string()),
+	affectedSelection: SmartCampaignRecoverySelectionSchema.nullable(),
+	kind: z.string(),
+	occurredAt: z.string(),
+	reasonCode: z.string().optional(),
+	retryAfter: z.string().nullable(),
+	stage: z.string(),
+});
+export const SmartCampaignLaunchProjectionSchema = z.object({
+	recovery: SmartCampaignRecoverySchema.optional(),
+	validationCode: z.string().optional(),
+	validationStage: z.string().optional(),
+});
+export type SmartCampaignLaunchProjection = z.infer<
+	typeof SmartCampaignLaunchProjectionSchema
+>;
+
 const ResultErrorCodeSchema = z.enum([
 	"ACCOUNT_READ_ONLY",
 	"INVALID_SPOTIFY_SOURCE",
@@ -75,6 +97,9 @@ export function addRecoverySafetyIssues(
 }
 
 const RESULT_ERROR_RECOVERY_FIELDS = [
+	"recovery",
+	"validationCode",
+	"validationStage",
 	"draftId",
 	"failureStage",
 	"screeningResult",
@@ -116,7 +141,7 @@ const MoneyDisplayOutputSchema = z
 
 export function createOutputEnvelopeSchema(
 	dataSchema: z.ZodType,
-	options?: { allowPartial?: boolean },
+	options?: { allowPartial?: boolean; launch?: boolean },
 ) {
 	const statuses = options?.allowPartial
 		? (["success", "partial_success", "error"] as const)
@@ -129,6 +154,7 @@ export function createOutputEnvelopeSchema(
 				.optional(),
 			message: z.string().optional(),
 			...ResultErrorRecoverySchema.shape,
+			...(options?.launch ? SmartCampaignLaunchProjectionSchema.shape : {}),
 			status: z.enum(statuses),
 		})
 		.strict()
@@ -397,6 +423,7 @@ const LaunchCampaignDataOutputSchema = z
 		id: z.string(),
 		isLive: z.boolean(),
 		nextSteps: z.array(z.string()),
+		outcome: z.enum(["created", "replayed"]).optional(),
 		platforms: z.array(z.string()),
 		status: z.string(),
 		summary: z.string(),
@@ -528,6 +555,7 @@ export const ListMediaAssetsOutputEnvelopeSchema = createOutputEnvelopeSchema(
 
 export const LaunchCampaignOutputEnvelopeSchema = createOutputEnvelopeSchema(
 	LaunchCampaignDataOutputSchema,
+	{ launch: true },
 );
 
 export const ManageYoutubeDraftOutputEnvelopeSchema =

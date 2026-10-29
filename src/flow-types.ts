@@ -244,6 +244,7 @@ export type ListMediaAssetsSummaryData = {
 };
 
 export type LaunchCampaignData = {
+	outcome?: "created" | "replayed";
 	youtubeEntries?: Array<{
 		videoId: string;
 		playlistId: string;

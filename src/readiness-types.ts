@@ -1,3 +1,5 @@
+import type { z } from "zod/v4";
+import type { ProposalReadinessOutputSchema } from "./server/output-schemas";
 import type { CampaignDisplayStatus, CampaignType } from "./types";
 
 export type CountryCatalogSource =
@@ -48,7 +50,10 @@ export type GetOnboardingStatusSummaryData = {
 	actionRequired?: string[];
 };
 
+type ProposalReadiness = z.infer<typeof ProposalReadinessOutputSchema>;
+
 export type GetCampaignReadinessData = {
+	proposalReadiness?: ProposalReadiness | null | undefined;
 	artistId: string;
 	artistName: string;
 	campaignType: CampaignType;

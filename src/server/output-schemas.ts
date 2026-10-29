@@ -330,6 +330,25 @@ const NormalizedTargetingOutputSchema = z.union([
 		.strict(),
 ]);
 
+const CampaignProposalBlockerOutputSchema = z.object({
+	code: z.enum([
+		"budget_policy",
+		"currency_unavailable",
+		"daily_spending_limit",
+		"funding_unavailable",
+		"invalid_end_date",
+		"onboarding",
+		"unsupported_content_type",
+	]),
+	field: z.string().optional(),
+	message: z.string(),
+});
+export const ProposalReadinessOutputSchema = z.object({
+	blockers: z.array(CampaignProposalBlockerOutputSchema),
+	isSubmissionReady: z.boolean(),
+	submissionBlockers: z.array(CampaignProposalBlockerOutputSchema),
+});
+
 type CampaignReadinessOutputWithFundingPreview = GetCampaignReadinessData & {
 	fundingPreview?: z.infer<typeof CampaignFundingPreviewOutputSchema> | null;
 };
@@ -339,17 +358,7 @@ const GetCampaignReadinessDataOutputSchema: z.ZodType<CampaignReadinessOutputWit
 		.object({
 			artistId: z.string(),
 			artistName: z.string(),
-			blockingCodes: z.array(
-				z.enum([
-					"budget_policy",
-					"currency_unavailable",
-					"daily_spending_limit",
-					"funding_unavailable",
-					"invalid_end_date",
-					"onboarding",
-					"unsupported_content_type",
-				]),
-			),
+			blockingCodes: z.array(CampaignProposalBlockerOutputSchema.shape.code),
 			blockingIssues: z.array(z.string()),
 			budgetConstraints: z
 				.object({
@@ -373,6 +382,7 @@ const GetCampaignReadinessDataOutputSchema: z.ZodType<CampaignReadinessOutputWit
 			isReady: z.boolean(),
 			missingInputs: z.array(z.string()),
 			normalizedTargeting: NormalizedTargetingOutputSchema,
+			proposalReadiness: ProposalReadinessOutputSchema.nullable().optional(),
 			recommendedNextAction: z.string(),
 			warnings: z.array(z.string()),
 			youtubeEntries: z

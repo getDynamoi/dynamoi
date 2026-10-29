@@ -163,7 +163,7 @@ export const DynamoiGetAuditLogInputSchema = z
 	.object({
 		artistId: z.string().uuid(),
 		cursor: z.string().min(1).max(128).optional(),
-		scope: z.enum(["artist", "organization"]).default("artist"),
+		scope: z.enum(["artist", "organization", "account"]).default("artist"),
 	})
 	.strict();
 export const DynamoiGetReferralsInputSchema = z
@@ -1095,7 +1095,7 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 	},
 	{
 		description:
-			"Read sanitized artist or organization settings audit events. Organization scope requires organization settings authority, beyond artist access. Pass nextCursor unchanged within the same scope; cursors are bounded and scope-checked. Full profile only.",
+			"Read sanitized artist or organization settings audit events, or your own 12 recent account activity entries with scope=account (artist access required; no cursor). Organization scope requires organization settings authority, beyond artist access. Pass nextCursor unchanged within the same scope; cursors are bounded and scope-checked. Full profile only.",
 		destructiveHint: false,
 		name: "dynamoi_get_audit_log",
 		openWorldHint: false,

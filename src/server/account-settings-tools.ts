@@ -21,6 +21,9 @@ export const SetArtistBillingCountrySchema = z
 		expectedCountryCode: z.string().nullable(),
 	})
 	.strict();
+export const GetArtistBillingCountrySchema = z
+	.object({ artistId: z.string().uuid() })
+	.strict();
 const writeAnnotations = {
 	destructiveHint: true,
 	openWorldHint: false,
@@ -28,6 +31,17 @@ const writeAnnotations = {
 	readOnlyHint: false,
 } as const;
 export const ACCOUNT_SETTINGS_TOOL_DEFINITIONS = [
+	{
+		description:
+			"Read the artist billing country. Existing commercial currency stays fixed. This is not tax residency. Full profile only.",
+		destructiveHint: false,
+		name: "dynamoi_get_artist_billing_country",
+		openWorldHint: false,
+		outputSchema: AnyOutputEnvelopeSchema,
+		readOnlyHint: true,
+		schema: GetArtistBillingCountrySchema,
+		title: "Get Artist Billing Country",
+	},
 	{
 		description:
 			"Preview a display name or preferred language change. Show the preview and obtain explicit confirmation, then echo the expected current values with confirm=true.",

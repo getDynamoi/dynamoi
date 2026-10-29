@@ -355,6 +355,7 @@ const DIRECTORY_EXCLUDED_TOOL_NAMES = new Set<string>([
 	"dynamoi_smart_campaign_ad_copy",
 	"dynamoi_delete_account",
 	"dynamoi_update_account_profile",
+	"dynamoi_get_artist_billing_country",
 	"dynamoi_set_artist_billing_country",
 	"dynamoi_contact_support",
 	"dynamoi_add_campaign_funds",
@@ -440,6 +441,7 @@ export type Phase3Adapter = {
 	deleteAccount(input: unknown): Promise<ResultEnvelope<object>>;
 	getActionCenter(input: unknown): Promise<ResultEnvelope<unknown>>;
 	getTeam(input: unknown): Promise<ResultEnvelope<unknown>>;
+	getArtistBillingCountry(input: unknown): Promise<ResultEnvelope<object>>;
 	getAuditLog(input: unknown): Promise<ResultEnvelope<unknown>>;
 	getReferrals(input: unknown): Promise<ResultEnvelope<unknown>>;
 	getEarnings(input: unknown): Promise<ResultEnvelope<unknown>>;
@@ -830,6 +832,8 @@ const DYNAMOI_TOOL_DISPATCHERS = {
 	dynamoi_get_action_center: (adapter, input) => adapter.getActionCenter(input),
 	dynamoi_get_artist_analytics: (adapter, input) =>
 		adapter.getArtistAnalytics(input),
+	dynamoi_get_artist_billing_country: (adapter, input) =>
+		adapter.getArtistBillingCountry(input),
 	dynamoi_get_audience_analytics: (adapter, input) =>
 		adapter.getAudienceAnalytics(input),
 	dynamoi_get_audit_log: (adapter, input) => adapter.getAuditLog(input),

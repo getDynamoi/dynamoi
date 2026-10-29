@@ -22,6 +22,7 @@ export {
 	type AccountEditResult,
 	type AccountSettingsInput,
 	DeleteAccountSchema,
+	GetArtistBillingCountrySchema,
 	SetArtistBillingCountrySchema,
 	UpdateAccountProfileSchema,
 } from "./server/account-settings-tools";

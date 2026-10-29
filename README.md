@@ -235,7 +235,7 @@ come from `tools/list`.
 | `dynamoi_update_smart_link_release_settings` | Update one Smart Link's release video or destination visibility | Changes data | Full |
 | `dynamoi_update_smart_link_artist_hub_settings` | Update an artist's hub introduction, official profile links or service order | Changes data | Full |
 | `dynamoi_get_action_center` | Artist Action Center revision, task states and distinct actions | Reads | Full |
-| `dynamoi_get_earnings` | Authenticated payee own-USD earnings, month axis and bounded detail pages; no payout/tax authority | Reads | Full |
+| `dynamoi_get_earnings` | Authenticated payee own-USD earnings, month axis, filtered detail pages, rankings, geographic views and statement export data; no payout/tax authority | Reads | Full |
 | `dynamoi_get_team` | Organization members and pending invitations; organization authority required. | Reads | Full |
 | `dynamoi_get_artist_billing_country` | Read current billing country; not tax residency. | Reads | Full |
 | `dynamoi_get_audit_log` | Sanitized artist/organization audit events with scope-bound cursors, plus your 12 recent account activity entries. | Reads | Full |

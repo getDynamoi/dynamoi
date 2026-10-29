@@ -352,6 +352,7 @@ const MUTATING_TOOL_NAMES = new Set<string>(
 );
 
 const DIRECTORY_EXCLUDED_TOOL_NAMES = new Set<string>([
+	"dynamoi_smart_link_controls",
 	"dynamoi_smart_campaign_ad_copy",
 	"dynamoi_delete_account",
 	"dynamoi_update_account_profile",
@@ -553,6 +554,7 @@ export type Phase3Adapter = {
 	updateSmartLinkArtistHubSettings(
 		input: unknown,
 	): Promise<ResultEnvelope<UpdateSmartLinkArtistSettingsData>>;
+	smartLinkControls(input: unknown): Promise<ResultEnvelope<unknown>>;
 	updateSmartLinkReleaseSettings(
 		input: unknown,
 	): Promise<ResultEnvelope<UpdateSmartLinkData>>;
@@ -881,6 +883,8 @@ const DYNAMOI_TOOL_DISPATCHERS = {
 	dynamoi_shop_list_orders: (adapter, input) => adapter.shopListOrders(input),
 	dynamoi_smart_campaign_ad_copy: (adapter, input) =>
 		adapter.smartCampaignAdCopy(input),
+	dynamoi_smart_link_controls: (adapter, input) =>
+		adapter.smartLinkControls(input),
 	dynamoi_start_meta_connection: (adapter, input) =>
 		adapter.startMetaConnection(input),
 	dynamoi_start_youtube_channel_link: (adapter, input) =>

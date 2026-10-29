@@ -93,6 +93,7 @@ export {
 	DynamoiGetSmartLinkArtistSettingsInputSchema,
 	DynamoiGetSmartLinkInputSchema,
 	DynamoiListSmartLinksInputSchema,
+	DynamoiSmartLinkControlsInputSchema,
 	DynamoiUpdateSmartLinkArtistHubSettingsInputSchema,
 	DynamoiUpdateSmartLinkArtistSettingsInputSchema,
 	DynamoiUpdateSmartLinkDescriptionInputSchema,

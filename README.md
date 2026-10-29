@@ -193,7 +193,7 @@ including what did not work.
 - **Each client gets one of two tool sets**, chosen from the identity it signs
   in with. Reviewed clients and apps that sign in on your own computer
   (Claude Code, Codex, Cursor, VS Code, Gemini CLI, OpenClaw and the `dynamoi`
-  CLI) get All 52 tools. ChatGPT, Claude added from its directory listing and other web apps get 24 review-safe advertised tools: reads, Smart Links,
+  CLI) get All 53 tools. ChatGPT, Claude added from its directory listing and other web apps get 24 review-safe advertised tools: reads, Smart Links,
   distribution applications and About, with no billing, launches or checkout.
 - **Sign-in is OAuth 2.1**, and every call still checks its scopes and the
   user's role for that artist. See
@@ -232,6 +232,7 @@ come from `tools/list`.
 | `dynamoi_update_smart_link_description` | Update one Smart Link's public description | Changes data | Directory |
 | `dynamoi_update_smart_link_artist_settings` | Update an artist's Smart Link theme or validated pixel settings | Changes data | Directory |
 | `dynamoi_update_smart_link` | Prior multi-action schema for description or artist settings | Changes data | Full |
+| `dynamoi_smart_link_controls` | Native catalog sync, availability, tracking and promote analytics | Changes data | Full |
 | `dynamoi_update_smart_link_release_settings` | Update one Smart Link's release video or destination visibility | Changes data | Full |
 | `dynamoi_update_smart_link_artist_hub_settings` | Update an artist's hub introduction, official profile links or service order | Changes data | Full |
 | `dynamoi_get_action_center` | Artist Action Center revision, task states and distinct actions | Reads | Full |

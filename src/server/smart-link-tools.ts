@@ -502,8 +502,45 @@ export const SMART_LINK_UPDATE_OPERATION_TOOL_DEFINITIONS = [
 	},
 ] as const;
 
+export const DynamoiSmartLinkControlsInputSchema = z
+	.object({
+		action: z.enum([
+			"sync_catalog",
+			"set_availability",
+			"update_tracking",
+			"promote_request",
+		]),
+		artistId: z.string().uuid(),
+		confirmedArtistName: z.string().max(500).optional(),
+		expectedVersion: z.string().min(1).max(128).optional(),
+		isEnabled: z.boolean().optional(),
+		platform: z.enum(["ios", "android"]).nullable().optional(),
+		playLinkId: z.string().trim().min(1).optional(),
+		tracking: z
+			.object({
+				googleAdsConversionId: z.string().trim().max(32).nullable(),
+				metaPixelId: z.string().trim().max(32).nullable(),
+				tiktokPixelId: z.string().trim().max(32).nullable(),
+			})
+			.strict()
+			.optional(),
+	})
+	.strict();
+
 /** Full-profile-only Smart Link writes; the directory contract never lists them. */
 export const FULL_SMART_LINK_STUDIO_TOOL_DEFINITIONS = [
+	{
+		description:
+			"Sync the native catalog, change artist-wide Smart Link availability, replace tracking IDs, or record a promote request. Confirm the requested change first. Disabling requires confirmedArtistName matching the artist name. Tracking requires all three IDs (null clears) and forwards expectedVersion from artistHub.version. Availability is unversioned. Catalog sync retains native cooldowns. Promote request requires playLinkId; it only records the native platform analytics event, sends no message and starts no paid work. Omitted platform uses the native default (iOS).",
+		destructiveHint: true,
+		idempotentHint: false,
+		name: "dynamoi_smart_link_controls",
+		openWorldHint: true,
+		outputSchema: AnyOutputEnvelopeSchema,
+		readOnlyHint: false,
+		schema: DynamoiSmartLinkControlsInputSchema,
+		title: "Smart Link Controls",
+	},
 	{
 		description:
 			"Use this when the user wants to change artist Smart Link theme, pixels, introduction, official profile links or service order. Pass the read artistHub.version as expectedVersion. Omitted fields preserve stored values; null explicitly clears supported fields. Confirm the requested settings before calling. The result includes the saved artistHub readback. If the theme applies but other changes are refused, reload with dynamoi_get_smart_link (artistId, includeArtistSettings=true) before retrying.",

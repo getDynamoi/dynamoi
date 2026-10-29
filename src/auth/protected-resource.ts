@@ -34,6 +34,7 @@ export const DYNAMOI_MCP_TOOL_SCOPES = {
 	dynamoi_get_account_overview: ["dynamoi:read"],
 	dynamoi_get_action_center: ["dynamoi:read", "dynamoi:platform.read"],
 	dynamoi_get_artist_analytics: ["dynamoi:read"],
+	dynamoi_onboard_artist: ["dynamoi:read", "dynamoi:mcp.full"],
 	[AUDIENCE_ANALYTICS_CONTRACT.mcp.definition.name]:
 		AUDIENCE_ANALYTICS_CONTRACT.mcp.scopes,
 	dynamoi_get_artist_billing_country: ["dynamoi:read", "dynamoi:mcp.full"],

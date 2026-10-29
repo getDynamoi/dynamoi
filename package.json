@@ -54,6 +54,7 @@
 		"dist/index.js",
 		"dist/readiness-types.d.ts",
 		"dist/server/about.d.ts",
+		"dist/server/artist-intake-tools.d.ts",
 		"dist/server/account-schema.generated.d.ts",
 		"dist/server/account-settings-tools.d.ts",
 		"dist/server/channel-results-schema.d.ts",

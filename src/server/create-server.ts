@@ -70,6 +70,7 @@ import {
 	ACCOUNT_SETTINGS_TOOL_DEFINITIONS,
 	DELETE_ACCOUNT_TOOL_DEFINITIONS,
 } from "./account-settings-tools";
+import { ARTIST_INTAKE_TOOL_DEFINITION } from "./artist-intake-tools";
 import { DISTRIBUTION_TOOL_DEFINITIONS } from "./distribution-tools";
 import {
 	DYNAMOI_CHATGPT_APP_INSTRUCTIONS,
@@ -318,6 +319,7 @@ type DynamoiToolRegistrationDescriptor = {
 };
 
 const DYNAMOI_TOOL_DEFINITIONS = [
+	ARTIST_INTAKE_TOOL_DEFINITION,
 	...ACCOUNT_SETTINGS_TOOL_DEFINITIONS,
 	...DELETE_ACCOUNT_TOOL_DEFINITIONS,
 	WORKSPACE_TOOL_DEFINITION,
@@ -352,6 +354,7 @@ const MUTATING_TOOL_NAMES = new Set<string>(
 );
 
 const DIRECTORY_EXCLUDED_TOOL_NAMES = new Set<string>([
+	"dynamoi_onboard_artist",
 	"dynamoi_smart_link_controls",
 	"dynamoi_claim_referral_code",
 	"dynamoi_smart_campaign_ad_copy",
@@ -456,6 +459,7 @@ export type Phase3Adapter = {
 	openWorkspace(
 		input: unknown,
 	): Promise<ResultEnvelope<import("./workspace/data").WorkspaceData>>;
+	onboardArtist(input: unknown): Promise<ResultEnvelope<object>>;
 	applyForDistribution(
 		input: unknown,
 	): Promise<ResultEnvelope<ApplyForDistributionData>>;
@@ -882,6 +886,7 @@ const DYNAMOI_TOOL_DISPATCHERS = {
 	dynamoi_manage_team: (adapter, input) => adapter.manageTeam(input),
 	dynamoi_manage_youtube_draft: (adapter, input) =>
 		adapter.manageYoutubeDraft(input),
+	dynamoi_onboard_artist: (adapter, input) => adapter.onboardArtist(input),
 	dynamoi_open_workspace: (adapter, input) => adapter.openWorkspace(input),
 	dynamoi_prepare_distribution_release: (adapter, input) =>
 		adapter.prepareDistributionRelease(input),

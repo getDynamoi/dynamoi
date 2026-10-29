@@ -55,6 +55,7 @@ export const DYNAMOI_MCP_TOOL_SCOPES = {
 	dynamoi_get_platform_status: ["dynamoi:read", "dynamoi:platform.read"],
 	[PLAYLIST_ANALYTICS_CONTRACT.mcp.definition.name]:
 		PLAYLIST_ANALYTICS_CONTRACT.mcp.scopes,
+	dynamoi_claim_referral_code: ["dynamoi:read", "dynamoi:mcp.full"],
 	dynamoi_get_referrals: ["dynamoi:read"],
 	dynamoi_get_resume_funding: ["dynamoi:read", "dynamoi:billing.read"],
 	dynamoi_get_smart_link: ["dynamoi:read"],

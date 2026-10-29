@@ -353,6 +353,7 @@ const MUTATING_TOOL_NAMES = new Set<string>(
 
 const DIRECTORY_EXCLUDED_TOOL_NAMES = new Set<string>([
 	"dynamoi_smart_link_controls",
+	"dynamoi_claim_referral_code",
 	"dynamoi_smart_campaign_ad_copy",
 	"dynamoi_delete_account",
 	"dynamoi_update_account_profile",
@@ -446,6 +447,7 @@ export type Phase3Adapter = {
 	getArtistBillingCountry(input: unknown): Promise<ResultEnvelope<object>>;
 	manageTeam(input: unknown): Promise<ResultEnvelope<unknown>>;
 	getAuditLog(input: unknown): Promise<ResultEnvelope<unknown>>;
+	claimReferralCode(input: unknown): Promise<ResultEnvelope<unknown>>;
 	getReferrals(input: unknown): Promise<ResultEnvelope<unknown>>;
 	getEarnings(input: unknown): Promise<ResultEnvelope<unknown>>;
 	updateAccountProfile(input: unknown): Promise<ResultEnvelope<object>>;
@@ -825,6 +827,8 @@ const DYNAMOI_TOOL_DISPATCHERS = {
 		adapter.addCampaignFunds(input),
 	dynamoi_apply_for_distribution: (adapter, input) =>
 		adapter.applyForDistribution(input),
+	dynamoi_claim_referral_code: (adapter, input) =>
+		adapter.claimReferralCode(input),
 	dynamoi_contact_support: (adapter, input) => adapter.contactSupport(input),
 	dynamoi_create_smart_link_from_spotify: (adapter, input) =>
 		adapter.createSmartLinkFromSpotify(input),

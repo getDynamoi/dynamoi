@@ -121,6 +121,7 @@ export {
 export {
 	DateRangeSchema,
 	DynamoiAddCampaignFundsInputSchema,
+	DynamoiClaimReferralCodeInputSchema,
 	DynamoiGetActionCenterInputSchema,
 	DynamoiGetArtistAnalyticsInputSchema,
 	DynamoiGetArtistInputSchema,

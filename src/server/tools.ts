@@ -188,6 +188,10 @@ export const DynamoiGetAuditLogInputSchema = z
 		scope: z.enum(["artist", "organization", "account"]).default("artist"),
 	})
 	.strict();
+export const DynamoiClaimReferralCodeInputSchema = z
+	.object({ code: z.string() })
+	.strict();
+
 export const DynamoiGetReferralsInputSchema = z
 	.object({
 		artistId: z.string().uuid(),
@@ -1146,6 +1150,17 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 		readOnlyHint: true,
 		schema: DynamoiGetAuditLogInputSchema,
 		title: "Get AuditLog",
+	},
+	{
+		description:
+			"Claim or change your own referral code using the web claim rules. Does not accept referral program terms; accept those yourself in the app or web. Full profile only.",
+		destructiveHint: false,
+		name: "dynamoi_claim_referral_code",
+		openWorldHint: false,
+		outputSchema: AnyOutputEnvelopeSchema,
+		readOnlyHint: false,
+		schema: DynamoiClaimReferralCodeInputSchema,
+		title: "Claim Referral Code",
 	},
 	{
 		description:

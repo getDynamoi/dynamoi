@@ -79,6 +79,7 @@ export {
 	CreativeSelectionSchema,
 	SmartCampaignCreativeInputSchema,
 	SmartCampaignCreativeOutputSchema,
+	SourceAudioImportSchema,
 	SourceAudioUploadCompleteSchema,
 	SourceAudioUploadSchema,
 } from "./server/smart-campaign-creative";

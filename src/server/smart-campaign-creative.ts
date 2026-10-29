@@ -13,6 +13,9 @@ export const SourceAudioUploadSchema = z.strictObject({
 	hookSeconds: z.array(z.number().int().nonnegative()).max(2),
 	trackDurationSeconds: z.number().positive(),
 });
+export const SourceAudioImportSchema = SourceAudioUploadSchema.omit({
+	fileSizeBytes: true,
+}).extend({ url: z.string().max(8192) });
 export const SourceAudioUploadCompleteSchema = SourceAudioUploadSchema.extend({
 	parts: z
 		.array(
@@ -30,10 +33,12 @@ export const SmartCampaignCreativeInputSchema = z.strictObject({
 	action: z.enum([
 		"read",
 		"select",
+		"import_source_audio",
 		"start_source_audio_upload",
 		"complete_source_audio_upload",
 	]),
 	artistId: z.uuid(),
+	url: z.string().max(8192).optional(),
 	...CreativeSelectionSchema.partial().shape,
 	...SourceAudioUploadCompleteSchema.partial().shape,
 });
@@ -90,7 +95,7 @@ export const SmartCampaignCreativeOutputSchema = z.strictObject({
 
 export const SMART_CAMPAIGN_CREATIVE_TOOL_DEFINITION = {
 	description:
-		"Read generation progress, generated creatives and current selection with action=read. Use action=select to save generated creative IDs on the draft with campaignId and expectedUpdatedAt from read. Selection never attests artist approval and never submits the campaign. Attach source MP3 audio to a draft with start_source_audio_upload, PUT each returned presigned part URL, then complete_source_audio_upload with the returned uploadId/uploadSessionId and part ETags. Both actions require campaignId, expectedUpdatedAt, fileSizeBytes, trackDurationSeconds and 0–2 hookSeconds. Read sourceAudio to confirm. Import from a Dropbox link is in progress; Google Drive is unsupported.",
+		"Read generation progress, generated creatives and current selection with action=read. Use action=select to save generated creative IDs on the draft with campaignId and expectedUpdatedAt from read. Selection never attests artist approval and never submits the campaign. Attach source MP3 audio to a draft with start_source_audio_upload, PUT each returned presigned part URL, then complete_source_audio_upload with the returned uploadId/uploadSessionId and part ETags. Both actions require campaignId, expectedUpdatedAt, fileSizeBytes, trackDurationSeconds and 0–2 hookSeconds. Read sourceAudio to confirm. Use import_source_audio with a public Dropbox share url, campaignId, expectedUpdatedAt, trackDurationSeconds and 0–2 hookSeconds (250 MiB maximum). Google Drive is unsupported because it requires a Google API key. On timeout or an ambiguous result, re-read sourceAudio before retrying.",
 	destructiveHint: false,
 	name: "dynamoi_manage_smart_campaign_creative",
 	openWorldHint: false,

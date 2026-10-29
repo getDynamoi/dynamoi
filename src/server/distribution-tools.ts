@@ -9,7 +9,13 @@ export const DynamoiGetDistributionApplicationInputSchema = z
 export const DynamoiGetDistributionStatusInputSchema = z
 	.object({
 		artistId: z.string().uuid(),
-		section: z.enum(["application", "agreement", "catalog", "releases"]),
+		section: z.enum([
+			"application",
+			"agreement",
+			"catalog",
+			"releases",
+			"foundation",
+		]),
 	})
 	.strict();
 
@@ -71,7 +77,7 @@ export const DISTRIBUTION_TOOL_DEFINITIONS = [
 	},
 	{
 		description:
-			"Read application, agreement, catalog or release status for an accessible artist through the same owners as web/mobile. Full profile only. Release intake status requires editor access, as on web; catalog retains viewer scoping. Catalog is a status overview; releases returns the latest 20 submissions, not complete history. Rights and agreement attestation and sending releases to stores are done by the artist in web or the app.",
+			"Read native foundation, application, agreement, catalog or release status for an accessible artist through the same owners as web/mobile. Full profile only. Release intake status requires editor access, as on web; catalog retains viewer scoping. Catalog is a status overview; releases returns the latest 20 submissions, not complete history. Rights and agreement attestation and sending releases to stores are done by the artist in web or the app.",
 		destructiveHint: false,
 		name: "dynamoi_get_distribution_status",
 		openWorldHint: false,

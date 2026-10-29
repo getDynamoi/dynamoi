@@ -150,6 +150,7 @@ export const DynamoiGetAudienceAnalyticsInputSchema =
 
 export const DynamoiGetBillingInputSchema = z
 	.object({
+		action: z.enum(["summary", "native_deposits"]).optional(),
 		artistId: z.string().uuid(),
 		format: ToolFormatSchema.optional(),
 		onboardingAttemptId: OnboardingAttemptIdSchema,
@@ -1087,7 +1088,7 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 	},
 	{
 		description:
-			"Use this when the user asks about billing state, credit balance, promo limits, subscription status, campaign-fund deposits, or whether billing blocks launches for one artist. This is a read-only status check; it does not create checkout links or collect payment. paymentMethod contains only the shared masked display details (brand or bank, type, last four digits and expiry); null means details are unavailable, not proof that no method exists. Each deposit in prefundPayments is pending (payment not yet confirmed), cleared (Stripe says paid and the funds are usable), failed (the payment did not complete) or held (paid, but funding is on hold for review and not usable yet). A Checkout link alone is never a deposit. To add campaign funds use dynamoi_add_campaign_funds; for other billing setup tell the user: 'You can do this in the Dynamoi dashboard at https://dynamoi.com/dashboard.' Then call this tool again to confirm the status. Do not use this for campaign analytics or platform connection troubleshooting.",
+			"Use action=native_deposits for the native funding summary and pending deposit (not transaction history); hosted Checkout remains the payment boundary. Use this when the user asks about billing state, credit balance, promo limits, subscription status, campaign-fund deposits, or whether billing blocks launches for one artist. This is a read-only status check; it does not create checkout links or collect payment. paymentMethod contains only the shared masked display details (brand or bank, type, last four digits and expiry); null means details are unavailable, not proof that no method exists. Each deposit in prefundPayments is pending (payment not yet confirmed), cleared (Stripe says paid and the funds are usable), failed (the payment did not complete) or held (paid, but funding is on hold for review and not usable yet). A Checkout link alone is never a deposit. To add campaign funds use dynamoi_add_campaign_funds; for other billing setup tell the user: 'You can do this in the Dynamoi dashboard at https://dynamoi.com/dashboard.' Then call this tool again to confirm the status. Do not use this for campaign analytics or platform connection troubleshooting.",
 		destructiveHint: false,
 		name: "dynamoi_get_billing",
 		openWorldHint: false,

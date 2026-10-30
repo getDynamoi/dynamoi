@@ -1,13 +1,24 @@
 import { z } from "zod/v4";
 import { createOutputEnvelopeSchema } from "./output-schemas";
 
+const UploadedSelectionSchema = z.strictObject({
+	fileName: z.string().default(""),
+	fileSize: z.number().int().nonnegative().default(0),
+	fileType: z.string().default(""),
+	id: z.string().default(""),
+	mediaAssetId: z.uuid(),
+});
 export const CreativeSelectionSchema = z.strictObject({
 	campaignId: z.uuid(),
 	expectedUpdatedAt: z.iso.datetime(),
-	selectedCreativeIds: z.array(z.uuid()).min(1).max(100),
+	selectedCreativeIds: z.array(z.uuid()).min(1).max(100).optional(),
+	selectedSocialPosts: z.array(z.string().min(1).max(200)).max(10).optional(),
+	source: z.enum(["generate", "posts", "upload"]).optional(),
+	uploadedAssets: z.array(UploadedSelectionSchema).max(30).optional(),
 });
-export const CreativeGenerationSchema = CreativeSelectionSchema.omit({
-	selectedCreativeIds: true,
+export const CreativeGenerationSchema = CreativeSelectionSchema.pick({
+	campaignId: true,
+	expectedUpdatedAt: true,
 });
 export const SourceAudioUploadStatusSchema = CreativeGenerationSchema.extend({
 	uploadId: z.string().min(1),
@@ -134,7 +145,9 @@ export const SmartCampaignCreativeOutputSchema = z.strictObject({
 	generationJobId: z.uuid().optional(),
 	locationDraft: LocationOutputSchema.optional(),
 	selectedCreativeIds: z.array(z.uuid()).max(100),
+	selectedSocialPosts: z.array(z.string()).optional(),
 	setupDraft: z.record(z.string(), z.unknown()).optional(),
+	source: z.enum(["generate", "posts", "upload"]).nullable().optional(),
 	sourceAudio: z
 		.strictObject({
 			fileName: z.string().nullable(),
@@ -155,6 +168,13 @@ export const SmartCampaignCreativeOutputSchema = z.strictObject({
 			uploadSessionId: z.uuid(),
 		})
 		.optional(),
+	uploadedAssets: z
+		.array(
+			UploadedSelectionSchema.extend({
+				uploadStatus: z.enum(["success", "error"]),
+			}),
+		)
+		.optional(),
 	uploadStatus: z
 		.strictObject({
 			campaignId: z.uuid(),
@@ -171,7 +191,7 @@ export const SmartCampaignCreativeOutputSchema = z.strictObject({
 
 export const SMART_CAMPAIGN_CREATIVE_TOOL_DEFINITION = {
 	description:
-		"Use save_setup with setupSave={playLinkId, appleMusicUrl?} and a stable UUID-v4 setupRequestId per setup flow; reuse it on retries, and start a new flow for different content. It returns setupDraft. Use read_budget for budgetDraft and save_budget with budgetSave={campaignId, expectedUpdatedAt, budgetAmountCents, budgetAmountMinor?, currency?, budgetType:DAILY|TOTAL, endDate:YYYY-MM-DD|null}. Amounts are exact minor units in the artist currency; use the budget policy from read_budget. Setup and budget saves only edit drafts and never launch or charge. Use read_location to read native draft targeting and save_location with locationSave={campaignId, expectedUpdatedAt, targeting:{mode:WORLDWIDE}|{mode:INCLUDE,countryCodes:[US]}} to save it. Read locationDraft first for the current revision; both location actions return locationDraft. Read generation progress, generated creatives and current selection with action=read. Use start_generation, retry_generation or clear_generation with campaignId and expectedUpdatedAt from read. Generation runs asynchronously; poll with read. Use source_audio_upload_status or abort_source_audio_upload with campaignId, expectedUpdatedAt, uploadId and uploadSessionId to inspect uploaded parts or abort the direct upload. Agents never approve or submit. Use action=select to save generated creative IDs on the draft with campaignId and expectedUpdatedAt from read. Selection never attests artist approval and never submits the campaign. Attach source MP3 audio to a draft with start_source_audio_upload, PUT each returned presigned part URL, then complete_source_audio_upload with the returned uploadId/uploadSessionId and part ETags. Both actions require campaignId, expectedUpdatedAt, fileSizeBytes, trackDurationSeconds and 0–2 hookSeconds. Read sourceAudio to confirm. Use import_source_audio with a public Dropbox share url, campaignId, expectedUpdatedAt, trackDurationSeconds and 0–2 hookSeconds (250 MiB maximum). Google Drive is unsupported because it requires a Google API key. On timeout or an ambiguous result, re-read sourceAudio before retrying.",
+		"Use save_setup with setupSave={playLinkId, appleMusicUrl?} and a stable UUID-v4 setupRequestId per setup flow; reuse it on retries, and start a new flow for different content. It returns setupDraft. Use read_budget for budgetDraft and save_budget with budgetSave={campaignId, expectedUpdatedAt, budgetAmountCents, budgetAmountMinor?, currency?, budgetType:DAILY|TOTAL, endDate:YYYY-MM-DD|null}. Amounts are exact minor units in the artist currency; use the budget policy from read_budget. Setup and budget saves only edit drafts and never launch or charge. Use read_location to read native draft targeting and save_location with locationSave={campaignId, expectedUpdatedAt, targeting:{mode:WORLDWIDE}|{mode:INCLUDE,countryCodes:[US]}} to save it. Read locationDraft first for the current revision; both location actions return locationDraft. Read generation progress, generated creatives and current selection with action=read. Use start_generation, retry_generation or clear_generation with campaignId and expectedUpdatedAt from read. Generation runs asynchronously; poll with read. Use source_audio_upload_status or abort_source_audio_upload with campaignId, expectedUpdatedAt, uploadId and uploadSessionId to inspect uploaded parts or abort the direct upload. Agents never approve or submit. Use action=select with campaignId and expectedUpdatedAt from read, source=generate|posts|upload, and selectedCreativeIds, selectedSocialPosts (owned META:post IDs), or uploadedAssets=[{mediaAssetId}] from dynamoi_list_media_assets. Omit selectedCreativeIds for social or uploaded media. Uploaded metadata is resolved by the server; only owned, moderation-approved uploads can be selected. Selection never attests artist approval and never submits the campaign. Attach source MP3 audio to a draft with start_source_audio_upload, PUT each returned presigned part URL, then complete_source_audio_upload with the returned uploadId/uploadSessionId and part ETags. Both actions require campaignId, expectedUpdatedAt, fileSizeBytes, trackDurationSeconds and 0–2 hookSeconds. Read sourceAudio to confirm. Use import_source_audio with a public Dropbox share url, campaignId, expectedUpdatedAt, trackDurationSeconds and 0–2 hookSeconds (250 MiB maximum). Google Drive is unsupported because it requires a Google API key. On timeout or an ambiguous result, re-read sourceAudio before retrying.",
 	destructiveHint: false,
 	name: "dynamoi_manage_smart_campaign_creative",
 	openWorldHint: false,

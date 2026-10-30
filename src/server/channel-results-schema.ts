@@ -65,6 +65,12 @@ export const ChannelResultsSchema = z.discriminatedUnion("status", [
 				.object({
 					averageTimeInPlaylistSeconds: z.number(),
 					playlistAddsPer1kViews: z.number().nullable(),
+					playlistMetricsAvailable: z
+						.boolean()
+						.optional()
+						.describe(
+							"When playlistMetricsAvailable is false, the playlist numbers are unavailable, not zero.",
+						),
 					playlistStarts: z.number(),
 					provenance: ProvenanceSchema,
 					viewsPerPlaylistStart: z.number(),

@@ -91,7 +91,7 @@ export function readLocalTarget(args: string[]): {
 	return { argv, target: { endpoint, token } };
 }
 
-function readLocalPreview(manifestPath: string) {
+export function readLocalPreview(manifestPath: string) {
 	const manifest = JSON.parse(readFileSync(manifestPath, "utf8")) as Preview;
 	if (!Number.isSafeInteger(manifest.pid) || manifest.pid <= 0)
 		throw new Error("Invalid preview owner.");

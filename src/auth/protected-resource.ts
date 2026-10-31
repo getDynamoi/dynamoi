@@ -1,3 +1,7 @@
+import {
+	BILLING_COUNTRY_READ_CONTRACT,
+	BILLING_COUNTRY_SET_CONTRACT,
+} from "../server/billing-country.generated";
 import { AUDIENCE_ANALYTICS_CONTRACT } from "../server/audience-analytics.generated";
 import { PLAYLIST_ANALYTICS_CONTRACT } from "../server/playlist-analytics.generated";
 
@@ -37,7 +41,8 @@ export const DYNAMOI_MCP_TOOL_SCOPES = {
 	dynamoi_onboard_artist: ["dynamoi:read", "dynamoi:mcp.full"],
 	[AUDIENCE_ANALYTICS_CONTRACT.mcp.definition.name]:
 		AUDIENCE_ANALYTICS_CONTRACT.mcp.scopes,
-	dynamoi_get_artist_billing_country: ["dynamoi:read", "dynamoi:mcp.full"],
+	[BILLING_COUNTRY_READ_CONTRACT.mcp.definition.name]:
+		BILLING_COUNTRY_READ_CONTRACT.mcp.scopes,
 	dynamoi_get_audit_log: ["dynamoi:read"],
 	dynamoi_get_billing: ["dynamoi:read", "dynamoi:billing.read"],
 	dynamoi_get_campaign: ["dynamoi:read"],
@@ -82,7 +87,8 @@ export const DYNAMOI_MCP_TOOL_SCOPES = {
 	dynamoi_open_workspace: ["dynamoi:read"],
 	dynamoi_preview_smart_link_themes: ["dynamoi:read"],
 	dynamoi_search: ["dynamoi:read"],
-	dynamoi_set_artist_billing_country: ["dynamoi:read", "dynamoi:mcp.full"],
+	[BILLING_COUNTRY_SET_CONTRACT.mcp.definition.name]:
+		BILLING_COUNTRY_SET_CONTRACT.mcp.scopes,
 	dynamoi_shop_create_checkout: ["dynamoi:read", "dynamoi:mcp.full"],
 	dynamoi_shop_get_quote: ["dynamoi:read", "dynamoi:mcp.full"],
 	dynamoi_shop_list_orders: ["dynamoi:read", "dynamoi:mcp.full"],

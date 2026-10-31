@@ -1,3 +1,7 @@
+import {
+	BILLING_COUNTRY_READ_CONTRACT,
+	BILLING_COUNTRY_SET_CONTRACT,
+} from "./billing-country.generated";
 import { z } from "zod/v4";
 import { AnyOutputEnvelopeSchema } from "./output-schemas";
 export const UpdateAccountProfileSchema = z
@@ -13,17 +17,10 @@ export const UpdateAccountProfileSchema = z
 		(input) => input.name !== undefined || input.preferredLocale !== undefined,
 		"Provide name or preferredLocale.",
 	);
-export const SetArtistBillingCountrySchema = z
-	.object({
-		artistId: z.string().uuid(),
-		confirm: z.boolean().optional(),
-		countryCode: z.string(),
-		expectedCountryCode: z.string().nullable(),
-	})
-	.strict();
-export const GetArtistBillingCountrySchema = z
-	.object({ artistId: z.string().uuid() })
-	.strict();
+export const SetArtistBillingCountrySchema =
+	BILLING_COUNTRY_SET_CONTRACT.mcp.definition.schema;
+export const GetArtistBillingCountrySchema =
+	BILLING_COUNTRY_READ_CONTRACT.mcp.definition.schema;
 const writeAnnotations = {
 	destructiveHint: true,
 	openWorldHint: false,
@@ -32,15 +29,8 @@ const writeAnnotations = {
 } as const;
 export const ACCOUNT_SETTINGS_TOOL_DEFINITIONS = [
 	{
-		description:
-			"Read the artist billing country. Existing commercial currency stays fixed. This is not tax residency. Full profile only.",
-		destructiveHint: false,
-		name: "dynamoi_get_artist_billing_country",
-		openWorldHint: false,
+		...BILLING_COUNTRY_READ_CONTRACT.mcp.definition,
 		outputSchema: AnyOutputEnvelopeSchema,
-		readOnlyHint: true,
-		schema: GetArtistBillingCountrySchema,
-		title: "Get Artist Billing Country",
 	},
 	{
 		description:
@@ -51,12 +41,8 @@ export const ACCOUNT_SETTINGS_TOOL_DEFINITIONS = [
 		title: "Update Account Profile",
 	},
 	{
-		description:
-			"Preview an artist checkout-currency suggestion country. Existing commercial currency stays fixed. Obtain explicit confirmation and echo expectedCountryCode with confirm=true.",
-		...writeAnnotations,
-		name: "dynamoi_set_artist_billing_country",
-		schema: SetArtistBillingCountrySchema,
-		title: "Set Artist Billing Country",
+		...BILLING_COUNTRY_SET_CONTRACT.mcp.definition,
+		outputSchema: AnyOutputEnvelopeSchema,
 	},
 ] as const;
 

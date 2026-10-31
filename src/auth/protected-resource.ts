@@ -1,8 +1,9 @@
+import { AUDIENCE_ANALYTICS_CONTRACT } from "../server/audience-analytics.generated";
 import {
 	BILLING_COUNTRY_READ_CONTRACT,
 	BILLING_COUNTRY_SET_CONTRACT,
 } from "../server/billing-country.generated";
-import { AUDIENCE_ANALYTICS_CONTRACT } from "../server/audience-analytics.generated";
+import { GROWTH_AUDIT_CONTRACT } from "../server/growth-audit.generated";
 import { PLAYLIST_ANALYTICS_CONTRACT } from "../server/playlist-analytics.generated";
 
 export const DYNAMOI_BETTER_AUTH_MCP_SCOPES = [
@@ -57,7 +58,7 @@ export const DYNAMOI_MCP_TOOL_SCOPES = {
 		"dynamoi:mcp.full",
 	],
 	dynamoi_get_earnings: ["dynamoi:read", "dynamoi:distribution.read"],
-	dynamoi_get_growth_audit: ["dynamoi:read"],
+	[GROWTH_AUDIT_CONTRACT.mcp.definition.name]: GROWTH_AUDIT_CONTRACT.mcp.scopes,
 	dynamoi_get_platform_status: ["dynamoi:read", "dynamoi:platform.read"],
 	dynamoi_prepare_distribution_release: [
 		"dynamoi:read",

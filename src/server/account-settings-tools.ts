@@ -1,8 +1,8 @@
+import { z } from "zod/v4";
 import {
 	BILLING_COUNTRY_READ_CONTRACT,
 	BILLING_COUNTRY_SET_CONTRACT,
 } from "./billing-country.generated";
-import { z } from "zod/v4";
 import { AnyOutputEnvelopeSchema } from "./output-schemas";
 export const UpdateAccountProfileSchema = z
 	.object({

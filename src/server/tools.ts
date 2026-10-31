@@ -13,6 +13,7 @@ import {
 	DynamoiListArtistsInputSchema,
 } from "./account-schema.generated";
 import { AUDIENCE_ANALYTICS_CONTRACT } from "./audience-analytics.generated";
+import { GROWTH_AUDIT_CONTRACT } from "./growth-audit.generated";
 import { createPhaseOnboardingToolDefinitions } from "./onboarding-tool-definitions";
 import { OPENAI_TOOL_DEFINITIONS } from "./openai-tools";
 import {
@@ -138,9 +139,8 @@ export const DynamoiGetArtistAnalyticsInputSchema = z
 	})
 	.strict();
 
-export const DynamoiGetGrowthAuditInputSchema = z
-	.object({ artistId: z.string().uuid() })
-	.strict();
+export const DynamoiGetGrowthAuditInputSchema =
+	GROWTH_AUDIT_CONTRACT.mcp.definition.schema;
 
 export const DynamoiGetPlaylistAnalyticsInputSchema =
 	PLAYLIST_ANALYTICS_CONTRACT.mcp.definition.schema;
@@ -1125,15 +1125,8 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 		title: "Get Artist Analytics",
 	},
 	{
-		description:
-			"Use this when the user asks for an artist's Spotify monthly listeners, listener growth over time, growth audit or score, playlist reach, or growth recommendations. The response carries its status, coverage dates, and limitations; preserve unavailable or stale status and do not treat a missing metric as zero. This is Spotify and market insight data, not paid campaign performance.",
-		destructiveHint: false,
-		name: "dynamoi_get_growth_audit",
-		openWorldHint: false,
+		...GROWTH_AUDIT_CONTRACT.mcp.definition,
 		outputSchema: AnyOutputEnvelopeSchema,
-		readOnlyHint: true,
-		schema: DynamoiGetGrowthAuditInputSchema,
-		title: "Get Spotify Growth Audit",
 	},
 	{
 		...PLAYLIST_ANALYTICS_CONTRACT.mcp.definition,

@@ -17,14 +17,8 @@ const journeys = ["billing-country", "billing-country-saved"] as const;
 
 export const BILLING_COUNTRY_READ_CONTRACT = {
 	capabilityId: "billing_country",
-	kind: "query",
-	version: 1,
 	journeys,
-	mobile: {
-		...mobile,
-		method: "GET",
-		operationId: "getMobileArtistBillingCountry",
-	},
+	kind: "query",
 	mcp: {
 		...mcp,
 		definition: {
@@ -39,20 +33,18 @@ export const BILLING_COUNTRY_READ_CONTRACT = {
 			title: "Get Artist Billing Country",
 		},
 	},
+	mobile: {
+		...mobile,
+		method: "GET",
+		operationId: "getMobileArtistBillingCountry",
+	},
+	version: 1,
 } as const;
 
 export const BILLING_COUNTRY_SET_CONTRACT = {
 	capabilityId: "billing_country",
-	kind: "command",
-	version: 1,
 	journeys,
-	mobile: {
-		...mobile,
-		bodySchema: z.object({ countryCode: z.string().trim().min(1) }),
-		idempotent: true,
-		method: "PATCH",
-		operationId: "patchMobileArtistBillingCountry",
-	},
+	kind: "command",
 	mcp: {
 		...mcp,
 		definition: {
@@ -74,4 +66,12 @@ export const BILLING_COUNTRY_SET_CONTRACT = {
 			title: "Set Artist Billing Country",
 		},
 	},
+	mobile: {
+		...mobile,
+		bodySchema: z.object({ countryCode: z.string().trim().min(1) }),
+		idempotent: true,
+		method: "PATCH",
+		operationId: "patchMobileArtistBillingCountry",
+	},
+	version: 1,
 } as const;

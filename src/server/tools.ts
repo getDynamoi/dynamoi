@@ -1215,7 +1215,7 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 	},
 	{
 		description:
-			"Claim or change your own referral code using the web claim rules. Does not accept referral program terms; accept those yourself in the app or web. Full profile only.",
+			"Claim or change your own referral code using the web claim rules. Claiming accepts the current referral program terms. Full profile only.",
 		destructiveHint: false,
 		name: "dynamoi_claim_referral_code",
 		openWorldHint: false,

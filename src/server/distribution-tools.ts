@@ -1,4 +1,5 @@
 import * as z from "zod/v4";
+import { DISTRIBUTION_APPLICATION_CONTRACT } from "./distribution-application.generated";
 import { AnyOutputEnvelopeSchema } from "./output-schemas";
 export const DynamoiGetDistributionApplicationInputSchema = z
 	.object({
@@ -19,17 +20,8 @@ export const DynamoiGetDistributionStatusInputSchema = z
 	})
 	.strict();
 
-export const DynamoiApplyForDistributionInputSchema = z
-	.object({
-		adultSignerAttestation: z.literal(true),
-		applicantCountry: z.string().trim().length(2),
-		artistId: z.string().uuid(),
-		confirmApplicationSubmission: z.literal(true),
-		payoutCountry: z.string().trim().length(2),
-		taxResidencyCountry: z.string().trim().length(2),
-		userIntentSummary: z.string().trim().min(1).max(500),
-	})
-	.strict();
+export const DynamoiApplyForDistributionInputSchema =
+	DISTRIBUTION_APPLICATION_CONTRACT.mcp.definition.schema;
 
 export const DynamoiPrepareDistributionReleaseInputSchema = z
 	.object({
@@ -98,15 +90,7 @@ export const DISTRIBUTION_TOOL_DEFINITIONS = [
 		title: "Check Distribution Application",
 	},
 	{
-		description:
-			"Submit an artist's application for Dynamoi music distribution after the user explicitly asks to apply and all five eligibility requirements are met. This records an application for manual review; it does not approve distribution, accept an agreement, submit a release, transfer rights, configure splits or tax forms, or deliver music to stores. All three valid ISO 3166-1 alpha-2 country or territory codes, an adult signer attestation, confirmApplicationSubmission=true, and a concise userIntentSummary are required. Country, tax, payout, sanctions, and provider-delivery checks remain manual progression gates after intake; a valid code does not imply approval. Repeated submission is idempotent for an active application.",
-		destructiveHint: false,
-		idempotentHint: true,
-		name: "dynamoi_apply_for_distribution",
-		openWorldHint: true,
+		...DISTRIBUTION_APPLICATION_CONTRACT.mcp.definition,
 		outputSchema: AnyOutputEnvelopeSchema,
-		readOnlyHint: false,
-		schema: DynamoiApplyForDistributionInputSchema,
-		title: "Apply for Music Distribution",
 	},
 ] as const;

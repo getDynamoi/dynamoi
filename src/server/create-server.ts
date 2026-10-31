@@ -607,6 +607,28 @@ const RECOVERY_METADATA_FIELDS = [
 	"retryAfterSeconds",
 ] as const;
 
+const SMART_LINK_STATE_CONFLICT_TOOLS = new Set([
+	"dynamoi_update_smart_link",
+	"dynamoi_update_smart_link_description",
+	"dynamoi_update_smart_link_artist_settings",
+	"dynamoi_update_smart_link_artist_hub_settings",
+	"dynamoi_update_smart_link_release_settings",
+]);
+const SMART_LINK_STATE_CONFLICT_FIELDS = new Map([
+	[
+		"Smart Link changed since it was last read. Read it again before updating.",
+		"expectedUpdatedAt",
+	],
+	[
+		"Smart Link changed since it was last read. Reload before updating.",
+		"expectedVersion",
+	],
+	[
+		"Theme applied, other changes refused because Smart Link changed. Reload before updating.",
+		"expectedVersion",
+	],
+]);
+
 const SPOTIFY_SOURCE_ERROR_MESSAGES = new Set([
 	"Paste a valid Spotify artist, album, or track URL.",
 	"Paste a Spotify artist, album, or track URL.",
@@ -752,18 +774,11 @@ function mapKnownErrorRecovery(
 		};
 	}
 
-	if (
-		(toolName === "dynamoi_update_smart_link" ||
-			toolName === "dynamoi_update_smart_link_description" ||
-			toolName === "dynamoi_update_smart_link_artist_settings" ||
-			toolName === "dynamoi_update_smart_link_artist_hub_settings" ||
-			toolName === "dynamoi_update_smart_link_release_settings") &&
-		message ===
-			"Smart Link changed since it was last read. Read it again before updating."
-	) {
+	const conflictField = SMART_LINK_STATE_CONFLICT_FIELDS.get(message);
+	if (SMART_LINK_STATE_CONFLICT_TOOLS.has(toolName) && conflictField) {
 		return {
 			code: "STATE_CONFLICT",
-			field: "expectedUpdatedAt",
+			field: conflictField,
 			nextAction: {
 				kind: "read_status",
 				reason:

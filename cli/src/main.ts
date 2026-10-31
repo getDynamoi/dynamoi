@@ -5,7 +5,8 @@ import {
 	renderCatalogSearch,
 	searchCatalog,
 } from "./catalog.ts";
-import { listTools } from "./mcp.ts";
+import { callTool, createRpc, listTools } from "./mcp.ts";
+import { readLocalTarget } from "./local-target.ts";
 import { accessToken, login, revoke, userInfo } from "./oauth.ts";
 import { runTool, terminal } from "./run.ts";
 import { clearCredentials, loadCredentials } from "./store.ts";
@@ -38,9 +39,13 @@ Usage:
   dynamoi tools --query <text> [--limit 1..10] [--json]
                                 Find tools without loading every schema
   dynamoi help <tool> [--json]  Show flags or the exact catalog schema
-  dynamoi <tool> [--flag value] Run a tool; add --json for machine output`;
+  dynamoi <tool> [--flag value] Run a tool; add --json for machine output
+  dynamoi --preview-manifest <run.json> --bearer-file <0600-file> <command>
+                                Use a ready local synthetic preview only`;
 
-async function main(argv: string[]): Promise<number> {
+async function main(args: string[]): Promise<number> {
+	const { argv, target } = readLocalTarget(args);
+	const request = createRpc(target);
 	const [command, ...rest] = argv;
 	if (
 		(command === "help" && rest.length === 0) ||
@@ -93,7 +98,7 @@ async function main(argv: string[]): Promise<number> {
 	}
 
 	const catalogArgs = command === "tools" ? parseCatalogArgs(rest) : undefined;
-	const tools = await listTools();
+	const tools = await listTools(request);
 	const find = (name: string | undefined) =>
 		tools.find(
 			(candidate) =>
@@ -125,7 +130,7 @@ async function main(argv: string[]): Promise<number> {
 				`${commandName(tool).padEnd(40)}${(tool.description ?? "").slice(0, 100)}`,
 			);
 		}
-		if (!(await loadCredentials())) {
+		if (!target && !(await loadCredentials())) {
 			err(
 				"\nSign in with `dynamoi login` to see every tool your account can use.",
 			);
@@ -162,7 +167,9 @@ async function main(argv: string[]): Promise<number> {
 		);
 		return 2;
 	}
-	const result = await runTool(tool, parsed.flags, terminal);
+	const result = await runTool(tool, parsed.flags, terminal, (name, input) =>
+		callTool(name, input, request),
+	);
 	const text = (result.content ?? [])
 		.map((part) => part.text ?? "")
 		.filter(Boolean)

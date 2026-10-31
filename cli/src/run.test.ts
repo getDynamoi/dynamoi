@@ -73,3 +73,86 @@ test("never fills optional or non-boolean consent fields, even after a yes", asy
 	await runTool(optional, { artistId: "a" }, yes.io, yes.call);
 	expect(yes.sent).toEqual([{ artistId: "a" }]);
 });
+
+test("local CLI rejects stale, foreign, production and non-loopback preview targets", async () => {
+	const { previewEndpoint, readLocalTarget } = await import(
+		"./local-target.ts"
+	);
+	const manifest = {
+		state: "ready",
+		data: "synthetic",
+		database: "dynamoi_agent_preview_test",
+		surface: "dashboard",
+		pid: 123,
+		identity: "456",
+		ports: [4321],
+		links: ["http://127.0.0.1:4321"],
+	};
+	const metadata = {
+		clones: { dynamoi_agent_preview_test: { source: "empty" } },
+	};
+	expect(previewEndpoint(manifest, metadata, "456")).toBe(
+		"http://127.0.0.1:4321/mcp",
+	);
+	for (const changed of [
+		{ state: "stopped" },
+		{ data: "production" },
+		{ database: "production" },
+		{ identity: "reused-pid" },
+		{ surface: "public" },
+		{ links: ["https://dynamoi.com"] },
+		{ links: ["http://127.0.0.1:4322"] },
+		{ links: ["http://user:pass@127.0.0.1:4321"] },
+		{ links: ["http://127.0.0.1:4321/path"] },
+	])
+		expect(() =>
+			previewEndpoint({ ...manifest, ...changed }, metadata, "456"),
+		).toThrow();
+	expect(() =>
+		previewEndpoint(
+			manifest,
+			{ clones: { dynamoi_agent_preview_test: { source: "prod" } } },
+			"456",
+		),
+	).toThrow();
+	expect(() =>
+		readLocalTarget(["tools", "--preview-manifest", "x", "--bearer-file", "y"]),
+	).toThrow("before the command");
+	for (const command of ["login", "logout", "whoami"])
+		expect(() =>
+			readLocalTarget([
+				"--preview-manifest",
+				"x",
+				"--bearer-file",
+				"y",
+				command,
+			]),
+		).toThrow("isolated");
+});
+
+test("local CLI never refreshes a rejected bearer and disables redirects", async () => {
+	const { createRpc } = await import("./mcp.ts");
+	const received: RequestInit[] = [];
+	let reject = true;
+	const request = (async (url, init) => {
+		expect(String(url)).toBe("http://127.0.0.1:4321/mcp");
+		received.push(init!);
+		return reject
+			? new Response(null, { status: 401 })
+			: Response.json({ result: { tools: [] } });
+	}) as typeof fetch;
+	const rpc = createRpc(
+		{ endpoint: "http://127.0.0.1:4321/mcp", token: "synthetic-only" },
+		request,
+	);
+	await expect(rpc("tools/list")).rejects.toThrow("no OAuth refresh");
+	expect(received).toHaveLength(1);
+	reject = false;
+	expect(await rpc("tools/list")).toEqual({ tools: [] });
+	for (const init of received) {
+		expect(new Headers(init.headers).get("authorization")).toBe(
+			"Bearer synthetic-only",
+		);
+		expect(init.redirect).toBe("error");
+	}
+});

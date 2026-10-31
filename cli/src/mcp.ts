@@ -1,3 +1,4 @@
+import type { LocalTarget } from "./local-target.ts";
 import { accessToken, MCP_URL, refresh } from "./oauth.ts";
 import { loadCredentials } from "./store.ts";
 import { isToolCommand } from "./tools.ts";
@@ -45,8 +46,15 @@ async function readRpc(response: Response): Promise<RpcResponse> {
 	return JSON.parse(text || "{}") as RpcResponse;
 }
 
-async function post(method: string, params: unknown, token: string | null) {
-	return fetch(MCP_URL, {
+async function post(
+	method: string,
+	params: unknown,
+	token: string | null,
+	target?: LocalTarget,
+	fetchRequest: typeof fetch = fetch,
+) {
+	return fetchRequest(target?.endpoint ?? MCP_URL, {
+		...(target ? { redirect: "error" as const } : {}),
 		body: JSON.stringify({ id: 1, jsonrpc: "2.0", method, params }),
 		headers: {
 			accept: "application/json, text/event-stream",
@@ -58,26 +66,48 @@ async function post(method: string, params: unknown, token: string | null) {
 	});
 }
 
-async function rpc<T>(method: string, params?: unknown): Promise<T> {
-	let response = await post(method, params, await accessToken());
-	if (response.status === 401) {
-		const stored = await loadCredentials();
-		const next = stored ? await refresh(stored) : null;
-		if (next) {
-			response = await post(method, params, next.accessToken);
-		}
-	}
-	if (response.status === 401) {
-		throw new Error("Not signed in. Run `dynamoi login`.");
-	}
-	const body = await readRpc(response);
-	if (body.error || !response.ok) {
-		throw new Error(
-			body.error?.message ?? `Dynamoi returned HTTP ${response.status}.`,
+export function createRpc(
+	target?: LocalTarget,
+	fetchRequest: typeof fetch = fetch,
+) {
+	return async function rpc<T>(method: string, params?: unknown): Promise<T> {
+		let response = await post(
+			method,
+			params,
+			target ? target.token : await accessToken(),
+			target,
+			fetchRequest,
 		);
-	}
-	return body.result as T;
+		if (!target && response.status === 401) {
+			const stored = await loadCredentials();
+			const next = stored ? await refresh(stored) : null;
+			if (next) {
+				response = await post(
+					method,
+					params,
+					next.accessToken,
+					undefined,
+					fetchRequest,
+				);
+			}
+		}
+		if (response.status === 401) {
+			throw new Error(
+				target
+					? "Synthetic preview bearer was rejected; no OAuth refresh attempted."
+					: "Not signed in. Run `dynamoi login`.",
+			);
+		}
+		const body = await readRpc(response);
+		if (body.error || !response.ok) {
+			throw new Error(
+				body.error?.message ?? `Dynamoi returned HTTP ${response.status}.`,
+			);
+		}
+		return body.result as T;
+	};
 }
+const rpc = createRpc();
 
 export async function listTools(
 	request: (
@@ -95,5 +125,8 @@ export async function listTools(
 	return tools;
 }
 
-export const callTool = (name: string, args: Record<string, unknown>) =>
-	rpc<ToolResult>("tools/call", { arguments: args, name });
+export const callTool = (
+	name: string,
+	args: Record<string, unknown>,
+	request = rpc,
+) => request<ToolResult>("tools/call", { arguments: args, name });

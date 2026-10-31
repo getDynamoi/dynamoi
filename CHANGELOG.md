@@ -7,6 +7,12 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.8] - 2026-10-31
+
+### Security
+
+- Pin the standalone package to Zod 4.6.7, including the constrained-collection memory-exhaustion fix. Tool schemas, permissions and consent requirements are unchanged.
+
 ## [1.0.7] - 2026-10-22
 
 ### Changed

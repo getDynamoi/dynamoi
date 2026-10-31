@@ -192,10 +192,43 @@ export function createOutputEnvelopeSchema(
 
 const AnyToolDataOutputSchema = z.object({}).passthrough();
 
+export const MediaAssetModerationOutputSchema = z.strictObject({
+	assetId: z.string(),
+	attemptCount: z.number().int().nonnegative(),
+	errorCode: z.string().nullable(),
+	errorMessage: z.string().nullable(),
+	fileType: z.string().nullable(),
+	provider: z
+		.enum([
+			"GOOGLE_VISION_SAFESEARCH",
+			"GOOGLE_VIDEO_INTELLIGENCE_EXPLICIT",
+			"MANUAL_ADMIN",
+			"SPECIALIST_HASH_PROVIDER",
+		])
+		.nullable(),
+	reasonCodes: z.array(z.string()),
+	riskLevel: z.enum(["NONE", "LOW", "MEDIUM", "HIGH", "SEVERE"]).nullable(),
+	scannedAt: z.string().nullable(),
+	status: z.enum([
+		"NOT_REQUIRED",
+		"PENDING",
+		"SCANNING",
+		"APPROVED",
+		"NEEDS_REVIEW",
+		"BLOCKED",
+		"SCAN_FAILED",
+		"PROVIDER_UNAVAILABLE",
+	]),
+	summary: z.record(z.string(), z.unknown()).nullable(),
+	verdict: z.enum(["APPROVED", "NEEDS_REVIEW", "BLOCKED"]).nullable(),
+});
+
 const MediaAssetSummaryOutputSchema = z
 	.object({
 		aspectRatio: z.string().optional(),
 		createdAt: z.string(),
+		moderation: MediaAssetModerationOutputSchema.optional(),
+		thumbnailUrl: z.string().optional(),
 		fileName: z.string().optional(),
 		fileType: z.string(),
 		height: z.number().optional(),

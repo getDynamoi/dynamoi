@@ -1,3 +1,5 @@
+import type { z } from "zod/v4";
+import type { MediaAssetModerationOutputSchema } from "./server/output-schemas";
 import type {
 	ArtistTier,
 	BillingStatus,
@@ -221,6 +223,8 @@ export type UpdateCampaignData =
 	  };
 
 export type MediaAssetSummary = {
+	moderation?: z.infer<typeof MediaAssetModerationOutputSchema>;
+	thumbnailUrl?: string;
 	id: string;
 	url?: string;
 	urlExpiresAt?: string;

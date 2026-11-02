@@ -23,15 +23,17 @@ export const BILLING_COUNTRY_READ_CONTRACT = {
 		...mcp,
 		definition: {
 			description:
-				"Read the artist billing country. Existing commercial currency stays fixed. This is not tax residency. Full profile only.",
+				"Read the artist billing country. Existing commercial currency stays fixed. This is not tax residency.",
 			destructiveHint: false,
 			name: "dynamoi_get_artist_billing_country",
 			openWorldHint: false,
-			profiles,
+			profiles: { directory: "advertised", full: "advertised" },
 			readOnlyHint: true,
 			schema: z.object({ artistId: z.string().uuid() }).strict(),
 			title: "Get Artist Billing Country",
 		},
+		directoryReason: "Read-only billing country is directory-safe.",
+		scopes: ["dynamoi:read", "dynamoi:billing.read"],
 	},
 	mobile: {
 		...mobile,

@@ -31,9 +31,9 @@ const DynamoiApplyForDistributionInputSchema = z
 	.strict();
 
 const pendingBehavior = {
-	status: "partial",
 	reason:
 		"Eligibility, adult attestation, country admission, submission and persisted submitted-state readback still need frozen feature receipts on all five surfaces. Manual review and existing admission rules remain required.",
+	status: "partial",
 } as const;
 
 export const DISTRIBUTION_APPLICATION_CONTRACT = {
@@ -43,7 +43,7 @@ export const DISTRIBUTION_APPLICATION_CONTRACT = {
 		definition: {
 			description:
 				"Submit an artist's application for Dynamoi music distribution after the user explicitly asks to apply and all five eligibility requirements are met. This records an application for manual review; it does not approve distribution, accept an agreement, submit a release, transfer rights, configure splits or tax forms, or deliver music to stores. All three valid ISO 3166-1 alpha-2 country or territory codes, an adult signer attestation, confirmApplicationSubmission=true, and a concise userIntentSummary are required. Country, tax, payout, sanctions, and provider-delivery checks remain manual progression gates after intake; a valid code does not imply approval. Repeated submission is idempotent for an active application.",
-			destructiveHint: false,
+			destructiveHint: true,
 			idempotentHint: true,
 			name: "dynamoi_apply_for_distribution",
 			openWorldHint: true,

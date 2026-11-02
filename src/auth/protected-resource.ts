@@ -39,7 +39,7 @@ export const DYNAMOI_MCP_TOOL_SCOPES = {
 	dynamoi_get_account_overview: ["dynamoi:read"],
 	dynamoi_get_action_center: ["dynamoi:read", "dynamoi:platform.read"],
 	dynamoi_get_artist_analytics: ["dynamoi:read"],
-	dynamoi_onboard_artist: ["dynamoi:read", "dynamoi:mcp.full"],
+	dynamoi_onboard_artist: ["dynamoi:read", "dynamoi:platform.write"],
 	[AUDIENCE_ANALYTICS_CONTRACT.mcp.definition.name]:
 		AUDIENCE_ANALYTICS_CONTRACT.mcp.scopes,
 	[BILLING_COUNTRY_READ_CONTRACT.mcp.definition.name]:
@@ -55,7 +55,6 @@ export const DYNAMOI_MCP_TOOL_SCOPES = {
 	dynamoi_get_distribution_status: [
 		"dynamoi:read",
 		"dynamoi:distribution.read",
-		"dynamoi:mcp.full",
 	],
 	dynamoi_get_earnings: ["dynamoi:read", "dynamoi:distribution.read"],
 	[GROWTH_AUDIT_CONTRACT.mcp.definition.name]: GROWTH_AUDIT_CONTRACT.mcp.scopes,
@@ -63,11 +62,10 @@ export const DYNAMOI_MCP_TOOL_SCOPES = {
 	dynamoi_prepare_distribution_release: [
 		"dynamoi:read",
 		"dynamoi:distribution.apply",
-		"dynamoi:mcp.full",
 	],
 	[PLAYLIST_ANALYTICS_CONTRACT.mcp.definition.name]:
 		PLAYLIST_ANALYTICS_CONTRACT.mcp.scopes,
-	dynamoi_claim_referral_code: ["dynamoi:read", "dynamoi:mcp.full"],
+	dynamoi_claim_referral_code: ["dynamoi:read", "dynamoi:platform.write"],
 	dynamoi_get_referrals: ["dynamoi:read"],
 	dynamoi_get_resume_funding: ["dynamoi:read", "dynamoi:billing.read"],
 	dynamoi_get_smart_link: ["dynamoi:read"],
@@ -83,7 +81,7 @@ export const DYNAMOI_MCP_TOOL_SCOPES = {
 		"dynamoi:read",
 		"dynamoi:campaign.write",
 	],
-	dynamoi_manage_team: ["dynamoi:read", "dynamoi:mcp.full"],
+	dynamoi_manage_team: ["dynamoi:read", "dynamoi:platform.write"],
 	dynamoi_manage_youtube_draft: ["dynamoi:read", "dynamoi:campaign.write"],
 	dynamoi_open_workspace: ["dynamoi:read"],
 	dynamoi_preview_smart_link_themes: ["dynamoi:read"],
@@ -100,8 +98,8 @@ export const DYNAMOI_MCP_TOOL_SCOPES = {
 		"dynamoi:read",
 		"dynamoi:platform.write",
 	],
-	dynamoi_update_account_profile: ["dynamoi:read", "dynamoi:mcp.full"],
-	dynamoi_update_campaign: ["dynamoi:read", "dynamoi:campaign.write"],
+	dynamoi_update_account_profile: ["dynamoi:read", "dynamoi:platform.write"],
+	dynamoi_update_campaign: ["dynamoi:read", "dynamoi:campaign.launch"],
 	dynamoi_update_smart_link: ["dynamoi:read", "dynamoi:smart_links.write"],
 	dynamoi_update_smart_link_artist_hub_settings: [
 		"dynamoi:read",

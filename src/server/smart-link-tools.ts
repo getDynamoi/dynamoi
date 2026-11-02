@@ -295,7 +295,7 @@ const ArtistHubSettingsShape = {
 
 /**
  * Handler-side superset: the directory schema stays the public contract for
- * theme/pixel writes and the full-only hub tool adds the hub fields.
+ * theme/pixel writes and the hub tool adds the hub fields.
  */
 const ArtistStudioSettingsHandlerInputSchema = z
 	.object({
@@ -429,7 +429,7 @@ export const PHASE_4_TOOL_DEFINITIONS = [
 	{
 		description:
 			"Use this when the user gives a Spotify artist URL and wants Dynamoi to create, import, or refresh free Smart Links for the artist catalog and return the artist hub. If the signed-in user has no Dynamoi artist yet, omit artistId so Dynamoi can create the first artist from the Spotify artist profile. This starts the background catalog import so the user does not need to open the dashboard. Smart Links are free to create and manage. High-popularity or unverifiable artist catalog links may stay unpublished in verification hold until Dynamoi can verify the client relationship. This does not create a paid ad campaign. In the final answer, lead with the artist hub URL and current public Smart Link URLs; do not expose internal IDs unless asked.",
-		destructiveHint: false,
+		destructiveHint: true,
 		idempotentHint: true,
 		name: "dynamoi_create_smart_links_from_spotify_artist",
 		openWorldHint: true,

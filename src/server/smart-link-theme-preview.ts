@@ -45,7 +45,10 @@ window.addEventListener("openai:set_globals", event => render(event.detail?.glob
 </script>
 `.trim();
 
-export function registerSmartLinkThemePreviewResource(server: McpServer) {
+export function registerSmartLinkThemePreviewResource(
+	server: McpServer,
+	uiDomain = "https://dynamoi.com",
+) {
 	server.registerResource(
 		"smart-link-theme-preview",
 		SMART_LINK_THEME_PREVIEW_RESOURCE_URI,
@@ -69,7 +72,7 @@ export function registerSmartLinkThemePreviewResource(server: McpServer) {
 									"https://fonts.gstatic.com",
 								],
 							},
-							domain: "https://dynamoi.com",
+							domain: uiDomain,
 							prefersBorder: true,
 						},
 					},

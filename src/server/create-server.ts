@@ -208,23 +208,6 @@ const DIRECTORY_DESCRIPTIVE_DATA_SCHEMAS = {
 			totalCount: z.number().optional(),
 		})
 		.passthrough(),
-	dynamoi_update_smart_link: DescriptiveEntitySchema.extend({
-		artistId: z.string().optional(),
-		artistName: z.string().optional(),
-		defaultTheme: z.string().optional(),
-		renderQueuedCount: z.number().optional(),
-		renderWarning: z.string().nullable().optional(),
-	}).passthrough(),
-	dynamoi_update_smart_link_artist_hub_settings: DescriptiveEntitySchema.extend(
-		{
-			artistHub: z.object({}).passthrough().optional(),
-			artistId: z.string().optional(),
-			artistName: z.string().optional(),
-			defaultTheme: z.string().optional(),
-			renderQueuedCount: z.number().optional(),
-			renderWarning: z.string().nullable().optional(),
-		},
-	).passthrough(),
 	dynamoi_update_smart_link_artist_settings: DescriptiveEntitySchema.extend({
 		artistId: z.string().optional(),
 		artistName: z.string().optional(),
@@ -238,16 +221,6 @@ const DIRECTORY_DESCRIPTIVE_DATA_SCHEMAS = {
 		defaultTheme: z.string().optional(),
 		renderQueuedCount: z.number().optional(),
 		renderWarning: z.string().nullable().optional(),
-	}).passthrough(),
-	dynamoi_update_smart_link_release_settings: DescriptiveEntitySchema.extend({
-		artistId: z.string().optional(),
-		customDescription: z.string().nullable().optional(),
-		nextActions: z.array(z.string()).optional(),
-		publishState: z.string().optional(),
-		releaseSettings: z.object({}).passthrough().optional(),
-		releaseTitle: z.string().optional(),
-		renderWarning: z.string().nullable().optional(),
-		theme: z.string().optional(),
 	}).passthrough(),
 	fetch: DescriptiveEntitySchema,
 	search: z
@@ -353,50 +326,20 @@ const MUTATING_TOOL_NAMES = new Set<string>(
 );
 
 const DIRECTORY_EXCLUDED_TOOL_NAMES = new Set<string>([
-	"dynamoi_onboard_artist",
-	"dynamoi_smart_link_controls",
-	"dynamoi_claim_referral_code",
-	"dynamoi_smart_campaign_ad_copy",
-	"dynamoi_delete_account",
-	"dynamoi_update_account_profile",
-	"dynamoi_get_artist_billing_country",
-	"dynamoi_set_artist_billing_country",
-	"dynamoi_contact_support",
 	"dynamoi_add_campaign_funds",
+	"dynamoi_launch_campaign",
+	"dynamoi_update_campaign",
 	"dynamoi_shop_create_checkout",
 	"dynamoi_shop_get_quote",
 	"dynamoi_shop_list_orders",
-	"dynamoi_get_billing",
-	"dynamoi_get_action_center",
-	"dynamoi_get_team",
-	"dynamoi_manage_team",
-	"dynamoi_get_audit_log",
-	"dynamoi_get_referrals",
-	"dynamoi_get_distribution_status",
-	"dynamoi_prepare_distribution_release",
-	"dynamoi_get_earnings",
+	"dynamoi_set_artist_billing_country",
 	"dynamoi_get_resume_funding",
-	"dynamoi_get_campaign_readiness",
-	"dynamoi_manage_youtube_draft",
-	"dynamoi_manage_smart_campaign_creative",
-	"dynamoi_launch_campaign",
-	"dynamoi_list_available_countries",
-	"dynamoi_list_media_assets",
-	"dynamoi_start_meta_connection",
-	"dynamoi_start_youtube_channel_link",
-	"dynamoi_update_campaign",
-	"dynamoi_update_smart_link",
-	"dynamoi_update_smart_link_artist_hub_settings",
-	"dynamoi_update_smart_link_release_settings",
+	"dynamoi_delete_account",
 ]);
 
 const DIRECTORY_ONLY_TOOL_NAMES = new Set<string>([
 	"dynamoi_update_smart_link_artist_settings",
 	"dynamoi_update_smart_link_description",
-]);
-
-const DIRECTORY_COMPATIBILITY_TOOL_NAMES = new Set<string>([
-	"dynamoi_update_smart_link",
 ]);
 
 export function getDynamoiToolDefinitions(options?: {
@@ -428,19 +371,11 @@ export function getDynamoiToolDefinitions(options?: {
 	);
 }
 
-/**
- * Directory callers may still invoke only this exact prior approved tool name
- * while clients transition to the advertised single-purpose operations.
- */
-export function getDynamoiToolCompatibilityDefinitions(options?: {
+/** All supported directory names are advertised directly. */
+export function getDynamoiToolCompatibilityDefinitions(_options?: {
 	toolProfile?: DynamoiMcpToolProfile;
 }): DynamoiToolDefinition[] {
-	if (options?.toolProfile === "full") {
-		return [];
-	}
-	return DYNAMOI_TOOL_DEFINITIONS.filter((definition) =>
-		DIRECTORY_COMPATIBILITY_TOOL_NAMES.has(definition.name),
-	);
+	return [];
 }
 
 export type Phase3Adapter = {
@@ -1183,6 +1118,7 @@ export function createDynamoiMcpServer(options: {
 	observerTimeoutMs?: number;
 	oauthScopes?: readonly string[];
 	toolProfile?: DynamoiMcpToolProfile;
+	uiDomain?: string | undefined;
 	websiteUrl?: string;
 }): McpServer {
 	const toolProfile = options.toolProfile ?? "directory";
@@ -1356,8 +1292,8 @@ export function createDynamoiMcpServer(options: {
 			],
 		}),
 	);
-	registerSmartLinkThemePreviewResource(server);
-	registerWorkspaceResource(server);
+	registerSmartLinkThemePreviewResource(server, options.uiDomain);
+	registerWorkspaceResource(server, options.uiDomain);
 
 	if (toolProfile === "full") {
 		registerDynamoiPrompts(server);

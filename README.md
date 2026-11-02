@@ -193,8 +193,8 @@ including what did not work.
 - **Each client gets one of two tool sets**, chosen from the identity it signs
   in with. Reviewed clients and apps that sign in on your own computer
   (Claude Code, Codex, Cursor, VS Code, Gemini CLI, OpenClaw and the `dynamoi`
-  CLI) get All 57 tools. ChatGPT, Claude added from its directory listing and other web apps get 24 review-safe advertised tools: reads, Smart Links,
-  distribution applications and About, with no billing, launches or checkout.
+  CLI) get All 57 tools. ChatGPT, Claude added from its directory listing and other web apps get 50 review-safe advertised tools: reads, Smart Links,
+  billing and earnings status, draft preparation, account management and connection links, with no purchases, launches or checkout.
 - **Sign-in is OAuth 2.1**, and every call still checks its scopes and the
   user's role for that artist. See
   [client permissions](https://dynamoi.com/docs/mcp-server/client-permissions).
@@ -218,10 +218,10 @@ including what did not work.
 | `dynamoi_get_playlist_analytics` | Tracked playlist placements, reach, and movement with freshness and snapshot dates | Reads | Both |
 | `dynamoi_get_audience_analytics` | Streaming audience by date range, country, service, and paid/free tier | Reads | Both |
 | `dynamoi_get_youtube_channel_data` | Observed YouTube channel data by dataset, with coverage and campaign dates | Reads | Both |
-| `dynamoi_onboard_artist` | Search or preview Spotify artists; intake Spotify or YouTube artists with workspace caps and claim checks | Changes data | Full |
+| `dynamoi_onboard_artist` | Search or preview Spotify artists; intake Spotify or YouTube artists with workspace caps and claim checks | Changes data | Both |
 | `dynamoi_get_platform_status` | Spotify, Meta, and YouTube connection status and setup blockers | Reads | Both |
-| `dynamoi_get_distribution_status` | Application, agreement, scoped catalog and latest release status; artist attestation and store delivery stay in web/app | Reads | Full |
-| `dynamoi_prepare_distribution_release` | Private 30-minute metadata, track and split proposal handoff; the artist reviews and submits on web | Changes data | Full |
+| `dynamoi_get_distribution_status` | Application, agreement, scoped catalog and latest release status; artist attestation and store delivery stay in web/app | Reads | Both |
+| `dynamoi_prepare_distribution_release` | Private 30-minute metadata, track and split proposal handoff; the artist reviews and submits on web | Changes data | Both |
 | `dynamoi_get_distribution_application` | The five distribution requirements and application status | Reads | Both |
 | `dynamoi_apply_for_distribution` | Submit a distribution application for manual review | Changes data | Both |
 | `dynamoi_preview_smart_link_themes` | Visual preview of the Smart Link themes | Reads | Both |
@@ -231,43 +231,41 @@ including what did not work.
 | `dynamoi_get_smart_link` | One Smart Link, with optional analytics and artist settings | Reads | Both |
 | `dynamoi_update_smart_link_description` | Update one Smart Link's public description | Changes data | Directory |
 | `dynamoi_update_smart_link_artist_settings` | Update an artist's Smart Link theme or validated pixel settings | Changes data | Directory |
-| `dynamoi_update_smart_link` | Prior multi-action schema for description or artist settings | Changes data | Full |
-| `dynamoi_smart_link_controls` | Native catalog sync, availability, tracking and promote analytics | Changes data | Full |
-| `dynamoi_update_smart_link_release_settings` | Update one Smart Link's release video or destination visibility | Changes data | Full |
-| `dynamoi_update_smart_link_artist_hub_settings` | Update an artist's hub introduction, official profile links or service order | Changes data | Full |
-| `dynamoi_get_action_center` | Artist Action Center revision, task states and distinct actions | Reads | Full |
-| `dynamoi_get_earnings` | Authenticated payee own-USD earnings, month axis, filtered detail pages, rankings, geographic views and statement export data; no payout/tax authority | Reads | Full |
-| `dynamoi_get_team` | Organization members and pending invitations; organization authority required. | Reads | Full |
-| `dynamoi_get_artist_billing_country` | Read current billing country; not tax residency. | Reads | Full |
-| `dynamoi_manage_team` | Change organization member roles, remove members or revoke pending invitations with web authority and owner protections. | Changes data | Full |
-| `dynamoi_get_audit_log` | Sanitized artist/organization audit events with scope-bound cursors, plus your 12 recent account activity entries. | Reads | Full |
-| `dynamoi_claim_referral_code` | Claim or change your own referral code. Accept program terms yourself in the app or web. | Changes data | Full |
-| `dynamoi_get_referrals` | Your referral snapshot; no attribution or commission writes. Pending and available amounts are not approved or paid payouts. | Reads | Full |
-| `dynamoi_get_billing` | Billing status, credit balance, promo limits and masked payment-method display | Reads | Full |
+| `dynamoi_update_smart_link` | Prior multi-action schema for description or artist settings | Changes data | Both |
+| `dynamoi_smart_link_controls` | Native catalog sync, availability, tracking and promote analytics | Changes data | Both |
+| `dynamoi_update_smart_link_release_settings` | Update one Smart Link's release video or destination visibility | Changes data | Both |
+| `dynamoi_update_smart_link_artist_hub_settings` | Update an artist's hub introduction, official profile links or service order | Changes data | Both |
+| `dynamoi_get_action_center` | Artist Action Center revision, task states and distinct actions | Reads | Both |
+| `dynamoi_get_earnings` | Authenticated payee own-USD earnings, month axis, filtered detail pages, rankings, geographic views and statement export data; no payout/tax authority | Reads | Both |
+| `dynamoi_get_team` | Organization members and pending invitations; organization authority required. | Reads | Both |
+| `dynamoi_get_artist_billing_country` | Read current billing country; not tax residency. | Reads | Both |
+| `dynamoi_manage_team` | Change organization member roles, remove members or revoke pending invitations with web authority and owner protections. | Changes data | Both |
+| `dynamoi_get_audit_log` | Sanitized artist/organization audit events with scope-bound cursors, plus your 12 recent account activity entries. | Reads | Both |
+| `dynamoi_claim_referral_code` | Claim or change your own referral code. Accept program terms yourself in the app or web. | Changes data | Both |
+| `dynamoi_get_referrals` | Your referral snapshot; no attribution or commission writes. Pending and available amounts are not approved or paid payouts. | Reads | Both |
+| `dynamoi_get_billing` | Billing status, credit balance, promo limits and masked payment-method display | Reads | Both |
 | `dynamoi_add_campaign_funds` | Create the unpaid Add campaign funds Stripe Checkout link, after the user approves the amount and currency | Changes data | Full |
 | `dynamoi_get_resume_funding` | Campaign resume-funding breakdown, refusal, and consent requirements | Reads | Full |
-| `dynamoi_list_available_countries` | Countries a Smart Campaign or YouTube campaign can target | Reads | Full |
-| `dynamoi_get_campaign_readiness` | Check launch inputs before creating anything | Reads | Full |
-| `dynamoi_list_media_assets` | Uploaded images and videos that a launch can reuse | Reads | Full |
+| `dynamoi_list_available_countries` | Countries a Smart Campaign or YouTube campaign can target | Reads | Both |
+| `dynamoi_get_campaign_readiness` | Check launch inputs before creating anything | Reads | Both |
+| `dynamoi_list_media_assets` | Uploaded images and videos that a launch can reuse | Reads | Both |
 | `dynamoi_launch_campaign` | Launch a Smart Campaign or YouTube campaign | Changes data | Full |
 | `dynamoi_update_campaign` | Pause, resume, or change a campaign's budget or end date | Changes data | Full |
-| `dynamoi_smart_campaign_ad_copy` | Read/save Smart Campaign creation-draft copy with shared validation and revision checks; never submits or launches | Changes data | Full |
-| `dynamoi_manage_smart_campaign_creative` | All 9 native draft creative operations: read generation/source audio, start/retry/clear asynchronous generation (poll with read), select creatives, and start/status/complete/abort direct MP3 multipart upload or import_source_audio from a public Dropbox share link on a draft; Google Drive unsupported (Google API key required); no approval or submission | Changes data | Full |
-| `dynamoi_manage_youtube_draft` | Inspect an interrupted YouTube launch draft, or discard it when the user asks | Changes data | Full |
-| `dynamoi_start_meta_connection` | Start the Facebook Page and Instagram connection in the browser | Changes data | Full |
-| `dynamoi_start_youtube_channel_link` | Start the YouTube channel connection in the browser | Changes data | Full |
-| `dynamoi_contact_support` | Send a support request or feedback to Dynamoi | Changes data | Full |
+| `dynamoi_smart_campaign_ad_copy` | Read/save Smart Campaign creation-draft copy with shared validation and revision checks; never submits or launches | Changes data | Both |
+| `dynamoi_manage_smart_campaign_creative` | All 9 native draft creative operations: read generation/source audio, start/retry/clear asynchronous generation (poll with read), select creatives, and start/status/complete/abort direct MP3 multipart upload or import_source_audio from a public Dropbox share link on a draft; Google Drive unsupported (Google API key required); no approval or submission | Changes data | Both |
+| `dynamoi_manage_youtube_draft` | Inspect an interrupted YouTube launch draft, or discard it when the user asks | Changes data | Both |
+| `dynamoi_start_meta_connection` | Start the Facebook Page and Instagram connection in the browser | Changes data | Both |
+| `dynamoi_start_youtube_channel_link` | Start the YouTube channel connection in the browser | Changes data | Both |
+| `dynamoi_contact_support` | Send a support request or feedback to Dynamoi | Changes data | Both |
 | `dynamoi_delete_account` | Preview eligibility and explicitly start irreversible account deletion; cleanup is asynchronous and required records may be retained | Changes data | Full |
-| `dynamoi_update_account_profile` | Preview or explicitly confirm a display name or preferred language change | Changes data | Full |
+| `dynamoi_update_account_profile` | Preview or explicitly confirm a display name or preferred language change | Changes data | Both |
 | `dynamoi_set_artist_billing_country` | Preview or explicitly confirm an artist checkout-currency suggestion country; existing currency stays fixed | Changes data | Full |
 | `dynamoi_shop_list_orders` | Read your authorized artist’s newest Shop order status and fulfillment timestamps | Reads | Full |
 | `dynamoi_shop_get_quote` | Estimate a one-off YouTube promotion | Reads | Full |
 | `dynamoi_shop_create_checkout` | Create an unpaid Stripe Checkout link for that promotion | Changes data | Full |
 
-The full-only Studio tools (`dynamoi_update_smart_link_release_settings` and
-`dynamoi_update_smart_link_artist_hub_settings`) are never listed in the
-directory profile. Previously approved directory clients may keep calling
-`dynamoi_update_smart_link` with its approved schema and the same checks.
+Directory clients can call `dynamoi_update_smart_link` directly, alongside the
+single-purpose Smart Link settings tools. No hidden compatibility names remain.
 
 ## FAQ
 

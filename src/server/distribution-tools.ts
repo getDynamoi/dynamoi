@@ -58,7 +58,7 @@ export const DynamoiPrepareDistributionReleaseInputSchema = z
 export const DISTRIBUTION_TOOL_DEFINITIONS = [
 	{
 		description:
-			"Prepare metadata, tracks and proposed splits for artist review in a private expiring web form. Does not submit a release, attest rights, accept agreements or invite collaborators. Full profile only.",
+			"Prepare metadata, tracks and proposed splits for artist review in a private expiring web form. Does not submit a release, attest rights, accept agreements or invite collaborators.",
 		destructiveHint: false,
 		name: "dynamoi_prepare_distribution_release",
 		openWorldHint: false,
@@ -69,7 +69,7 @@ export const DISTRIBUTION_TOOL_DEFINITIONS = [
 	},
 	{
 		description:
-			"Read native foundation, application, agreement, catalog or release status for an accessible artist through the same owners as web/mobile. Full profile only. Release intake status requires editor access, as on web; catalog retains viewer scoping. Catalog is a status overview; releases returns the latest 20 submissions, not complete history. Rights and agreement attestation and sending releases to stores are done by the artist in web or the app.",
+			"Read native foundation, application, agreement, catalog or release status for an accessible artist through the same owners as web/mobile. Release intake status requires editor access, as on web; catalog retains viewer scoping. Catalog is a status overview; releases returns the latest 20 submissions, not complete history. Rights and agreement attestation and sending releases to stores are done by the artist in web or the app.",
 		destructiveHint: false,
 		name: "dynamoi_get_distribution_status",
 		openWorldHint: false,

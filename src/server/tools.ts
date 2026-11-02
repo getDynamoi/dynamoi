@@ -1160,7 +1160,7 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 	},
 	{
 		description:
-			"Read an artist's platform Action Center after authenticated artist access. Preserve revision, task states, steps and primary/secondary actions: open_url opens a URL; navigate is dashboard navigation. Reading does not complete or approve a task. Unavailable data is an error, not an empty task list. Full profile only.",
+			"Read an artist's platform Action Center after authenticated artist access. Preserve revision, task states, steps and primary/secondary actions: open_url opens a URL; navigate is dashboard navigation. Reading does not complete or approve a task. Unavailable data is an error, not an empty task list.",
 		destructiveHint: false,
 		name: "dynamoi_get_action_center",
 		openWorldHint: false,
@@ -1171,7 +1171,7 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 	},
 	{
 		description:
-			"Read distribution earnings for the authenticated payee only, optionally restricted to their artistIds. Team or artist access never grants payee access. action=overview returns the payee's own share in USD, range totals, monthly totals and at most 50 detail rows, narrowed by trackKey, storeKey, storeFamily and countryCode (totals remain for the whole range). action=ranking returns up to 300 rows by dimension (track, artist, store, country), with their filtered totalUsd, narrowed by trackKey, storeFamily and countryCode. action=geography returns {rows} of the country map with optional prior-window comparison. action=statement returns the web export data for one statement month: use axis=statement and equal fromMonth/toMonth, with no exploration filters or cursor. No new files are created. Rankings and prior-window geography read an equal preceding window within the owner's 60-month bound. For overview pagination, pass nextCursor unchanged to continue with the same range, axis, artists and filters. fromMonth/toMonth are inclusive YYYY-MM, at most 60 months. axis=statement groups by statement month; earned groups by royalty month, while payee share always follows statement month. Nullable amounts or counts mean unavailable; an explicit 0 is measured zero. Empty rows mean no matching data; an error means unavailable, never zero earnings. This grants no payout or tax authority and performs no writes. Full profile only.",
+			"Read distribution earnings for the authenticated payee only, optionally restricted to their artistIds. Team or artist access never grants payee access. action=overview returns the payee's own share in USD, range totals, monthly totals and at most 50 detail rows, narrowed by trackKey, storeKey, storeFamily and countryCode (totals remain for the whole range). action=ranking returns up to 300 rows by dimension (track, artist, store, country), with their filtered totalUsd, narrowed by trackKey, storeFamily and countryCode. action=geography returns {rows} of the country map with optional prior-window comparison. action=statement returns the web export data for one statement month: use axis=statement and equal fromMonth/toMonth, with no exploration filters or cursor. No new files are created. Rankings and prior-window geography read an equal preceding window within the owner's 60-month bound. For overview pagination, pass nextCursor unchanged to continue with the same range, axis, artists and filters. fromMonth/toMonth are inclusive YYYY-MM, at most 60 months. axis=statement groups by statement month; earned groups by royalty month, while payee share always follows statement month. Nullable amounts or counts mean unavailable; an explicit 0 is measured zero. Empty rows mean no matching data; an error means unavailable, never zero earnings. This grants no payout or tax authority and performs no writes.",
 		destructiveHint: false,
 		name: "dynamoi_get_earnings",
 		openWorldHint: false,
@@ -1182,7 +1182,7 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 	},
 	{
 		description:
-			"Read organization members and pending invitations after artist and organization settings authority checks. Artist collaboration alone never grants roster access. No invitation tokens or role mutations. Full profile only.",
+			"Read organization members and pending invitations after artist and organization settings authority checks. Artist collaboration alone never grants roster access. No invitation tokens or role mutations.",
 		destructiveHint: false,
 		name: "dynamoi_get_team",
 		openWorldHint: false,
@@ -1193,7 +1193,7 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 	},
 	{
 		description:
-			"Change an organization member's role, remove a member or revoke a pending organization invitation using the same authority and transactional protections as web. Full profile only. targetId is the organization membership or pending invitation row ID from dynamoi_get_team. Owner and last-admin protections apply; removal can revoke access and pending invitations.",
+			"Change an organization member's role, remove a member or revoke a pending organization invitation using the same authority and transactional protections as web. targetId is the organization membership or pending invitation row ID from dynamoi_get_team. Owner and last-admin protections apply; removal can revoke access and pending invitations.",
 		destructiveHint: true,
 		name: "dynamoi_manage_team",
 		openWorldHint: false,
@@ -1204,7 +1204,7 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 	},
 	{
 		description:
-			"Read sanitized artist or organization settings audit events, or your own 12 recent account activity entries with scope=account (artist access required; no cursor). Organization scope requires organization settings authority, beyond artist access. Pass nextCursor unchanged within the same scope; cursors are bounded and scope-checked. Full profile only.",
+			"Read sanitized artist or organization settings audit events, or your own 12 recent account activity entries with scope=account (artist access required; no cursor). Organization scope requires organization settings authority, beyond artist access. Pass nextCursor unchanged within the same scope; cursors are bounded and scope-checked.",
 		destructiveHint: false,
 		name: "dynamoi_get_audit_log",
 		openWorldHint: false,
@@ -1215,7 +1215,7 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 	},
 	{
 		description:
-			"Claim or change your own referral code using the web claim rules. Claiming accepts the current referral program terms. Full profile only.",
+			"Claim or change your own referral code using the web claim rules. Claiming accepts the current referral program terms.",
 		destructiveHint: false,
 		name: "dynamoi_claim_referral_code",
 		openWorldHint: false,
@@ -1226,7 +1226,7 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 	},
 	{
 		description:
-			"Read the authenticated caller's referral dashboard after artist access, without cookie attribution or commission refresh. USD cents and observed states: PENDING is not yet available; AVAILABLE is eligible, not payout approval; WITHDRAWAL_PENDING is awaiting payout; PAID is paid. Never describe pending or available amounts as approved or paid. Full profile only.",
+			"Read the authenticated caller's referral dashboard after artist access, without cookie attribution or commission refresh. USD cents and observed states: PENDING is not yet available; AVAILABLE is eligible, not payout approval; WITHDRAWAL_PENDING is awaiting payout; PAID is paid. Never describe pending or available amounts as approved or paid.",
 		destructiveHint: false,
 		name: "dynamoi_get_referrals",
 		openWorldHint: false,
@@ -1290,7 +1290,7 @@ export const PHASE_ONBOARDING_TOOL_DEFINITIONS =
 export const PHASE_2_TOOL_DEFINITIONS = [
 	{
 		description:
-			"Read ad copy for a Smart Campaign creation draft, or save copy by providing save with the revision read. Full profile only; editor access required. Refuses submitted campaigns. Never launches, submits or publishes.",
+			"Read ad copy for a Smart Campaign creation draft, or save copy by providing save with the revision read. Editor access required. Refuses submitted campaigns. Never launches, submits or publishes.",
 		destructiveHint: false,
 		name: "dynamoi_smart_campaign_ad_copy",
 		openWorldHint: false,
@@ -1313,7 +1313,7 @@ export const PHASE_2_TOOL_DEFINITIONS = [
 	},
 	{
 		description:
-			"Full profile; editor access required. Returns the current draft summary in data and the native operation response in stepResult. Read native setup with setup, browse videos with videos and optional pageToken, screen with screen and videoId. Save draft steps with save_content/contentSave={campaignId,videoId,playlistId,strategy}, save_location/locationSave={campaignId,targeting:{mode:GLOBAL}|{mode:COUNTRIES,countries:[US]}}, save_ad_copy/adCopySave={campaignId,adCopy,mode:assisted|preserve}, or save_budget/budgetSave={campaignId,budgetAmountCents,budgetType,endDate,currency?,budgetAmountMinor?}. Amounts are exact minor units in the artist currency; use the setup budget policy. Reuse the campaignId when retrying. Saves use native last-write-wins semantics; re-read setup after ambiguous outcomes. Draft saves never launch, change live campaigns or call Google Ads; launch stays on dynamoi_launch_campaign. Inspect a recoverable draft with inspect. Use discard only on explicit user request with campaignId, expectedUpdatedAt from inspect and userIntentSummary. Discard cannot be undone.",
+			"Editor access required. Returns the current draft summary in data and the native operation response in stepResult. Read native setup with setup, browse videos with videos and optional pageToken, screen with screen and videoId. Save draft steps with save_content/contentSave={campaignId,videoId,playlistId,strategy}, save_location/locationSave={campaignId,targeting:{mode:GLOBAL}|{mode:COUNTRIES,countries:[US]}}, save_ad_copy/adCopySave={campaignId,adCopy,mode:assisted|preserve}, or save_budget/budgetSave={campaignId,budgetAmountCents,budgetType,endDate,currency?,budgetAmountMinor?}. Amounts are exact minor units in the artist currency; use the setup budget policy. Reuse the campaignId when retrying. Saves use native last-write-wins semantics; re-read setup after ambiguous outcomes. Draft saves never launch, change live campaigns or call Google Ads; launch stays on dynamoi_launch_campaign. Inspect a recoverable draft with inspect. Use discard only on explicit user request with campaignId, expectedUpdatedAt from inspect and userIntentSummary. Discard cannot be undone.",
 		destructiveHint: true,
 		name: "dynamoi_manage_youtube_draft",
 		openWorldHint: false,

@@ -1216,7 +1216,7 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 	{
 		description:
 			"Claim or change your own referral code using the web claim rules. Claiming accepts the current referral program terms.",
-		destructiveHint: false,
+		destructiveHint: true,
 		name: "dynamoi_claim_referral_code",
 		openWorldHint: false,
 		outputSchema: AnyOutputEnvelopeSchema,
@@ -1291,7 +1291,7 @@ export const PHASE_2_TOOL_DEFINITIONS = [
 	{
 		description:
 			"Read ad copy for a Smart Campaign creation draft, or save copy by providing save with the revision read. Editor access required. Refuses submitted campaigns. Never launches, submits or publishes.",
-		destructiveHint: false,
+		destructiveHint: true,
 		name: "dynamoi_smart_campaign_ad_copy",
 		openWorldHint: false,
 		outputSchema: AnyOutputEnvelopeSchema,

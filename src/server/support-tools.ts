@@ -33,7 +33,7 @@ export const SUPPORT_TOOL_DEFINITIONS = [
 	{
 		description:
 			"Use this when the user wants to report a problem with Dynamoi (a tool error, sign-in or permission problem, wrong data, a billing, campaign or distribution question) or send Dynamoi feedback. Show the user the subject and message and get their OK before sending. Dynamoi attaches the signed-in account and this agent's identity, and support replies by email to the account address. Never include passwords, tokens, API keys or card numbers. Sending changes no campaign, billing or account data.",
-		destructiveHint: false,
+		destructiveHint: true,
 		idempotentHint: false,
 		name: "dynamoi_contact_support",
 		openWorldHint: false,

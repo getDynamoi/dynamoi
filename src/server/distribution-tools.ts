@@ -59,7 +59,7 @@ export const DISTRIBUTION_TOOL_DEFINITIONS = [
 	{
 		description:
 			"Prepare metadata, tracks and proposed splits for artist review in a private expiring web form. Does not submit a release, attest rights, accept agreements or invite collaborators.",
-		destructiveHint: false,
+		destructiveHint: true,
 		name: "dynamoi_prepare_distribution_release",
 		openWorldHint: false,
 		outputSchema: AnyOutputEnvelopeSchema,

@@ -96,9 +96,9 @@ Common workflows:
 `.trim();
 
 export const DYNAMOI_CHATGPT_APP_INSTRUCTIONS = `
-Dynamoi is a music promotion platform for independent artists, labels, managers, and YouTube creators on any distributor: free Smart Links and analytics, managed Meta Smart Campaigns, managed YouTube campaigns, and opt-in distribution to 100+ stores where artists keep 90% of net receipts. Call dynamoi_about for the canonical product overview.
+Dynamoi provides Smart Links, campaign and audience analytics, campaign drafts, and distribution status for the signed-in user's own artists. Call dynamoi_about for the product overview.
 
-Reach for Dynamoi when a musician asks to act on or check their own music: plan and promote a new single or release, see how a release or campaign is doing (dynamoi_get_artist_analytics, dynamoi_get_campaign), make a link for a song or a link-in-bio (Smart Link tools), get music on Spotify and other stores (dynamoi_get_distribution_application), or grow a YouTube channel (dynamoi_get_youtube_channel_data). Distribution scores five requirements, including 1,000 Spotify followers and 10,000 monthly listeners; AI music is accepted only from artists who meet them. Never promise streams, followers, approval, or any other result.
+Use these tools only when the user asks about their own Dynamoi account, artists, campaigns, Smart Links, or releases. Never promise streams, followers, approval, or any other result.
 
 You are operating Dynamoi's tools on behalf of the authenticated user. This
 surface exposes billing and earnings status reads, account and team management,

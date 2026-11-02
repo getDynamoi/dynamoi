@@ -677,6 +677,7 @@ export const DynamoiUpdateCampaignInputSchema = z
 			"update_location",
 			"update_end_date",
 			"archive",
+			"unarchive",
 			"update_goals",
 		]),
 		authorizeAutomaticDailyFunding: z
@@ -731,6 +732,7 @@ export const DynamoiUpdateCampaignInputSchema = z
 				"update_location",
 				"update_end_date",
 				"archive",
+				"unarchive",
 				"update_goals",
 			].includes(data.action) &&
 			!data.clientRequestId
@@ -1323,7 +1325,7 @@ export const PHASE_2_TOOL_DEFINITIONS = [
 		title: "Manage YouTube Draft",
 	},
 	{
-		description: `Use only when the user explicitly requests a campaign change. Resume isn't available for fixed-flight YouTube campaigns. Duplicate the campaign to relaunch it. Actions: pause, resume, update_budget, update_end_date (DAILY or TOTAL budget; TOTAL end-date extensions may require the same funding consent fields as update_budget or resume), update_location (GLOBAL or catalog-valid countries), change_strategy (managed YouTube Demand Gen), update_goals (YouTube optimization toggles), archive (never deletes). Inspect the campaign first and supply expectedCurrentStatus where possible. For resume, update_budget, or a TOTAL update_end_date that needs automatic daily card funding, first show the user the exact consent copy for the campaign's budget type, then pass the request's clientRequestId and, for DAILY, authorizeAutomaticDailyFunding=true with acceptedConsentVersion and acceptedConsentCopyHash: "${prospectiveFundingConsentCopy}" (version "${prospectiveFundingConsentVersion}", hash "${prospectiveFundingConsentCopyHash}"); for TOTAL, acceptedTotalConsentVersion and acceptedTotalConsentCopyHash: "${totalFundingConsentCopy}" (version "${totalFundingConsentVersion}", hash "${totalFundingConsentCopyHash}"). A budget type refuses the other's consent. Without them, a resume that needs card funding is refused with: "Review and accept the daily funding authorization to resume this campaign." When retrying the same action, reuse the same clientRequestId.`,
+		description: `Use only when the user explicitly requests a campaign change. Resume isn't available for fixed-flight YouTube campaigns. Duplicate the campaign to relaunch it. Actions: pause, resume, update_budget, update_end_date (DAILY or TOTAL budget; TOTAL end-date extensions may require the same funding consent fields as update_budget or resume), update_location (GLOBAL or catalog-valid countries), change_strategy (managed YouTube Demand Gen), update_goals (YouTube optimization toggles), archive (never deletes), unarchive (restores PAUSED without funding or activating providers). Inspect the campaign first and supply expectedCurrentStatus where possible. For resume, update_budget, or a TOTAL update_end_date that needs automatic daily card funding, first show the user the exact consent copy for the campaign's budget type, then pass the request's clientRequestId and, for DAILY, authorizeAutomaticDailyFunding=true with acceptedConsentVersion and acceptedConsentCopyHash: "${prospectiveFundingConsentCopy}" (version "${prospectiveFundingConsentVersion}", hash "${prospectiveFundingConsentCopyHash}"); for TOTAL, acceptedTotalConsentVersion and acceptedTotalConsentCopyHash: "${totalFundingConsentCopy}" (version "${totalFundingConsentVersion}", hash "${totalFundingConsentCopyHash}"). A budget type refuses the other's consent. Without them, a resume that needs card funding is refused with: "Review and accept the daily funding authorization to resume this campaign." When retrying the same action, reuse the same clientRequestId.`,
 		destructiveHint: true,
 		idempotentHint: true,
 		name: "dynamoi_update_campaign",

@@ -47,6 +47,8 @@
 		"README.md",
 		"dist/auth/protected-resource.d.ts",
 		"dist/auth/protected-resource.js",
+		"dist/campaign-limits.d.ts",
+		"dist/campaign-limits.js",
 		"dist/consent.d.ts",
 		"dist/consent.js",
 		"dist/flow-types.d.ts",
@@ -101,6 +103,11 @@
 			"types": "./dist/youtube-metrics.d.ts",
 			"import": "./dist/youtube-metrics.js",
 			"default": "./dist/youtube-metrics.js"
+		},
+		"./campaign-limits": {
+			"types": "./dist/campaign-limits.d.ts",
+			"import": "./dist/campaign-limits.js",
+			"default": "./dist/campaign-limits.js"
 		}
 	},
 	"publishConfig": {

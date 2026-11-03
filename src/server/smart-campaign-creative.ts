@@ -1,4 +1,9 @@
 import { z } from "zod/v4";
+import {
+	CAMPAIGN_CREATIVE_SELECTION_LIMIT,
+	MAX_SOURCE_AUDIO_BYTES,
+	MAX_SOURCE_AUDIO_MIB,
+} from "../campaign-limits";
 import { createOutputEnvelopeSchema } from "./output-schemas";
 
 const UploadedSelectionSchema = z.strictObject({
@@ -11,10 +16,20 @@ const UploadedSelectionSchema = z.strictObject({
 export const CreativeSelectionSchema = z.strictObject({
 	campaignId: z.uuid(),
 	expectedUpdatedAt: z.iso.datetime(),
-	selectedCreativeIds: z.array(z.uuid()).min(1).max(100).optional(),
-	selectedSocialPosts: z.array(z.string().min(1).max(200)).max(10).optional(),
+	selectedCreativeIds: z
+		.array(z.uuid())
+		.min(1)
+		.max(CAMPAIGN_CREATIVE_SELECTION_LIMIT)
+		.optional(),
+	selectedSocialPosts: z
+		.array(z.string().min(1).max(200))
+		.max(CAMPAIGN_CREATIVE_SELECTION_LIMIT)
+		.optional(),
 	source: z.enum(["generate", "posts", "upload"]).optional(),
-	uploadedAssets: z.array(UploadedSelectionSchema).max(30).optional(),
+	uploadedAssets: z
+		.array(UploadedSelectionSchema)
+		.max(CAMPAIGN_CREATIVE_SELECTION_LIMIT)
+		.optional(),
 });
 export const CreativeGenerationSchema = CreativeSelectionSchema.pick({
 	campaignId: true,
@@ -27,7 +42,7 @@ export const SourceAudioUploadStatusSchema = CreativeGenerationSchema.extend({
 export const SourceAudioUploadSchema = z.strictObject({
 	campaignId: z.uuid(),
 	expectedUpdatedAt: z.iso.datetime(),
-	fileSizeBytes: z.number().int().positive().max(262_144_000),
+	fileSizeBytes: z.number().int().positive().max(MAX_SOURCE_AUDIO_BYTES),
 	hookSeconds: z.array(z.number().int().nonnegative()).max(2),
 	trackDurationSeconds: z.number().positive(),
 });
@@ -271,8 +286,7 @@ export const SmartCampaignCreativeOutputSchema = z.strictObject({
 });
 
 export const SMART_CAMPAIGN_CREATIVE_TOOL_DEFINITION = {
-	description:
-		"Use save_setup with setupSave={playLinkId, appleMusicUrl?} and a stable UUID-v4 setupRequestId per setup flow; reuse it on retries, and start a new flow for different content. It returns setupDraft. Use read_budget for budgetDraft and save_budget with budgetSave={campaignId, expectedUpdatedAt, budgetAmountCents, budgetAmountMinor?, currency?, budgetType:DAILY|TOTAL, endDate:YYYY-MM-DD|null}. Amounts are exact minor units in the artist currency; use the budget policy from read_budget. Setup and budget saves only edit drafts and never launch or charge. Use read_location to read native draft targeting and save_location with locationSave={campaignId, expectedUpdatedAt, targeting:{mode:WORLDWIDE}|{mode:INCLUDE,countryCodes:[US]}} to save it. Read locationDraft first for the current revision; both location actions return locationDraft. Read generation progress, generated creatives and current selection with action=read. To discover owned social posts, explicitly add catalog={source:facebook|instagram,limit:1..25,after?:nextCursor}. Only requested catalog reads fetch connected-account posts; use catalog.items[].id directly in selectedSocialPosts. Pass nextCursor as after for another page. Catalog reads never alter selections, token state, or campaigns; provider failure is an error, and selection revalidates ownership. Use start_generation, retry_generation or clear_generation with campaignId and expectedUpdatedAt from read. Generation runs asynchronously; poll with read. Use source_audio_upload_status or abort_source_audio_upload with campaignId, expectedUpdatedAt, uploadId and uploadSessionId to inspect uploaded parts or abort the direct upload. Agents never approve or submit. Use action=select with campaignId and expectedUpdatedAt from read, source=generate|posts|upload, and selectedCreativeIds, selectedSocialPosts (owned META:post IDs), or uploadedAssets=[{mediaAssetId}] from dynamoi_list_media_assets. Omit selectedCreativeIds for social or uploaded media. Uploaded metadata is resolved by the server; only owned, moderation-approved uploads can be selected. Selection never attests artist approval and never submits the campaign. Upload private JPEG/PNG/MP4 campaign media (1 GiB maximum) with start_media_upload, campaignId, expectedUpdatedAt and mediaUpload={assetId:UUID,fileName,fileSizeBytes,contentType}. Retain the returned key/uploadId and PUT each presigned part URL. Complete with complete_media_upload, a freshly inspected expectedUpdatedAt, and mediaUpload={assetId,fileName,fileSizeBytes,fileType,key,uploadId,parts:[{partNumber,etag}]}. Use media_upload_status or abort_media_upload with campaignId and mediaUpload={key,uploadId}; both remain usable after draft edits. A completed status means retry completion, not re-upload. Completion returns only a moderation receipt; poll dynamoi_list_media_assets and select only after APPROVED. Uploads do not edit the draft selection. Attach source MP3 audio to a draft with start_source_audio_upload, PUT each returned presigned part URL, then complete_source_audio_upload with the returned uploadId/uploadSessionId and part ETags. Both actions require campaignId, expectedUpdatedAt, fileSizeBytes, trackDurationSeconds and 0–2 hookSeconds. Read sourceAudio to confirm. Use import_source_audio with a public Dropbox share url, campaignId, expectedUpdatedAt, trackDurationSeconds and 0–2 hookSeconds (250 MiB maximum). Google Drive is unsupported because it requires a Google API key. On timeout or an ambiguous result, re-read sourceAudio before retrying.",
+	description: `Use save_setup with setupSave={playLinkId, appleMusicUrl?} and a stable UUID-v4 setupRequestId per setup flow; reuse it on retries, and start a new flow for different content. It returns setupDraft. Use read_budget for budgetDraft and save_budget with budgetSave={campaignId, expectedUpdatedAt, budgetAmountCents, budgetAmountMinor?, currency?, budgetType:DAILY|TOTAL, endDate:YYYY-MM-DD|null}. Amounts are exact minor units in the artist currency; use the budget policy from read_budget. Setup and budget saves only edit drafts and never launch or charge. Use read_location to read native draft targeting and save_location with locationSave={campaignId, expectedUpdatedAt, targeting:{mode:WORLDWIDE}|{mode:INCLUDE,countryCodes:[US]}} to save it. Read locationDraft first for the current revision; both location actions return locationDraft. Read generation progress, generated creatives and current selection with action=read. To discover owned social posts, explicitly add catalog={source:facebook|instagram,limit:1..25,after?:nextCursor}. Only requested catalog reads fetch connected-account posts; use catalog.items[].id directly in selectedSocialPosts. Pass nextCursor as after for another page. Catalog reads never alter selections, token state, or campaigns; provider failure is an error, and selection revalidates ownership. Use start_generation, retry_generation or clear_generation with campaignId and expectedUpdatedAt from read. Generation runs asynchronously; poll with read. Use source_audio_upload_status or abort_source_audio_upload with campaignId, expectedUpdatedAt, uploadId and uploadSessionId to inspect uploaded parts or abort the direct upload. Agents never approve or submit. Use action=select with campaignId and expectedUpdatedAt from read, source=generate|posts|upload, and selectedCreativeIds, selectedSocialPosts (owned META:post IDs), or uploadedAssets=[{mediaAssetId}] from dynamoi_list_media_assets. Omit selectedCreativeIds for social or uploaded media. Uploaded metadata is resolved by the server; only owned, moderation-approved uploads can be selected. Selection never attests artist approval and never submits the campaign. Upload private JPEG/PNG/MP4 campaign media (1 GiB maximum) with start_media_upload, campaignId, expectedUpdatedAt and mediaUpload={assetId:UUID,fileName,fileSizeBytes,contentType}. Retain the returned key/uploadId and PUT each presigned part URL. Complete with complete_media_upload, a freshly inspected expectedUpdatedAt, and mediaUpload={assetId,fileName,fileSizeBytes,fileType,key,uploadId,parts:[{partNumber,etag}]}. Use media_upload_status or abort_media_upload with campaignId and mediaUpload={key,uploadId}; both remain usable after draft edits. A completed status means retry completion, not re-upload. Completion returns only a moderation receipt; poll dynamoi_list_media_assets and select only after APPROVED. Uploads do not edit the draft selection. Attach source MP3 audio to a draft with start_source_audio_upload, PUT each returned presigned part URL, then complete_source_audio_upload with the returned uploadId/uploadSessionId and part ETags. Both actions require campaignId, expectedUpdatedAt, fileSizeBytes, trackDurationSeconds and 0–2 hookSeconds. Read sourceAudio to confirm. Use import_source_audio with a public Dropbox share url, campaignId, expectedUpdatedAt, trackDurationSeconds and 0–2 hookSeconds (${MAX_SOURCE_AUDIO_MIB} MiB maximum). Google Drive is unsupported because it requires a Google API key. On timeout or an ambiguous result, re-read sourceAudio before retrying.`,
 	destructiveHint: true,
 	name: "dynamoi_manage_smart_campaign_creative",
 	openWorldHint: false,

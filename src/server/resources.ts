@@ -1,6 +1,6 @@
 import { type McpServer, ResourceTemplate } from "@modelcontextprotocol/server";
 import * as z from "zod/v4";
-import { USD_BUDGET_MINIMUMS } from "./budget-minimums";
+import { USD_BUDGET_MINIMUMS } from "../campaign-limits";
 import type { Phase3Adapter } from "./create-server";
 import { registerPlaybookResources } from "./playbook-resources";
 import {

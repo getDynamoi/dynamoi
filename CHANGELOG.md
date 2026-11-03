@@ -7,6 +7,12 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.9] - 2026-11-02
+
+### Changed
+
+- Export the unchanged Shop quote and targeting limits from `@dynamoi/mcp/shop-limits` and campaign creative limits from `@dynamoi/mcp/campaign-limits` so standalone MCP and first-party validators share one policy. Tool inputs, scopes and consent requirements remain unchanged.
+
 ## [1.0.8] - 2026-10-31
 
 ### Security

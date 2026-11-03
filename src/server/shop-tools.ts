@@ -1,15 +1,18 @@
 import * as z from "zod/v4";
 import {
+	SHOP_CUSTOM_MAX_DURATION_DAYS,
+	SHOP_CUSTOM_MAX_TARGET_VIEWS,
+	SHOP_CUSTOM_MIN_DURATION_DAYS,
+	SHOP_CUSTOM_MIN_TARGET_VIEWS,
+	SHOP_MAX_TARGET_COUNTRY_CODES,
+} from "../shop-limits";
+import {
 	addRecoverySafetyIssues,
 	ResultErrorRecoverySchema,
 } from "./output-schemas";
 
 export const DYNAMOI_SHOP_FULL_SCOPE = "dynamoi:mcp.full" as const;
-export const DYNAMOI_SHOP_MAX_TARGET_COUNTRY_CODES = 50;
-const DYNAMOI_SHOP_CUSTOM_MIN_TARGET_VIEWS = 25_000;
-const DYNAMOI_SHOP_CUSTOM_MAX_TARGET_VIEWS = 1_000_000;
-const DYNAMOI_SHOP_CUSTOM_MIN_DURATION_DAYS = 7;
-const DYNAMOI_SHOP_CUSTOM_MAX_DURATION_DAYS = 30;
+export { SHOP_MAX_TARGET_COUNTRY_CODES as DYNAMOI_SHOP_MAX_TARGET_COUNTRY_CODES } from "../shop-limits";
 
 const ShopPackageSelectionInputSchema = z
 	.object({
@@ -23,14 +26,14 @@ const ShopCustomSelectionInputSchema = z
 		campaignDurationDays: z
 			.number()
 			.int()
-			.min(DYNAMOI_SHOP_CUSTOM_MIN_DURATION_DAYS)
-			.max(DYNAMOI_SHOP_CUSTOM_MAX_DURATION_DAYS),
+			.min(SHOP_CUSTOM_MIN_DURATION_DAYS)
+			.max(SHOP_CUSTOM_MAX_DURATION_DAYS),
 		kind: z.literal("custom"),
 		targetViews: z
 			.number()
 			.int()
-			.min(DYNAMOI_SHOP_CUSTOM_MIN_TARGET_VIEWS)
-			.max(DYNAMOI_SHOP_CUSTOM_MAX_TARGET_VIEWS),
+			.min(SHOP_CUSTOM_MIN_TARGET_VIEWS)
+			.max(SHOP_CUSTOM_MAX_TARGET_VIEWS),
 	})
 	.strict();
 
@@ -48,7 +51,7 @@ const ShopIncludedTargetingInputSchema = z
 		countryCodes: z
 			.array(z.string().regex(/^[A-Z]{2}$/))
 			.min(1)
-			.max(DYNAMOI_SHOP_MAX_TARGET_COUNTRY_CODES),
+			.max(SHOP_MAX_TARGET_COUNTRY_CODES),
 		mode: z.literal("INCLUDE"),
 	})
 	.strict();

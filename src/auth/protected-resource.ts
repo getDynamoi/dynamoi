@@ -74,6 +74,7 @@ export const DYNAMOI_MCP_TOOL_SCOPES = {
 	dynamoi_launch_campaign: ["dynamoi:read", "dynamoi:campaign.launch"],
 	dynamoi_list_artists: ["dynamoi:read"],
 	dynamoi_list_available_countries: ["dynamoi:read"],
+	dynamoi_list_campaign_drafts: ["dynamoi:read"],
 	dynamoi_list_campaigns: ["dynamoi:read"],
 	dynamoi_list_media_assets: ["dynamoi:read"],
 	dynamoi_list_smart_links: ["dynamoi:read"],

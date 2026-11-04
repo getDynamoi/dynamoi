@@ -151,6 +151,7 @@ export {
 	DynamoiLaunchCampaignInputSchema,
 	DynamoiListArtistsInputSchema,
 	DynamoiListAvailableCountriesInputSchema,
+	DynamoiListCampaignDraftsInputSchema,
 	DynamoiListCampaignsInputSchema,
 	DynamoiListMediaAssetsInputSchema,
 	DynamoiManageTeamInputSchema,

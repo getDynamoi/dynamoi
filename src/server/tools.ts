@@ -13,6 +13,7 @@ import {
 	DynamoiListArtistsInputSchema,
 } from "./account-schema.generated";
 import { AUDIENCE_ANALYTICS_CONTRACT } from "./audience-analytics.generated";
+import { CAMPAIGN_DRAFTS_CONTRACT } from "./drafts.generated";
 import { GROWTH_AUDIT_CONTRACT } from "./growth-audit.generated";
 import { createPhaseOnboardingToolDefinitions } from "./onboarding-tool-definitions";
 import { OPENAI_TOOL_DEFINITIONS } from "./openai-tools";
@@ -144,6 +145,9 @@ export const DynamoiGetGrowthAuditInputSchema =
 
 export const DynamoiGetPlaylistAnalyticsInputSchema =
 	PLAYLIST_ANALYTICS_CONTRACT.mcp.definition.schema;
+
+export const DynamoiListCampaignDraftsInputSchema =
+	CAMPAIGN_DRAFTS_CONTRACT.mcp.definition.schema;
 
 export const DynamoiGetAudienceAnalyticsInputSchema =
 	AUDIENCE_ANALYTICS_CONTRACT.mcp.definition.schema;
@@ -1130,6 +1134,10 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 	},
 	{
 		...PLAYLIST_ANALYTICS_CONTRACT.mcp.definition,
+		outputSchema: AnyOutputEnvelopeSchema,
+	},
+	{
+		...CAMPAIGN_DRAFTS_CONTRACT.mcp.definition,
 		outputSchema: AnyOutputEnvelopeSchema,
 	},
 	{

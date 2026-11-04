@@ -75,6 +75,7 @@ export const DELETE_ACCOUNT_TOOL_DEFINITIONS = [
 		description:
 			"Preview account deletion eligibility and blockers without changing anything. Show the irreversible consequences, then obtain explicit confirmation and call with confirm=true. Deletion starts cleanup; it does not promise all records are erased.",
 		name: "dynamoi_delete_account",
+		openWorldHint: true,
 		schema: DeleteAccountSchema,
 		title: "Delete Account",
 	},

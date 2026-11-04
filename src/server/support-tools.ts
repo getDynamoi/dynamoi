@@ -15,6 +15,7 @@ export const DYNAMOI_SUPPORT_CATEGORIES = [
 export const DynamoiContactSupportInputSchema = z
 	.object({
 		category: z.enum(DYNAMOI_SUPPORT_CATEGORIES),
+		requestId: z.string().uuid().optional().describe("Reuse this ID when retrying the same request; use a new ID for a new request."),
 		errorMessage: z.string().trim().max(1000).optional(),
 		failedTool: z
 			.string()

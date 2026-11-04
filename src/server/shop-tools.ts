@@ -214,6 +214,10 @@ export const DynamoiShopOrdersDataSchema = z
 						createdAt: z.string(),
 						deploymentCompletedAt: z.string().nullable(),
 						orderId: z.string(),
+						remedyOutcome: z
+							.enum(["full_refund", "partial_refund", "no_refund"])
+							.nullable()
+							.optional(),
 						status: z.string(),
 					})
 					.strict(),
@@ -226,7 +230,7 @@ export type DynamoiShopOrdersData = z.infer<typeof DynamoiShopOrdersDataSchema>;
 export const SHOP_TOOL_DEFINITIONS = [
 	{
 		description:
-			"Read up to 20 newest Shop orders for an authorized artist, optionally filtered by order ID. Returns observed order status, campaign status and fulfillment timestamps. No refunds or fulfillment changes.",
+			"Read up to 20 newest Shop orders for an authorized artist, optionally filtered by order ID. Returns observed order status, independent remedy outcome, campaign status and fulfillment timestamps. No refunds or fulfillment changes.",
 		destructiveHint: false,
 		idempotentHint: true,
 		name: "dynamoi_shop_list_orders",

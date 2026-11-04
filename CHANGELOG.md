@@ -7,6 +7,12 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.10] - 2026-11-03
+
+### Changed
+
+- Include the independent full, partial or no-refund remedy outcome in full-profile Shop order reads. Unknown legacy outcomes remain null; directory tools and permissions are unchanged.
+
 ## [1.0.9] - 2026-11-02
 
 ### Changed

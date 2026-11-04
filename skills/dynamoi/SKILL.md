@@ -1,6 +1,6 @@
 ---
 name: dynamoi
-description: Music promotion that works with any distributor, for independent artists, labels and YouTube creators. Free Smart Links with Meta, TikTok and Google Ads pixels; managed Instagram and Facebook ads for Spotify releases; YouTube music video promotion with real Google ads; optional distribution to 100+ stores.
+description: Use Dynamoi to inspect or manage music-promotion campaigns, Smart Links, artist analytics, platform connections, or distribution applications. Trigger for requests about the user's Dynamoi account or an explicit Dynamoi action; general music and marketing advice needs no account tools.
 homepage: https://dynamoi.com
 metadata: {"openclaw":{"emoji":"🎵","homepage":"https://dynamoi.com"}}
 ---
@@ -58,10 +58,14 @@ retry; redo the setup above or use https://dynamoi.com/dashboard instead.
   `dynamoi_preview_smart_link_themes`. With write access,
   `dynamoi_create_smart_links_from_spotify_artist` builds a catalog and hub and
   `dynamoi_create_smart_link_from_spotify` builds one release. Lead with the hub
-  URL. Smart Links are free and never start a paid campaign.
+  URL when returned and report publication/rendering/verification state. Inspecting
+  existing links never requires creating one. Smart Links are free and never start
+  a paid campaign.
 - **Campaigns:** `dynamoi_list_campaigns`, `dynamoi_get_campaign`,
   `dynamoi_get_artist_analytics`; read a YouTube campaign's `strategyGuide`
-  first. For a stuck campaign, check `dynamoi_get_platform_status`. With write
+  first. Request `includeAnalytics=true` for one campaign's paid results; channel
+  results combine paid and organic activity and are not campaign-attributed.
+  For a stuck campaign, check `dynamoi_get_platform_status`. With write
   access, launch with `dynamoi_get_campaign_readiness`,
   `dynamoi_list_media_assets`, then `dynamoi_launch_campaign`; budget minimums
   come from the readiness response. Plans: https://dynamoi.com/pricing
@@ -76,12 +80,12 @@ retry; redo the setup above or use https://dynamoi.com/dashboard instead.
 
 ### Distribution
 
-Artists keep 90% of net receipts, with no upfront charge. US artists can be
-approved now; other countries are reviewed one by one. Call
-`dynamoi_get_distribution_application` before any eligibility claim. All five
-are required: a connected Spotify artist profile, at least 1,000 Spotify
-followers, at least 10,000 monthly listeners, a connected Facebook Page and
-Instagram professional account, and a connected YouTube channel.
+Use `dynamoi_about` for current distribution terms and
+`dynamoi_get_distribution_application` for the target artist's current
+requirements, thresholds, evidence, country restrictions, and application status.
+Report each returned requirement; meeting the eligibility bar permits an
+application and never guarantees approval. Distribution remains optional for
+campaigns and Smart Links.
 
 AI-assisted music can qualify when disclosed and the artist controls the
 rights. Fully AI-generated tracks are reviewed by hand and may be rejected;
@@ -90,8 +94,10 @@ audience bar can build listeners with Smart Campaigns first, with no guarantee.
 
 Apply at https://dynamoi.com/music-distribution. With write access,
 `dynamoi_apply_for_distribution` submits only after the user asks, confirms the
-details and attests the signer is an adult. Every application is reviewed by
-hand.
+details, supplies the applicant, tax-residency, and payout countries, and attests
+the signer is an adult. Never infer those fields. Every application is reviewed
+by hand; submission does not approve distribution, accept agreements, or send
+releases to stores.
 
 ## Money and safety rules
 

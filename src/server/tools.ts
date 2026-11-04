@@ -1278,7 +1278,7 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 	},
 	{
 		description:
-			'Use this when a musician wants to promote a new single or release with ads ("promote my new single", "run ads for my song"): it checks whether a Smart Campaign or YouTube campaign is ready before launching the campaign. This validates readiness and targeting without creating a campaign. Complete budget inputs also return the shared, nonbinding campaign funding preview with known or unavailable credit coverage, card upper bounds and expiry timing. For TOTAL budgets the preview describes total-daily funding for web and native creation; MCP TOTAL launch uses existing credits only, cannot authorize card funding, and does not accept the preview\'s total-daily consent. Do not use this to create or mutate campaigns.',
+			'Use this when a musician wants to promote a new single or release with ads ("promote my new single", "run ads for my song"): it checks whether a Smart Campaign or YouTube campaign is ready before launching the campaign. This validates readiness and targeting without creating a campaign. Complete budget inputs also return the shared, nonbinding campaign funding preview with known or unavailable credit coverage, card upper bounds and expiry timing. A preview is not consent. TOTAL launch requires the client to accept the current TOTAL funding consent and pass acceptedTotalConsentVersion plus acceptedTotalConsentCopyHash; never pass DAILY consent fields for TOTAL. Funding uses credit first, then prepaid funds, then the saved card, subject to the launch guards. Do not use this to create or mutate campaigns.',
 		destructiveHint: false,
 		name: "dynamoi_get_campaign_readiness",
 		openWorldHint: true,

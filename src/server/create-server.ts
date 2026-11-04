@@ -961,7 +961,7 @@ function snapshotForObserver(value: unknown) {
 	}
 }
 
-function asTextResult(envelope: unknown) {
+function asTextResult(envelope: unknown, toolName?: string) {
 	const isToolError =
 		Boolean(envelope) &&
 		typeof envelope === "object" &&
@@ -981,6 +981,14 @@ function asTextResult(envelope: unknown) {
 
 		const data = (envelope as { data?: unknown }).data;
 		if (data && typeof data === "object") {
+			if (
+				toolName === "dynamoi_claim_referral_code" &&
+				"link" in data &&
+				typeof data.link === "string"
+			) {
+				const referralPage = new URL("/dashboard/user/refer", data.link).href;
+				return `${JSON.stringify(envelope)}\n\nTo join the referral program, you need to accept the affiliate terms on your referral page: ${referralPage}`;
+			}
 			const summary = (data as { summary?: unknown }).summary;
 			if (typeof summary === "string" && summary.trim().length > 0) {
 				return summary;
@@ -1032,7 +1040,7 @@ function asValidatedTextResult(options: {
 			status: "error",
 		} satisfies ResultEnvelope<never>);
 	}
-	return asTextResult(envelope);
+	return asTextResult(envelope, options.toolName);
 }
 
 // Lists vary by the caller's authorization, so clients may reuse them briefly

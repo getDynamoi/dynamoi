@@ -1,3 +1,7 @@
+import {META_CONNECTION_CONTRACT,YOUTUBE_CONNECTION_CONTRACT} from "./connections.generated";
+import {TEAM_READ_CONTRACT,TEAM_ROLE_CONTRACT} from "./team.generated";
+import {REFERRALS_READ_CONTRACT,REFERRALS_CLAIM_CONTRACT} from "./referrals.generated";
+import { AUDIT_SETTINGS_CONTRACT, AUDIT_ACCOUNT_CONTRACT } from "./audit-log.generated";
 import * as z from "zod/v4";
 import {
 	FUNDING_CONSENT_BUDGET_TYPE_MISMATCH_MESSAGE,
@@ -12,7 +16,6 @@ import {ACCOUNT_OVERVIEW_CONTRACT,ARTIST_ROSTER_CONTRACT,ARTIST_CONTEXT_CONTRACT
 import { AUDIENCE_ANALYTICS_CONTRACT } from "./audience-analytics.generated";
 import { CAMPAIGN_DRAFTS_CONTRACT } from "./drafts.generated";
 import { GROWTH_AUDIT_CONTRACT } from "./growth-audit.generated";
-import { createPhaseOnboardingToolDefinitions } from "./onboarding-tool-definitions";
 import { OPENAI_TOOL_DEFINITIONS } from "./openai-tools";
 import {
 	AnyOutputEnvelopeSchema,
@@ -153,52 +156,11 @@ export const DynamoiGetBillingInputSchema = z
 	})
 	.strict();
 
-export const DynamoiManageTeamInputSchema = z
-	.object({
-		action: z.enum(["update_role", "remove_member", "revoke_invitation"]),
-		role: z.enum(["admin", "editor", "viewer"]).optional(),
-		targetId: z
-			.string()
-			.uuid()
-			.describe(
-				"Organization membership or pending invitation row ID from dynamoi_get_team.",
-			),
-	})
-	.strict()
-	.superRefine((input, ctx) => {
-		if ((input.action === "update_role") !== (input.role !== undefined)) {
-			ctx.addIssue({
-				code: "custom",
-				message: "role is required only for update_role",
-				path: ["role"],
-			});
-		}
-	});
-
-export const DynamoiGetTeamInputSchema = z
-	.object({ artistId: z.string().uuid() })
-	.strict();
-export const DynamoiGetAuditLogInputSchema = z
-	.object({
-		artistId: z.string().uuid(),
-		cursor: z.string().min(1).max(128).optional(),
-		scope: z.enum(["artist", "organization", "account"]).default("artist"),
-	})
-	.strict();
-export const DynamoiClaimReferralCodeInputSchema = z
-	.object({ code: z.string() })
-	.strict();
-
-export const DynamoiGetReferralsInputSchema = z
-	.object({
-		artistId: z.string().uuid(),
-		filter: z
-			.enum(["all", "available", "pending", "paid", "void"])
-			.default("all"),
-		page: z.number().int().min(1).max(100_000).default(1),
-		pageSize: z.number().int().min(10).max(100).default(25),
-	})
-	.strict();
+export const DynamoiManageTeamInputSchema=TEAM_ROLE_CONTRACT.mcp.definition.schema;
+export const DynamoiGetTeamInputSchema=TEAM_READ_CONTRACT.mcp.definition.schema;
+export const DynamoiGetAuditLogInputSchema = AUDIT_SETTINGS_CONTRACT.mcp.definition.schema;
+export const DynamoiClaimReferralCodeInputSchema = REFERRALS_CLAIM_CONTRACT.mcp.definition.schema;
+export const DynamoiGetReferralsInputSchema = REFERRALS_READ_CONTRACT.mcp.definition.schema;
 
 export const DynamoiGetActionCenterInputSchema = z
 	.object({ artistId: z.string().uuid() })
@@ -249,23 +211,8 @@ export const DynamoiGetPlatformStatusInputSchema = z
 	})
 	.strict();
 
-export const DynamoiStartYoutubeChannelLinkInputSchema = z
-	.object({
-		artistId: z.string().uuid(),
-		format: ToolFormatSchema.optional(),
-		purpose: z.enum(["advertising", "distribution_identity"]).optional(),
-		userIntentSummary: UserIntentSummarySchema,
-	})
-	.strict();
-
-export const DynamoiStartMetaConnectionInputSchema = z
-	.object({
-		artistId: z.string().uuid(),
-		format: ToolFormatSchema.optional(),
-		purpose: z.enum(["advertising", "distribution_identity"]).optional(),
-		userIntentSummary: UserIntentSummarySchema,
-	})
-	.strict();
+export const DynamoiStartYoutubeChannelLinkInputSchema=YOUTUBE_CONNECTION_CONTRACT.mcp.definition.schema;
+export const DynamoiStartMetaConnectionInputSchema=META_CONNECTION_CONTRACT.mcp.definition.schema;
 
 export const DynamoiListAvailableCountriesInputSchema = z
 	.object({
@@ -1149,61 +1096,11 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 		schema: DynamoiGetEarningsInputSchema,
 		title: "Get Distribution Earnings",
 	},
-	{
-		description:
-			"Read organization members and pending invitations after artist and organization settings authority checks. Artist collaboration alone never grants roster access. No invitation tokens or role mutations.",
-		destructiveHint: false,
-		name: "dynamoi_get_team",
-		openWorldHint: false,
-		outputSchema: AnyOutputEnvelopeSchema,
-		readOnlyHint: true,
-		schema: DynamoiGetTeamInputSchema,
-		title: "Get Team",
-	},
-	{
-		description:
-			"Change an organization member's role, remove a member or revoke a pending organization invitation using the same authority and transactional protections as web. targetId is the organization membership or pending invitation row ID from dynamoi_get_team. Owner and last-admin protections apply; removal can revoke access and pending invitations.",
-		destructiveHint: true,
-		name: "dynamoi_manage_team",
-		openWorldHint: false,
-		outputSchema: AnyOutputEnvelopeSchema,
-		readOnlyHint: false,
-		schema: DynamoiManageTeamInputSchema,
-		title: "Manage Organization Members",
-	},
-	{
-		description:
-			"Read sanitized artist or organization settings audit events, or your own 12 recent account activity entries with scope=account (artist access required; no cursor). Organization scope requires organization settings authority, beyond artist access. Pass nextCursor unchanged within the same scope; cursors are bounded and scope-checked.",
-		destructiveHint: false,
-		name: "dynamoi_get_audit_log",
-		openWorldHint: false,
-		outputSchema: AnyOutputEnvelopeSchema,
-		readOnlyHint: true,
-		schema: DynamoiGetAuditLogInputSchema,
-		title: "Get AuditLog",
-	},
-	{
-		description:
-			"Claim or change your own referral code using the web claim rules. Claiming accepts the current referral program terms.",
-		destructiveHint: true,
-		name: "dynamoi_claim_referral_code",
-		openWorldHint: false,
-		outputSchema: AnyOutputEnvelopeSchema,
-		readOnlyHint: false,
-		schema: DynamoiClaimReferralCodeInputSchema,
-		title: "Claim Referral Code",
-	},
-	{
-		description:
-			"Read the authenticated caller's referral dashboard after artist access, without cookie attribution or commission refresh. USD cents and observed states: PENDING is not yet available; AVAILABLE is eligible, not payout approval; WITHDRAWAL_PENDING is awaiting payout; PAID is paid. Never describe pending or available amounts as approved or paid.",
-		destructiveHint: false,
-		name: "dynamoi_get_referrals",
-		openWorldHint: false,
-		outputSchema: AnyOutputEnvelopeSchema,
-		readOnlyHint: true,
-		schema: DynamoiGetReferralsInputSchema,
-		title: "Get Referrals",
-	},
+	{...TEAM_READ_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
+	{...TEAM_ROLE_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
+	{ ...AUDIT_SETTINGS_CONTRACT.mcp.definition, outputSchema: AnyOutputEnvelopeSchema.or(AUDIT_ACCOUNT_CONTRACT.mcp.accountResponseSchema) },
+	{...REFERRALS_CLAIM_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
+	{...REFERRALS_READ_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
 	{
 		description:
 			"Read the existing campaign's resume funding breakdown before requesting funding consent: campaign budget, funded-window coverage, usable credits, immediate charge, payment method, refusal and current consent. Amounts carry their commercial currency and minor-unit exponent. This read never reserves funds, authorizes collection or resumes delivery. A refusal is not a zero-charge approval. Use dynamoi_update_campaign to resume only after explicit user consent when required.",
@@ -1250,11 +1147,10 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 	},
 ] as const;
 
-export const PHASE_ONBOARDING_TOOL_DEFINITIONS =
-	createPhaseOnboardingToolDefinitions({
-		metaConnection: DynamoiStartMetaConnectionInputSchema,
-		youtubeChannelLink: DynamoiStartYoutubeChannelLinkInputSchema,
-	});
+export const PHASE_ONBOARDING_TOOL_DEFINITIONS = [
+ {...YOUTUBE_CONNECTION_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
+ {...META_CONNECTION_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
+] as const;
 
 export const PHASE_2_TOOL_DEFINITIONS = [
 	{

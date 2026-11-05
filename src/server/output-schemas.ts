@@ -1,3 +1,4 @@
+import { SUPPORT_REQUEST_CONTRACT } from "./request.generated";
 import * as z from "zod/v4";
 import type { GetCampaignReadinessData } from "../readiness-types";
 import { ChannelResultsSchema } from "./channel-results-schema";
@@ -658,14 +659,7 @@ export const CreateSmartLinkFromSpotifyOutputEnvelopeSchema =
 export const CreateSmartLinksFromSpotifyArtistOutputEnvelopeSchema =
 	createOutputEnvelopeSchema(CreateSmartLinksFromSpotifyArtistDataOutputSchema);
 
-export const ContactSupportDataSchema = z
-	.object({
-		kind: z.literal("support_request"),
-		reference: z.string().min(1),
-		replyChannel: z.literal("account_email"),
-		status: z.literal("received"),
-	})
-	.strict();
+export const ContactSupportDataSchema = SUPPORT_REQUEST_CONTRACT.mobile.responseSchema;
 
 export type ContactSupportData = z.infer<typeof ContactSupportDataSchema>;
 

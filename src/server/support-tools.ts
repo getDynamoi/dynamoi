@@ -1,30 +1,9 @@
-import { z } from "zod/v4";
+import type { z } from "zod/v4";
 import { ContactSupportOutputEnvelopeSchema } from "./output-schemas";
 
-export const DYNAMOI_SUPPORT_CATEGORIES = [
-	"sign_in",
-	"tool_error",
-	"billing",
-	"campaign",
-	"distribution",
-	"smart_links",
-	"feedback",
-	"other",
-] as const;
-
-export const DynamoiContactSupportInputSchema = z
-	.object({
-		category: z.enum(DYNAMOI_SUPPORT_CATEGORIES),
-		requestId: z.string().uuid().optional().describe("Reuse this ID when retrying the same request; use a new ID for a new request."),
-		errorMessage: z.string().trim().max(1000).optional(),
-		failedTool: z
-			.string()
-			.regex(/^[a-z][a-z0-9_]{0,63}$/)
-			.optional(),
-		message: z.string().trim().min(10).max(4000),
-		subject: z.string().trim().min(3).max(150),
-	})
-	.strict();
+import { SUPPORT_REQUEST_CONTRACT } from "./request.generated";
+export const DYNAMOI_SUPPORT_CATEGORIES = SUPPORT_REQUEST_CONTRACT.mcp.definition.schema.shape.category.options;
+export const DynamoiContactSupportInputSchema = SUPPORT_REQUEST_CONTRACT.mcp.definition.schema;
 
 export type DynamoiContactSupportInput = z.infer<
 	typeof DynamoiContactSupportInputSchema
@@ -32,15 +11,7 @@ export type DynamoiContactSupportInput = z.infer<
 
 export const SUPPORT_TOOL_DEFINITIONS = [
 	{
-		description:
-			"Use this when the user wants to report a problem with Dynamoi (a tool error, sign-in or permission problem, wrong data, a billing, campaign or distribution question) or send Dynamoi feedback. Show the user the subject and message and get their OK before sending. Dynamoi attaches the signed-in account and this agent's identity, and support replies by email to the account address. Never include passwords, tokens, API keys or card numbers. Sending changes no campaign, billing or account data.",
-		destructiveHint: true,
-		idempotentHint: false,
-		name: "dynamoi_contact_support",
-		openWorldHint: false,
-		outputSchema: ContactSupportOutputEnvelopeSchema,
-		readOnlyHint: false,
-		schema: DynamoiContactSupportInputSchema,
-		title: "Contact Dynamoi Support",
+        ...SUPPORT_REQUEST_CONTRACT.mcp.definition,
+        outputSchema: ContactSupportOutputEnvelopeSchema,
 	},
 ] as const;

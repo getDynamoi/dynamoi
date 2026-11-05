@@ -1,3 +1,4 @@
+import {YOUTUBE_DRAFT_SETUP_CONTRACT} from "./youtube-draft.generated";
 import {CAMPAIGN_COUNTRIES_CONTRACT} from "./country-catalog.generated";
 import {SMART_CAMPAIGN_SUBMISSION_CONTRACT} from "./submission.generated";
 const YouTubeStrategySchema=SMART_CAMPAIGN_SUBMISSION_CONTRACT.youtubeStrategySchema;
@@ -171,104 +172,7 @@ export const DynamoiGetOnboardingStatusInputSchema = z
 
 // Keep this standalone package's public limit in sync with web-shared's
 // MAX_PROMOTED_VIDEOS_PER_CAMPAIGN (10).
-export const DynamoiManageYoutubeDraftInputSchema = z
-	.object({
-		action: z.enum([
-			"inspect",
-			"discard",
-			"setup",
-			"videos",
-			"screen",
-			"save_content",
-			"save_location",
-			"save_ad_copy",
-			"save_budget",
-		]),
-		adCopySave: z
-			.strictObject({
-				adCopy: z.string(),
-				campaignId: z.uuid(),
-				mode: z.enum(["assisted", "preserve"]),
-			})
-			.optional(),
-		artistId: z.string().uuid(),
-		budgetSave: z
-			.strictObject({
-				budgetAmountCents: z.number().int().positive(),
-				budgetAmountMinor: z.number().int().positive().optional(),
-				budgetType: z.enum(["DAILY", "TOTAL"]),
-				campaignId: z.uuid(),
-				currency: z.string().length(3).optional(),
-				endDate: z
-					.union([IsoCalendarDateSchema, z.string().datetime()])
-					.nullable(),
-			})
-			.optional(),
-		campaignId: z.string().uuid().optional(),
-		contentSave: z
-			.strictObject({
-				campaignId: z.uuid(),
-				playlistId: z.string().trim().min(1).max(128).nullable().optional(),
-				strategy: YouTubeStrategySchema,
-				videoId: z.string().trim().min(1).max(100),
-			})
-			.optional(),
-		expectedUpdatedAt: z.string().datetime().optional(),
-		locationSave: z
-			.strictObject({
-				campaignId: z.uuid(),
-				targeting: z.union([
-					z.strictObject({ mode: z.literal("GLOBAL") }),
-					z.strictObject({
-						countries: z.array(z.string().trim().length(2)).min(1).max(250),
-						mode: z.literal("COUNTRIES"),
-					}),
-				]),
-			})
-			.optional(),
-		pageToken: z.string().trim().min(1).max(512).nullable().optional(),
-		userIntentSummary: UserIntentSummarySchema.optional(),
-		videoId: z.string().trim().min(1).max(100).optional(),
-	})
-	.strict()
-	.superRefine((data, ctx) => {
-		for (const [action, field] of [
-			["screen", "videoId"],
-			["save_content", "contentSave"],
-			["save_location", "locationSave"],
-			["save_ad_copy", "adCopySave"],
-			["save_budget", "budgetSave"],
-		] as const) {
-			if (data.action === action && !data[field]) {
-				ctx.addIssue({
-					code: "custom",
-					message: `${field} is required for ${action}`,
-					path: [field],
-				});
-			}
-		}
-		if (data.action === "discard" && !data.campaignId) {
-			ctx.addIssue({
-				code: "custom",
-				message: "campaignId is required to discard a draft",
-				path: ["campaignId"],
-			});
-		}
-		if (data.action === "discard" && !data.expectedUpdatedAt) {
-			ctx.addIssue({
-				code: "custom",
-				message: "expectedUpdatedAt is required to discard a draft",
-				path: ["expectedUpdatedAt"],
-			});
-		}
-		if (data.action === "discard" && !data.userIntentSummary) {
-			ctx.addIssue({
-				code: "custom",
-				message: "userIntentSummary is required to discard a draft",
-				path: ["userIntentSummary"],
-			});
-		}
-	});
+export const DynamoiManageYoutubeDraftInputSchema=YOUTUBE_DRAFT_SETUP_CONTRACT.mcp.definition.schema;
 
 export const DynamoiGetCampaignDeploymentStatusInputSchema = z
 	.object({
@@ -784,17 +688,7 @@ export const PHASE_2_TOOL_DEFINITIONS = [
 		schema: DynamoiAddCampaignFundsInputSchema,
 		title: "Add Campaign Funds",
 	},
-	{
-		description:
-			"Editor access required. Returns the current draft summary in data and the native operation response in stepResult. Read native setup with setup, browse videos with videos and optional pageToken, screen with screen and videoId. Save draft steps with save_content/contentSave={campaignId,videoId,playlistId,strategy}, save_location/locationSave={campaignId,targeting:{mode:GLOBAL}|{mode:COUNTRIES,countries:[US]}}, save_ad_copy/adCopySave={campaignId,adCopy,mode:assisted|preserve}, or save_budget/budgetSave={campaignId,budgetAmountCents,budgetType,endDate,currency?,budgetAmountMinor?}. Amounts are exact minor units in the artist currency; use the setup budget policy. Reuse the campaignId when retrying. Saves use native last-write-wins semantics; re-read setup after ambiguous outcomes. Draft saves never launch, change live campaigns or call Google Ads; launch is a separate step. Inspect a recoverable draft with inspect. Use discard only on explicit user request with campaignId, expectedUpdatedAt from inspect and userIntentSummary. Discard cannot be undone.",
-		destructiveHint: true,
-		name: "dynamoi_manage_youtube_draft",
-		openWorldHint: true,
-		outputSchema: ManageYoutubeDraftOutputEnvelopeSchema,
-		readOnlyHint: false,
-		schema: DynamoiManageYoutubeDraftInputSchema,
-		title: "Manage YouTube Draft",
-	},
+	{...YOUTUBE_DRAFT_SETUP_CONTRACT.mcp.definition,outputSchema:ManageYoutubeDraftOutputEnvelopeSchema},
 	{
 		description: `Use only when the user explicitly requests a campaign change. Resume isn't available for fixed-flight YouTube campaigns. Duplicate the campaign to relaunch it. For pause, resume and archive, first request phase=preview with one clientRequestId. Show that exact preview to the human; only after approval send phase=confirm with its expectedUpdatedAt, expectedCurrentStatus and (for resume) expectedFundingHash and the same request ID. Omitting phase never executes those three actions. Actions: pause, resume, update_budget, update_end_date (DAILY or TOTAL budget; TOTAL end-date extensions may require the same funding consent fields as update_budget or resume), update_location (GLOBAL or catalog-valid countries), change_strategy (managed YouTube Demand Gen), update_goals (YouTube optimization toggles), archive (never deletes), unarchive (restores PAUSED without funding or activating providers). Inspect the campaign first and supply expectedCurrentStatus where possible. For resume, update_budget, or a TOTAL update_end_date that needs automatic daily card funding, first show the user the exact consent copy for the campaign's budget type, then pass the request's clientRequestId and, for DAILY, authorizeAutomaticDailyFunding=true with acceptedConsentVersion and acceptedConsentCopyHash: "${prospectiveFundingConsentCopy}" (version "${prospectiveFundingConsentVersion}", hash "${prospectiveFundingConsentCopyHash}"); for TOTAL, acceptedTotalConsentVersion and acceptedTotalConsentCopyHash: "${totalFundingConsentCopy}" (version "${totalFundingConsentVersion}", hash "${totalFundingConsentCopyHash}"). A budget type refuses the other's consent. Without them, a resume that needs card funding is refused with: "Review and accept the daily funding authorization to resume this campaign." When retrying the same action, reuse the same clientRequestId.`,
 		destructiveHint: true,

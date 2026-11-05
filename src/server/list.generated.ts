@@ -138,9 +138,9 @@ const WIRE_CATALOG_CURRENCIES = [
 	"ZMW",
 ] as const;
 
-const WireCatalogCurrencySchema = z.enum(WIRE_CATALOG_CURRENCIES);
-const CurrencyExponentSchema = z.number().int().min(0).max(3);
-const MinorAmountSchema = z.number().int().nonnegative();
+export const WireCatalogCurrencySchema = z.enum(WIRE_CATALOG_CURRENCIES);
+export const CurrencyExponentSchema = z.number().int().min(0).max(3);
+export const MinorAmountSchema = z.number().int().nonnegative();
 
 
 

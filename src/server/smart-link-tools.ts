@@ -1,3 +1,4 @@
+import { SMART_LINK_ANALYTICS_CONTRACT } from "./smart-link-analytics.generated";
 import * as z from "zod/v4";
 import {
 	AnyOutputEnvelopeSchema,
@@ -7,25 +8,12 @@ import {
 } from "./output-schemas";
 import {
 	ClientRequestIdSchema,
-	DateRangeSchema,
 	RequiredClientRequestIdSchema,
 	ToolFormatSchema,
 	UserIntentSummarySchema,
 } from "./shared-schemas";
 
-const SmartLinkAnalyticsDateRangeSchema = DateRangeSchema.superRefine(
-	(range, ctx) => {
-		const days =
-			(Date.parse(range.end) - Date.parse(range.start)) / 86_400_000 + 1;
-		if (days > 366) {
-			ctx.addIssue({
-				code: "custom",
-				message: "Smart-link analytics date windows cover at most 366 days",
-				path: ["end"],
-			});
-		}
-	},
-);
+const SmartLinkAnalyticsDateRangeSchema = SMART_LINK_ANALYTICS_CONTRACT.analyticsDateRangeSchema;
 
 const SmartLinkStatusFiltersSchema = {
 	claimStatus: z
@@ -79,61 +67,8 @@ export const DynamoiListSmartLinksInputSchema = z
 	})
 	.strict();
 
-const DynamoiGetSmartLinkInputShape = {
-	artistId: z.string().uuid().optional(),
-	dateRange: SmartLinkAnalyticsDateRangeSchema.optional(),
-	format: ToolFormatSchema.optional(),
-	granularity: z.enum(["TOTAL", "DAILY"]).optional(),
-	includeAnalytics: z.boolean().optional(),
-	includeArtistSettings: z.boolean().optional(),
-	includeBreakdowns: z.boolean().optional(),
-	playLinkId: z.string().uuid().optional(),
-	spotifyUrl: z.string().trim().min(1).max(500).optional(),
-} as const;
-
-function validateDynamoiGetSmartLinkInput(
-	data: z.infer<z.ZodObject<typeof DynamoiGetSmartLinkInputShape>>,
-	ctx: z.RefinementCtx,
-) {
-	const settingsOnly =
-		data.includeArtistSettings === true &&
-		!data.playLinkId &&
-		!data.spotifyUrl &&
-		Boolean(data.artistId);
-	if (
-		!(data.playLinkId || (data.artistId && data.spotifyUrl) || settingsOnly)
-	) {
-		ctx.addIssue({
-			code: "custom",
-			message:
-				"Provide playLinkId, artistId with spotifyUrl, or artistId with includeArtistSettings=true",
-			path: ["playLinkId"],
-		});
-	}
-	if (
-		(data.dateRange || data.granularity || data.includeBreakdowns) &&
-		data.includeAnalytics !== true
-	) {
-		ctx.addIssue({
-			code: "custom",
-			message:
-				"dateRange, granularity, and includeBreakdowns require includeAnalytics=true",
-			path: ["includeAnalytics"],
-		});
-	}
-}
-
-const StrictDynamoiGetSmartLinkInputSchema = z
-	.object(DynamoiGetSmartLinkInputShape)
-	.strict()
-	.superRefine(validateDynamoiGetSmartLinkInput);
-
-export const DynamoiGetSmartLinkInputSchema =
-	StrictDynamoiGetSmartLinkInputSchema;
-
-export function parseDynamoiGetSmartLinkInput(rawInput: unknown) {
-	return StrictDynamoiGetSmartLinkInputSchema.parse(rawInput);
-}
+export const DynamoiGetSmartLinkInputSchema = SMART_LINK_ANALYTICS_CONTRACT.mcp.definition.schema;
+export function parseDynamoiGetSmartLinkInput(rawInput: unknown) { return DynamoiGetSmartLinkInputSchema.parse(rawInput); }
 
 export const DynamoiGetSmartLinkAnalyticsInputSchema = z
 	.object({
@@ -449,18 +384,7 @@ export const PHASE_4_TOOL_DEFINITIONS = [
 		schema: DynamoiListSmartLinksInputSchema,
 		title: "List Smart Links",
 	},
-	{
-		description:
-			"Use this when the user wants full details for one free Smart Link, including release, Spotify URL, public play.dynamoi.com URL, current status, theme source, and next actions. Set includeAnalytics=true for visit/click analytics and includeArtistSettings=true for artist-level theme/pixel settings. In the final answer, lead with the public URL and do not expose internal IDs unless asked.",
-		destructiveHint: false,
-		name: "dynamoi_get_smart_link",
-		openWorldHint: true,
-		outputSchema: AnyOutputEnvelopeSchema,
-		readOnlyHint: true,
-		schema: DynamoiGetSmartLinkInputSchema,
-		title: "Get Smart Link",
-	},
-	{
+	{ ...SMART_LINK_ANALYTICS_CONTRACT.mcp.definition, outputSchema: AnyOutputEnvelopeSchema },	{
 		description:
 			"Use this when the user wants to change one Smart Link's public description or update artist-level Smart Link theme/pixel settings. Set action to update_description or update_artist_settings. Public availability is artist-wide in the dashboard; this tool does not publish or unpublish individual links. Theme-only updates switch instantly; description or pixel changes may queue background rendering.",
 		destructiveHint: true,

@@ -36,7 +36,7 @@ import {
 	ToolFormatSchema as SharedToolFormatSchema,
 	UserIntentSummarySchema,
 } from "./shared-schemas";
-import { DynamoiGetYouTubeChannelDataInputSchema } from "./youtube-channel-data-schema";
+import { YOUTUBE_CHANNEL_DATA_CONTRACT } from "./youtube-channel-data.generated";
 import {
 	YOUTUBE_CAMPAIGN_STRATEGIES_RESOURCE_URI,
 	YouTubeStrategyKeySchema,
@@ -1144,18 +1144,7 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 		...AUDIENCE_ANALYTICS_CONTRACT.mcp.definition,
 		outputSchema: AnyOutputEnvelopeSchema,
 	},
-	{
-		description:
-			'Use this for "how is my YouTube channel doing?" or "what is growing my channel?" once a channel is linked. Use this to analyze an artist\'s own connected YouTube channel\'s estimated ad revenue to inform AdSense strategy and channel growth, alongside subscribers, views, watch time or country, device and subscribed-status breakdowns: paged channel data from the YouTube Analytics warehouse or explicitly qualified synthetic/sample data. Pick one dataset: channel_daily (views, watch time, subscribers gained and lost, likes, shares, playlist starts, estimated revenue, ad revenue, gross revenue, monetized playbacks, CPM and playback-based CPM), video_daily (per-video metrics with titles; filter with videoIds), country_daily, traffic_source_daily, search_term_daily (YouTube search terms for the whole channel), subscribed_status_daily, device_daily, operating_system_daily, playback_location_daily, creator_content_type_daily, or video_catalog (video titles and publish dates). traffic_source_daily rows with source ADVERTISING carry trafficClass=paid and every other source carries trafficClass=organic, but that label only groups sources and is not organic proof: ad clicks that land in a playlist are credited mostly to PLAYLIST and SUBSCRIBER, so trafficClass=organic rows include ad sessions. Organic lift is growth in sources ads do not touch (YT_SEARCH, RELATED_VIDEO, browse features) or lift that persists after spend stops. Warehouse data is observed on the channel, not attributed to any campaign. Preserve the returned source, coverage, freshness, and synthetic/sample qualifications; do not treat synthetic/sample data as observed channel results, campaign attribution, or actual earnings/payouts. Treat returned ad revenue as estimated revenue, not an AdSense payout. The first page of any dataset (including format=summary) also carries one adsense block, the same figures the Dynamoi dashboard and app show: formats (long-form versus Shorts AdSense revenue and RPM), recovery and campaigns (incremental AdSense since each campaign and whether it earned back the billed amount), and countries (AdSense per ad playback against similar channels). It is estimated, not a payout, and covers windowFromDay to windowThroughDay, which is not always the requested range: compare against those fields. recovery.state building or unavailable and null figures mean unknown, never zero; adsense is null outside the YouTube Partner Program, on later pages, or when temporarily unavailable (adsenseNote explains). Compare periods yourself and use the campaigns block (dates, strategy, promoted videos) as context. YouTube data arrives about 2-3 days late and revenue can lag further: check coverage before comparing, and treat placeholderDays and missingDays as unknown, never zero. Not available yet: audience demographics, per-video traffic sources and per-video search terms. Needs a connected channel; a channel that must be reconnected is refused. Returns no ad spend. Before judging a campaign\'s strategy, read the strategyGuide from dynamoi_get_campaign. Page with nextCursor; format=summary returns only the summary, coverage and adsense.',
-		destructiveHint: false,
-		name: "dynamoi_get_youtube_channel_data",
-		openWorldHint: false,
-		outputSchema: GetYouTubeChannelDataOutputEnvelopeSchema,
-		readOnlyHint: true,
-		schema: DynamoiGetYouTubeChannelDataInputSchema,
-		title: "Get YouTube Channel Data",
-	},
-	{
+	{ ...YOUTUBE_CHANNEL_DATA_CONTRACT.mcp.definition, outputSchema: GetYouTubeChannelDataOutputEnvelopeSchema },	{
 		description:
 			"Use action=native_commerce for the native commerce projection (full profile, read-only; no subscription changes or invoices). Use this when the user asks about billing state, credit balance, promo limits, subscription status, campaign-fund deposits, or whether billing blocks launches for one artist. This is a read-only status check; it does not create checkout links or collect payment. paymentMethod contains only the shared masked display details (brand or bank, type, last four digits and expiry); null means details are unavailable, not proof that no method exists. Each deposit in prefundPayments is pending (payment not yet confirmed), cleared (Stripe says paid and the funds are usable), failed (the payment did not complete) or held (paid, but funding is on hold for review and not usable yet). A Checkout link alone is never a deposit. To add campaign funds, use the Dynamoi dashboard at https://dynamoi.com/dashboard; for other billing setup tell the user: 'You can do this in the Dynamoi dashboard at https://dynamoi.com/dashboard.' Then call this tool again to confirm the status. Do not use this for campaign analytics or platform connection troubleshooting.",
 		destructiveHint: false,

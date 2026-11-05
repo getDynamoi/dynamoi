@@ -1,3 +1,4 @@
+import {ARTIST_WORKSPACE_CONTRACT} from "../context.generated";
 import type { McpServer } from "@modelcontextprotocol/server";
 import * as z from "zod/v4";
 import type { ResultEnvelope } from "../../types";
@@ -68,17 +69,7 @@ const WorkspaceOutputSchema = z
 			});
 		}
 	});
-export const WORKSPACE_TOOL_DEFINITION = {
-	description:
-		"Open the read-only Dynamoi workspace when the user wants to browse their existing artists, campaigns, Smart Links and observed results in ChatGPT. Returns an authorized artist roster or an honest empty account state. Does not create links, change campaigns, start purchases or connect accounts. Use individual read tools for follow-up details.",
-	destructiveHint: false,
-	name: "dynamoi_open_workspace",
-	openWorldHint: false,
-	outputSchema: WorkspaceOutputSchema,
-	readOnlyHint: true,
-	schema: z.object({}).strict(),
-	title: "Open Artist Workspace",
-} as const;
+export const WORKSPACE_TOOL_DEFINITION={...ARTIST_WORKSPACE_CONTRACT.mcp.definition,outputSchema:WorkspaceOutputSchema} as const;
 export type WorkspaceReaders = {
 	getCurrentUser(input: unknown): Promise<ResultEnvelope<object>>;
 	listArtists(input: unknown): Promise<ResultEnvelope<object>>;

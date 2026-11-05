@@ -8,10 +8,7 @@ import {
 	TOTAL_BUDGET_FUNDING_CONSENT_COPY_HASH as totalFundingConsentCopyHash,
 	TOTAL_BUDGET_FUNDING_CONSENT_VERSION as totalFundingConsentVersion,
 } from "../consent";
-import {
-	DynamoiGetCurrentUserInputSchema,
-	DynamoiListArtistsInputSchema,
-} from "./account-schema.generated";
+import {ACCOUNT_OVERVIEW_CONTRACT,ARTIST_ROSTER_CONTRACT,ARTIST_CONTEXT_CONTRACT} from "./context.generated";
 import { AUDIENCE_ANALYTICS_CONTRACT } from "./audience-analytics.generated";
 import { CAMPAIGN_DRAFTS_CONTRACT } from "./drafts.generated";
 import { GROWTH_AUDIT_CONTRACT } from "./growth-audit.generated";
@@ -46,6 +43,8 @@ export {
 	DynamoiGetCurrentUserInputSchema,
 	DynamoiListArtistsInputSchema,
 } from "./account-schema.generated";
+
+export const DynamoiGetArtistInputSchema=ARTIST_CONTEXT_CONTRACT.detailInputSchema;
 
 const YouTubeStrategySchema = YouTubeStrategyKeySchema.describe(
 	`YouTube campaign strategy. Labels for users: CHEAPEST_VIEWS = Views, ORGANIC_VIEWS = Watch Time, SUBSCRIBERS = Subscribers, ORGANIC_VIEWS_AND_SUBSCRIBERS = Channel Growth (default for non-monetized channels), ADSENSE_ROI = Revenue (monetized channels only). Read ${YOUTUBE_CAMPAIGN_STRATEGIES_RESOURCE_URI} before recommending or changing one.`,
@@ -90,13 +89,6 @@ export const DynamoiSearchInputSchema = z
 			});
 		}
 	});
-
-export const DynamoiGetArtistInputSchema = z
-	.object({
-		artistId: z.string().uuid(),
-		format: ToolFormatSchema.optional(),
-	})
-	.strict();
 
 export const DynamoiListCampaignsInputSchema = z
 	.object({
@@ -1061,28 +1053,8 @@ export const DynamoiLaunchCampaignInputSchema = z
 	});
 
 export const PHASE_1_TOOL_DEFINITIONS = [
-	{
-		description:
-			"Start here when a musician asks to promote a new single, check how a release is doing, make a song link, get music on Spotify, or grow a YouTube channel and the artist is not yet identified. Use this when the user explicitly asks about the signed-in Dynamoi account itself, such as who is logged in, how many organizations or artists it can access, or whether account-level platform connections exist. Pass intent to match that explicit account question; it defaults to account_overview. Do not use this to confirm a specific Meta or YouTube onboarding attempt because this account-level state can span multiple artists; use dynamoi_get_platform_status for the target artist instead. Do not use this to enumerate artists one by one; use dynamoi_list_artists for that. Never use this to 'check context' before answering generic Instagram, lyrics, songwriting, or marketing-advice questions, even if Dynamoi is attached.",
-		destructiveHint: false,
-		name: "dynamoi_get_account_overview",
-		openWorldHint: false,
-		outputSchema: AnyOutputEnvelopeSchema,
-		readOnlyHint: true,
-		schema: DynamoiGetCurrentUserInputSchema,
-		title: "Get Account Overview",
-	},
-	{
-		description:
-			"Use this when the user wants to see which artists or YouTube channels they manage, along with billing status, active campaign count, and their role. Pass artistId when you need the full profile/readiness details for one artist instead of a roster page. Do not use this for campaign details; use dynamoi_list_campaigns or dynamoi_get_campaign. Never use this for generic social-media or marketing advice, including Instagram follower-growth questions, unless the user explicitly asked about their Dynamoi roster. If the result is empty, the user is brand-new — do not stop with 'no records found'; route through dynamoi_get_account_overview.recommendedNextActions.",
-		destructiveHint: false,
-		name: "dynamoi_list_artists",
-		openWorldHint: false,
-		outputSchema: AnyOutputEnvelopeSchema,
-		readOnlyHint: true,
-		schema: DynamoiListArtistsInputSchema,
-		title: "List Artists",
-	},
+ { ...ACCOUNT_OVERVIEW_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
+ { ...ARTIST_ROSTER_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
 	{
 		description:
 			"Use this when the user mentions an artist, release, campaign, or smart link but you do not yet know the exact record to inspect. Do not use this for analytics summaries or billing questions once you already know the target record. If the result is empty for a brand-new user (no artists yet), do not respond 'no records found' as a terminal answer — instead suggest creating their first artist hub via dynamoi_create_smart_links_from_spotify_artist.",

@@ -84,7 +84,8 @@
 		"dist/youtube-metrics.js",
 		"server.json",
 		"dist/shop-limits.d.ts",
-		"dist/shop-limits.js"
+		"dist/shop-limits.js",
+		"dist/server/funding-consent.d.ts"
 	],
 	"exports": {
 		".": {

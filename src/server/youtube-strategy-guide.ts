@@ -1,15 +1,8 @@
+import {SMART_CAMPAIGN_SUBMISSION_CONTRACT} from "./submission.generated";
 import * as z from "zod/v4";
 
-export const YOUTUBE_CAMPAIGN_STRATEGIES_RESOURCE_URI =
-	"dynamoi://youtube/campaign-strategies";
-
-export const YouTubeStrategyKeySchema = z.enum([
-	"CHEAPEST_VIEWS",
-	"ORGANIC_VIEWS",
-	"SUBSCRIBERS",
-	"ORGANIC_VIEWS_AND_SUBSCRIBERS",
-	"ADSENSE_ROI",
-]);
+export const YOUTUBE_CAMPAIGN_STRATEGIES_RESOURCE_URI=SMART_CAMPAIGN_SUBMISSION_CONTRACT.youtubeStrategiesResourceUri;
+export const YouTubeStrategyKeySchema=SMART_CAMPAIGN_SUBMISSION_CONTRACT.youtubeStrategyKeySchema;
 
 export type YouTubeStrategyKey = z.infer<typeof YouTubeStrategyKeySchema>;
 

@@ -1,3 +1,18 @@
+import {
+	PROSPECTIVE_BUDGET_FUNDING_CONSENT_VERSION,
+	PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY_HASH,
+	TOTAL_BUDGET_FUNDING_CONSENT_VERSION,
+	TOTAL_BUDGET_FUNDING_CONSENT_COPY_HASH,
+} from "./server/funding-consent";
+export {
+	PROSPECTIVE_BUDGET_FUNDING_CONSENT_VERSION,
+	PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY,
+	PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY_HASH,
+	TOTAL_BUDGET_FUNDING_CONSENT_VERSION,
+	TOTAL_BUDGET_FUNDING_CONSENT_COPY,
+	TOTAL_BUDGET_FUNDING_CONSENT_COPY_HASH,
+	FUNDING_CONSENT_BUDGET_TYPE_MISMATCH_MESSAGE
+} from "./server/funding-consent";
 /**
  * Current prospective daily funding consent. A launch or resume funds one
  * first window (the rest of today plus the next full day) in one charge;
@@ -8,12 +23,6 @@
  * section linked beside it. v7 makes credit-first allocation explicit; its
  * funding and collection terms are identical.
  */
-export const PROSPECTIVE_BUDGET_FUNDING_CONSENT_VERSION =
-	"managed-ads-prospective-daily-v7";
-export const PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY =
-	"Charge my default payment method daily for this campaign's budget, after my available credits, until I pause or end it.";
-export const PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY_HASH =
-	"f49b33a4f7e8aa3cc814d5057d03e97eaa0c35a9f3f2bc0315dbd031efa0f356";
 
 /**
  * The previous daily consent, with the same terms as v6 spelled out in the
@@ -70,12 +79,6 @@ export const PROSPECTIVE_BUDGET_FUNDING_CONSENT_V2_COPY_HASH =
  * method, capped by the total budget); the rest of the charging terms are the
  * Terms of Service section linked beside it.
  */
-export const TOTAL_BUDGET_FUNDING_CONSENT_VERSION =
-	"managed-ads-total-daily-v3";
-export const TOTAL_BUDGET_FUNDING_CONSENT_COPY =
-	"Charge my default payment method daily for this campaign, after my available credits, up to my total budget.";
-export const TOTAL_BUDGET_FUNDING_CONSENT_COPY_HASH =
-	"8bece5f58e0c94b04b35ac1a98f0e8a142ed968bbe34dcc0d51fe52e2c0d75bd";
 
 /** Whether a client-submitted total-budget consent is exactly the current pair. */
 export function isCurrentTotalBudgetFundingConsent(input: {
@@ -104,8 +107,6 @@ export function isCurrentProspectiveBudgetFundingConsent(input: {
 	);
 }
 
-export const FUNDING_CONSENT_BUDGET_TYPE_MISMATCH_MESSAGE =
-	"The funding consent does not match this budget type. Send acceptedConsentVersion and acceptedConsentCopyHash (with authorizeAutomaticDailyFunding) only for a DAILY budget, and acceptedTotalConsentVersion and acceptedTotalConsentCopyHash only for a TOTAL budget.";
 
 /** Whether a submitted pair is the current one for the budget type (never interchangeable). */
 export function isCurrentFundingConsent(

@@ -1,3 +1,4 @@
+import {SMART_CAMPAIGN_SUBMISSION_CONTRACT} from "./submission.generated";
 import { SUPPORT_REQUEST_CONTRACT } from "./request.generated";
 import * as z from "zod/v4";
 import type { GetCampaignReadinessData } from "../readiness-types";
@@ -5,27 +6,10 @@ import { ChannelResultsSchema } from "./channel-results-schema";
 import { CampaignFundingPreviewOutputSchema } from "./funding-preview-schema.generated";
 import { YouTubeChannelDataSchema } from "./youtube-channel-data-schema";
 
-export const SmartCampaignRecoverySelectionSchema = z.object({
-	id: z.string(),
-	kind: z.string(),
-});
-export const SmartCampaignRecoverySchema = z.object({
-	actions: z.array(z.string()),
-	affectedSelection: SmartCampaignRecoverySelectionSchema.nullable(),
-	kind: z.string(),
-	occurredAt: z.string(),
-	reasonCode: z.string().optional(),
-	retryAfter: z.string().nullable(),
-	stage: z.string(),
-});
-export const SmartCampaignLaunchProjectionSchema = z.object({
-	recovery: SmartCampaignRecoverySchema.optional(),
-	validationCode: z.string().optional(),
-	validationStage: z.string().optional(),
-});
-export type SmartCampaignLaunchProjection = z.infer<
-	typeof SmartCampaignLaunchProjectionSchema
->;
+export const SmartCampaignRecoverySelectionSchema = SMART_CAMPAIGN_SUBMISSION_CONTRACT.recoverySelectionSchema;
+export const SmartCampaignRecoverySchema = SMART_CAMPAIGN_SUBMISSION_CONTRACT.recoverySchema;
+export const SmartCampaignLaunchProjectionSchema = SMART_CAMPAIGN_SUBMISSION_CONTRACT.launchProjectionSchema;
+export type SmartCampaignLaunchProjection = z.infer<typeof SmartCampaignLaunchProjectionSchema>;
 
 const ResultErrorCodeSchema = z.enum([
 	"ACCOUNT_READ_ONLY",
@@ -514,6 +498,7 @@ export const GetCampaignOutputEnvelopeSchema = createOutputEnvelopeSchema(
 
 export const UpdateCampaignOutputEnvelopeSchema = createOutputEnvelopeSchema(
 	z.union([
+		z.object({phase:z.literal("preview"),preview:z.object({action:z.enum(["pause","resume","archive"]),campaignId:z.string(),artistId:z.string(),contentTitle:z.string(),currentStatus:z.string(),expected:z.object({expectedUpdatedAt:z.iso.datetime(),expectedCurrentStatus:z.string(),expectedFundingHash:z.string().regex(/^[a-f0-9]{64}$/u).optional()}).strict(),funding:z.lazy(()=>ResumeFundingDataSchema).nullable()}).strict()}).strict(),
 		z
 			.object({
 				actionRequired: z.array(z.string()).optional(),

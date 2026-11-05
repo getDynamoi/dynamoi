@@ -1,3 +1,14 @@
+import {CAMPAIGN_COUNTRIES_CONTRACT} from "./country-catalog.generated";
+import {SMART_CAMPAIGN_SUBMISSION_CONTRACT} from "./submission.generated";
+const YouTubeStrategySchema=SMART_CAMPAIGN_SUBMISSION_CONTRACT.youtubeStrategySchema;
+const LocationTargetSchema=SMART_CAMPAIGN_SUBMISSION_CONTRACT.locationTargetSchema;
+const YouTubeEntriesSchema=SMART_CAMPAIGN_SUBMISSION_CONTRACT.youTubeEntriesSchema;
+const validateYouTubeEntries=SMART_CAMPAIGN_SUBMISSION_CONTRACT.validateYouTubeEntries;
+const totalFundingConsentFields=SMART_CAMPAIGN_SUBMISSION_CONTRACT.totalFundingConsentFields;
+const addFundingConsentFamilyIssue=SMART_CAMPAIGN_SUBMISSION_CONTRACT.addFundingConsentFamilyIssue;
+export const DynamoiLaunchCampaignInputSchema=SMART_CAMPAIGN_SUBMISSION_CONTRACT.mcp.definition.schema;
+import {CAMPAIGN_LIST_CONTRACT, CAMPAIGN_DETAIL_CONTRACT} from "./list.generated";
+import { CAMPAIGN_RESUME_FUNDING_CONTRACT } from "./resume-funding.generated";
 import {earningsDefinition,DynamoiGetEarningsInputSchema as EarningsInputSchema} from "./distribution-wire";
 import {META_CONNECTION_CONTRACT,YOUTUBE_CONNECTION_CONTRACT} from "./connections.generated";
 import {TEAM_READ_CONTRACT,TEAM_ROLE_CONTRACT} from "./team.generated";
@@ -5,7 +16,6 @@ import {REFERRALS_READ_CONTRACT,REFERRALS_CLAIM_CONTRACT} from "./referrals.gene
 import { AUDIT_SETTINGS_CONTRACT, AUDIT_ACCOUNT_CONTRACT } from "./audit-log.generated";
 import * as z from "zod/v4";
 import {
-	FUNDING_CONSENT_BUDGET_TYPE_MISMATCH_MESSAGE,
 	PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY as prospectiveFundingConsentCopy,
 	PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY_HASH as prospectiveFundingConsentCopyHash,
 	PROSPECTIVE_BUDGET_FUNDING_CONSENT_VERSION as prospectiveFundingConsentVersion,
@@ -38,10 +48,6 @@ import {
 	UserIntentSummarySchema,
 } from "./shared-schemas";
 import { YOUTUBE_CHANNEL_DATA_CONTRACT } from "./youtube-channel-data.generated";
-import {
-	YOUTUBE_CAMPAIGN_STRATEGIES_RESOURCE_URI,
-	YouTubeStrategyKeySchema,
-} from "./youtube-strategy-guide";
 
 export {
 	DynamoiGetCurrentUserInputSchema,
@@ -49,11 +55,6 @@ export {
 } from "./account-schema.generated";
 
 export const DynamoiGetArtistInputSchema=ARTIST_CONTEXT_CONTRACT.detailInputSchema;
-
-const YouTubeStrategySchema = YouTubeStrategyKeySchema.describe(
-	`YouTube campaign strategy. Labels for users: CHEAPEST_VIEWS = Views, ORGANIC_VIEWS = Watch Time, SUBSCRIBERS = Subscribers, ORGANIC_VIEWS_AND_SUBSCRIBERS = Channel Growth (default for non-monetized channels), ADSENSE_ROI = Revenue (monetized channels only). Read ${YOUTUBE_CAMPAIGN_STRATEGIES_RESOURCE_URI} before recommending or changing one.`,
-);
-
 export const DateRangeSchema = SharedDateRangeSchema;
 export const ToolFormatSchema = SharedToolFormatSchema;
 
@@ -71,7 +72,6 @@ const ExpectedCampaignStatusEnum = z.enum([
 	"SUBSCRIPTION_PAUSED",
 ]);
 const ExpectedCampaignStatusSchema = ExpectedCampaignStatusEnum.optional();
-const CampaignStatusFilterSchema = ExpectedCampaignStatusEnum.optional();
 
 export const DynamoiSearchInputSchema = z
 	.object({
@@ -94,29 +94,8 @@ export const DynamoiSearchInputSchema = z
 		}
 	});
 
-export const DynamoiListCampaignsInputSchema = z
-	.object({
-		artistId: z.string().uuid(),
-		campaignType: z.enum(["SMART_CAMPAIGN", "YOUTUBE"]).optional(),
-		cursor: z.string().optional(),
-		format: ToolFormatSchema.optional(),
-		limit: z.number().int().min(1).max(50).optional(),
-		status: CampaignStatusFilterSchema,
-	})
-	.strict();
-
-export const DynamoiGetCampaignInputSchema = z
-	.object({
-		analyticsDateRange: DateRangeSchema.optional(),
-		analyticsGranularity: z.enum(["TOTAL", "DAILY"]).optional(),
-		campaignId: z.string().uuid(),
-		format: ToolFormatSchema.optional(),
-		includeAnalytics: z.boolean().optional(),
-		includeChannelResults: z.boolean().optional(),
-		includeCountries: z.boolean().optional(),
-		includeDeploymentStatus: z.boolean().optional(),
-	})
-	.strict();
+export const DynamoiListCampaignsInputSchema = CAMPAIGN_LIST_CONTRACT.mcp.definition.schema;
+export const DynamoiGetCampaignInputSchema = CAMPAIGN_DETAIL_CONTRACT.mcp.definition.schema;
 
 export const DynamoiGetCampaignAnalyticsInputSchema = z
 	.object({
@@ -169,13 +148,6 @@ export const DynamoiGetActionCenterInputSchema = z
 
 export const DynamoiGetEarningsInputSchema = EarningsInputSchema;
 
-const LocationTargetSchema = z
-	.object({
-		code: z.string().trim().min(1).max(8),
-		name: z.string().trim().min(1).max(120),
-	})
-	.strict();
-
 export const DynamoiGetPlatformStatusInputSchema = z
 	.object({
 		artistId: z.string().uuid(),
@@ -188,15 +160,7 @@ export const DynamoiGetPlatformStatusInputSchema = z
 export const DynamoiStartYoutubeChannelLinkInputSchema=YOUTUBE_CONNECTION_CONTRACT.mcp.definition.schema;
 export const DynamoiStartMetaConnectionInputSchema=META_CONNECTION_CONTRACT.mcp.definition.schema;
 
-export const DynamoiListAvailableCountriesInputSchema = z
-	.object({
-		campaignType: z.enum(["SMART_CAMPAIGN", "YOUTUBE"]),
-		cursor: z.string().optional(),
-		format: ToolFormatSchema.optional(),
-		limit: z.number().int().min(1).max(100).optional(),
-		query: z.string().trim().max(120).optional(),
-	})
-	.strict();
+export const DynamoiListAvailableCountriesInputSchema = CAMPAIGN_COUNTRIES_CONTRACT.mcp.definition.schema;
 
 export const DynamoiGetOnboardingStatusInputSchema = z
 	.object({
@@ -207,103 +171,6 @@ export const DynamoiGetOnboardingStatusInputSchema = z
 
 // Keep this standalone package's public limit in sync with web-shared's
 // MAX_PROMOTED_VIDEOS_PER_CAMPAIGN (10).
-const YouTubeEntriesSchema = z
-	.array(
-		z
-			.object({
-				playlistId: z.string().trim().min(1).max(128).optional(),
-				videoId: z.string().trim().min(1).max(128),
-			})
-			.strict(),
-	)
-	.min(1)
-	.max(10);
-
-function validateYouTubeEntries(
-	data: {
-		youtubeEntries?: z.infer<typeof YouTubeEntriesSchema> | undefined;
-		youtubeVideoId?: string | undefined;
-		youtubePlaylistId?: string | undefined;
-		youtubeStrategy?: string | undefined;
-	},
-	ctx: {
-		addIssue: (issue: {
-			code: "custom";
-			message: string;
-			path: (string | number)[];
-		}) => void;
-	},
-) {
-	if (data.youtubeEntries && (data.youtubeVideoId || data.youtubePlaylistId)) {
-		ctx.addIssue({
-			code: "custom",
-			message:
-				"Use youtubeEntries or youtubeVideoId/youtubePlaylistId, not both",
-			path: ["youtubeEntries"],
-		});
-	}
-	if (data.youtubeEntries && data.youtubeStrategy !== "CHEAPEST_VIEWS") {
-		data.youtubeEntries.forEach((entry, index) => {
-			if (!entry.playlistId) {
-				ctx.addIssue({
-					code: "custom",
-					message:
-						"playlistId is required unless youtubeStrategy is CHEAPEST_VIEWS",
-					path: ["youtubeEntries", index, "playlistId"],
-				});
-			}
-		});
-	}
-	if (
-		data.youtubeEntries &&
-		data.youtubeStrategy === "CHEAPEST_VIEWS" &&
-		data.youtubeEntries.length > 1
-	) {
-		ctx.addIssue({
-			code: "custom",
-			message: "Views campaigns support one promoted video.",
-			path: ["youtubeEntries"],
-		});
-	}
-}
-
-export const DynamoiGetCampaignReadinessInputSchema = z
-	.object({
-		adCopy: z.string().trim().max(500).optional(),
-		artistId: z.string().uuid(),
-		budgetAmount: z.number().finite().positive().optional(),
-		budgetType: z.enum(["DAILY", "TOTAL"]).optional(),
-		campaignType: z.enum(["SMART_CAMPAIGN", "YOUTUBE"]),
-		contentType: z.enum(["TRACK", "ALBUM", "PLAYLIST", "VIDEO"]).optional(),
-		endDate: IsoCalendarDateSchema.describe("Last day ads run").optional(),
-		format: ToolFormatSchema.optional(),
-		locationTargets: z.array(LocationTargetSchema).optional(),
-		mediaAssetIds: z.array(z.string().uuid()).optional(),
-		spotifyUrl: z.string().trim().min(1).max(500).optional(),
-		useAiGeneratedCopy: z.boolean().optional(),
-		youtubeEntries: YouTubeEntriesSchema.optional(),
-		youtubePlaylistId: z.string().trim().min(1).max(128).optional(),
-		youtubeStrategy: YouTubeStrategySchema.optional(),
-		youtubeVideoId: z.string().trim().min(1).max(128).optional(),
-	})
-	.strict()
-	.superRefine(validateYouTubeEntries);
-
-export const DynamoiSmartCampaignAdCopyInputSchema = z
-	.object({
-		artistId: z.string().uuid(),
-		campaignId: z.string().uuid(),
-		save: z
-			.object({
-				adCopy: z.string(),
-				expectedUpdatedAt: z.string().datetime(),
-				mode: z.enum(["assisted", "preserve"]),
-			})
-			.strict()
-			.optional(),
-	})
-	.strict();
-
 export const DynamoiManageYoutubeDraftInputSchema = z
 	.object({
 		action: z.enum([
@@ -429,12 +296,7 @@ export const DynamoiAddCampaignFundsInputSchema = z
 	})
 	.strict();
 
-export const DynamoiGetResumeFundingInputSchema = z
-	.object({
-		campaignId: z.string().uuid(),
-		format: ToolFormatSchema.optional(),
-	})
-	.strict();
+export const DynamoiGetResumeFundingInputSchema = CAMPAIGN_RESUME_FUNDING_CONTRACT.mcp.definition.schema;
 
 const staleConsent = {
 	error:
@@ -448,52 +310,6 @@ const FundingConsentCopyHashSchema = z.enum(
 	[prospectiveFundingConsentCopyHash, totalFundingConsentCopyHash],
 	staleConsent,
 );
-
-const totalFundingConsentFields = {
-	acceptedTotalConsentCopyHash: z
-		.literal(totalFundingConsentCopyHash)
-		.describe(
-			`TOTAL budgets only, with acceptedTotalConsentVersion, after the client explicitly accepts: “${totalFundingConsentCopy}”`,
-		)
-		.optional(),
-	acceptedTotalConsentVersion: z.literal(totalFundingConsentVersion).optional(),
-};
-
-/** The TOTAL pair is whole, only for a TOTAL budget, and never sent with the DAILY fields. */
-function addFundingConsentFamilyIssue(
-	data: Partial<
-		Record<
-			| "acceptedConsentCopyHash"
-			| "acceptedConsentVersion"
-			| "acceptedTotalConsentCopyHash"
-			| "acceptedTotalConsentVersion"
-			| "authorizeAutomaticDailyFunding",
-			unknown
-		>
-	>,
-	ctx: z.RefinementCtx,
-	budgetType?: "DAILY" | "TOTAL",
-) {
-	const total = [
-		data.acceptedTotalConsentCopyHash,
-		data.acceptedTotalConsentVersion,
-	];
-	const daily =
-		data.acceptedConsentCopyHash ||
-		data.acceptedConsentVersion ||
-		data.authorizeAutomaticDailyFunding;
-	if (
-		(total.some(Boolean) &&
-			(!total.every(Boolean) || daily || budgetType === "DAILY")) ||
-		(daily && budgetType === "TOTAL")
-	) {
-		ctx.addIssue({
-			code: "custom",
-			message: FUNDING_CONSENT_BUDGET_TYPE_MISMATCH_MESSAGE,
-			path: ["acceptedTotalConsentVersion"],
-		});
-	}
-}
 
 export const DynamoiResumeCampaignInputSchema = z
 	.object({
@@ -623,6 +439,9 @@ export const DynamoiUpdateCampaignInputSchema = z
 		expectedCurrentEndDate:
 			IsoCalendarDateSchema.describe("Last day ads run").optional(),
 		expectedCurrentStatus: ExpectedCampaignStatusSchema,
+		expectedUpdatedAt: z.iso.datetime().optional(),
+		expectedFundingHash: z.string().regex(/^[a-f0-9]{64}$/u).optional(),
+		phase: z.enum(["preview", "confirm"]).describe("Pause, resume and archive require preview first; confirm only after the human approves that exact preview.").optional(),
 		locationTargets: z
 			.union([
 				z.object({ mode: z.literal("GLOBAL") }).strict(),
@@ -641,8 +460,11 @@ export const DynamoiUpdateCampaignInputSchema = z
 	})
 	.strict()
 	.superRefine((data, ctx) => {
+		if(data.phase && !["pause","resume","archive"].includes(data.action)) ctx.addIssue({code:"custom",message:"Review phase is only supported for pause, resume and archive",path:["phase"]});
 		if (
 			[
+				"pause",
+				"resume",
 				"change_strategy",
 				"update_location",
 				"update_end_date",
@@ -797,182 +619,42 @@ export const DynamoiListMediaAssetsInputSchema = z
 	})
 	.strict();
 
-export const DynamoiLaunchCampaignInputSchema = z
+export const DynamoiGetCampaignReadinessInputSchema = z
 	.object({
-		acceptedConsentCopyHash: z
-			.literal(prospectiveFundingConsentCopyHash)
-			.optional(),
-		acceptedConsentVersion: z
-			.literal(prospectiveFundingConsentVersion)
-			.optional(),
-		...totalFundingConsentFields,
-		// Creative
 		adCopy: z.string().trim().max(500).optional(),
-		appleMusicUrl: z.string().trim().min(1).max(500).optional(),
 		artistId: z.string().uuid(),
-		authorizeAutomaticDailyFunding: z
-			.literal(true)
-			.describe(
-				`Required for DAILY budgets. Set only after the client explicitly accepts: “${prospectiveFundingConsentCopy}”`,
-			)
-			.optional(),
-
-		// Budget
-		budgetAmount: z
-			.number()
-			.finite()
-			.positive()
-			.describe(
-				"Budget in the artist's commercial currency (major units; use only exact minor units).",
-			),
-		budgetSplits: z.record(
-			z.enum(["META", "GOOGLE"]),
-			z.number().int().min(0).max(100),
-		),
-		budgetType: z.enum(["DAILY", "TOTAL"]),
-
+		budgetAmount: z.number().finite().positive().optional(),
+		budgetType: z.enum(["DAILY", "TOTAL"]).optional(),
 		campaignType: z.enum(["SMART_CAMPAIGN", "YOUTUBE"]),
-		// Idempotency (client-generated UUID)
-		clientRequestId: z.string().uuid(),
-
-		// Content
-		contentTitle: z.string().trim().min(1).max(160),
-		contentType: z.enum(["TRACK", "ALBUM", "PLAYLIST", "VIDEO"]),
+		contentType: z.enum(["TRACK", "ALBUM", "PLAYLIST", "VIDEO"]).optional(),
 		endDate: IsoCalendarDateSchema.describe("Last day ads run").optional(),
-
-		// Targeting
+		format: ToolFormatSchema.optional(),
 		locationTargets: z.array(LocationTargetSchema).optional(),
-
-		// Smart Campaign creative selection (existing assets only in Phase 3)
 		mediaAssetIds: z.array(z.string().uuid()).optional(),
 		spotifyUrl: z.string().trim().min(1).max(500).optional(),
 		useAiGeneratedCopy: z.boolean().optional(),
-		userIntentSummary: UserIntentSummarySchema,
 		youtubeEntries: YouTubeEntriesSchema.optional(),
-		// YouTube content (same choices as the app's YouTube campaign setup)
 		youtubePlaylistId: z.string().trim().min(1).max(128).optional(),
 		youtubeStrategy: YouTubeStrategySchema.optional(),
 		youtubeVideoId: z.string().trim().min(1).max(128).optional(),
 	})
 	.strict()
-	.superRefine((data, ctx) => {
-		if (
-			data.budgetType === "DAILY" &&
-			!(
-				data.authorizeAutomaticDailyFunding &&
-				data.acceptedConsentCopyHash &&
-				data.acceptedConsentVersion
-			)
-		) {
-			ctx.addIssue({
-				code: "custom",
-				message:
-					"DAILY budgets require authorizeAutomaticDailyFunding with acceptedConsentCopyHash and acceptedConsentVersion",
-				path: ["authorizeAutomaticDailyFunding"],
-			});
-		}
-		addFundingConsentFamilyIssue(data, ctx, data.budgetType);
+	.superRefine(validateYouTubeEntries);
 
-		const sum = Object.values(data.budgetSplits ?? {}).reduce(
-			(acc, v) => acc + (Number.isFinite(v) ? v : 0),
-			0,
-		);
-		if (!(sum > 0)) {
-			ctx.addIssue({
-				code: "custom",
-				message: "budgetSplits must allocate at least one platform",
-				path: ["budgetSplits"],
-			});
-		}
-
-		// Require splits to sum to ~100 for predictable intent.
-		if (sum > 0 && Math.abs(sum - 100) > 0.01) {
-			ctx.addIssue({
-				code: "custom",
-				message: "budgetSplits must sum to 100",
-				path: ["budgetSplits"],
-			});
-		}
-
-		if (data.campaignType === "SMART_CAMPAIGN") {
-			if (!data.mediaAssetIds || data.mediaAssetIds.length === 0) {
-				ctx.addIssue({
-					code: "custom",
-					message: "mediaAssetIds is required for SMART_CAMPAIGN",
-					path: ["mediaAssetIds"],
-				});
-			}
-			if (!("META" in data.budgetSplits) || data.budgetSplits.META <= 0) {
-				ctx.addIssue({
-					code: "custom",
-					message: "SMART_CAMPAIGN requires a META budget split > 0",
-					path: ["budgetSplits", "META"],
-				});
-			}
-			// Smart Campaigns are Meta-only today. Keep the public contract accurate.
-			if (data.budgetSplits.GOOGLE && data.budgetSplits.GOOGLE > 0) {
-				ctx.addIssue({
-					code: "custom",
-					message: "SMART_CAMPAIGN does not support GOOGLE budget splits",
-					path: ["budgetSplits", "GOOGLE"],
-				});
-			}
-		}
-
-		if (data.campaignType === "YOUTUBE") {
-			validateYouTubeEntries(data, ctx);
-			if (!(data.youtubeVideoId || data.youtubeEntries)) {
-				ctx.addIssue({
-					code: "custom",
-					message: "youtubeVideoId is required for YOUTUBE",
-					path: ["youtubeVideoId"],
-				});
-			}
-			if (!data.youtubeStrategy) {
-				ctx.addIssue({
-					code: "custom",
-					message: "youtubeStrategy is required for YOUTUBE",
-					path: ["youtubeStrategy"],
-				});
-			}
-			if (
-				data.youtubeStrategy &&
-				data.youtubeStrategy !== "CHEAPEST_VIEWS" &&
-				!data.youtubePlaylistId &&
-				!data.youtubeEntries
-			) {
-				ctx.addIssue({
-					code: "custom",
-					message:
-						"youtubePlaylistId is required for YOUTUBE unless youtubeStrategy is CHEAPEST_VIEWS",
-					path: ["youtubePlaylistId"],
-				});
-			}
-			if (data.contentType !== "VIDEO") {
-				ctx.addIssue({
-					code: "custom",
-					message: "contentType must be VIDEO for YOUTUBE",
-					path: ["contentType"],
-				});
-			}
-			if (!("GOOGLE" in data.budgetSplits) || data.budgetSplits.GOOGLE <= 0) {
-				ctx.addIssue({
-					code: "custom",
-					message: "YOUTUBE requires a GOOGLE budget split > 0",
-					path: ["budgetSplits", "GOOGLE"],
-				});
-			}
-			// YouTube campaigns are Google-only today.
-			if (data.budgetSplits.META && data.budgetSplits.META > 0) {
-				ctx.addIssue({
-					code: "custom",
-					message: "YOUTUBE does not support META budget splits",
-					path: ["budgetSplits", "META"],
-				});
-			}
-		}
-	});
-
+export const DynamoiSmartCampaignAdCopyInputSchema = z
+	.object({
+		artistId: z.string().uuid(),
+		campaignId: z.string().uuid(),
+		save: z
+			.object({
+				adCopy: z.string(),
+				expectedUpdatedAt: z.string().datetime(),
+				mode: z.enum(["assisted", "preserve"]),
+			})
+			.strict()
+			.optional(),
+	})
+	.strict();
 export const PHASE_1_TOOL_DEFINITIONS = [
  { ...ACCOUNT_OVERVIEW_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
  { ...ARTIST_ROSTER_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
@@ -988,28 +670,8 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 		title: "Search Dynamoi",
 	},
 	...OPENAI_TOOL_DEFINITIONS,
-	{
-		description:
-			"Use this when the user wants to browse campaigns for one artist, optionally filtered by type or status. Do not use this for a single campaign deep dive; use dynamoi_get_campaign for that. Never use this to personalize generic marketing advice. If the user has no artists yet, do not call this — route via dynamoi_get_account_overview first.",
-		destructiveHint: false,
-		name: "dynamoi_list_campaigns",
-		openWorldHint: false,
-		outputSchema: AnyOutputEnvelopeSchema,
-		readOnlyHint: true,
-		schema: DynamoiListCampaignsInputSchema,
-		title: "List Campaigns",
-	},
-	{
-		description:
-			"Use this when the user wants full details for one campaign, including budget, targeting, platform status, and next actions. YouTube campaigns return youtubeStrategy and strategyGuide: read the guide's goal and judgeBy before interpreting results. Set includeAnalytics=true for paid delivery, includeChannelResults=true for observed YouTube channel results with paid and organic views (never attributed to the campaign), includeDeploymentStatus=true for delivery/deployment blockers, and includeCountries=true only when the full country list is needed. Do not use this for a campaign list; use dynamoi_list_campaigns instead. After a successful launch or campaign mutation, prefer format=summary when you need a follow-up read to relay the final answer.",
-		destructiveHint: false,
-		name: "dynamoi_get_campaign",
-		openWorldHint: false,
-		outputSchema: GetCampaignOutputEnvelopeSchema,
-		readOnlyHint: true,
-		schema: DynamoiGetCampaignInputSchema,
-		title: "Get Campaign",
-	},
+	{...CAMPAIGN_LIST_CONTRACT.mcp.definition, outputSchema: AnyOutputEnvelopeSchema},
+	{...CAMPAIGN_DETAIL_CONTRACT.mcp.definition, outputSchema: GetCampaignOutputEnvelopeSchema},
 	{
 		description:
 			'Use this for "how is my release doing?" and "are my ads working?" questions about an artist\'s Dynamoi campaigns. Use this when the user wants artist-level performance across all campaigns, including 30-day rollups or daily breakdowns. Pass granularity=DAILY when the user asks for a daily breakdown. Pass format=summary when the user wants a written rollup, a strongest-campaign verdict, or a direct answer you can relay immediately. If this tool already returned the requested strongest-campaign comparison, stop and answer instead of calling more analytics tools. For one campaign\'s metrics, use dynamoi_get_campaign with includeAnalytics=true.',
@@ -1066,17 +728,9 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 	{...REFERRALS_CLAIM_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
 	{...REFERRALS_READ_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
 	{
-		description:
-			"Read the existing campaign's resume funding breakdown before requesting funding consent: campaign budget, funded-window coverage, usable credits, immediate charge, payment method, refusal and current consent. Amounts carry their commercial currency and minor-unit exponent. This read never reserves funds, authorizes collection or resumes delivery. A refusal is not a zero-charge approval. Use dynamoi_update_campaign to resume only after explicit user consent when required.",
-		destructiveHint: false,
-		name: "dynamoi_get_resume_funding",
-		openWorldHint: true,
+		...CAMPAIGN_RESUME_FUNDING_CONTRACT.mcp.definition,
 		outputSchema: GetResumeFundingOutputEnvelopeSchema,
-		readOnlyHint: true,
-		schema: DynamoiGetResumeFundingInputSchema,
-		title: "Get Resume Funding",
-	},
-	{
+	},	{
 		description:
 			"Use this when the user wants to know whether Spotify, Meta, or YouTube are connected and what setup steps still block launches. When polling after a connection-start flow, pass the returned onboardingAttemptId and onboardingFlow so Dynamoi ops can correlate the browser step. Do not use this for detailed billing questions. Never use this to personalize generic Instagram or marketing-advice questions.",
 		destructiveHint: false,
@@ -1087,17 +741,7 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 		schema: DynamoiGetPlatformStatusInputSchema,
 		title: "Get Platform Status",
 	},
-	{
-		description:
-			"Use this when the user asks which countries they can target for a Smart Campaign or YouTube campaign. Always pass campaignType because Smart Campaign and YouTube country catalogs are different. Do not use this for generic country marketing advice.",
-		destructiveHint: false,
-		name: "dynamoi_list_available_countries",
-		openWorldHint: false,
-		outputSchema: ListAvailableCountriesOutputEnvelopeSchema,
-		readOnlyHint: true,
-		schema: DynamoiListAvailableCountriesInputSchema,
-		title: "List Available Countries",
-	},
+	{...CAMPAIGN_COUNTRIES_CONTRACT.mcp.definition,outputSchema:ListAvailableCountriesOutputEnvelopeSchema},
 	{
 		description:
 			'Use this when a musician wants to promote a new single or release with ads ("promote my new single", "run ads for my song"): it checks whether a Smart Campaign or YouTube campaign is ready before launching the campaign. This validates readiness and targeting without creating a campaign. Complete budget inputs also return the shared, nonbinding campaign funding preview with known or unavailable credit coverage, card upper bounds and expiry timing. A preview is not consent. TOTAL launch requires the client to accept the current TOTAL funding consent and pass acceptedTotalConsentVersion plus acceptedTotalConsentCopyHash; never pass DAILY consent fields for TOTAL. Funding uses credit first, then prepaid funds, then the saved card, subject to the launch guards. Do not use this to create or mutate campaigns.',
@@ -1152,7 +796,7 @@ export const PHASE_2_TOOL_DEFINITIONS = [
 		title: "Manage YouTube Draft",
 	},
 	{
-		description: `Use only when the user explicitly requests a campaign change. Resume isn't available for fixed-flight YouTube campaigns. Duplicate the campaign to relaunch it. Actions: pause, resume, update_budget, update_end_date (DAILY or TOTAL budget; TOTAL end-date extensions may require the same funding consent fields as update_budget or resume), update_location (GLOBAL or catalog-valid countries), change_strategy (managed YouTube Demand Gen), update_goals (YouTube optimization toggles), archive (never deletes), unarchive (restores PAUSED without funding or activating providers). Inspect the campaign first and supply expectedCurrentStatus where possible. For resume, update_budget, or a TOTAL update_end_date that needs automatic daily card funding, first show the user the exact consent copy for the campaign's budget type, then pass the request's clientRequestId and, for DAILY, authorizeAutomaticDailyFunding=true with acceptedConsentVersion and acceptedConsentCopyHash: "${prospectiveFundingConsentCopy}" (version "${prospectiveFundingConsentVersion}", hash "${prospectiveFundingConsentCopyHash}"); for TOTAL, acceptedTotalConsentVersion and acceptedTotalConsentCopyHash: "${totalFundingConsentCopy}" (version "${totalFundingConsentVersion}", hash "${totalFundingConsentCopyHash}"). A budget type refuses the other's consent. Without them, a resume that needs card funding is refused with: "Review and accept the daily funding authorization to resume this campaign." When retrying the same action, reuse the same clientRequestId.`,
+		description: `Use only when the user explicitly requests a campaign change. Resume isn't available for fixed-flight YouTube campaigns. Duplicate the campaign to relaunch it. For pause, resume and archive, first request phase=preview with one clientRequestId. Show that exact preview to the human; only after approval send phase=confirm with its expectedUpdatedAt, expectedCurrentStatus and (for resume) expectedFundingHash and the same request ID. Omitting phase never executes those three actions. Actions: pause, resume, update_budget, update_end_date (DAILY or TOTAL budget; TOTAL end-date extensions may require the same funding consent fields as update_budget or resume), update_location (GLOBAL or catalog-valid countries), change_strategy (managed YouTube Demand Gen), update_goals (YouTube optimization toggles), archive (never deletes), unarchive (restores PAUSED without funding or activating providers). Inspect the campaign first and supply expectedCurrentStatus where possible. For resume, update_budget, or a TOTAL update_end_date that needs automatic daily card funding, first show the user the exact consent copy for the campaign's budget type, then pass the request's clientRequestId and, for DAILY, authorizeAutomaticDailyFunding=true with acceptedConsentVersion and acceptedConsentCopyHash: "${prospectiveFundingConsentCopy}" (version "${prospectiveFundingConsentVersion}", hash "${prospectiveFundingConsentCopyHash}"); for TOTAL, acceptedTotalConsentVersion and acceptedTotalConsentCopyHash: "${totalFundingConsentCopy}" (version "${totalFundingConsentVersion}", hash "${totalFundingConsentCopyHash}"). A budget type refuses the other's consent. Without them, a resume that needs card funding is refused with: "Review and accept the daily funding authorization to resume this campaign." When retrying the same action, reuse the same clientRequestId.`,
 		destructiveHint: true,
 		idempotentHint: true,
 		name: "dynamoi_update_campaign",

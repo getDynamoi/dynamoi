@@ -77,7 +77,7 @@ Common workflows:
   propose next steps
 - Pause/resume: dynamoi_get_campaign (confirm) → dynamoi_update_campaign with action=pause or action=resume; a resume that needs card funding also requires the funding-consent fields (see the tool description).
 - Budget update: dynamoi_get_campaign (confirm) → dynamoi_update_campaign with action=update_budget
-- Launch: dynamoi_list_media_assets → dynamoi_launch_campaign. every budget is funded from credit, then
+- Smart submission: dynamoi_launch_campaign returns a human workspace handoff; it never submits or funds a Smart Campaign. The human finishes its draft, consent and submission there. YouTube launch: dynamoi_list_media_assets → dynamoi_launch_campaign. every budget is funded from credit, then
   prepaid funds, then the saved card, so it needs the user's funding consent
   (DAILY: authorizeAutomaticDailyFunding with acceptedConsentVersion and acceptedConsentCopyHash;
   TOTAL: acceptedTotalConsentVersion and acceptedTotalConsentCopyHash; neither accepts the other's).

@@ -56,7 +56,7 @@ export function registerPlaybookResources(server: McpServer) {
 							},
 						},
 						upsellAfterStarter:
-							"Once they have a hub URL, the natural next ask is 'would you like to promote this release on Meta Ads?' which routes to dynamoi_get_campaign_readiness, dynamoi_start_meta_connection if Meta is missing, then dynamoi_launch_campaign for a Smart Campaign — when those tools are available to this client.",
+							"Once they have a hub URL, the natural next ask is 'would you like to promote this release on Meta Ads?' which routes to dynamoi_get_campaign_readiness, dynamoi_start_meta_connection if Meta is missing, then dynamoi_launch_campaign for a human Smart Campaign workspace handoff — when those tools are available to this client. The human finishes setup, consent and submission; the agent handoff never launches or funds.",
 					}),
 					uri: uri.href,
 				},

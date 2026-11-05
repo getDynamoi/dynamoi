@@ -164,6 +164,7 @@ export const GROWTH_AUDIT_CONTRACT = {
 		ios: partial,
 		mcp: partial,
 		web: partial,
+		webmcp: { status: "complete", journeys: ["WM-DASHBOARD-growthAudit"], binding: { file: "apps/dashboard/app/dashboard/webmcp/dashboard-bindings.webmcp.generated.ts", export: "growthAuditWebMcp", tool: "dashboard_growth_audit", role: "consumer", intermediates: [{file: "apps/dashboard/app/dashboard/webmcp/insight-reads.ts", export: "growthAudit"}] } },
 	},
 	version: 1,
 } as const;

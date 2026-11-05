@@ -40,6 +40,7 @@ export const BILLING_COUNTRY_READ_CONTRACT = {
 		method: "GET",
 		operationId: "getMobileArtistBillingCountry",
 	},
+	parity: { webmcp: { status: "complete", journeys: ["WM-DASHBOARD-billingCountry"], binding: { file: "apps/dashboard/app/dashboard/webmcp/dashboard-bindings.webmcp.generated.ts", export: "billingCountryWebMcp", tool: "dashboard_billing_country", role: "consumer", intermediates: [{file: "apps/dashboard/app/dashboard/webmcp/insight-reads.ts", export: "billingCountry"}] } } },
 	version: 1,
 } as const;
 

@@ -67,5 +67,6 @@ export const AUDIENCE_ANALYTICS_CONTRACT = {
 		}),
 		responseSchema: MobileAudienceAnalyticsResponseSchema,
 	},
+	parity: { webmcp: { status: "complete", journeys: ["WM-DASHBOARD-audienceAnalytics"], binding: { file: "apps/dashboard/app/dashboard/webmcp/dashboard-bindings.webmcp.generated.ts", export: "audienceAnalyticsWebMcp", tool: "dashboard_audience_analytics", role: "consumer", intermediates: [{file: "apps/dashboard/app/dashboard/webmcp/insight-reads.ts", export: "audienceAnalytics"}] } } },
 	version: 1,
 } as const;

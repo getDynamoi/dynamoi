@@ -1,3 +1,4 @@
+import {earningsDefinition,DynamoiGetEarningsInputSchema as EarningsInputSchema} from "./distribution-wire";
 import {META_CONNECTION_CONTRACT,YOUTUBE_CONNECTION_CONTRACT} from "./connections.generated";
 import {TEAM_READ_CONTRACT,TEAM_ROLE_CONTRACT} from "./team.generated";
 import {REFERRALS_READ_CONTRACT,REFERRALS_CLAIM_CONTRACT} from "./referrals.generated";
@@ -166,34 +167,7 @@ export const DynamoiGetActionCenterInputSchema = z
 	.object({ artistId: z.string().uuid() })
 	.strict();
 
-const RoyaltyMonthSchema = z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/);
-export const DynamoiGetEarningsInputSchema = z
-	.object({
-		action: z
-			.enum(["overview", "ranking", "geography", "statement"])
-			.default("overview"),
-		artistIds: z.array(z.string().uuid()).min(1).max(50).optional(),
-		axis: z.enum(["statement", "earned"]).default("statement"),
-		countryCode: z.string().max(10).optional(),
-		cursor: z
-			.object({
-				countryCode: z.string().max(10),
-				month: RoyaltyMonthSchema,
-				storeKey: z.string().min(1).max(500),
-				trackKey: z.string().min(1).max(500),
-			})
-			.strict()
-			.optional(),
-		dimension: z.enum(["track", "artist", "store", "country"]).default("track"),
-		fromMonth: RoyaltyMonthSchema,
-		limit: z.number().int().min(1).max(300).default(300),
-		storeFamily: z.string().min(1).max(500).optional(),
-		storeKey: z.string().min(1).max(500).optional(),
-		toMonth: RoyaltyMonthSchema,
-		trackKey: z.string().min(1).max(500).optional(),
-		withPrior: z.boolean().default(true),
-	})
-	.strict();
+export const DynamoiGetEarningsInputSchema = EarningsInputSchema;
 
 const LocationTargetSchema = z
 	.object({
@@ -1085,17 +1059,7 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 		schema: DynamoiGetActionCenterInputSchema,
 		title: "Get Action Center",
 	},
-	{
-		description:
-			"Read distribution earnings for the authenticated payee only, optionally restricted to their artistIds. Team or artist access never grants payee access. action=overview returns the payee's own share in USD, range totals, monthly totals and at most 50 detail rows, narrowed by trackKey, storeKey, storeFamily and countryCode (totals remain for the whole range). action=ranking returns up to 300 rows by dimension (track, artist, store, country), with their filtered totalUsd, narrowed by trackKey, storeFamily and countryCode. action=geography returns {rows} of the country map with optional prior-window comparison. action=statement returns the web export data for one statement month: use axis=statement and equal fromMonth/toMonth, with no exploration filters or cursor. No new files are created. Rankings and prior-window geography read an equal preceding window within the owner's 60-month bound. For overview pagination, pass nextCursor unchanged to continue with the same range, axis, artists and filters. fromMonth/toMonth are inclusive YYYY-MM, at most 60 months. axis=statement groups by statement month; earned groups by royalty month, while payee share always follows statement month. Nullable amounts or counts mean unavailable; an explicit 0 is measured zero. Empty rows mean no matching data; an error means unavailable, never zero earnings. This grants no payout or tax authority and performs no writes.",
-		destructiveHint: false,
-		name: "dynamoi_get_earnings",
-		openWorldHint: false,
-		outputSchema: AnyOutputEnvelopeSchema,
-		readOnlyHint: true,
-		schema: DynamoiGetEarningsInputSchema,
-		title: "Get Distribution Earnings",
-	},
+	{...earningsDefinition, outputSchema: AnyOutputEnvelopeSchema},
 	{...TEAM_READ_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
 	{...TEAM_ROLE_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
 	{ ...AUDIT_SETTINGS_CONTRACT.mcp.definition, outputSchema: AnyOutputEnvelopeSchema.or(AUDIT_ACCOUNT_CONTRACT.mcp.accountResponseSchema) },

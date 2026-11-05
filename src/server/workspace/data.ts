@@ -110,7 +110,7 @@ export function publicLink(value: unknown): string | undefined {
 			url.username ||
 			url.password ||
 			url.port ||
-			url.hostname !== "play.dynamoi.com" ||
+			!["streamit.fm", "play.dynamoi.com"].includes(url.hostname) ||
 			url.search ||
 			url.hash
 		) {

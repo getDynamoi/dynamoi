@@ -126,6 +126,8 @@ const MobileSpotifyGrowthAuditResponseSchema = z.object({
 	}),
 	status: MobileSpotifyGrowthAuditStatusSchema,
 });
+
+
 const partial = {
 	reason:
 		"Shared verified-context owner; frozen observed, unknown and explicitly synthetic feature receipts are still required on both native apps. Installed native clients retain live observations and never opt into the MCP sample.",

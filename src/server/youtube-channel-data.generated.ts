@@ -94,6 +94,8 @@ const MobileYouTubeChannelDataQuerySchema = z
 			});
 		}
 	});
+
+
 const nullableString = z.string().nullable();
 const nullableInt = z.number().int().nullable();
 const nullableNumber = z.number().nullable();
@@ -147,6 +149,7 @@ const MobileYouTubeChannelDataRowSchema = z.object({
 	views: nullableInt,
 	viewsPerPlaylistStart: nullableNumber,
 });
+
 const MobileYouTubeChannelDataCoverageSchema = z.object({
 	datasetLatestDay: nullableString,
 	latestCompleteDay: z.string(),
@@ -245,6 +248,8 @@ const MobileYouTubeAdsenseSchema = z.object({
 	/** Null without a YouTube campaign. */
 	recovery: MobileYouTubeAdsenseRecoverySchema.nullable(),
 });
+
+
 const MobileYouTubeChannelDataResponseSchema = z.object({
 	/** channel_daily first pages only; null outside the Partner Program. */
 	adsense: MobileYouTubeAdsenseSchema.nullable().optional(),
@@ -257,6 +262,8 @@ const MobileYouTubeChannelDataResponseSchema = z.object({
 	nextCursor: nullableString,
 	rows: z.array(MobileYouTubeChannelDataRowSchema),
 });
+
+
 const IsoCalendarDateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/).refine((value) => {
 	const date = new Date(`${value}T00:00:00.000Z`);
 	return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value;

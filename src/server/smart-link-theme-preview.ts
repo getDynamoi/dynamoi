@@ -1,30 +1,12 @@
 import type { McpServer } from "@modelcontextprotocol/server";
-import * as z from "zod/v4";
+import {SMART_LINK_THEME_PREVIEW_CONTRACT} from "./theme-preview.generated";
 import { AnyOutputEnvelopeSchema } from "./output-schemas";
 
 export const SMART_LINK_THEME_PREVIEW_RESOURCE_URI =
 	"ui://dynamoi/smart-link-theme-preview-v1.html";
 
-const SampleTextSchema = z.string().trim().min(1).max(80);
-
-export const DynamoiPreviewSmartLinkThemesInputSchema = z
-	.object({
-		artistName: SampleTextSchema.optional(),
-		releaseTitle: SampleTextSchema.optional(),
-	})
-	.strict();
-
-export const SMART_LINK_THEME_PREVIEW_TOOL_DEFINITION = {
-	description:
-		"Use this when the user asks what Dynamoi Smart Link pages can look like, wants to compare Smart Link themes, or asks to preview the available themes before creating or updating a free Smart Link. This is a read-only visual preview and does not create, publish, update, or promote a Smart Link.",
-	destructiveHint: false,
-	name: "dynamoi_preview_smart_link_themes",
-	openWorldHint: false,
-	outputSchema: AnyOutputEnvelopeSchema,
-	readOnlyHint: true,
-	schema: DynamoiPreviewSmartLinkThemesInputSchema,
-	title: "Preview Smart Link Themes",
-} as const;
+export const DynamoiPreviewSmartLinkThemesInputSchema = SMART_LINK_THEME_PREVIEW_CONTRACT.mcp.definition.schema;
+export const SMART_LINK_THEME_PREVIEW_TOOL_DEFINITION = {...SMART_LINK_THEME_PREVIEW_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema};
 
 const SMART_LINK_THEME_PREVIEW_HTML = `
 <div id="themes"></div>

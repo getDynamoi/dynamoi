@@ -7,6 +7,8 @@ const MobileDistributionApplicationRequestSchema = z.object({
 	payoutCountry: z.string().trim().min(2).max(80),
 	taxResidencyCountry: z.string().trim().min(2).max(80),
 });
+
+
 const MobileDistributionApplicationResponseSchema = z.object({
 	application: z
 		.object({
@@ -18,6 +20,8 @@ const MobileDistributionApplicationResponseSchema = z.object({
 	message: z.string().nullable(),
 	ok: z.boolean(),
 });
+
+
 const DynamoiApplyForDistributionInputSchema = z
 	.object({
 		adultSignerAttestation: z.literal(true),

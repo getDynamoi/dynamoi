@@ -87,9 +87,9 @@ Report each returned requirement; meeting the eligibility bar permits an
 application and never guarantees approval. Distribution remains optional for
 campaigns and Smart Links.
 
-AI-assisted music can qualify when disclosed and the artist controls the
-rights. Fully AI-generated tracks are reviewed by hand and may be rejected;
-voice clones, soundalikes and impersonation are rejected. Artists below the
+Dynamoi promotes AI-generated music, but distribution does not accept music made
+wholly or partly with generative AI at this time (partner policy; may change).
+Voice clones, soundalikes and impersonation are rejected. Artists below the
 audience bar can build listeners with Smart Campaigns first, with no guarantee.
 
 Apply at https://dynamoi.com/music-distribution. With write access,

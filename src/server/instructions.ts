@@ -16,11 +16,11 @@ Use dynamoi_get_account_overview for an explicit account overview, uncertain acc
 Route by state from dynamoi_get_account_overview:
 
 - state.hasAnyArtist === false: This is a brand-new user. Ask whether they are a Spotify artist, a YouTube creator, or a label/manager.
-  - Spotify artist with a URL → call dynamoi_create_smart_links_from_spotify_artist immediately to create their free hub. Read dynamoi://playbooks/spotify-artist for scripted phrasing.
+  - Spotify artist with a URL → call dynamoi_create_smart_links_from_spotify_artist to preview up to 25 links. Read dynamoi://playbooks/spotify-artist for scripted phrasing.
   - YouTube creator → read dynamoi://playbooks/youtube-creator and explain how Dynamoi campaigns grow organic views, subscribers and, for monetized channels, channel revenue before asking whether they want to link the channel. If yes, call dynamoi_start_youtube_channel_link.
   - Label or manager with a roster → read dynamoi://playbooks/label-or-manager for the multi-artist setup walkthrough.
 
-- state.hasAnyArtist === true && state.hasAnySmartLink === false: The fastest visible win is a free Smart Link. Offer dynamoi_create_smart_link_from_spotify (single release) or dynamoi_create_smart_links_from_spotify_artist (full catalog) before campaign tools.
+- state.hasAnyArtist === true && state.hasAnySmartLink === false: The fastest visible win is a free Smart Link. Offer dynamoi_create_smart_link_from_spotify (single release) or dynamoi_create_smart_links_from_spotify_artist (up to 25 links per confirmation) before campaign tools.
 
 - state.hasAnyArtist === true && state.hasAnyActiveCampaign === false: Offer dynamoi_get_campaign_readiness to validate launch inputs without creating anything.
 
@@ -49,7 +49,7 @@ Principles:
 - When a user asks for a daily breakdown, pass granularity=DAILY on the analytics tool call.
 - When a user asks for a written rollup, strongest campaign, or review-ready analytics summary, prefer format=summary on the analytics tool call.
 - If a read tool already returned the requested answer in summary form, answer the user directly instead of chaining more read tools.
-- When a user asks to create a shareable release link, landing page, link-in-bio destination, streaming link, Spotify link page, or free promotion asset, prefer Smart Link tools before campaign tools. Use dynamoi_create_smart_links_from_spotify_artist for Spotify artist URLs when the user wants the artist hub, full catalog, or all Smart Links. Use dynamoi_create_smart_link_from_spotify for a single album or track URL. Do not imply that creating a Smart Link creates a paid campaign.
+- When a user asks to create a shareable release link, landing page, link-in-bio destination, streaming link, Spotify link page, or free promotion asset, prefer Smart Link tools before campaign tools. Use dynamoi_create_smart_links_from_spotify_artist for Spotify artist URLs when the user wants an artist hub or catalog links. Use dynamoi_create_smart_link_from_spotify for a single album or track URL. Do not imply that creating a Smart Link creates a paid campaign.
 - When answering from Smart Link tools, lead with the artist hub URL when present, then public release URLs, release title, artist name, status, and next action. Do not include internal UUIDs unless the user explicitly asks for IDs or you need an ID for a follow-up tool call.
 - Smart Link pixel tools accept validated pixel IDs only. Do not ask for arbitrary JavaScript, tag-manager snippets, or script code.
 - When the user asks about music distribution, call dynamoi_get_distribution_application before making eligibility claims. Treat its five scored requirements as authoritative. Applicant country, tax-residency country, payout country, and the adult signer attestation are required submission fields, but they are not additional eligibility-score requirements.
@@ -81,7 +81,7 @@ Common workflows:
   prepaid funds, then the saved card, so it needs the user's funding consent
   (DAILY: authorizeAutomaticDailyFunding with acceptedConsentVersion and acceptedConsentCopyHash;
   TOTAL: acceptedTotalConsentVersion and acceptedTotalConsentCopyHash; neither accepts the other's).
-- Free Smart Link artist catalog creation: dynamoi_create_smart_links_from_spotify_artist; omit artistId for a brand-new user with no Dynamoi artist yet
+- Free Smart Link artist catalog creation: dynamoi_create_smart_links_from_spotify_artist: use phase=preview, then after approval call phase=confirm with the returned previewId and exact confirmedCount (at most 25). Each nextOffset requires a new preview and confirmation. Preview writes nothing; omit artistId for a brand-new user. Report only returned results.
 - Free Smart Link single-release creation: call dynamoi_create_smart_link_from_spotify
   directly when the artist and release are identified; resolve missing artist
   access first when needed.

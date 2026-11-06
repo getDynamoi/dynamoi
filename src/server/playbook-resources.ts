@@ -16,13 +16,13 @@ export function registerPlaybookResources(server: McpServer) {
 					mimeType: "application/json",
 					text: JSON.stringify({
 						fastestPath:
-							"Ask the user for their Spotify artist URL, then call dynamoi_create_smart_links_from_spotify_artist with that URL. Return the artist hub URL plus the starter Smart Link URL. Catalog import continues in the background.",
+							"Ask for the Spotify artist URL. With dynamoi_create_smart_links_from_spotify_artist, use phase=preview, then after approval call phase=confirm with the returned previewId and exact confirmedCount (at most 25). Each nextOffset requires a new preview and confirmation. Preview writes nothing; return only confirmed results and available public URLs.",
 						freePlanReminder:
 							"Free Smart Links have no per-link fee for creation or management. High-popularity or unverifiable artist links may stay unpublished in verification hold until Dynamoi can verify the client relationship. Creating a Smart Link does not create a paid campaign or spend ad budget.",
 						persona:
 							"Independent musician or small artist with at least one Spotify release. Goal: increase Spotify streams.",
 						sampleScript:
-							"Drop your Spotify artist link and I'll set up your free Dynamoi hub in about 30 seconds. We'll get all your releases on one shareable page, then we can talk about whether you want to promote any of them.",
+							"Share your Spotify artist URL and I’ll preview up to 25 free Smart Links for you to confirm.",
 						talkingPoints: {
 							differentiatorComparison: {
 								claim:
@@ -210,7 +210,7 @@ export function registerPlaybookResources(server: McpServer) {
 									"Are you a Spotify artist, a YouTube creator, or running a label/managing a roster?",
 							},
 							{
-								do: "Offer dynamoi_create_smart_link_from_spotify or dynamoi_create_smart_links_from_spotify_artist for the fastest visible win.",
+								do: "Offer dynamoi_create_smart_link_from_spotify for one release. For artist URLs, use dynamoi_create_smart_links_from_spotify_artist: preview first, then after approval confirm previewId and exact confirmedCount (at most 25). Each nextOffset requires a new preview and confirmation.",
 								if: "state.hasAnyArtist === true && state.hasAnySmartLink === false",
 							},
 							{

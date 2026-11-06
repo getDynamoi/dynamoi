@@ -83,7 +83,7 @@ export function registerDynamoiPrompts(server: McpServer) {
 						: "Ask me for a Spotify artist, album, or track URL. Playlist URLs are not supported today.",
 					"",
 					"Smart Links are free to create and manage. High-popularity or unverifiable artist links may require verification before public publishing. This does not create a paid campaign.",
-					"If the Spotify URL is an artist URL and I want my hub/catalog, use dynamoi_create_smart_links_from_spotify_artist. If it is an album or track URL, use dynamoi_create_smart_link_from_spotify.",
+					"If the Spotify URL is an artist URL and I want my hub/catalog, use dynamoi_create_smart_links_from_spotify_artist: use phase=preview, then after approval call phase=confirm with the returned previewId and exact confirmedCount (at most 25). Each nextOffset requires a new preview and confirmation. Preview writes nothing. If it is an album or track URL, use dynamoi_create_smart_link_from_spotify.",
 				].join("\n"),
 			),
 	);

@@ -56,9 +56,8 @@ retry; redo the setup above or use https://dynamoi.com/dashboard instead.
 
 - **Smart Links:** `dynamoi_list_smart_links`, `dynamoi_get_smart_link`,
   `dynamoi_preview_smart_link_themes`. With write access,
-  `dynamoi_create_smart_links_from_spotify_artist` builds a catalog and hub and
-  `dynamoi_create_smart_link_from_spotify` builds one release. Lead with the hub
-  URL when returned and report publication/rendering/verification state. Inspecting
+  `dynamoi_create_smart_links_from_spotify_artist`: use phase=preview, then after approval call phase=confirm with the returned previewId and exact confirmedCount (at most 25). Each nextOffset requires a new preview and confirmation. Preview writes nothing.
+  `dynamoi_create_smart_link_from_spotify` builds one release. Lead with the hub URL when returned and report publication/rendering/verification state. Inspecting
   existing links never requires creating one. Smart Links are free and never start
   a paid campaign.
 - **Campaigns:** `dynamoi_list_campaigns`, `dynamoi_get_campaign`,

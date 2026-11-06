@@ -171,7 +171,7 @@ export function registerDynamoiResources(
 					mimeType: "application/json",
 					text: JSON.stringify({
 						artistCatalogWorkflow:
-							"Use dynamoi_create_smart_links_from_spotify_artist for Spotify artist URLs when the user wants the artist hub, catalog import, or all links. The tool creates/returns a starter link immediately and starts the background catalog import so the user does not need the dashboard.",
+							"For Spotify artist URLs, use dynamoi_create_smart_links_from_spotify_artist with phase=preview. Preview writes nothing. After approval, confirm with phase=confirm, previewId and the exact confirmedCount (at most 25). Each nextOffset requires a new preview and confirmation. Report only returned results.",
 						creationInputs: {
 							supportedSpotifyKinds: ["artist", "album", "track"],
 							unsupportedToday: ["playlist"],

@@ -1,3 +1,5 @@
+import type { BulkSmartLinkResponse } from "./server/intake-native.generated";
+
 export type * from "./flow-types";
 export type * from "./readiness-types";
 
@@ -392,22 +394,7 @@ export type CreateSmartLinkFromSpotifyData = GetSmartLinkData & {
 	workflowWarning: string | null;
 };
 
-export type CreateSmartLinksFromSpotifyArtistData = {
-	artistId: string;
-	artistName: string;
-	artistHubUrl: string;
-	spotifyArtistUrl: string;
-	artistCreatedFromSpotify?: boolean;
-	catalogImportStatus: "started" | "start_failed";
-	initialSmartLink: SmartLinkSummary | null;
-	currentSmartLinkCount: number;
-	newlyAvailableCount: number;
-	existingCount: number;
-	smartLinks: SmartLinkSummary[];
-	summary: string;
-	nextActions: string[];
-	warnings?: string[];
-};
+export type CreateSmartLinksFromSpotifyArtistData = BulkSmartLinkResponse;
 
 export type UpdateSmartLinkData = GetSmartLinkData & {
 	renderWarning: string | null;

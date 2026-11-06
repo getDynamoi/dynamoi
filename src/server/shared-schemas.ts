@@ -6,7 +6,6 @@ export const UserIntentSummarySchema = z.string().trim().max(500).optional();
 
 export const ClientRequestIdSchema = z.string().uuid().optional();
 
-export const RequiredClientRequestIdSchema = z.string().uuid();
 
 import { SMART_LINK_ANALYTICS_CONTRACT } from "./smart-link-analytics.generated";
 export const IsoCalendarDateSchema = SMART_LINK_ANALYTICS_CONTRACT.isoCalendarDateSchema;

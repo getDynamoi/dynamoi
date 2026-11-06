@@ -1,3 +1,4 @@
+import { BulkSmartLinkResponseSchema } from "./intake-native.generated";
 import {SMART_CAMPAIGN_SUBMISSION_CONTRACT} from "./submission.generated";
 import { SUPPORT_REQUEST_CONTRACT } from "./request.generated";
 import * as z from "zod/v4";
@@ -422,24 +423,7 @@ const CreateSmartLinkFromSpotifyDataOutputSchema =
 		workflowWarning: z.string().nullable(),
 	}).strict();
 
-const CreateSmartLinksFromSpotifyArtistDataOutputSchema = z
-	.object({
-		artistCreatedFromSpotify: z.boolean().optional(),
-		artistHubUrl: z.string(),
-		artistId: z.string(),
-		artistName: z.string(),
-		catalogImportStatus: z.enum(["started", "start_failed"]),
-		currentSmartLinkCount: z.number(),
-		existingCount: z.number(),
-		initialSmartLink: SmartLinkSummaryOutputSchema.nullable(),
-		newlyAvailableCount: z.number(),
-		nextActions: z.array(z.string()),
-		smartLinks: z.array(SmartLinkSummaryOutputSchema),
-		spotifyArtistUrl: z.string(),
-		summary: z.string(),
-		warnings: z.array(z.string()).optional(),
-	})
-	.strict();
+const CreateSmartLinksFromSpotifyArtistDataOutputSchema = BulkSmartLinkResponseSchema;
 
 const LaunchCampaignDataOutputSchema = z
 	.object({

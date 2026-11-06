@@ -2,7 +2,7 @@
 import { z } from "zod/v4";
 import {ToolFormatSchema,DynamoiListArtistsInputSchema,DynamoiGetCurrentUserInputSchema,DynamoiAccountOverviewDescriptiveDataSchema,DynamoiArtistListDescriptiveDataSchema} from "./account-schema.generated";
 
-const MobilePlayLinkThemeSchema = z.enum([
+const MobileOwnedSmartLinkThemeSchema = z.enum([
 	"classic",
 	"brutalist",
 	"aurora",
@@ -20,7 +20,7 @@ const MobileUserSchema = z.object({
 
 
 const MobileArtistSmartLinkSettingsSchema = z.object({
-	defaultTheme: MobilePlayLinkThemeSchema,
+	defaultTheme: MobileOwnedSmartLinkThemeSchema,
 	isEnabled: z.boolean(),
 });
 const MobileArtistMembershipSchema = z.object({

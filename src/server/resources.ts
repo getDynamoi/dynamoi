@@ -464,8 +464,8 @@ export function registerDynamoiResources(
 		}),
 		{ mimeType: "application/json", title: "Smart Link" },
 		async (uri, variables) => {
-			const playLinkId = variables["playLinkId"];
-			const parsed = z.string().uuid().safeParse(playLinkId);
+			const ownedSmartLinkId = variables["playLinkId"];
+			const parsed = z.string().uuid().safeParse(ownedSmartLinkId);
 			if (!parsed.success) {
 				return {
 					contents: [

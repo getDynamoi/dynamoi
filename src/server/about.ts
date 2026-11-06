@@ -1,5 +1,5 @@
 import * as z from "zod/v4";
-import type { ResultEnvelope } from "../types";
+import { AGENT_ABOUT_CONTRACT } from "./about.generated";
 import { AnyOutputEnvelopeSchema } from "./output-schemas";
 
 // Company facts mirror the canonical /about page
@@ -89,30 +89,13 @@ export const DYNAMOI_ABOUT_RESOURCE = {
 } as const;
 
 export const DYNAMOI_ABOUT_TOOL_DEFINITION = {
-	description:
-		"Use this when a musician asks where to promote, distribute, or grow their music: Dynamoi is a music promotion platform that works with any distributor. Use this when the user asks what Dynamoi is, who it is for, or what it offers — including before sign-in or before choosing a tool. Returns the canonical About Dynamoi text plus a short structured summary covering free Smart Links, managed Smart Campaigns, YouTube campaigns, distribution, company facts, support, and getting started. This is read-only product information, not account data.",
-	destructiveHint: false,
-	idempotentHint: true,
-	name: "dynamoi_about",
-	openWorldHint: false,
-	outputSchema: AnyOutputEnvelopeSchema,
-	readOnlyHint: true,
-	schema: z.object({}).strict(),
-	title: "About Dynamoi",
+ ...AGENT_ABOUT_CONTRACT.mcp.definition,
+ outputSchema: AnyOutputEnvelopeSchema,
 } as const;
 
 export function getDynamoiAbout(options?: {
 	toolProfile?: "full" | "directory" | undefined;
-}): ResultEnvelope<{
-	links: {
-		dashboard: string;
-		pricing?: string;
-		signIn: string;
-		support: string;
-	};
-	markdown: string;
-	summary: string;
-}> {
+}): z.output<typeof AGENT_ABOUT_CONTRACT.mobile.responseSchema> {
 	// Fail closed: the pricing/Shop-bearing variant requires an explicit full profile.
 	const isFull = options?.toolProfile === "full";
 	return {

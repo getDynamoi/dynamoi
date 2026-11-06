@@ -2,8 +2,6 @@ import * as z from "zod/v4";
 
 export { ToolFormatSchema } from "./account-schema.generated";
 
-export const SearchQuerySchema = z.string().trim().max(120);
-
 export const UserIntentSummarySchema = z.string().trim().max(500).optional();
 
 export const ClientRequestIdSchema = z.string().uuid().optional();

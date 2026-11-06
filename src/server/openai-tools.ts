@@ -1,6 +1,5 @@
-import * as z from "zod/v4";
 import { AnyOutputEnvelopeSchema } from "./output-schemas";
-import { SearchQuerySchema } from "./shared-schemas";
+import {OPENAI_SEARCH_CONTRACT,OPENAI_FETCH_CONTRACT} from "./protocols.generated";
 
 /**
  * OpenAI ChatGPT Connectors / Deep Research spec requires every connector
@@ -34,46 +33,9 @@ export type OpenAiFetchData = {
 	metadata?: Record<string, unknown>;
 };
 
-export const DynamoiOpenAiSearchInputSchema = z
-	.object({
-		query: SearchQuerySchema.min(1),
-	})
-	.strict();
-
-export const DynamoiOpenAiFetchInputSchema = z
-	.object({
-		id: z.string().trim().min(1).max(200),
-	})
-	.strict();
-
-export const OPENAI_TOOL_DEFINITIONS = [
-	{
-		// OpenAI ChatGPT Connectors / Deep Research expects a tool literally
-		// named `search` returning {results: [{id, title, text?, url?}]}. This
-		// is the same data dynamoi_search returns, reshaped for OpenAI Deep
-		// Research citation flows. ChatGPT will not call this tool directly in
-		// regular chat — it picks dynamoi_search by description.
-		description:
-			"OpenAI ChatGPT Deep Research / Connectors search contract. Returns matching Dynamoi artists, campaigns, and Smart Links so they can be cited in a deep-research session. For regular ChatGPT chat use dynamoi_search instead.",
-		destructiveHint: false,
-		name: "search",
-		openWorldHint: false,
-		outputSchema: AnyOutputEnvelopeSchema,
-		readOnlyHint: true,
-		schema: DynamoiOpenAiSearchInputSchema,
-		title: "Search (OpenAI Connectors)",
-	},
-	{
-		// OpenAI Deep Research follow-up tool: given an id returned by `search`,
-		// returns the full record so it can be cited.
-		description:
-			"OpenAI ChatGPT Deep Research / Connectors fetch contract. Given an id returned by `search` (formatted as 'artist:<uuid>', 'campaign:<uuid>', or 'smartlink:<uuid>'), returns the full record for citation.",
-		destructiveHint: false,
-		name: "fetch",
-		openWorldHint: false,
-		outputSchema: AnyOutputEnvelopeSchema,
-		readOnlyHint: true,
-		schema: DynamoiOpenAiFetchInputSchema,
-		title: "Fetch (OpenAI Connectors)",
-	},
+export const DynamoiOpenAiSearchInputSchema=OPENAI_SEARCH_CONTRACT.mcp.definition.schema;
+export const DynamoiOpenAiFetchInputSchema=OPENAI_FETCH_CONTRACT.mcp.definition.schema;
+export const OPENAI_TOOL_DEFINITIONS=[
+ {...OPENAI_SEARCH_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
+ {...OPENAI_FETCH_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
 ] as const;

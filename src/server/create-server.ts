@@ -379,6 +379,7 @@ export function getDynamoiToolCompatibilityDefinitions(_options?: {
 }
 
 export type Phase3Adapter = {
+	about?(input: { toolProfile?: DynamoiMcpToolProfile | undefined }): Promise<ReturnType<typeof getDynamoiAbout>>;
 	deleteAccount(input: unknown): Promise<ResultEnvelope<object>>;
 	getActionCenter(input: unknown): Promise<ResultEnvelope<unknown>>;
 	getTeam(input: unknown): Promise<ResultEnvelope<unknown>>;
@@ -517,7 +518,7 @@ export type Phase3Adapter = {
 };
 
 type DynamoiToolDispatcher = (
-	adapter: Phase3Adapter,
+	adapter: Phase3Adapter & { about(input: unknown): Promise<ReturnType<typeof getDynamoiAbout>> },
 	input: unknown,
 	toolProfile?: DynamoiMcpToolProfile,
 ) => Promise<ResultEnvelope<unknown>>;
@@ -780,8 +781,7 @@ function normalizeKnownErrorRecovery(
 }
 
 const DYNAMOI_TOOL_DISPATCHERS = {
-	dynamoi_about: (_adapter, _input, toolProfile) =>
-		Promise.resolve(getDynamoiAbout({ toolProfile })),
+	dynamoi_about: (adapter, input) => adapter.about(input),
 	dynamoi_add_campaign_funds: (adapter, input) =>
 		adapter.addCampaignFunds(input),
 	dynamoi_apply_for_distribution: (adapter, input) =>
@@ -1236,10 +1236,14 @@ export function createDynamoiMcpServer(options: {
 				}
 				const startedAt = Date.now();
 				try {
+					const invocationAdapter = def.name === "dynamoi_about"
+						? { about: () => options.adapter.about
+							? options.adapter.about({ toolProfile })
+							: Promise.resolve(getDynamoiAbout({ toolProfile })) }
+						: options.adapter;
 					const envelope = await dispatcher(
-						options.adapter,
+						invocationAdapter as Parameters<DynamoiToolDispatcher>[0],
 						input,
-						toolProfile,
 					);
 					const finalized = asValidatedTextResult({
 						envelope,

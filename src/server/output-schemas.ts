@@ -498,7 +498,7 @@ export const GetCampaignOutputEnvelopeSchema = createOutputEnvelopeSchema(
 
 export const UpdateCampaignOutputEnvelopeSchema = createOutputEnvelopeSchema(
 	z.union([
-		z.object({phase:z.literal("preview"),preview:z.object({action:z.enum(["pause","resume","archive"]),campaignId:z.string(),artistId:z.string(),contentTitle:z.string(),currentStatus:z.string(),expected:z.object({expectedUpdatedAt:z.iso.datetime(),expectedCurrentStatus:z.string(),expectedFundingHash:z.string().regex(/^[a-f0-9]{64}$/u).optional()}).strict(),funding:z.lazy(()=>ResumeFundingDataSchema).nullable()}).strict()}).strict(),
+		z.object({phase:z.literal("preview"),preview:z.object({action:z.enum(["pause","resume","archive","unarchive"]),campaignId:z.string(),artistId:z.string(),contentTitle:z.string(),currentStatus:z.string(),expected:z.object({expectedUpdatedAt:z.iso.datetime(),expectedCurrentStatus:z.string(),expectedFundingHash:z.string().regex(/^[a-f0-9]{64}$/u).optional()}).strict(),funding:z.lazy(()=>ResumeFundingDataSchema).nullable()}).strict()}).strict(),
 		z
 			.object({
 				actionRequired: z.array(z.string()).optional(),

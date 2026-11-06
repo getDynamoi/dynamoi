@@ -16,6 +16,7 @@ const NativeInputSchema=z.object({campaignType:z.enum(["SMART_CAMPAIGN","YOUTUBE
 const NativeResponseSchema=z.object({campaignType:z.enum(["SMART_CAMPAIGN","YOUTUBE"]),countries:z.array(CountrySchema),source:z.enum(["SMART_CAMPAIGN_COUNTRIES","GOOGLE_ADS_COUNTRIES"]),notes:z.array(z.string())});
 const screenPending={status:"partial",reason:"Native screen pending: packages/application-api-contract/native-specs/campaign-country-catalog.md; exact-revision paired receipts required."} as const;
 export const CAMPAIGN_COUNTRIES_CONTRACT={capabilityId:"campaign_country_catalog",kind:"query",version:1,
+ legacyAliases:[{"id":"campaign.smart-location.countries","revision":"4d590527fecebbea8aef85e136ae46422e56c1c4","fingerprint":"6e1306c55ab1a83515565a2e95f6e853f5677e53d00626af59307efb52ca5db6"}],
  mcp:{definition:{
 		description:
 			"Use this when the user asks which countries they can target for a Smart Campaign or YouTube campaign. Always pass campaignType because Smart Campaign and YouTube country catalogs are different. Do not use this for generic country marketing advice.",

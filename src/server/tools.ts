@@ -1,3 +1,4 @@
+import {AGENT_SEARCH_CONTRACT} from "./search.generated";
 import {YOUTUBE_DRAFT_SETUP_CONTRACT} from "./youtube-draft.generated";
 import {CAMPAIGN_COUNTRIES_CONTRACT} from "./country-catalog.generated";
 import {SMART_CAMPAIGN_SUBMISSION_CONTRACT} from "./submission.generated";
@@ -43,7 +44,6 @@ import { PLAYLIST_ANALYTICS_CONTRACT } from "./playlist-analytics.generated";
 import {
 	ClientRequestIdSchema,
 	IsoCalendarDateSchema,
-	SearchQuerySchema,
 	DateRangeSchema as SharedDateRangeSchema,
 	ToolFormatSchema as SharedToolFormatSchema,
 	UserIntentSummarySchema,
@@ -74,26 +74,7 @@ const ExpectedCampaignStatusEnum = z.enum([
 ]);
 const ExpectedCampaignStatusSchema = ExpectedCampaignStatusEnum.optional();
 
-export const DynamoiSearchInputSchema = z
-	.object({
-		artistId: z.string().uuid().optional(),
-		cursor: z.string().optional(),
-		format: ToolFormatSchema.optional(),
-		includeArchived: z.boolean().optional(),
-		limit: z.number().int().min(1).max(50).optional(),
-		query: SearchQuerySchema.optional(),
-		type: z.enum(["artist", "campaign", "smartlink"]).optional(),
-	})
-	.strict()
-	.superRefine((data, ctx) => {
-		if (!(data.type || data.query)) {
-			ctx.addIssue({
-				code: "custom",
-				message: "query is required when type is not specified",
-				path: ["query"],
-			});
-		}
-	});
+export const DynamoiSearchInputSchema = AGENT_SEARCH_CONTRACT.mcp.definition.schema;
 
 export const DynamoiListCampaignsInputSchema = CAMPAIGN_LIST_CONTRACT.mcp.definition.schema;
 export const DynamoiGetCampaignInputSchema = CAMPAIGN_DETAIL_CONTRACT.mcp.definition.schema;
@@ -364,7 +345,7 @@ export const DynamoiUpdateCampaignInputSchema = z
 	})
 	.strict()
 	.superRefine((data, ctx) => {
-		if(data.phase && !["pause","resume","archive"].includes(data.action)) ctx.addIssue({code:"custom",message:"Review phase is only supported for pause, resume and archive",path:["phase"]});
+		if(data.phase && !["pause","resume","archive","unarchive"].includes(data.action)) ctx.addIssue({code:"custom",message:"Review phase is only supported for pause, resume, archive and unarchive",path:["phase"]});
 		if (
 			[
 				"pause",
@@ -562,17 +543,7 @@ export const DynamoiSmartCampaignAdCopyInputSchema = z
 export const PHASE_1_TOOL_DEFINITIONS = [
  { ...ACCOUNT_OVERVIEW_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
  { ...ARTIST_ROSTER_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
-	{
-		description:
-			"Use this when the user mentions an artist, release, campaign, or smart link but you do not yet know the exact record to inspect. Do not use this for analytics summaries or billing questions once you already know the target record. If the result is empty for a brand-new user (no artists yet), do not respond 'no records found' as a terminal answer — instead suggest creating their first artist hub via dynamoi_create_smart_links_from_spotify_artist.",
-		destructiveHint: false,
-		name: "dynamoi_search",
-		openWorldHint: false,
-		outputSchema: AnyOutputEnvelopeSchema,
-		readOnlyHint: true,
-		schema: DynamoiSearchInputSchema,
-		title: "Search Dynamoi",
-	},
+	{...AGENT_SEARCH_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
 	...OPENAI_TOOL_DEFINITIONS,
 	{...CAMPAIGN_LIST_CONTRACT.mcp.definition, outputSchema: AnyOutputEnvelopeSchema},
 	{...CAMPAIGN_DETAIL_CONTRACT.mcp.definition, outputSchema: GetCampaignOutputEnvelopeSchema},
@@ -690,7 +661,7 @@ export const PHASE_2_TOOL_DEFINITIONS = [
 	},
 	{...YOUTUBE_DRAFT_SETUP_CONTRACT.mcp.definition,outputSchema:ManageYoutubeDraftOutputEnvelopeSchema},
 	{
-		description: `Use only when the user explicitly requests a campaign change. Resume isn't available for fixed-flight YouTube campaigns. Duplicate the campaign to relaunch it. For pause, resume and archive, first request phase=preview with one clientRequestId. Show that exact preview to the human; only after approval send phase=confirm with its expectedUpdatedAt, expectedCurrentStatus and (for resume) expectedFundingHash and the same request ID. Omitting phase never executes those three actions. Actions: pause, resume, update_budget, update_end_date (DAILY or TOTAL budget; TOTAL end-date extensions may require the same funding consent fields as update_budget or resume), update_location (GLOBAL or catalog-valid countries), change_strategy (managed YouTube Demand Gen), update_goals (YouTube optimization toggles), archive (never deletes), unarchive (restores PAUSED without funding or activating providers). Inspect the campaign first and supply expectedCurrentStatus where possible. For resume, update_budget, or a TOTAL update_end_date that needs automatic daily card funding, first show the user the exact consent copy for the campaign's budget type, then pass the request's clientRequestId and, for DAILY, authorizeAutomaticDailyFunding=true with acceptedConsentVersion and acceptedConsentCopyHash: "${prospectiveFundingConsentCopy}" (version "${prospectiveFundingConsentVersion}", hash "${prospectiveFundingConsentCopyHash}"); for TOTAL, acceptedTotalConsentVersion and acceptedTotalConsentCopyHash: "${totalFundingConsentCopy}" (version "${totalFundingConsentVersion}", hash "${totalFundingConsentCopyHash}"). A budget type refuses the other's consent. Without them, a resume that needs card funding is refused with: "Review and accept the daily funding authorization to resume this campaign." When retrying the same action, reuse the same clientRequestId.`,
+		description: `Use only when the user explicitly requests a campaign change. Resume isn't available for fixed-flight YouTube campaigns. Duplicate the campaign to relaunch it. For pause, resume, archive and unarchive, first request phase=preview with one clientRequestId. Show that exact preview to the human; only after approval send phase=confirm with its expectedUpdatedAt, expectedCurrentStatus and (for resume) expectedFundingHash and the same request ID. Omitting phase never executes these status actions. Actions: pause, resume, update_budget, update_end_date (DAILY or TOTAL budget; TOTAL end-date extensions may require the same funding consent fields as update_budget or resume), update_location (GLOBAL or catalog-valid countries), change_strategy (managed YouTube Demand Gen), update_goals (YouTube optimization toggles), archive (never deletes), unarchive (restores PAUSED without funding or activating providers). Inspect the campaign first and supply expectedCurrentStatus where possible. For resume, update_budget, or a TOTAL update_end_date that needs automatic daily card funding, first show the user the exact consent copy for the campaign's budget type, then pass the request's clientRequestId and, for DAILY, authorizeAutomaticDailyFunding=true with acceptedConsentVersion and acceptedConsentCopyHash: "${prospectiveFundingConsentCopy}" (version "${prospectiveFundingConsentVersion}", hash "${prospectiveFundingConsentCopyHash}"); for TOTAL, acceptedTotalConsentVersion and acceptedTotalConsentCopyHash: "${totalFundingConsentCopy}" (version "${totalFundingConsentVersion}", hash "${totalFundingConsentCopyHash}"). A budget type refuses the other's consent. Without them, a resume that needs card funding is refused with: "Review and accept the daily funding authorization to resume this campaign." When retrying the same action, reuse the same clientRequestId.`,
 		destructiveHint: true,
 		idempotentHint: true,
 		name: "dynamoi_update_campaign",

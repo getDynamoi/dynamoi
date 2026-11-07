@@ -40,7 +40,24 @@ export const BILLING_COUNTRY_READ_CONTRACT = {
 		method: "GET",
 		operationId: "getMobileArtistBillingCountry",
 	},
-	parity: { webmcp: { status: "complete", journeys: ["WM-DASHBOARD-billingCountry"], binding: { file: "apps/dashboard/app/dashboard/webmcp/dashboard-bindings.webmcp.generated.ts", export: "billingCountryWebMcp", tool: "dashboard_billing_country", role: "consumer", intermediates: [{file: "apps/dashboard/app/dashboard/webmcp/insight-reads.ts", export: "billingCountry"}] } } },
+	parity: {
+		webmcp: {
+			binding: {
+				export: "billingCountryWebMcp",
+				file: "apps/dashboard/app/dashboard/webmcp/dashboard-bindings.webmcp.generated.ts",
+				intermediates: [
+					{
+						export: "billingCountry",
+						file: "apps/dashboard/app/dashboard/webmcp/insight-reads.ts",
+					},
+				],
+				role: "consumer",
+				tool: "dashboard_billing_country",
+			},
+			journeys: ["WM-DASHBOARD-billingCountry"],
+			status: "complete",
+		},
+	},
 	version: 1,
 } as const;
 
@@ -71,7 +88,10 @@ export const BILLING_COUNTRY_SET_CONTRACT = {
 	},
 	mobile: {
 		...mobile,
-		bodySchema: z.object({ countryCode: z.string().trim().min(1) }),
+		bodySchema: z.object({
+			countryCode: z.string().trim().min(1),
+			expectedCountryCode: z.string().nullable().default(null),
+		}),
 		idempotent: true,
 		method: "PATCH",
 		operationId: "patchMobileArtistBillingCountry",

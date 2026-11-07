@@ -79,14 +79,7 @@ export const DynamoiSearchInputSchema = AGENT_SEARCH_CONTRACT.mcp.definition.sch
 export const DynamoiListCampaignsInputSchema = CAMPAIGN_LIST_CONTRACT.mcp.definition.schema;
 export const DynamoiGetCampaignInputSchema = CAMPAIGN_DETAIL_CONTRACT.mcp.definition.schema;
 
-export const DynamoiGetCampaignAnalyticsInputSchema = z
-	.object({
-		campaignId: z.string().uuid(),
-		dateRange: DateRangeSchema.optional(),
-		format: ToolFormatSchema.optional(),
-		granularity: z.enum(["TOTAL", "DAILY"]).optional(),
-	})
-	.strict();
+export const DynamoiGetCampaignAnalyticsInputSchema = CAMPAIGN_DETAIL_CONTRACT.analyticsInputSchema;
 
 export const DynamoiGetArtistAnalyticsInputSchema = z
 	.object({

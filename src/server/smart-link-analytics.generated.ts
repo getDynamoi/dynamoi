@@ -89,7 +89,7 @@ const IsoCalendarDateSchema = IsoDateSchema.refine(isValidCalendarDate, {
 	message: "must be a valid calendar date",
 });
 
-const DateRangeSchema = z
+export const DateRangeSchema = z
 	.object({
 		end: IsoDateSchema,
 		start: IsoDateSchema,

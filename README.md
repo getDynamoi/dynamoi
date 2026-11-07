@@ -193,7 +193,7 @@ including what did not work.
 - **Each client gets one of two tool sets**, chosen from the identity it signs
   in with. Reviewed clients and apps that sign in on your own computer
   (Claude Code, Codex, Cursor, VS Code, Gemini CLI, OpenClaw and the `dynamoi`
-  CLI) get All 68 tools. ChatGPT, Claude added from its directory listing and other web apps get 51 review-safe advertised tools: reads, Smart Links,
+  CLI) get All 70 tools. ChatGPT, Claude added from its directory listing and other web apps get 53 review-safe advertised tools: reads, Smart Links,
   billing and earnings status, draft preparation, account management and connection links, with no purchases, launches or checkout.
 - **Sign-in is OAuth 2.1**, and every call still checks its scopes and the
   user's role for that artist. See
@@ -212,6 +212,8 @@ including what did not work.
 | `dynamoi_search` | Find artists, campaigns, and Smart Links by name | Reads | Both |
 | `search` / `fetch` | ChatGPT deep research search and fetch | Reads | Both |
 | `dynamoi_list_campaigns` | An artist's campaigns, with type and status filters | Reads | Both |
+| `dynamoi_get_campaign_management` | Bounded campaign lifecycle, targeting and optimization state | Reads | Both |
+| `dynamoi_get_meta_campaign_groups` | Customer-visible Meta analytics for bounded groups of campaigns | Reads | Both |
 | `dynamoi_read_campaign_draft_media` | Reopen an owned draft or read the editor media chooser; preserves private-upload moderation masking | Reads | Full |
 | `dynamoi_list_campaign_drafts` | In-progress campaign drafts and campaignIds to resume setup | Reads | Both |
 | `dynamoi_get_campaign` | One campaign, with optional analytics, delivery status, and countries | Reads | Both |

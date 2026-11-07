@@ -1,3 +1,5 @@
+import {META_CAMPAIGN_GROUPS_CONTRACT} from "./meta-groups.generated";
+import {CAMPAIGN_MANAGEMENT_READ_CONTRACT} from "./management-read.generated";
 import {AGENT_SEARCH_CONTRACT} from "./search.generated";
 import {YOUTUBE_DRAFT_SETUP_CONTRACT} from "./youtube-draft.generated";
 import {CAMPAIGN_COUNTRIES_CONTRACT} from "./country-catalog.generated";
@@ -31,6 +33,7 @@ import { CAMPAIGN_DRAFTS_CONTRACT } from "./drafts.generated";
 import { GROWTH_AUDIT_CONTRACT } from "./growth-audit.generated";
 import { OPENAI_TOOL_DEFINITIONS } from "./openai-tools";
 import {
+	createOutputEnvelopeSchema,
 	AnyOutputEnvelopeSchema,
 	GetCampaignOutputEnvelopeSchema,
 	GetCampaignReadinessOutputEnvelopeSchema,
@@ -534,6 +537,8 @@ export const DynamoiSmartCampaignAdCopyInputSchema = z
 	})
 	.strict();
 export const PHASE_1_TOOL_DEFINITIONS = [
+ {...META_CAMPAIGN_GROUPS_CONTRACT.mcp.definition,outputSchema:createOutputEnvelopeSchema(META_CAMPAIGN_GROUPS_CONTRACT.mobile.responseSchema)},
+ {...CAMPAIGN_MANAGEMENT_READ_CONTRACT.mcp.definition,outputSchema:createOutputEnvelopeSchema(CAMPAIGN_MANAGEMENT_READ_CONTRACT.mobile.responseSchema)},
  { ...ACCOUNT_OVERVIEW_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
  { ...ARTIST_ROSTER_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
 	{...AGENT_SEARCH_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},

@@ -1,3 +1,5 @@
+import {META_CAMPAIGN_GROUPS_CONTRACT} from "./meta-groups.generated";
+import {CAMPAIGN_MANAGEMENT_READ_CONTRACT} from "./management-read.generated";
 import {SHOP_REBUY_TOOL_DEFINITIONS} from "./shop-rebuy";
 import {SHOP_VIDEO_TOOL_DEFINITIONS} from "./shop-order-video";
 import { SHOP_HISTORY_TOOL_DEFINITION } from "./shop-purchase-history";
@@ -148,6 +150,8 @@ type DynamoiToolAnnotations = {
 };
 
 const DIRECTORY_DESCRIPTIVE_DATA_SCHEMAS = {
+ dynamoi_get_meta_campaign_groups:META_CAMPAIGN_GROUPS_CONTRACT.mobile.responseSchema,
+ dynamoi_get_campaign_management:CAMPAIGN_MANAGEMENT_READ_CONTRACT.mobile.responseSchema,
 	dynamoi_get_account_overview: DynamoiAccountOverviewDescriptiveDataSchema,
 	dynamoi_get_artist_analytics: z
 		.object({
@@ -448,6 +452,8 @@ export type Phase3Adapter = {
 	getGrowthAudit(input: unknown): Promise<ResultEnvelope<unknown>>;
 	getPlaylistAnalytics(input: unknown): Promise<ResultEnvelope<unknown>>;
 	getAudienceAnalytics(input: unknown): Promise<ResultEnvelope<unknown>>;
+	getMetaCampaignGroups(input:unknown):Promise<ResultEnvelope<unknown>>;
+	getCampaignManagement(input:unknown):Promise<ResultEnvelope<unknown>>;
 	listCampaignDrafts(input: unknown): Promise<ResultEnvelope<unknown>>;
 	listCampaigns(
 		input: unknown,
@@ -801,6 +807,8 @@ function normalizeKnownErrorRecovery(
 }
 
 const DYNAMOI_TOOL_DISPATCHERS = {
+ dynamoi_get_meta_campaign_groups:(adapter,input)=>adapter.getMetaCampaignGroups(input),
+ dynamoi_get_campaign_management:(adapter,input)=>adapter.getCampaignManagement(input),
 	dynamoi_about: (adapter, input) => adapter.about(input),
 	dynamoi_add_campaign_funds: (adapter, input) =>
 		adapter.addCampaignFunds(input),

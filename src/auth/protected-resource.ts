@@ -19,6 +19,8 @@ export const DYNAMOI_BETTER_AUTH_MCP_SCOPES = [
 	"dynamoi:smart_links.write",
 ] as const;
 export const DYNAMOI_MCP_TOOL_SCOPES = {
+ dynamoi_get_meta_campaign_groups:["dynamoi:read"],
+ dynamoi_get_campaign_management:["dynamoi:read"],
 	// Public product information; callable before sign-in.
 	dynamoi_about: [],
 	dynamoi_add_campaign_funds: ["dynamoi:read", "dynamoi:mcp.full"],

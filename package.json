@@ -88,7 +88,15 @@
 		"dist/version.d.ts",
 		"dist/youtube-metrics.d.ts",
 		"dist/youtube-metrics.js",
-		"server.json"
+		"server.json",
+		"dist/server/shop-order-status.d.ts",
+		"dist/server/wire-shop-agent-wire.generated.d.ts",
+		"dist/server/draft-media-read.d.ts",
+		"dist/server/drafts-media.generated.d.ts",
+		"dist/server/wire-creative-agent-wire.generated.d.ts",
+		"dist/server/shop-purchase-history.d.ts",
+		"dist/server/shop-order-video.d.ts",
+		"dist/server/shop-rebuy.d.ts"
 	],
 	"exports": {
 		".": {

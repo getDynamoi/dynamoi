@@ -193,7 +193,7 @@ including what did not work.
 - **Each client gets one of two tool sets**, chosen from the identity it signs
   in with. Reviewed clients and apps that sign in on your own computer
   (Claude Code, Codex, Cursor, VS Code, Gemini CLI, OpenClaw and the `dynamoi`
-  CLI) get All 58 tools. ChatGPT, Claude added from its directory listing and other web apps get 51 review-safe advertised tools: reads, Smart Links,
+  CLI) get All 68 tools. ChatGPT, Claude added from its directory listing and other web apps get 51 review-safe advertised tools: reads, Smart Links,
   billing and earnings status, draft preparation, account management and connection links, with no purchases, launches or checkout.
 - **Sign-in is OAuth 2.1**, and every call still checks its scopes and the
   user's role for that artist. See
@@ -212,6 +212,7 @@ including what did not work.
 | `dynamoi_search` | Find artists, campaigns, and Smart Links by name | Reads | Both |
 | `search` / `fetch` | ChatGPT deep research search and fetch | Reads | Both |
 | `dynamoi_list_campaigns` | An artist's campaigns, with type and status filters | Reads | Both |
+| `dynamoi_read_campaign_draft_media` | Reopen an owned draft or read the editor media chooser; preserves private-upload moderation masking | Reads | Full |
 | `dynamoi_list_campaign_drafts` | In-progress campaign drafts and campaignIds to resume setup | Reads | Both |
 | `dynamoi_get_campaign` | One campaign, with optional analytics, delivery status, and countries | Reads | Both |
 | `dynamoi_get_artist_analytics` | Artist campaign analytics; full profile also includes qualified artist-wide Smart Link totals and up to ten top links | Reads | Both |
@@ -261,6 +262,15 @@ including what did not work.
 | `dynamoi_delete_account` | Preview eligibility and explicitly start irreversible account deletion; cleanup is asynchronous and required records may be retained | Changes data | Full |
 | `dynamoi_update_account_profile` | Preview or explicitly confirm a display name or preferred language change | Changes data | Both |
 | `dynamoi_set_artist_billing_country` | Preview or explicitly confirm an artist checkout-currency suggestion country; existing currency stays fixed | Changes data | Full |
+| `dynamoi_pause_shop_promotion` | Preview and confirm an owned Shop promotion pause; existing safeguards remain authoritative | Changes data | Full |
+| `dynamoi_resume_shop_promotion` | Preview and confirm an owned Shop promotion resume; existing safeguards remain authoritative | Changes data | Full |
+| `dynamoi_restart_shop_promotion` | Preview and confirm an owned Shop promotion restart; existing safeguards remain authoritative | Changes data | Full |
+| `dynamoi_attach_shop_order_video` | Preview and confirm the first video on an owned paid order. | Changes data | Full |
+| `dynamoi_replace_shop_promotion_video` | Preview and confirm an eligible policy replacement. | Changes data | Full |
+| `dynamoi_quote_shop_rebuy_custom` | Read an authorized returning-buyer custom quote. | Reads | Full |
+| `dynamoi_estimate_shop_rebuy_packages` | Read up to ten returning-buyer package estimates. | Reads | Full |
+| `dynamoi_prepare_shop_rebuy_checkout` | Preview and confirm an unpaid checkout bound to the verified buyer and artist. | Changes data | Full |
+| `dynamoi_get_shop_purchase_history` | Read the same localized buyer-safe purchase-history rows and cursor as the web | Reads | Full |
 | `dynamoi_shop_list_orders` | Read your authorized artist’s newest Shop order status and fulfillment timestamps | Reads | Full |
 | `dynamoi_shop_get_quote` | Estimate a one-off YouTube promotion | Reads | Full |
 | `dynamoi_shop_create_checkout` | Create an unpaid Stripe Checkout link for that promotion | Changes data | Full |

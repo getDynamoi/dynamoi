@@ -1,3 +1,8 @@
+import {SHOP_REBUY_TOOL_DEFINITIONS} from "./shop-rebuy";
+import {SHOP_VIDEO_TOOL_DEFINITIONS} from "./shop-order-video";
+import { SHOP_HISTORY_TOOL_DEFINITION } from "./shop-purchase-history";
+import { SHOP_STATUS_TOOL_DEFINITIONS } from "./shop-order-status";
+import { DRAFT_MEDIA_READ_TOOL_DEFINITION } from "./draft-media-read";
 import {
 	type CacheHint,
 	type CallToolResult,
@@ -301,8 +306,13 @@ const DYNAMOI_TOOL_DEFINITIONS = [
 	...PHASE_2_TOOL_DEFINITIONS,
 	...PHASE_3_TOOL_DEFINITIONS,
 	SMART_CAMPAIGN_CREATIVE_TOOL_DEFINITION,
+	DRAFT_MEDIA_READ_TOOL_DEFINITION,
 	...DISTRIBUTION_TOOL_DEFINITIONS,
 	...SHOP_TOOL_DEFINITIONS,
+	SHOP_HISTORY_TOOL_DEFINITION,
+ ...SHOP_VIDEO_TOOL_DEFINITIONS,
+ ...SHOP_REBUY_TOOL_DEFINITIONS,
+	...SHOP_STATUS_TOOL_DEFINITIONS,
 	...SUPPORT_TOOL_DEFINITIONS,
 	SMART_LINK_THEME_PREVIEW_TOOL_DEFINITION,
 	...PHASE_4_TOOL_DEFINITIONS,
@@ -379,6 +389,15 @@ export function getDynamoiToolCompatibilityDefinitions(_options?: {
 }
 
 export type Phase3Adapter = {
+	shopAttachVideo(input:unknown):Promise<ResultEnvelope<unknown>>;
+	shopReplaceVideo(input:unknown):Promise<ResultEnvelope<unknown>>;
+	shopRebuyCustom(input:unknown):Promise<ResultEnvelope<unknown>>;
+	shopRebuyPresets(input:unknown):Promise<ResultEnvelope<unknown>>;
+	shopRebuyCheckout(input:unknown):Promise<ResultEnvelope<unknown>>;
+	shopPurchaseHistory(input:unknown):Promise<ResultEnvelope<unknown>>;
+	pauseShopPromotion(input:unknown):Promise<ResultEnvelope<unknown>>;
+	resumeShopPromotion(input:unknown):Promise<ResultEnvelope<unknown>>;
+	restartShopPromotion(input:unknown):Promise<ResultEnvelope<unknown>>;
 	about?(input: { toolProfile?: DynamoiMcpToolProfile | undefined }): Promise<ReturnType<typeof getDynamoiAbout>>;
 	deleteAccount(input: unknown): Promise<ResultEnvelope<object>>;
 	getActionCenter(input: unknown): Promise<ResultEnvelope<unknown>>;
@@ -469,6 +488,7 @@ export type Phase3Adapter = {
 		ResultEnvelope<GetCampaignReadinessData | GetCampaignReadinessSummaryData>
 	>;
 	smartCampaignAdCopy(input: unknown): Promise<ResultEnvelope<unknown>>;
+	readCampaignDraftMedia(input: unknown): Promise<ResultEnvelope<unknown>>;
 	smartCampaignCreative(input: unknown): Promise<ResultEnvelope<unknown>>;
 	manageYoutubeDraft(input: unknown): Promise<ResultEnvelope<unknown>>;
 	updateCampaign(input: unknown): Promise<ResultEnvelope<UpdateCampaignData>>;
@@ -834,6 +854,7 @@ const DYNAMOI_TOOL_DISPATCHERS = {
 	dynamoi_list_campaigns: (adapter, input) => adapter.listCampaigns(input),
 	dynamoi_list_media_assets: (adapter, input) => adapter.listMediaAssets(input),
 	dynamoi_list_smart_links: (adapter, input) => adapter.listSmartLinks(input),
+	dynamoi_read_campaign_draft_media: (adapter, input) => adapter.readCampaignDraftMedia(input),
 	dynamoi_manage_smart_campaign_creative: (adapter, input) =>
 		adapter.smartCampaignCreative(input),
 	dynamoi_manage_team: (adapter, input) => adapter.manageTeam(input),
@@ -851,6 +872,15 @@ const DYNAMOI_TOOL_DISPATCHERS = {
 	dynamoi_shop_create_checkout: (adapter, input) =>
 		adapter.shopCreateCheckout(input),
 	dynamoi_shop_get_quote: (adapter, input) => adapter.shopGetQuote(input),
+	dynamoi_pause_shop_promotion: (adapter,input)=>adapter.pauseShopPromotion(input),
+	dynamoi_resume_shop_promotion: (adapter,input)=>adapter.resumeShopPromotion(input),
+	dynamoi_restart_shop_promotion: (adapter,input)=>adapter.restartShopPromotion(input),
+	dynamoi_attach_shop_order_video: (adapter,input)=>adapter.shopAttachVideo(input),
+	dynamoi_replace_shop_promotion_video: (adapter,input)=>adapter.shopReplaceVideo(input),
+	dynamoi_quote_shop_rebuy_custom: (adapter,input)=>adapter.shopRebuyCustom(input),
+	dynamoi_estimate_shop_rebuy_packages: (adapter,input)=>adapter.shopRebuyPresets(input),
+	dynamoi_prepare_shop_rebuy_checkout: (adapter,input)=>adapter.shopRebuyCheckout(input),
+	dynamoi_get_shop_purchase_history: (adapter,input)=>adapter.shopPurchaseHistory(input),
 	dynamoi_shop_list_orders: (adapter, input) => adapter.shopListOrders(input),
 	dynamoi_smart_campaign_ad_copy: (adapter, input) =>
 		adapter.smartCampaignAdCopy(input),

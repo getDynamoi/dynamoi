@@ -156,3 +156,51 @@ test("local CLI never refreshes a rejected bearer and disables redirects", async
 		expect(init.redirect).toBe("error");
 	}
 });
+
+test("billing JSON preserves independent debt, earned credit and suspension without granting consent", async () => {
+	const billing: Tool = {
+		name: "dynamoi_get_billing",
+		description: "Read billing.",
+		inputSchema: {
+			type: "object",
+			required: ["artistId"],
+			properties: { artistId: { type: "string" }, format: { type: "string" } },
+		},
+	};
+	const payload = {
+		billingStatus: "SUSPENDED",
+		creditBalance: { amount: 25, currency: "usd" },
+		plan: { state: "NONE" },
+		recovery: {
+			accountSuspended: true,
+			requiresNewPlan: true,
+			invoicesComplete: true,
+			outstanding: [
+				{ currency: "usd", amountMinor: 5008, currencyExponent: 2 },
+			],
+			invoices: [{ amountMinor: 2500 }, { amountMinor: 2508 }],
+		},
+	};
+	const args = { artistId: "exact-artist", format: "json" };
+	const response = {
+		structuredContent: payload,
+		content: [{ type: "text", text: JSON.stringify(payload) }],
+	};
+	const result = await runTool(
+		billing,
+		args,
+		{
+			isTty: false,
+			ask: async () => {
+				throw new Error("A billing read must not ask to charge");
+			},
+		},
+		async (name, sent) => {
+			expect(name).toBe("dynamoi_get_billing");
+			expect(sent).toEqual(args);
+			return response;
+		},
+	);
+	expect(result).toBe(response);
+	expect(args).toEqual({ artistId: "exact-artist", format: "json" });
+});

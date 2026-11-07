@@ -3,20 +3,10 @@ import {
 	BILLING_COUNTRY_READ_CONTRACT,
 	BILLING_COUNTRY_SET_CONTRACT,
 } from "./billing-country.generated";
+import { ACCOUNT_LANGUAGE_CONTRACT } from "./language.generated";
 import { AnyOutputEnvelopeSchema } from "./output-schemas";
-export const UpdateAccountProfileSchema = z
-	.object({
-		confirm: z.boolean().optional(),
-		expectedName: z.string().nullable().optional(),
-		expectedPreferredLocale: z.string().nullable().optional(),
-		name: z.string().trim().min(1).max(100).optional(),
-		preferredLocale: z.string().min(1).optional(),
-	})
-	.strict()
-	.refine(
-		(input) => input.name !== undefined || input.preferredLocale !== undefined,
-		"Provide name or preferredLocale.",
-	);
+export const UpdateAccountProfileSchema =
+	ACCOUNT_LANGUAGE_CONTRACT.mcp.definition.schema;
 export const SetArtistBillingCountrySchema =
 	BILLING_COUNTRY_SET_CONTRACT.mcp.definition.schema;
 export const GetArtistBillingCountrySchema =
@@ -33,12 +23,8 @@ export const ACCOUNT_SETTINGS_TOOL_DEFINITIONS = [
 		outputSchema: AnyOutputEnvelopeSchema,
 	},
 	{
-		description:
-			"Preview a display name or preferred language change. Show the preview and obtain explicit confirmation, then echo the expected current values with confirm=true.",
-		...writeAnnotations,
-		name: "dynamoi_update_account_profile",
-		schema: UpdateAccountProfileSchema,
-		title: "Update Account Profile",
+		...ACCOUNT_LANGUAGE_CONTRACT.mcp.definition,
+		outputSchema: AnyOutputEnvelopeSchema,
 	},
 	{
 		...BILLING_COUNTRY_SET_CONTRACT.mcp.definition,

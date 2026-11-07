@@ -191,7 +191,7 @@ const DynamoiGetSmartLinkInputSchema =
 
 
 export const SMART_LINK_ANALYTICS_CONTRACT = {
- capabilityId: "smart_link_analytics", kind: "query", version: 1, journeys: ["analytics-ranges"],
+ capabilityId: "smart_link_analytics", kind: "query", version: 1, journeys: ["native-reads", "reads-link-states", "reads-revoked", "reads-switch-delay"],
  dateRangeSchema: DateRangeSchema, isoCalendarDateSchema: IsoCalendarDateSchema, analyticsDateRangeSchema: SmartLinkAnalyticsDateRangeSchema,
  mcp: { definition: {
 		description:
@@ -206,8 +206,6 @@ export const SMART_LINK_ANALYTICS_CONTRACT = {
 	}, scopes: ["dynamoi:read"], directoryReason: "Read-only per-link analytics are directory-safe." },
  mobile: {auth: "bearer", method: "GET", operationId: "getMobileSmartLinkAnalytics", paramsSchema: z.object({id: z.string().trim().min(1)}), path: "/api/mobile/smart-links/{id}/analytics", platforms: ["android", "ios"], querySchema: MobileAnalyticsQuerySchema, responseSchema: MobileAnalyticsResponseSchema},
  parity: {
- ios: {status: "partial", reason: "native screen pending: packages/application-api-contract/native-specs/smart_link_analytics.md; paired receipt required."},
- android: {status: "partial", reason: "native screen pending: packages/application-api-contract/native-specs/smart_link_analytics.md; paired receipt required."},
  web: {status: "partial", reason: "Adapter proof pending."}, mcp: {status: "partial", reason: "Adapter proof pending."}, cli: {status: "partial", reason: "Adapter proof pending."},
  webmcp: {status: "partial", journeys: [], binding: {file: "apps/dashboard/app/dashboard/webmcp/dashboard-bindings.webmcp.generated.ts", export: "smartLinkAnalyticsWebMcp", tool: "dashboard_smart_link_analytics", role: "consumer", intermediates: [{file: "apps/dashboard/app/dashboard/webmcp/reads.ts", export: "smartLinkAnalytics"}, {file: "apps/dashboard/app/lib/domains/mcp/tools/smart-links-analytics.ts", export: "toolGetSmartLinkAnalytics"}]}}
  }

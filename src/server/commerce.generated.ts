@@ -3,7 +3,220 @@ import { z } from "zod";
 import { SHOP_AGENT_TOOL_DEFINITIONS, DynamoiShopOrdersDataSchema } from "./wire-shop-agent-wire.generated";
 import { ShopNativePromotionSchema, ShopNativeQuoteResponseSchema, ShopNativeCheckoutRequestSchema, ShopNativeCheckoutResponseSchema } from "./wire-native-wire.generated";
 const screens={ios:{status:"partial",reason:"Native screen pending: native-specs/shop_orders.md; anonymous storefront and order-bound claim stay distinct from authenticated history."},android:{status:"partial",reason:"Native screen pending: native-specs/shop_orders.md; exact-revision journey receipt required."}} as const;
-export const SHOP_ORDERS_CONTRACT={capabilityId:"shop_orders",kind:"query",version:1,
+export const SHOP_ORDERS_CONTRACT={
+ parityCompatibility: [
+  {
+    "fact": "04d5c58546397a9084cbdef7bb8e4ecb3707c11bfc1af00617bbc1e4b3f4e365",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "603420d2a8daf8cc3bed21432f65a4f7da8774828ad94dfc5ddb910268489526",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "702c7afde7c47c3241888b76d6758ef763cf61040713c2b5691c009ba489b7cb",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "bac34469ca921a2ced5c50754c76c4ff4fffc87c6812d6e3d6d6719dbd893109",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "c48bc4fee25dc1514945a86721fde2e4623a1ae4b64cbdf736343a17f032bae2",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "cfa2d4c0887488d392292d6ca4e492bd9868a18be6ab6cf5059e2d59db84b175",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "0d2ef17248fa232f8856c60faa10e27fc1d63022861f85ca824446dae911a582",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "e57604bc1c1bf73decbe8bb3e4ef440ccb4c540bbf50682376870a4e9e4ce4fe",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "a1db6e68a18f154aa58cbd7d2874265abf249881e8903a366f9a6879ba81c399",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "c87ed24b9946e370940ed6246ecba0b46177e4397b7dada85a9b374734bb8bae",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "6b46c89122abadd3f50765a6415e4a2a3c13047613792c9bb8abd36f5cded53b",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "171b241a256d8b13b8860630361a63f7967af10dbfbc8f4b36a63cf28d7cd51c",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "c259713094f96fa7a0e67b812e834ffa2b8cdb757b5a3ce85d63e77d7b31de7a",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "c80a873ce518ec6a1257945b5de841dfd89ad6651a50a7b6537ddd04acd32ce0",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "9872f3d8cf8b09e304b02ed2fdb0e8380967b3312fef9bf71fb778c76667f11d",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "f2b570f97051849dabdf1b24c7d14c668eef2b15d0c65237777897eb4220d95c",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "ef1fc6ae30a0524e4f53c6fccc9d28f1fcfc462538ecc211c6f48e57b3d13ff6",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "f236d05deaceb3f178bd1e11914c2ba56d61fb1c97e9ecb7d8f2c02ad2d35b17",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "54fe48ee335dd447831c69af809dab1e3b187f0468e05b34d9a3ccb15ea898c0",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "cef23f6fa07cf720e86a2178a182c0fb04fd3db54dcd4deb854eaa1800782701",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "2dd74a8706b5bf3db0d8e95cfe485d9df5a0f51bbd8c8fef67e2c8241252cb12",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "2ca1d9bfaa65e0392080f6e642f06e6200021a4306522517bacd8d3e4ff01181",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "9c8de4d14a10fa252356a2fc4e5d9e64e7212d77fbee0545fc143486701a1ddd",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "20ba445a11ea9ab56da7b24fe25f8e1ae3df647afbf41f57fba35b0f17d52f3d",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "41a1648a51b62c8e5de09a01835fa8366a7b1d2a6ba2011b258d85b78268c0ef",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "eb46d4226a399929e8f9502d5aa66121ace8cabfcaf8c31e83a4303c7307bfca",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "84da7d09b2f9ed71d05166eee269afda5f09bcf15cd1c660e40ee88d0338df7a",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "92cce0dba81400238eb655002a8801edffc94d5a05c7ac3c58bf7ffe4503f0b0",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "95badf1bb05b7d2a39725796317c301dd5619607b24255742a3f36ac82f64c08",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "3af0aa3e87db2f4dc128a0da7f2c431981e2debdabe22dde292e3f61b07b2120",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "39035d742e3094ea8cee8ed793686352dbac9fa3c3219143746ed4f7111e5312",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "36655711e6e7d6bfd41fa99be5e5e18ecd5f2fd3c19fb2bbf274f55a54e8f2fa",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "2de479e12146b8bd01458800bd6981bd906baf3a4016a3d1c21d315047509862",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "35acddf847031db9fe68298975aa54190ccda736aa9dafed27810a38f0007634",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "571d8abd2b45ad2d3b19a766256a374dba5809c50f735b76e984168cb962d4d3",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "804661f430ea48d68b9de7f92413f93f89c8f6c1f163659f807568328ff57512",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "88055784be1e09cc228bc05e64c0b053212ae5c3a98fcd9edfb6b82145c4829c",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "c9fcb051fdd1aa8953952faa99beb5df80d51419a84b655585eab87996eda1ad",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "2c822bdd79a8fdf8078349f67f29e10b1e47308bf06bd199e35db69357168d1a",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "f20ce30bd2e9a5c7b9b082448eb07636a01deae1fcc4e5cd98658b2206d0e642",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "d66f142b22ab365241f0cd9b265bc8815589fb7449e77a5f59cf6d21ff89d1d4",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  },
+  {
+    "fact": "c0e984c19bf0b139b94702426402ce6623e3c11bcc1f903f87caefaa9e459edd",
+    "reason": "Retain the reviewed web-only anonymous checkout receipt and verified-email claim boundary; remove agent tool admission from Shop claim and success routes. Authenticated Shop history remains separate.",
+    "decision": "repo:dynamoi@f6f833978807a07b9cf5d7766cdeb731a677daa0#native-specs/shop_orders.md"
+  }
+],
+capabilityId:"shop_orders",kind:"query",version:1,
  mcp:{definition:SHOP_AGENT_TOOL_DEFINITIONS[0],scopes:["dynamoi:read","dynamoi:mcp.full"],directoryReason:"Existing Shop full-only order read; directory stays excluded."},
  mobile:{operationId:"getMobileShopOrders",auth:"bearer",method:"GET",path:"/api/mobile/artists/{artistId}/shop-orders",platforms:["ios","android"],paramsSchema:z.object({artistId:z.string().min(1)}),querySchema:z.object({limit:z.coerce.number().int().min(1).max(20).default(10),orderId:z.string().min(1).max(255).optional()}),responseSchema:DynamoiShopOrdersDataSchema},parity:{...screens,webmcp:{status:"complete",binding:{file:"apps/dashboard/app/dashboard/webmcp/dashboard-bindings.webmcp.generated.ts",export:"shopOrdersWebMcp",tool:"dashboard_shop_orders",intermediates:[{file:"apps/dashboard/app/dashboard/webmcp/reads.ts",export:"shopOrders"}]},journeys:["WM-DASHBOARD-shopOrders"]}}} as const;
 export const SHOP_QUOTE_CONTRACT={capabilityId:"shop_orders",kind:"query",version:1,

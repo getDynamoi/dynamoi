@@ -15,6 +15,7 @@ export const DescriptiveEntitySchema = z
 export const DynamoiListArtistsInputSchema = z
 	.object({
 		artistId: z.string().uuid().optional(),
+		query: z.string().trim().min(2).max(80).optional(),
 		cursor: z.string().optional(),
 		format: ToolFormatSchema.optional(),
 		limit: z.number().int().min(1).max(50).optional(),

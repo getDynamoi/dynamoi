@@ -326,6 +326,7 @@ const DynamoiGetYouTubeChannelDataInputSchema = z
 
 export const YOUTUBE_CHANNEL_DATA_CONTRACT = {
 	capabilityId: "youtube_channel_data",
+	journeys: ["native-reads", "reads-youtube-states", "reads-revoked", "reads-switch-delay"],
 	kind: "query",
 	defaultLimit: MOBILE_YOUTUBE_CHANNEL_DATA_DEFAULT_LIMIT,
 	mcp: {
@@ -352,8 +353,6 @@ export const YOUTUBE_CHANNEL_DATA_CONTRACT = {
 	},
 	parity: {
 		webmcp: { status: "partial", journeys: [], binding: { file: "apps/dashboard/app/dashboard/webmcp/dashboard-bindings.webmcp.generated.ts", export: "youtubeChannelDataWebMcp", tool: "dashboard_youtube_channel_data", role: "consumer", intermediates: [{ file: "apps/dashboard/app/dashboard/webmcp/reads.ts", export: "youtubeChannelData" }, { file: "apps/dashboard/app/lib/domains/mcp/tools/get-youtube-channel-data.ts", export: "toolGetYouTubeChannelData" }, { file: "apps/dashboard/app/lib/domains/youtube-campaign/analytics/readers/read-artist-youtube-channel-data.ts", export: "readArtistYouTubeChannelData" }] } },
-		ios: { status: "partial", reason: "native screen pending: packages/application-api-contract/native-specs/youtube_channel_data.md; HTTP contract retained; paired current-revision journey required." },
-		android: { status: "partial", reason: "native screen pending: packages/application-api-contract/native-specs/youtube_channel_data.md; HTTP contract retained; paired current-revision journey required." },
 		web: { status: "partial", reason: "Adapter behavior proof pending." },
 		mcp: { status: "partial", reason: "Adapter behavior proof pending." },
 		cli: { status: "partial", reason: "Adapter behavior proof pending." },

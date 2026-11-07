@@ -58,6 +58,7 @@
 		"dist/server/about.d.ts",
 		"dist/server/about.generated.d.ts",
 		"dist/server/artist-intake-tools.d.ts",
+		"dist/server/artist-intake-wire.generated.d.ts",
 		"dist/server/account-schema.generated.d.ts",
 		"dist/server/account-settings-tools.d.ts",
 		"dist/server/audit-log.generated.d.ts",

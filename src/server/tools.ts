@@ -36,6 +36,7 @@ import { OPENAI_TOOL_DEFINITIONS } from "./openai-tools";
 import {
 	createOutputEnvelopeSchema,
 	AnyOutputEnvelopeSchema,
+    TeamOutputEnvelopeSchema,
 	GetCampaignOutputEnvelopeSchema,
 	GetCampaignReadinessOutputEnvelopeSchema,
 	GetResumeFundingOutputEnvelopeSchema,
@@ -585,7 +586,7 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 	{...PLATFORM_ACTION_CENTER_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
 	{...earningsDefinition, outputSchema: AnyOutputEnvelopeSchema},
 	{...TEAM_READ_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
-	{...TEAM_ROLE_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
+	{...TEAM_ROLE_CONTRACT.mcp.definition,outputSchema:TeamOutputEnvelopeSchema},
 	{ ...AUDIT_SETTINGS_CONTRACT.mcp.definition, outputSchema: AnyOutputEnvelopeSchema.or(AUDIT_ACCOUNT_CONTRACT.mcp.accountResponseSchema) },
 	{...REFERRALS_CLAIM_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
 	{...REFERRALS_READ_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},

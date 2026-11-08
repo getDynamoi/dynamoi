@@ -8,6 +8,7 @@ export type ResultEnvelope<T> =
 	| { status: "partial_success"; data: T; message: string }
 	| {
 			status: "error";
+            reason?: "member_changed" | "invitation_changed";
 			recovery?: import("./server/output-schemas").SmartCampaignLaunchProjection["recovery"];
 			validationCode?: string | undefined;
 			validationStage?: string | undefined;

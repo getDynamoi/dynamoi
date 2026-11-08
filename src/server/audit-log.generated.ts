@@ -27,7 +27,9 @@ const mcp = {
 const pending = {status: "partial", reason: "Native screen pending: packages/application-api-contract/native-specs/audit_log.md; completion requires paired journey receipts."} as const;
 const paramsSchema = z.object({artistId: z.string().min(1)});
 const metadata = z.record(z.string(), z.json());
+const auditText = z.object({action: z.string().nullable(), description: z.string().nullable(), itemName: z.string().nullable(), locale: z.string()});
 const settingsEvent = z.object({
+ display: auditText,
  rowKey: z.string(), timestampIso: z.string(), actorEmail: z.string(),
  actorName: z.string().nullable().optional(), artistName: z.string().nullable().optional(),
  artistImageUrl: z.string().nullable().optional(), eventKey: z.string().nullable(),
@@ -39,7 +41,7 @@ export const AUDIT_ACCOUNT_CONTRACT = {
  mobile: {
   auth: "bearer", method: "GET", operationId: "getMobileAccountAuditLog",
   path: "/api/mobile/artists/{artistId}/account-activity", paramsSchema,
-  platforms: ["ios", "android"], responseSchema: mcp.accountResponseSchema.shape.data,
+  platforms: ["ios", "android"], responseSchema: z.array(z.object({id: z.string(), actorEmail: z.string(), timestampIso: z.string(), display: auditText})),
  },
  parity: {ios: pending, android: pending, webmcp: {status:"complete",journeys:["WM-DASHBOARD-accountAudit"],binding:{file:"apps/dashboard/app/dashboard/webmcp/dashboard-bindings.webmcp.generated.ts",export:"accountAuditWebMcp", tool: "dashboard_account_audit", intermediates: [{file: "apps/dashboard/app/dashboard/webmcp/reads.ts", export: "accountAudit"}, {file: "apps/dashboard/app/lib/domains/mcp/tools/parity-reads.ts", export: "toolGetAuditLog"}, {file: "apps/dashboard/app/lib/domains/audit/actions/account-audit-log.ts", export: "readAccountAuditEventsForUser"}]}}},
 } as const;

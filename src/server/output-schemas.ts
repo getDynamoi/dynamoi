@@ -127,7 +127,7 @@ const MoneyDisplayOutputSchema = z
 
 export function createOutputEnvelopeSchema(
 	dataSchema: z.ZodType,
-	options?: { allowPartial?: boolean; launch?: boolean },
+	options?: { allowPartial?: boolean; launch?: boolean; team?: boolean },
 ) {
 	const statuses = options?.allowPartial
 		? (["success", "partial_success", "error"] as const)
@@ -135,6 +135,7 @@ export function createOutputEnvelopeSchema(
 	return z
 		.object({
 			data: dataSchema.optional(),
+            ...(options?.team ? {reason: z.enum(["member_changed", "invitation_changed"]).optional()} : {}),
 			kind: z
 				.enum(["validation", "business", "platform", "unknown"])
 				.optional(),
@@ -453,6 +454,8 @@ const LaunchCampaignDataOutputSchema = z
 			.optional(),
 	})
 	.strict();
+
+export const TeamOutputEnvelopeSchema = createOutputEnvelopeSchema(AnyToolDataOutputSchema, {allowPartial: true, team: true});
 
 export const AnyOutputEnvelopeSchema = createOutputEnvelopeSchema(
 	AnyToolDataOutputSchema,

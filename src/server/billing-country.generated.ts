@@ -96,5 +96,6 @@ export const BILLING_COUNTRY_SET_CONTRACT = {
 		method: "PATCH",
 		operationId: "patchMobileArtistBillingCountry",
 	},
+	parity: {webmcp: {status: "complete",journeys:["WM-DASHBOARD-billingCountrySet"],binding:{file:"apps/dashboard/app/dashboard/webmcp/dashboard-bindings.webmcp.generated.ts",export:"billingCountrySetWebMcp",tool:"dashboard_set_artist_billing_country",intermediates:[{file:"apps/dashboard/app/dashboard/webmcp/account-commands.ts",export:"billingCountrySet"}]}}},
 	version: 1,
 } as const;

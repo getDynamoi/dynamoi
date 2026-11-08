@@ -207,6 +207,6 @@ export const SMART_LINK_ANALYTICS_CONTRACT = {
  mobile: {auth: "bearer", method: "GET", operationId: "getMobileSmartLinkAnalytics", paramsSchema: z.object({id: z.string().trim().min(1)}), path: "/api/mobile/smart-links/{id}/analytics", platforms: ["android", "ios"], querySchema: MobileAnalyticsQuerySchema, responseSchema: MobileAnalyticsResponseSchema},
  parity: {
  web: {status: "partial", reason: "Adapter proof pending."}, mcp: {status: "partial", reason: "Adapter proof pending."}, cli: {status: "partial", reason: "Adapter proof pending."},
- webmcp: {status: "partial", journeys: [], binding: {file: "apps/dashboard/app/dashboard/webmcp/dashboard-bindings.webmcp.generated.ts", export: "smartLinkAnalyticsWebMcp", tool: "dashboard_smart_link_analytics", role: "consumer", intermediates: [{file: "apps/dashboard/app/dashboard/webmcp/reads.ts", export: "smartLinkAnalytics"}, {file: "apps/dashboard/app/lib/domains/mcp/tools/smart-links-analytics.ts", export: "toolGetSmartLinkAnalytics"}]}}
+ webmcp: {status: "complete", journeys: ["WM-DASHBOARD-smartLinkAnalytics"], binding: {file: "apps/dashboard/app/dashboard/webmcp/dashboard-bindings.webmcp.generated.ts", export: "smartLinkAnalyticsWebMcp", tool: "dashboard_smart_link_analytics", role: "consumer", intermediates: [{file: "apps/dashboard/app/dashboard/webmcp/reads.ts", export: "smartLinkAnalytics"}, {file: "apps/dashboard/app/lib/domains/mcp/tools/smart-links-analytics.ts", export: "toolGetSmartLinkAnalytics"}]}}
  }
 } as const;

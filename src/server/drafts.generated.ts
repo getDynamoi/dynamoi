@@ -77,6 +77,22 @@ export const CAMPAIGN_DRAFTS_CONTRACT = {
 				"Preserves the native drafts/media cohort's partial journey acceptance.",
 			status: "partial",
 		},
+		webmcp: {
+			binding: {
+				export: "campaignDraftsWebMcp",
+				file: "apps/dashboard/app/dashboard/webmcp/dashboard-bindings.webmcp.generated.ts",
+				intermediates: [
+					{
+						export: "campaignDrafts",
+						file: "apps/dashboard/app/dashboard/webmcp/reads-campaigns.ts",
+					},
+				],
+				role: "consumer",
+				tool: "dashboard_campaign_drafts",
+			},
+			journeys: ["WM-DASHBOARD-campaignDrafts"],
+			status: "complete",
+		},
 	},
 	version: 1,
 } as const;

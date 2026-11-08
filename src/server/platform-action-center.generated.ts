@@ -178,7 +178,8 @@ export const PLATFORM_ACTION_CENTER_CONTRACT = {
 		ios: screenPending,
 		android: screenPending,
 		webmcp: {
-			status: "partial",
+			status: "complete",
+			journeys: ["WM-DASHBOARD-actionCenter"],
 			binding: {
 				file: "apps/dashboard/app/dashboard/webmcp/dashboard-bindings.webmcp.generated.ts",
 				export: "actionCenterWebMcp",

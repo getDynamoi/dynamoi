@@ -1,3 +1,4 @@
+import {PLATFORM_ACTION_CENTER_CONTRACT} from "./platform-action-center.generated";
 import {META_CAMPAIGN_GROUPS_CONTRACT} from "./meta-groups.generated";
 import {CAMPAIGN_MANAGEMENT_READ_CONTRACT} from "./management-read.generated";
 import {AGENT_SEARCH_CONTRACT} from "./search.generated";
@@ -120,9 +121,7 @@ export const DynamoiGetAuditLogInputSchema = AUDIT_SETTINGS_CONTRACT.mcp.definit
 export const DynamoiClaimReferralCodeInputSchema = REFERRALS_CLAIM_CONTRACT.mcp.definition.schema;
 export const DynamoiGetReferralsInputSchema = REFERRALS_READ_CONTRACT.mcp.definition.schema;
 
-export const DynamoiGetActionCenterInputSchema = z
-	.object({ artistId: z.string().uuid() })
-	.strict();
+export const DynamoiGetActionCenterInputSchema = PLATFORM_ACTION_CENTER_CONTRACT.mcp.definition.schema;
 
 export const DynamoiGetEarningsInputSchema = EarningsInputSchema;
 
@@ -583,17 +582,7 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 		schema: DynamoiGetBillingInputSchema,
 		title: "Get Billing",
 	},
-	{
-		description:
-			"Read an artist's platform Action Center after authenticated artist access. Preserve revision, task states, steps and primary/secondary actions: open_url opens a URL; navigate is dashboard navigation. Reading does not complete or approve a task. Unavailable data is an error, not an empty task list.",
-		destructiveHint: false,
-		name: "dynamoi_get_action_center",
-		openWorldHint: false,
-		outputSchema: AnyOutputEnvelopeSchema,
-		readOnlyHint: true,
-		schema: DynamoiGetActionCenterInputSchema,
-		title: "Get Action Center",
-	},
+	{...PLATFORM_ACTION_CENTER_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
 	{...earningsDefinition, outputSchema: AnyOutputEnvelopeSchema},
 	{...TEAM_READ_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
 	{...TEAM_ROLE_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},

@@ -1,3 +1,4 @@
+import {ONBOARDING_PLATFORM_STATUS_CONTRACT} from "./reads.generated";
 import {CAMPAIGN_READINESS_MCP} from "./readiness-input.generated";
 import { SMART_AD_COPY_MCP } from "./smart-ad-copy.generated";
 export { DynamoiSmartCampaignAdCopyInputSchema } from "./smart-ad-copy.generated";
@@ -126,14 +127,7 @@ export const DynamoiGetActionCenterInputSchema = PLATFORM_ACTION_CENTER_CONTRACT
 
 export const DynamoiGetEarningsInputSchema = EarningsInputSchema;
 
-export const DynamoiGetPlatformStatusInputSchema = z
-	.object({
-		artistId: z.string().uuid(),
-		format: ToolFormatSchema.optional(),
-		onboardingAttemptId: OnboardingAttemptIdSchema,
-		onboardingFlow: z.enum(["meta", "youtube"]).optional(),
-	})
-	.strict();
+export const DynamoiGetPlatformStatusInputSchema = ONBOARDING_PLATFORM_STATUS_CONTRACT.mcp.definition.schema;
 
 export const DynamoiStartYoutubeChannelLinkInputSchema=YOUTUBE_CONNECTION_CONTRACT.mcp.definition.schema;
 export const DynamoiStartMetaConnectionInputSchema=META_CONNECTION_CONTRACT.mcp.definition.schema;
@@ -551,17 +545,7 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 	{
 		...CAMPAIGN_RESUME_FUNDING_CONTRACT.mcp.definition,
 		outputSchema: GetResumeFundingOutputEnvelopeSchema,
-	},	{
-		description:
-			"Use this when the user wants to know whether Spotify, Meta, or YouTube are connected and what setup steps still block launches. When polling after a connection-start flow, pass the returned onboardingAttemptId and onboardingFlow so Dynamoi ops can correlate the browser step. Do not use this for detailed billing questions. Never use this to personalize generic Instagram or marketing-advice questions.",
-		destructiveHint: false,
-		name: "dynamoi_get_platform_status",
-		openWorldHint: false,
-		outputSchema: AnyOutputEnvelopeSchema,
-		readOnlyHint: true,
-		schema: DynamoiGetPlatformStatusInputSchema,
-		title: "Get Platform Status",
-	},
+	},	{...ONBOARDING_PLATFORM_STATUS_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
 	{...CAMPAIGN_COUNTRIES_CONTRACT.mcp.definition,outputSchema:ListAvailableCountriesOutputEnvelopeSchema},
 	{...CAMPAIGN_READINESS_MCP.definition,outputSchema:GetCampaignReadinessOutputEnvelopeSchema},] as const;
 

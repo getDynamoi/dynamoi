@@ -12,3 +12,45 @@ export const META_CONNECTION_CONTRACT={capabilityId:"connected_apps",kind:"comma
 export const YOUTUBE_CONNECTION_CONTRACT={capabilityId:"connected_apps",kind:"command",version:1,mcp:{definition:{...exposure,name:"dynamoi_start_youtube_channel_link",title:"Start YouTube Channel Link",description:"Use this when the user wants to grow a YouTube channel with Dynamoi campaigns or is ready to link a channel to one Dynamoi artist from chat. Set purpose=distribution_identity for the least-privilege identity connection required by a distribution application; that flow does not require advertising billing or Google Ads linking, and its result is checked with dynamoi_get_distribution_application. Use purpose=advertising (the default) for managed YouTube promotion, then poll dynamoi_get_platform_status until platforms.youtube.connected is true. The tool returns a Google OAuth URL bound to the signed-in user and artist."},scopes:["dynamoi:read","dynamoi:platform.write"],directoryReason:"Existing user-present Google OAuth handoff; agents never grant provider consent."},mobile:{...mobile,operationId:"postMobileYouTubeConnection",path:"/api/mobile/artists/{artistId}/connections/youtube",responseSchema:youtubeResponse},parity:{ios:pending,android:pending,webmcp: {status:"complete",journeys:["WM-DASHBOARD-connectionYoutube"],binding:{file:"apps/dashboard/app/dashboard/webmcp/dashboard-bindings.webmcp.generated.ts",export:"connectionYoutubeWebMcp",tool:"dashboard_connection_youtube",intermediates:[{file:"apps/dashboard/app/dashboard/webmcp/connection-commands.ts",export:"connectionYoutube"}]}}}} as const;
 
 /** Native read of the existing advertising status owner; initiation stays separate. */
+export const MOBILE_PLATFORM_STATUS_OPERATION = {
+	auth: "bearer",
+	method: "GET",
+	operationId: "getMobilePlatformStatus",
+	paramsSchema: z.object({ artistId: z.string().uuid() }),
+	path: "/api/mobile/artists/{artistId}/platform-status",
+	platforms: ["ios", "android"],
+	querySchema: z.object({
+		onboardingAttemptId: z.string().trim().min(1).max(120).optional(),
+		onboardingFlow: z.enum(["meta", "youtube"]).optional(),
+	}),
+	responseSchema: z.object({
+		actionRequired: z.array(z.string()),
+		missingForSmartCampaign: z.array(z.string()),
+		missingForYouTube: z.array(z.string()),
+		onboardingComplete: z.boolean(),
+		platforms: z.object({
+			meta: z.object({
+				connected: z.boolean(),
+				isTokenExpired: z.boolean().optional(),
+				pageName: z.string().optional(),
+				status: z.enum([
+					"not_connected",
+					"selection_pending",
+					"oauth_complete",
+					"partnership_pending",
+					"partnership_active",
+				]),
+				tokenExpiresAt: z.string().optional(),
+			}),
+			spotify: z.object({
+				artistName: z.string().optional(),
+				artistUrl: z.string().optional(),
+				connected: z.boolean(),
+			}),
+			youtube: z.object({
+				channelName: z.string().optional(),
+				connected: z.boolean(),
+			}),
+		}),
+	}),
+} as const;

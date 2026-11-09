@@ -19,8 +19,6 @@ export {
 	getDynamoiAbout,
 } from "./server/about";
 export {
-	type AccountEditResult,
-	type AccountSettingsInput,
 	DeleteAccountSchema,
 	GetArtistBillingCountrySchema,
 	SetArtistBillingCountrySchema,

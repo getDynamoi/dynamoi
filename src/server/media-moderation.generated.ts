@@ -18,6 +18,7 @@ export const MediaModerationResponseSchema=z.object({assets:z.array(MediaModerat
 const pending={status:"partial",reason:"Full receipt screen pending; authenticated read preserves the existing paginated list.",screenSpec:"packages/application-api-contract/native-specs/media-moderation.md"} as const;
 const retirementCompatibility={"reason":"Retire only the duplicate legacy YouTube receipt identity onto the approved complete shared receipt query on the existing route. Installed media-assets schemas/profiles/scopes and converter binding remain protected by the unchanged Smart row; no status-only catalog substitution, surface completion claim or runtime mutation.","decision":"repo:dynamoi@83d4681260826522921e50b30a1889d72539c02d#packages/application-api-contract/src/campaign/media-moderation.ts"} as const;
 export const MEDIA_MODERATION_READ_CONTRACT={
+ legacyAliases:[{"id":"campaign.smart-creative.media-moderation","revision":"2cc8e31e8bdd786843c76df70c5180c006f36257","fingerprint":"5cacd2c9508cca63080d8172b6ec5b02ef2753e188fe95d218a451262e9136f9","readProjection":true}],
  parityCompatibility:[
   {...retirementCompatibility,fact:"2544302647f6675c67cf909ca235d8f6c3d17f774fd98e445d509338df720181"},
   {...retirementCompatibility,fact:"6c6a37c8cb5c196143a6065a49ef9a92c8e8364810bfa4eb8e97e5fba2d17b82"},

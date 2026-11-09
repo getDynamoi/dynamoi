@@ -8,7 +8,7 @@ import {
 	TOTAL_BUDGET_FUNDING_CONSENT_COPY,
 	TOTAL_BUDGET_FUNDING_CONSENT_COPY_HASH,
 	TOTAL_BUDGET_FUNDING_CONSENT_VERSION,
-} from "./funding-consent";
+} from "./funding-consent.generated";
 const prospectiveFundingConsentCopy = PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY,
 	prospectiveFundingConsentCopyHash =
 		PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY_HASH,
@@ -365,7 +365,24 @@ const SmartCampaignSubmissionHandoffSchema = z.strictObject({
 	url: z.url(),
 	submitted: z.literal(false),
 });
+
+const submissionIdentityCompatibility = {reason:"Move the existing partial Smart submission browser handoff to its generated owner, preserving the exact binding, routes, no-write behavior and partial coverage.",decision:"repo:dynamoi@a7b7501462d263fa77e26d253e621ddb1f5ebbb7#packages/application-api-contract/README.md"} as const;
+const submissionPreparationCompatibility = {reason:"Retire the submission aggregate's preparation-only accounting. Creative management, media listing and readiness keep their existing directory profiles and assigned setup/creative/budget owners; Smart submission remains full-only and human-gated. No tool catalog, scope or callable changes.",decision:submissionIdentityCompatibility.decision} as const;
+const submissionHandoffOnly = {status:"partial",reason:"Smart agent submission is a no-write human handoff; it does not certify consent, funding or launch completion."} as const;
+const submissionScreenPending = {status:"partial",screenSpec:"packages/application-api-contract/native-specs/smart_campaign_submission.md",reason:"Native screen pending: packages/application-api-contract/native-specs/smart_campaign_submission.md; prove consent, durable request identity, retry after saved draft and revoked-access handling on both apps."} as const;
 export const SMART_CAMPAIGN_SUBMISSION_CONTRACT = {
+ parityCompatibility:[
+  {...submissionIdentityCompatibility,fact:"aba38f8bb7a7a4b5b02d57a5542ac313e86cc6e7a5ac84d7ff12a28f03a0da00"},
+  {...submissionIdentityCompatibility,fact:"0aab822928102a6937d8fe808fd8acdf102c0db4a24166faf5a05a43c9d7a090"},
+  {...submissionIdentityCompatibility,fact:"8feb2470d123e3fe3cf7fdba2f8c1885331e677e7dc863bd06169a05d05a53a7"},
+  {...submissionIdentityCompatibility,fact:"251b56c4c02e3959a61ec10e86493aab2e817f999e4f4c2c452f84843fd70133"},
+  {...submissionPreparationCompatibility,fact:"3463a752cd118ca44df1b53dc289c10d7b1bf442f77c5d5bb6fbf7291e7e2657"},
+  {...submissionPreparationCompatibility,fact:"8157d23ee18a2f6270d8a77dc358f7125109d630321a6b202464126d33f00f19"},
+  {...submissionPreparationCompatibility,fact:"c91d18789e7dd930e0f7e396b7a3b1e64e4d3e716430d9837f66fc146e8165ab"},
+  {...submissionPreparationCompatibility,fact:"6747b8432a15e22297c8c7d04c16806805b2f2ca66839fbd6210fadb1e5b60a4"},
+ ],
+ capabilityId:"smart_campaign_submission",kind:"command",version:1,
+ parity:{ios:submissionScreenPending,android:submissionScreenPending,mcp:submissionHandoffOnly,cli:submissionHandoffOnly,webmcp:{status:"partial",reason:"Human-gated handoff only; final submission requires the human workspace. This binding does not certify an agent launch.",binding:{file:"apps/dashboard/app/dashboard/webmcp/dashboard-bindings.webmcp.generated.ts",export:"smartSubmissionHandoffWebMcp",tool:"dashboard_smart_campaign_submission_handoff",role:"consumer",intermediates:[{file:"apps/dashboard/app/dashboard/webmcp/submission-handoff.ts",export:"smartSubmissionHandoff"},{file:"apps/dashboard/app/lib/domains/campaign/launch.ts",export:"getSmartCampaignSubmissionHandoff"}]}}},
 	mcp: {
 		definition: {
 			description: `SMART_CAMPAIGN returns only a human-gated workspace handoff: it never saves these supplied compatibility fields, launches, authorizes funding or charges. Finish the current saved draft and confirm submission in that human flow. The following launch and funding instructions apply only to YOUTUBE. Use YOUTUBE only when the user explicitly wants to start its launch workflow. Ads are not necessarily live until the returned delivery state is ACTIVE. DAILY budgets require authorizeAutomaticDailyFunding=true plus the exact acceptedConsentVersion ("${PROSPECTIVE_BUDGET_FUNDING_CONSENT_VERSION}") and acceptedConsentCopyHash ("${PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY_HASH}"); first show the user this exact consent copy: "${PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY}". A TOTAL budget uses its own consent: show "${TOTAL_BUDGET_FUNDING_CONSENT_COPY}" and send acceptedTotalConsentVersion ("${TOTAL_BUDGET_FUNDING_CONSENT_VERSION}") and acceptedTotalConsentCopyHash ("${TOTAL_BUDGET_FUNDING_CONSENT_COPY_HASH}"), without authorizeAutomaticDailyFunding. Every budget is funded from credit first, then prepaid funds, then the saved card; a budget type refuses the other's consent, and without consent the launch is refused and never charged. YOUTUBE campaigns require youtubeStrategy and either legacy youtubeVideoId/youtubePlaylistId or ordered youtubeEntries (up to 10 videoId/playlistId pairs); playlistId is optional for CHEAPEST_VIEWS, which supports one video. After a successful launch, answer from the returned campaign details directly instead of chaining more tools unless the user explicitly asked for more.`,

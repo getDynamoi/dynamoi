@@ -9,8 +9,8 @@ const MobileSmartCampaignUuidSchema = z.uuid();
 const MobileSmartCampaignRevisionSchema = z.iso.datetime();
 export const MobileSmartCampaignAdCopyResponseSchema: z.ZodObject<z.core.$ZodShape> = z.object({
 	activeStep: z.literal("adCopy"),
-	adCopy: z.nullable(MobileSmartCampaignAdCopyDraftSchema),
+	adCopy: MobileSmartCampaignAdCopyDraftSchema.nullable(),
 	campaignId: MobileSmartCampaignUuidSchema,
-	minimumPreservedAdCopyCharacters: z.int().positive(),
+	minimumPreservedAdCopyCharacters: z.number().int().positive(),
 	updatedAt: MobileSmartCampaignRevisionSchema,
 });

@@ -32,20 +32,20 @@ function isValidCalendarDate(value: string): boolean {
 		Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value
 	);
 }
-const IsoCalendarDateSchema = IsoDateSchema.refine(isValidCalendarDate, {
+export const IsoCalendarDateSchema = IsoDateSchema.refine(isValidCalendarDate, {
 	message: "must be a valid calendar date",
 });
 const UserIntentSummarySchema = z.string().trim().max(500).optional();
-const YouTubeStrategySchema = YouTubeStrategyKeySchema.describe(
+export const YouTubeStrategySchema = YouTubeStrategyKeySchema.describe(
 	`YouTube campaign strategy. Labels for users: CHEAPEST_VIEWS = Views, ORGANIC_VIEWS = Watch Time, SUBSCRIBERS = Subscribers, ORGANIC_VIEWS_AND_SUBSCRIBERS = Channel Growth (default for non-monetized channels), ADSENSE_ROI = Revenue (monetized channels only). Read ${YOUTUBE_CAMPAIGN_STRATEGIES_RESOURCE_URI} before recommending or changing one.`,
 );
-const LocationTargetSchema = z
+export const LocationTargetSchema = z
 	.object({
 		code: z.string().trim().min(1).max(8),
 		name: z.string().trim().min(1).max(120),
 	})
 	.strict();
-const YouTubeEntriesSchema = z
+export const YouTubeEntriesSchema = z
 	.array(
 		z
 			.object({
@@ -57,7 +57,7 @@ const YouTubeEntriesSchema = z
 	.min(1)
 	.max(10);
 
-function validateYouTubeEntries(
+export function validateYouTubeEntries(
 	data: {
 		youtubeEntries?: z.infer<typeof YouTubeEntriesSchema> | undefined;
 		youtubeVideoId?: string | undefined;

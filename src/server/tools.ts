@@ -1,3 +1,4 @@
+import {CAMPAIGN_READINESS_MCP} from "./readiness-input.generated";
 import { SMART_AD_COPY_MCP } from "./smart-ad-copy.generated";
 export { DynamoiSmartCampaignAdCopyInputSchema } from "./smart-ad-copy.generated";
 import {PLATFORM_ACTION_CENTER_CONTRACT} from "./platform-action-center.generated";
@@ -8,9 +9,6 @@ import {YOUTUBE_DRAFT_SETUP_CONTRACT} from "./youtube-draft.generated";
 import {CAMPAIGN_COUNTRIES_CONTRACT} from "./country-catalog.generated";
 import {SMART_CAMPAIGN_SUBMISSION_CONTRACT} from "./submission.generated";
 const YouTubeStrategySchema=SMART_CAMPAIGN_SUBMISSION_CONTRACT.youtubeStrategySchema;
-const LocationTargetSchema=SMART_CAMPAIGN_SUBMISSION_CONTRACT.locationTargetSchema;
-const YouTubeEntriesSchema=SMART_CAMPAIGN_SUBMISSION_CONTRACT.youTubeEntriesSchema;
-const validateYouTubeEntries=SMART_CAMPAIGN_SUBMISSION_CONTRACT.validateYouTubeEntries;
 const totalFundingConsentFields=SMART_CAMPAIGN_SUBMISSION_CONTRACT.totalFundingConsentFields;
 const addFundingConsentFamilyIssue=SMART_CAMPAIGN_SUBMISSION_CONTRACT.addFundingConsentFamilyIssue;
 export const DynamoiLaunchCampaignInputSchema=SMART_CAMPAIGN_SUBMISSION_CONTRACT.mcp.definition.schema;
@@ -494,27 +492,7 @@ export const DynamoiUpdateCampaignInputSchema = z
 
 export {DynamoiListMediaAssetsInputSchema} from "./media-moderation.generated";
 
-export const DynamoiGetCampaignReadinessInputSchema = z
-	.object({
-		adCopy: z.string().trim().max(500).optional(),
-		artistId: z.string().uuid(),
-		budgetAmount: z.number().finite().positive().optional(),
-		budgetType: z.enum(["DAILY", "TOTAL"]).optional(),
-		campaignType: z.enum(["SMART_CAMPAIGN", "YOUTUBE"]),
-		contentType: z.enum(["TRACK", "ALBUM", "PLAYLIST", "VIDEO"]).optional(),
-		endDate: IsoCalendarDateSchema.describe("Last day ads run").optional(),
-		format: ToolFormatSchema.optional(),
-		locationTargets: z.array(LocationTargetSchema).optional(),
-		mediaAssetIds: z.array(z.string().uuid()).optional(),
-		spotifyUrl: z.string().trim().min(1).max(500).optional(),
-		useAiGeneratedCopy: z.boolean().optional(),
-		youtubeEntries: YouTubeEntriesSchema.optional(),
-		youtubePlaylistId: z.string().trim().min(1).max(128).optional(),
-		youtubeStrategy: YouTubeStrategySchema.optional(),
-		youtubeVideoId: z.string().trim().min(1).max(128).optional(),
-	})
-	.strict()
-	.superRefine(validateYouTubeEntries);
+export const DynamoiGetCampaignReadinessInputSchema=CAMPAIGN_READINESS_MCP.definition.schema;
 
 export const PHASE_1_TOOL_DEFINITIONS = [
  {...META_CAMPAIGN_GROUPS_CONTRACT.mcp.definition,outputSchema:createOutputEnvelopeSchema(META_CAMPAIGN_GROUPS_CONTRACT.mobile.responseSchema)},
@@ -585,18 +563,7 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 		title: "Get Platform Status",
 	},
 	{...CAMPAIGN_COUNTRIES_CONTRACT.mcp.definition,outputSchema:ListAvailableCountriesOutputEnvelopeSchema},
-	{
-		description:
-			'Use this when a musician wants to promote a new single or release with ads ("promote my new single", "run ads for my song"): it checks whether a Smart Campaign or YouTube campaign is ready before launching the campaign. This validates readiness and targeting without creating a campaign. Complete budget inputs also return the shared, nonbinding campaign funding preview with known or unavailable credit coverage, card upper bounds and expiry timing. A preview is not consent. TOTAL launch requires the client to accept the current TOTAL funding consent and pass acceptedTotalConsentVersion plus acceptedTotalConsentCopyHash; never pass DAILY consent fields for TOTAL. Funding uses credit first, then prepaid funds, then the saved card, subject to the launch guards. Do not use this to create or mutate campaigns.',
-		destructiveHint: false,
-		name: "dynamoi_get_campaign_readiness",
-		openWorldHint: true,
-		outputSchema: GetCampaignReadinessOutputEnvelopeSchema,
-		readOnlyHint: true,
-		schema: DynamoiGetCampaignReadinessInputSchema,
-		title: "Get Campaign Readiness",
-	},
-] as const;
+	{...CAMPAIGN_READINESS_MCP.definition,outputSchema:GetCampaignReadinessOutputEnvelopeSchema},] as const;
 
 export const PHASE_ONBOARDING_TOOL_DEFINITIONS = [
  {...YOUTUBE_CONNECTION_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},

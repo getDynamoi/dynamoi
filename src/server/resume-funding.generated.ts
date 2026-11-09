@@ -54,7 +54,10 @@ const screenPending = {
 	status: "partial",
 } as const;
 
+const compatibility={reason:"Consolidate the duplicate YouTube funding read and misplaced draft-route debt onto the unchanged generated live-campaign funding owner, full-only MCP tool and existing campaign-management browser binding.",decision:"repo:dynamoi@973ac6cf24504d952eca0b33cbcbd29735da5eb9#packages/application-api-contract/README.md"} as const;
 export const CAMPAIGN_RESUME_FUNDING_CONTRACT = {
+	parityCompatibility: [{...compatibility,fact:"39bf06ba5165f3f6bbbdc602978c8b36dba55ccadbe989277206377531cb02c8"},{...compatibility,fact:"ac79d8901258f79c7531b3bd4e3de0be0642d2f348c11e98354ff5293ba42c77"},{...compatibility,fact:"8c443a981e0f3bcb5506561bc7dad47472c1aa60f5afa4722e238edab2a23c40"}],
+	legacyAliases: [{"id":"youtube.resume-funding","revision":"973ac6cf24504d952eca0b33cbcbd29735da5eb9","fingerprint":"5f7c40ef6aa82ba4828f7dfe8cccbc3d6584293a3347866700383586ff930f58"}],
 	capabilityId: "campaign_resume_funding",
 	currencyProof: {
 		currency: {

@@ -492,15 +492,7 @@ export const DynamoiUpdateCampaignInputSchema = z
 		}
 	});
 
-export const DynamoiListMediaAssetsInputSchema = z
-	.object({
-		artistId: z.string().uuid(),
-		cursor: z.string().optional(),
-		format: ToolFormatSchema.optional(),
-		includeUrls: z.boolean().optional(),
-		limit: z.number().int().min(1).max(50).optional(),
-	})
-	.strict();
+export {DynamoiListMediaAssetsInputSchema} from "./media-moderation.generated";
 
 export const DynamoiGetCampaignReadinessInputSchema = z
 	.object({

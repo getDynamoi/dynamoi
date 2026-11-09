@@ -193,7 +193,7 @@ including what did not work.
 - **Each client gets one of two tool sets**, chosen from the identity it signs
   in with. Reviewed clients and apps that sign in on your own computer
   (Claude Code, Codex, Cursor, VS Code, Gemini CLI, OpenClaw and the `dynamoi`
-  CLI) get All 70 tools. ChatGPT, Claude added from its directory listing and other web apps get 53 review-safe advertised tools: reads, Smart Links,
+  CLI) get All 71 tools. ChatGPT, Claude added from its directory listing and other web apps get 53 review-safe advertised tools: reads, Smart Links,
   billing and earnings status, draft preparation, account management and connection links, with no purchases, launches or checkout.
 - **Sign-in is OAuth 2.1**, and every call still checks its scopes and the
   user's role for that artist. See
@@ -252,6 +252,7 @@ including what did not work.
 | `dynamoi_get_resume_funding` | Campaign resume-funding breakdown, refusal, and consent requirements | Reads | Full |
 | `dynamoi_list_available_countries` | Countries a Smart Campaign or YouTube campaign can target | Reads | Both |
 | `dynamoi_get_campaign_readiness` | Check launch inputs before creating anything | Reads | Both |
+| `dynamoi_read_media_moderation` | Complete moderation receipts with provider, scan time, risk and errors | Reads | Full |
 | `dynamoi_list_media_assets` | Uploaded images and videos that a launch can reuse | Reads | Both |
 | `dynamoi_launch_campaign` | Launch a Smart Campaign or YouTube campaign | Changes data | Full |
 | `dynamoi_update_campaign` | Pause, resume, or change a campaign's budget or end date | Changes data | Full |

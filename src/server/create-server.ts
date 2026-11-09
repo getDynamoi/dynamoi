@@ -1,3 +1,4 @@
+import {MEDIA_MODERATION_READ_CONTRACT,MediaModerationResponseSchema} from "./media-moderation.generated";
 import {META_CAMPAIGN_GROUPS_CONTRACT} from "./meta-groups.generated";
 import {CAMPAIGN_MANAGEMENT_READ_CONTRACT} from "./management-read.generated";
 import {SHOP_REBUY_TOOL_DEFINITIONS} from "./shop-rebuy";
@@ -88,6 +89,7 @@ import {
 	type ContactSupportData,
 	type GetResumeFundingData,
 	ResultErrorRecoverySchema,
+ createOutputEnvelopeSchema,
 } from "./output-schemas";
 import { registerDynamoiPrompts } from "./prompts";
 import { registerDynamoiResources } from "./resources";
@@ -311,6 +313,7 @@ const DYNAMOI_TOOL_DEFINITIONS = [
 	...PHASE_3_TOOL_DEFINITIONS,
 	SMART_CAMPAIGN_CREATIVE_TOOL_DEFINITION,
 	DRAFT_MEDIA_READ_TOOL_DEFINITION,
+ {...MEDIA_MODERATION_READ_CONTRACT.mcp.definition,outputSchema:createOutputEnvelopeSchema(MediaModerationResponseSchema)},
 	...DISTRIBUTION_TOOL_DEFINITIONS,
 	...SHOP_TOOL_DEFINITIONS,
 	SHOP_HISTORY_TOOL_DEFINITION,
@@ -498,6 +501,7 @@ export type Phase3Adapter = {
 	smartCampaignCreative(input: unknown): Promise<ResultEnvelope<unknown>>;
 	manageYoutubeDraft(input: unknown): Promise<ResultEnvelope<unknown>>;
 	updateCampaign(input: unknown): Promise<ResultEnvelope<UpdateCampaignData>>;
+ readMediaModeration(input:unknown):Promise<ResultEnvelope<z.infer<typeof MediaModerationResponseSchema>>>;
 	listMediaAssets(
 		input: unknown,
 	): Promise<ResultEnvelope<ListMediaAssetsData | ListMediaAssetsSummaryData>>;
@@ -860,6 +864,7 @@ const DYNAMOI_TOOL_DISPATCHERS = {
 	dynamoi_list_campaign_drafts: (adapter, input) =>
 		adapter.listCampaignDrafts(input),
 	dynamoi_list_campaigns: (adapter, input) => adapter.listCampaigns(input),
+ dynamoi_read_media_moderation:(adapter,input)=>adapter.readMediaModeration(input),
 	dynamoi_list_media_assets: (adapter, input) => adapter.listMediaAssets(input),
 	dynamoi_list_smart_links: (adapter, input) => adapter.listSmartLinks(input),
 	dynamoi_read_campaign_draft_media: (adapter, input) => adapter.readCampaignDraftMedia(input),

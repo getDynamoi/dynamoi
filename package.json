@@ -98,7 +98,8 @@
 		"dist/server/wire-creative-agent-wire.generated.d.ts",
 		"dist/server/shop-purchase-history.d.ts",
 		"dist/server/shop-order-video.d.ts",
-		"dist/server/shop-rebuy.d.ts"
+		"dist/server/shop-rebuy.d.ts",
+		"dist/server/media-moderation.generated.d.ts"
 	],
 	"exports": {
 		".": {

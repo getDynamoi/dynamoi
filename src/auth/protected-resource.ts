@@ -79,6 +79,7 @@ export const DYNAMOI_MCP_TOOL_SCOPES = {
 	dynamoi_read_campaign_draft_media: ["dynamoi:read"],
 	dynamoi_list_campaign_drafts: ["dynamoi:read"],
 	dynamoi_list_campaigns: ["dynamoi:read"],
+	dynamoi_read_media_moderation: ["dynamoi:read"],
 	dynamoi_list_media_assets: ["dynamoi:read"],
 	dynamoi_list_smart_links: ["dynamoi:read"],
 	dynamoi_manage_smart_campaign_creative: [

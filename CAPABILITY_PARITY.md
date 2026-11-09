@@ -44,8 +44,8 @@ without them the shared path refuses before any provider call.
 Existing owners retain RBAC, spending authority and idempotency checks. Demo
 responses remain simulations with no provider, billing or campaign effects.
 
-The native parity manifest is itself incomplete: planned/partial entries must
-not be presented as completed mobile behavior. StoreKit, Play Billing, APNs and
+The native parity manifest is itself incomplete: partial entries must
+not be presented as completed mobile behavior. StoreKit, Play Billing and
 native session mechanics are client-specific implementations; removing them from
 an agent operation count does not make the underlying commerce journey complete.
 

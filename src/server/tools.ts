@@ -1,3 +1,4 @@
+import {ARTIST_ANALYTICS_CONTRACT} from "./artist-analytics.generated";
 import {ONBOARDING_PLATFORM_STATUS_CONTRACT} from "./reads.generated";
 import {CAMPAIGN_READINESS_MCP} from "./readiness-input.generated";
 import { SMART_AD_COPY_MCP } from "./smart-ad-copy.generated";
@@ -87,14 +88,7 @@ export const DynamoiGetCampaignInputSchema = CAMPAIGN_DETAIL_CONTRACT.mcp.defini
 
 export const DynamoiGetCampaignAnalyticsInputSchema = CAMPAIGN_DETAIL_CONTRACT.analyticsInputSchema;
 
-export const DynamoiGetArtistAnalyticsInputSchema = z
-	.object({
-		artistId: z.string().uuid(),
-		dateRange: DateRangeSchema.optional(),
-		format: ToolFormatSchema.optional(),
-		granularity: z.enum(["TOTAL", "DAILY"]).optional(),
-	})
-	.strict();
+export const DynamoiGetArtistAnalyticsInputSchema = ARTIST_ANALYTICS_CONTRACT.mcp.definition.schema;
 
 export const DynamoiGetGrowthAuditInputSchema =
 	GROWTH_AUDIT_CONTRACT.mcp.definition.schema;
@@ -497,17 +491,7 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 	...OPENAI_TOOL_DEFINITIONS,
 	{...CAMPAIGN_LIST_CONTRACT.mcp.definition, outputSchema: AnyOutputEnvelopeSchema},
 	{...CAMPAIGN_DETAIL_CONTRACT.mcp.definition, outputSchema: GetCampaignOutputEnvelopeSchema},
-	{
-		description:
-			'Use this for "how is my release doing?" and "are my ads working?" questions about an artist\'s Dynamoi campaigns. Use this when the user wants artist-level performance across all campaigns, including 30-day rollups or daily breakdowns. Pass granularity=DAILY when the user asks for a daily breakdown. Pass format=summary when the user wants a written rollup, a strongest-campaign verdict, or a direct answer you can relay immediately. If this tool already returned the requested strongest-campaign comparison, stop and answer instead of calling more analytics tools. For one campaign\'s metrics, use dynamoi_get_campaign with includeAnalytics=true.',
-		destructiveHint: false,
-		name: "dynamoi_get_artist_analytics",
-		openWorldHint: false,
-		outputSchema: AnyOutputEnvelopeSchema,
-		readOnlyHint: true,
-		schema: DynamoiGetArtistAnalyticsInputSchema,
-		title: "Get Artist Analytics",
-	},
+	{...ARTIST_ANALYTICS_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
 	{
 		...GROWTH_AUDIT_CONTRACT.mcp.definition,
 		outputSchema: AnyOutputEnvelopeSchema,

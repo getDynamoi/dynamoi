@@ -43,7 +43,6 @@ const MobileAccountDeleteResponseSchema = z.object({
 
 
 
-
 export const ACCOUNT_DELETION_CONTRACT = {
 	capabilityId: "account",
 	kind: "command",

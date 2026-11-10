@@ -16,20 +16,7 @@ const MediaModerationAssetSchema=z.object({
 });
 export const MediaModerationResponseSchema=z.object({assets:z.array(MediaModerationAssetSchema),nextCursor:z.string().optional()});
 const pending={status:"partial",reason:"Full receipt screen pending; authenticated read preserves the existing paginated list.",screenSpec:"packages/application-api-contract/native-specs/media-moderation.md"} as const;
-const retirementCompatibility={"reason":"Retire only the duplicate legacy YouTube receipt identity onto the approved complete shared receipt query on the existing route. Installed media-assets schemas/profiles/scopes and converter binding remain protected by the unchanged Smart row; no status-only catalog substitution, surface completion claim or runtime mutation.","decision":"repo:dynamoi@83d4681260826522921e50b30a1889d72539c02d#packages/application-api-contract/src/campaign/media-moderation.ts"} as const;
 export const MEDIA_MODERATION_READ_CONTRACT={
- legacyAliases:[{"id":"campaign.smart-creative.media-moderation","revision":"2cc8e31e8bdd786843c76df70c5180c006f36257","fingerprint":"5cacd2c9508cca63080d8172b6ec5b02ef2753e188fe95d218a451262e9136f9","readProjection":true}],
- parityCompatibility:[
-  {...retirementCompatibility,fact:"2544302647f6675c67cf909ca235d8f6c3d17f774fd98e445d509338df720181"},
-  {...retirementCompatibility,fact:"6c6a37c8cb5c196143a6065a49ef9a92c8e8364810bfa4eb8e97e5fba2d17b82"},
-  {...retirementCompatibility,fact:"46b0bbb658d88841d4c3a658c2f2ef69aad89d761fa43936a6eaf2b1b87ea542"},
-  {...retirementCompatibility,fact:"9f6027380f61010964288379d08cabef047423cf5f09c28b278ced1eb11ac6d2"},
-  {...retirementCompatibility,fact:"d49d067102cb785af619cc40921988b7c4d79f02ae796fc94f51e164f4e6e150"},
-  {...retirementCompatibility,fact:"3ecf0441f88efb2818ea9a16c555ca08eb6337c1338c8cea9b81eb3dcde7920b"},
-  {...retirementCompatibility,fact:"3bad33b03d5743c295b22e7f0a1ce77a0b21b39bc3417aca284ebb00bb63990a"},
-  {...retirementCompatibility,fact:"131339cf4d487892e280f654ce6d97bd4f68af48f81927557ba393e2b835a478"},
-  {...retirementCompatibility,fact:"6db21ae8228a08a728ef0f6c2cc7b8b677b61d58d59289ba5b0fca27d12a6f34"},
- ],
 
  capabilityId:"campaign_media_moderation",kind:"query",version:1,
  mcp:{definition:{

@@ -9,7 +9,6 @@ const MobileArtistThemePreviewQuerySchema = z.object({
 });
 const MobileArtistThemePreviewResponseSchema = z.object({html:z.string(),releaseTitle:z.string(),sampleCount:z.number().int().positive(),sampleIndex:z.number().int().nonnegative()});
 export const SMART_LINK_THEME_PREVIEW_CONTRACT = {
- legacyAliases:[{"id":"smart-link.ios_smart_link_studio.rendered-preview","revision":"37f4a2387c5402b99e74ef7a4d7d20e105d2d669","fingerprint":"dfe0292eaee51e0d39b10c329d027d6d97eb2fcdc5747f6fa8d93cba3124b05c"}],
  capabilityId:"smart_link_theme_preview",journeys:["share-kit"],kind:"query",version:1,
  mcp:{definition:{
  description:"Use this when the user asks what Dynamoi Smart Link pages can look like, wants to compare Smart Link themes, or asks to preview the available themes before creating or updating a free Smart Link. This is a read-only visual preview and does not create, publish, update, or promote a Smart Link.",

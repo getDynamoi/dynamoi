@@ -98,57 +98,6 @@ const screenPending = {
 		"packages/application-api-contract/native-specs/platform-action-center.md",
 } as const;
 export const PLATFORM_ACTION_CENTER_CONTRACT = {
-	parityCompatibility: [
-		{
-			fact: "d908d537ea93e8e82a689b7a32798039b4dcfe0c9cfbce9ee9680a4344a40ca5",
-			reason:
-				"Replace the two legacy Action Center source identities with the same original generated owner and retain its artist-scoped browser read on the same routes. Native and human web journey completion remain explicitly partial.",
-			decision:
-				"repo:dynamoi@7bdb2d3b10364f9668c21e4baf4c7b23c13c4da1#packages/application-api-contract/README.md",
-		},
-		{
-			fact: "0d631529e6641cc5a137d6dd0ed3935ccc9ca129769f73a4252ec86c3828173c",
-			reason:
-				"Replace the two legacy Action Center source identities with the same original generated owner and retain its artist-scoped browser read on the same routes. Native and human web journey completion remain explicitly partial.",
-			decision:
-				"repo:dynamoi@7bdb2d3b10364f9668c21e4baf4c7b23c13c4da1#packages/application-api-contract/README.md",
-		},
-		{
-			fact: "3d664d4a8834222cfeaab39b0a7ca626a5b3093500e5f1f3eef4920e5cc84976",
-			reason:
-				"Replace the two legacy Action Center source identities with the same original generated owner and retain its artist-scoped browser read on the same routes. Native and human web journey completion remain explicitly partial.",
-			decision:
-				"repo:dynamoi@7bdb2d3b10364f9668c21e4baf4c7b23c13c4da1#packages/application-api-contract/README.md",
-		},
-		{
-			fact: "eb17719db58f625bbc21fc6279bfd0fad6eedce6a8e6e9c2cb2e47d9af6f2d67",
-			reason:
-				"Replace the two legacy Action Center source identities with the same original generated owner and retain its artist-scoped browser read on the same routes. Native and human web journey completion remain explicitly partial.",
-			decision:
-				"repo:dynamoi@7bdb2d3b10364f9668c21e4baf4c7b23c13c4da1#packages/application-api-contract/README.md",
-		},
-		{
-			fact: "a1ebc1c549559550e0757eca62a68983bf3f5016d6a5e295b235560232535bd7",
-			reason:
-				"Replace the two legacy Action Center source identities with the same original generated owner and retain its artist-scoped browser read on the same routes. Native and human web journey completion remain explicitly partial.",
-			decision:
-				"repo:dynamoi@7bdb2d3b10364f9668c21e4baf4c7b23c13c4da1#packages/application-api-contract/README.md",
-		},
-		{
-			fact: "c6e470202c7c8e63b07cf298cc357b007b919567f0593ad710ab8540d01363a8",
-			reason:
-				"Replace the two legacy Action Center source identities with the same original generated owner and retain its artist-scoped browser read on the same routes. Native and human web journey completion remain explicitly partial.",
-			decision:
-				"repo:dynamoi@7bdb2d3b10364f9668c21e4baf4c7b23c13c4da1#packages/application-api-contract/README.md",
-		},
-		{
-			fact: "f67bb7609001e9ff0aff98956f1fe04e16043a34195d1203c798c321b41f1883",
-			reason:
-				"Replace the two legacy Action Center source identities with the same original generated owner and retain its artist-scoped browser read on the same routes. Native and human web journey completion remain explicitly partial.",
-			decision:
-				"repo:dynamoi@7bdb2d3b10364f9668c21e4baf4c7b23c13c4da1#packages/application-api-contract/README.md",
-		},
-	],
 	capabilityId: "platform_action_center",
 	kind: "query",
 	version: 1,

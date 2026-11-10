@@ -20,7 +20,7 @@ import {earningsDefinition,DynamoiGetEarningsInputSchema as EarningsInputSchema}
 import {META_CONNECTION_CONTRACT,YOUTUBE_CONNECTION_CONTRACT} from "./connections.generated";
 import {TEAM_READ_CONTRACT,TEAM_ROLE_CONTRACT} from "./team.generated";
 import {REFERRALS_READ_CONTRACT,REFERRALS_CLAIM_CONTRACT} from "./referrals.generated";
-import { AUDIT_SETTINGS_CONTRACT, AUDIT_ACCOUNT_CONTRACT } from "./audit-log.generated";
+import { AUDIT_SETTINGS_CONTRACT } from "./audit-log.generated";
 import * as z from "zod/v4";
 import {
 	PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY as prospectiveFundingConsentCopy,
@@ -523,7 +523,7 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 	{...earningsDefinition, outputSchema: AnyOutputEnvelopeSchema},
 	{...TEAM_READ_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
 	{...TEAM_ROLE_CONTRACT.mcp.definition,outputSchema:TeamOutputEnvelopeSchema},
-	{ ...AUDIT_SETTINGS_CONTRACT.mcp.definition, outputSchema: AnyOutputEnvelopeSchema.or(AUDIT_ACCOUNT_CONTRACT.mcp.accountResponseSchema) },
+	{ ...AUDIT_SETTINGS_CONTRACT.mcp.definition, outputSchema: AnyOutputEnvelopeSchema.or(AUDIT_SETTINGS_CONTRACT.mcp.accountResponseSchema) },
 	{...REFERRALS_CLAIM_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
 	{...REFERRALS_READ_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
 	{

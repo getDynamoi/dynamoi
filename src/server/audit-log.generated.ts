@@ -5,6 +5,7 @@ const input = z.object({
  artistId: z.string().uuid(), cursor: z.string().min(1).max(128).optional(),
  scope: z.enum(["artist", "organization", "account"]).default("artist"),
 }).strict();
+// Retain the published MCP union variant; current reads use one paginated projection.
 type AuditValue = AuditMessage | AuditMessage[] | number | string;
 export type AuditMessage = { key: string; values?: Record<string, AuditValue> | undefined };
 const message: z.ZodType<AuditMessage> = z.lazy(() => z.object({
@@ -16,7 +17,7 @@ const mcp = {
   itemContext: message, itemName: z.union([z.string(), message]), timestampIso: z.string(),
  }))}),
  definition: {
-  description: "Read sanitized artist or organization settings audit events, or your own 12 recent account activity entries with scope=account (artist access required; no cursor). Organization scope requires organization settings authority, beyond artist access. Pass nextCursor unchanged within the same scope; cursors are bounded and scope-checked.",
+  description: "Read the same sanitized, paginated artist, organization or own-account activity with scope=artist, organization or account (artist access required). Organization scope requires organization settings authority, beyond artist access. Pass nextCursor unchanged within the same scope; cursors are bounded and scope-checked.",
   destructiveHint: false, name: "dynamoi_get_audit_log", openWorldHint: false,
   profiles: {directory: "advertised", full: "advertised"}, readOnlyHint: true,
   schema: input, title: "Get AuditLog",
@@ -24,7 +25,7 @@ const mcp = {
  directoryReason: "Sanitized read-only activity under existing artist and organization authority.",
  scopes: ["dynamoi:read"],
 } as const;
-const pending = {status: "partial", reason: "Native screen pending: packages/application-api-contract/native-specs/audit_log.md; completion requires paired journey receipts."} as const;
+const pending = {status: "partial", reason: "Native Activity specification: packages/application-api-contract/native-specs/audit_log.md; completion requires paired journey receipts."} as const;
 const paramsSchema = z.object({artistId: z.string().min(1)});
 const metadata = z.record(z.string(), z.json());
 const auditText = z.object({action: z.string().nullable(), description: z.string().nullable(), itemName: z.string().nullable(), locale: z.string()});
@@ -36,21 +37,13 @@ const settingsEvent = z.object({
  itemContext: z.string(), itemName: z.string(), itemType: z.string(),
  platform: z.string().nullable(), reason: z.string().nullable(), metadata,
 });
-export const AUDIT_ACCOUNT_CONTRACT = {
- capabilityId: "audit_log", kind: "query", version: 1, mcp,
- mobile: {
-  auth: "bearer", method: "GET", operationId: "getMobileAccountAuditLog",
-  path: "/api/mobile/artists/{artistId}/account-activity", paramsSchema,
-  platforms: ["ios", "android"], responseSchema: z.array(z.object({id: z.string(), actorEmail: z.string(), timestampIso: z.string(), display: auditText})),
- },
- parity: {ios: pending, android: pending, webmcp: {status:"complete",journeys:["WM-DASHBOARD-accountAudit"],binding:{file:"apps/dashboard/app/dashboard/webmcp/dashboard-bindings.webmcp.generated.ts",export:"accountAuditWebMcp", tool: "dashboard_account_audit", intermediates: [{file: "apps/dashboard/app/dashboard/webmcp/reads.ts", export: "accountAudit"}, {file: "apps/dashboard/app/lib/domains/mcp/tools/parity-reads.ts", export: "toolGetAuditLog"}, {file: "apps/dashboard/app/lib/domains/audit/actions/account-audit-log.ts", export: "readAccountAuditEventsForUser"}]}}},
-} as const;
+
 export const AUDIT_SETTINGS_CONTRACT = {
  capabilityId: "audit_log", kind: "query", version: 1, mcp,
  mobile: {
   auth: "bearer", method: "GET", operationId: "getMobileSettingsAuditLog",
   path: "/api/mobile/artists/{artistId}/audit-log", paramsSchema,
-  querySchema: z.object({cursor: z.string().min(1).max(128).optional(), scope: z.enum(["artist", "organization"]).default("artist")}),
+  querySchema: z.object({cursor: z.string().min(1).max(128).optional(), scope: z.enum(["artist", "organization", "account"]).default("artist")}),
   platforms: ["ios", "android"], responseSchema: z.object({events: z.array(settingsEvent), nextCursor: z.string().nullable()}),
  },
  parity: {ios: pending, android: pending, webmcp: {status:"complete",journeys:["WM-DASHBOARD-settingsAudit"],binding:{file:"apps/dashboard/app/dashboard/webmcp/dashboard-bindings.webmcp.generated.ts",export:"settingsAuditWebMcp", tool: "dashboard_settings_audit", intermediates: [{file: "apps/dashboard/app/dashboard/webmcp/reads.ts", export: "settingsAudit"}, {file: "apps/dashboard/app/lib/domains/mcp/tools/parity-reads.ts", export: "toolGetAuditLog"}, {file: "apps/dashboard/app/lib/domains/audit/actions/settings-audit-reader.ts", export: "readSettingsAuditLog"}]}}},

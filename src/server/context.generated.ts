@@ -47,7 +47,7 @@ const MobileArtistSearchResponseSchema = z.object({
 const MobileFeatureFlagsSchema = z.object({
 	promoteWebHandoffEnabled: z.boolean(),
 	// Installed mobile clients require this disabled compatibility field.
-	pushEnabled: z.boolean(),
+	pushEnabled: z.boolean().optional(),
 });
 
 const MobileAnalyticsContextSchema = z.object({

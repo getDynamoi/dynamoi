@@ -11,6 +11,12 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Server instructions and the Dynamoi skill state that Dynamoi promotes AI-generated music but does not distribute music made with generative AI. No tool, schema or permission changes.
 
+## [1.0.11] - 2026-11-10
+
+### Changed
+
+- Consolidate the generated consent constants used by the public SDK without changing consent values or exports.
+
 ## [1.0.10] - 2026-11-03
 
 ### Changed

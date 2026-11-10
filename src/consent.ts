@@ -3,7 +3,7 @@ import {
 	PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY_HASH,
 	TOTAL_BUDGET_FUNDING_CONSENT_VERSION,
 	TOTAL_BUDGET_FUNDING_CONSENT_COPY_HASH,
-} from "./server/funding-consent";
+} from "./server/funding-consent.generated";
 export {
 	PROSPECTIVE_BUDGET_FUNDING_CONSENT_VERSION,
 	PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY,
@@ -11,7 +11,7 @@ export {
 	TOTAL_BUDGET_FUNDING_CONSENT_VERSION,
 	TOTAL_BUDGET_FUNDING_CONSENT_COPY,
 	TOTAL_BUDGET_FUNDING_CONSENT_COPY_HASH,
-} from "./server/funding-consent";
+} from "./server/funding-consent.generated";
 
 /**
  * The previous daily consent, with the same terms as v6 spelled out in the

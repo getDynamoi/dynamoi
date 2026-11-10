@@ -197,7 +197,20 @@ export type GetCurrentUserState = {
 	isFirstSession: boolean;
 };
 
+export type DataApiHandoff = {
+	handoffUrl: string;
+	rereadInstruction: string;
+	subscriptions: {
+		id: string;
+		offerCode: string;
+		status: "ACTIVE" | "ENDED" | "ENDING" | "PAST_DUE";
+		accessEndsAtIso: string | null;
+		canIssueKey: boolean;
+		key: { createdAtIso: string; lastFour: string } | null;
+	}[];
+};
 export type GetCurrentUserData = {
+	dataApi?: DataApiHandoff;
 	user: {
 		name?: string;
 	};
@@ -407,6 +420,7 @@ export type UpdateSmartLinkArtistSettingsData = SmartLinkSettingsData & {
 };
 
 export type GetCurrentUserSummaryData = {
+	dataApi?: DataApiHandoff;
 	summary: string;
 	organizationCount: number;
 	artistCount: number;

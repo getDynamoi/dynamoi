@@ -648,7 +648,6 @@ export const ResumeFundingDataSchema = z.object({
 	appliedCreditsMinor: z.number().int().nonnegative().optional(),
 	budgetCents: z.number().int().nonnegative(),
 	budgetMinor: z.number().int().nonnegative().optional(),
-	/** The daily funding consent to show and accept; null when not required. */
 	consent: z
 		.object({
 			copy: z.string().min(1),

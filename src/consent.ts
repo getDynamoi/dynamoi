@@ -11,18 +11,7 @@ export {
 	TOTAL_BUDGET_FUNDING_CONSENT_VERSION,
 	TOTAL_BUDGET_FUNDING_CONSENT_COPY,
 	TOTAL_BUDGET_FUNDING_CONSENT_COPY_HASH,
-	FUNDING_CONSENT_BUDGET_TYPE_MISMATCH_MESSAGE
 } from "./server/funding-consent";
-/**
- * Current prospective daily funding consent. A launch or resume funds one
- * first window (the rest of today plus the next full day) in one charge;
- * routine renewals then fund each following day. Like the total-budget
- * consent, the checkbox carries the term that matters at the moment of
- * consent (a daily charge to the default payment method until the campaign is
- * paused or ended); the rest of the charging terms are the Terms of Service
- * section linked beside it. v7 makes credit-first allocation explicit; its
- * funding and collection terms are identical.
- */
 
 /**
  * The previous daily consent, with the same terms as v6 spelled out in the
@@ -70,17 +59,7 @@ export const PROSPECTIVE_BUDGET_FUNDING_CONSENT_V2_COPY =
 export const PROSPECTIVE_BUDGET_FUNDING_CONSENT_V2_COPY_HASH =
 	"06bbd517d58f345a767be9aaeb59f4959d11c6db16e7d07cb889f3ce7950f805";
 
-/**
- * Total-budget campaign funding consent. A total budget is funded one Pacific
- * day at a time like a daily budget: a launch or resume funds the rest of
- * today and all of tomorrow, then each following day, never more than the
- * total budget in all. Client copy only. The checkbox carries the two terms
- * that matter at the moment of consent (a daily charge to the default payment
- * method, capped by the total budget); the rest of the charging terms are the
- * Terms of Service section linked beside it.
- */
 
-/** Whether a client-submitted total-budget consent is exactly the current pair. */
 export function isCurrentTotalBudgetFundingConsent(input: {
 	copyHash: string;
 	copyVersion: string;
@@ -91,12 +70,6 @@ export function isCurrentTotalBudgetFundingConsent(input: {
 	);
 }
 
-/**
- * Whether a client-submitted consent is exactly the current (version, hash)
- * pair. New launches and resumes accept only this pair; earlier versions stay
- * renewable for campaigns that already accepted them, but a client must not
- * be able to name one for a new authorization after showing the current copy.
- */
 export function isCurrentProspectiveBudgetFundingConsent(input: {
 	copyHash: string;
 	copyVersion: string;
@@ -108,40 +81,7 @@ export function isCurrentProspectiveBudgetFundingConsent(input: {
 }
 
 
-/** Whether a submitted pair is the current one for the budget type (never interchangeable). */
-export function isCurrentFundingConsent(
-	input: { copyHash?: string | undefined; copyVersion?: string | undefined },
-	budgetType: "DAILY" | "TOTAL",
-): boolean {
-	const pair = {
-		copyHash: input.copyHash ?? "",
-		copyVersion: input.copyVersion ?? "",
-	};
-	return budgetType === "TOTAL"
-		? isCurrentTotalBudgetFundingConsent(pair)
-		: isCurrentProspectiveBudgetFundingConsent(pair);
-}
 
-/** The consent fields the handlers read: the TOTAL pair when sent, else the DAILY fields. */
-export function fundingConsentFields(input: {
-	acceptedConsentCopyHash?: string | undefined;
-	acceptedConsentVersion?: string | undefined;
-	acceptedTotalConsentCopyHash?: string | undefined;
-	acceptedTotalConsentVersion?: string | undefined;
-	authorizeAutomaticDailyFunding?: true | undefined;
-}) {
-	return input.acceptedTotalConsentVersion && input.acceptedTotalConsentCopyHash
-		? {
-				acceptedConsentCopyHash: input.acceptedTotalConsentCopyHash,
-				acceptedConsentVersion: input.acceptedTotalConsentVersion,
-				authorizeAutomaticDailyFunding: true as const,
-			}
-		: {
-				acceptedConsentCopyHash: input.acceptedConsentCopyHash,
-				acceptedConsentVersion: input.acceptedConsentVersion,
-				authorizeAutomaticDailyFunding: input.authorizeAutomaticDailyFunding,
-			};
-}
 
 /** Previous exact consent pair; existing receipts remain renewable. */
 export const PROSPECTIVE_BUDGET_FUNDING_CONSENT_V6_VERSION =
@@ -180,4 +120,15 @@ export function isRenewableProspectiveBudgetFundingConsent(input: {
 		(input.copyVersion === PROSPECTIVE_BUDGET_FUNDING_CONSENT_V2_VERSION &&
 			input.copyHash === PROSPECTIVE_BUDGET_FUNDING_CONSENT_V2_COPY_HASH)
 	);
+}
+
+/** Frozen storage compatibility values for an authenticated campaign click. */
+export function currentCampaignFundingPair(budgetType: string) {
+ return budgetType === "TOTAL" ? {
+ acceptedConsentCopyHash: TOTAL_BUDGET_FUNDING_CONSENT_COPY_HASH,
+ acceptedConsentVersion: TOTAL_BUDGET_FUNDING_CONSENT_VERSION,
+ } : {
+ acceptedConsentCopyHash: PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY_HASH,
+ acceptedConsentVersion: PROSPECTIVE_BUDGET_FUNDING_CONSENT_VERSION,
+ };
 }

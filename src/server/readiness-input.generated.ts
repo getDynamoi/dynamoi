@@ -26,11 +26,11 @@ const DynamoiGetCampaignReadinessInputSchema = z
 
 export const CAMPAIGN_READINESS_MCP={definition:{
 		description:
-			'Use this when a musician wants to promote a new single or release with ads ("promote my new single", "run ads for my song"): it checks whether a Smart Campaign or YouTube campaign is ready before launching the campaign. This validates readiness and targeting without creating a campaign. Complete budget inputs also return the shared, nonbinding campaign funding preview with known or unavailable credit coverage, card upper bounds and expiry timing. A preview is not consent. TOTAL launch requires the client to accept the current TOTAL funding consent and pass acceptedTotalConsentVersion plus acceptedTotalConsentCopyHash; never pass DAILY consent fields for TOTAL. Funding uses credit first, then prepaid funds, then the saved card, subject to the launch guards. Do not use this to create or mutate campaigns.',
+			'Use this when a musician wants to promote a new single or release with ads ("promote my new single", "run ads for my song"): it checks whether a Smart Campaign or YouTube campaign is ready before launching the campaign. This validates readiness and targeting without creating a campaign. Complete budget inputs also return the shared, nonbinding campaign funding preview with known or unavailable credit coverage, card upper bounds and expiry timing. A preview never authorizes a charge. Funding uses credit first, then prepaid funds, then the saved card, subject to the launch guards. Do not use this to create or mutate campaigns.',
 		destructiveHint: false,
 		name: "dynamoi_get_campaign_readiness",
 		openWorldHint: true,
 		readOnlyHint: true,
 		schema: DynamoiGetCampaignReadinessInputSchema,
 		title: "Get Campaign Readiness",
-	profiles:{full:"advertised",directory:"advertised"}},scopes:["dynamoi:read"],directoryReason:"Existing nonbinding readiness and funding preview read; never grants consent, reserves funds or launches."} as const;
+	profiles:{full:"advertised",directory:"advertised"}},scopes:["dynamoi:read"],directoryReason:"Existing nonbinding readiness and funding preview read; never reserves funds or launches."} as const;

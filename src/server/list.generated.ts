@@ -216,7 +216,6 @@ const MobileCampaignSchema = z.object({
 		canRequestChanges: z.boolean(),
 		canResume: z.boolean(),
 		canUnarchive: z.boolean(),
-		/** Resume needs the native funding review and consent sheet first. */
 		resumeRequiresFundingConsent: z.boolean().default(false),
 		unavailableReason: z.string().nullable(),
 	}),

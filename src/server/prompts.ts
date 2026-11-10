@@ -142,7 +142,7 @@ export function registerDynamoiPrompts(server: McpServer) {
 					"- YouTube campaign for videos",
 					"",
 					"If we proceed to launch:",
-					"- For Smart Campaign: dynamoi_launch_campaign only returns a human workspace handoff; the human finishes setup, consent and submission there.",
+					"- For Smart Campaign: dynamoi_launch_campaign only returns a human workspace handoff; the human finishes setup, reviews the funding summary and submits there.",
 					"- For YouTube: use dynamoi_launch_campaign with youtubeVideoId.",
 				]
 					.filter(Boolean)

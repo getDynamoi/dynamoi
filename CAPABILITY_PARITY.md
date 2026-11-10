@@ -34,13 +34,7 @@ work. Everything else is refused.
 | Billing and Shop | Managed billing observations including masked payment-method display, and read-only existing-campaign resume funding breakdown (`dynamoi_get_resume_funding`); unpaid Add campaign funds Checkout creation (`dynamoi_add_campaign_funds`); full-profile Shop quote, unpaid Stripe checkout creation and bounded authorized-artist order status/fulfillment reads | Managed subscription changes, invoice/funding workflows or agent payment settlement. Shop checkout is not a campaign launch or paid order. |
 
 A real campaign launch, budget edit or pause/resume runs the same shared
-backend functions as web and mobile. Operations that need automatic daily card
-funding — launches and budget updates (DAILY or TOTAL), and resumes of
-campaigns that require card funding — must carry the funding-consent fields
-(`authorizeAutomaticDailyFunding` with the exact `acceptedConsentVersion` and
-`acceptedConsentCopyHash`, plus `clientRequestId`) after the user is shown the
-consent copy for the budget type (the TOTAL consent only on a TOTAL budget);
-without them the shared path refuses before any provider call.
+backend functions as web and mobile. The user reviews the funding summary and submits.
 Existing owners retain RBAC, spending authority and idempotency checks. Demo
 responses remain simulations with no provider, billing or campaign effects.
 

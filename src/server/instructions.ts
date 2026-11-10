@@ -75,12 +75,9 @@ Common workflows:
 - YouTube channel data science (trends, videos, countries, traffic sources, advertising-tagged versus other-source views, revenue): dynamoi_get_youtube_channel_data, one dataset per call, paging with nextCursor. It supports channel analysis, not campaign attribution. The first page also carries the dashboard's estimated AdSense block (formats, campaign recovery, countries) over its stated window fields; building, unavailable or null means unknown, not zero. Preserve the returned source, coverage, freshness, and synthetic/sample qualifications; do not treat synthetic/sample data as observed channel results, campaign attribution, or actual earnings/payouts. Treat returned ad revenue as estimated revenue, not an AdSense payout.
 - Diagnose stuck campaign: dynamoi_get_campaign → dynamoi_get_platform_status →
   propose next steps
-- Pause/resume: dynamoi_get_campaign (confirm) → dynamoi_update_campaign with action=pause or action=resume; a resume that needs card funding also requires the funding-consent fields (see the tool description).
+- Pause/resume: dynamoi_get_campaign (confirm) → dynamoi_update_campaign with action=pause or action=resume.
 - Budget update: dynamoi_get_campaign (confirm) → dynamoi_update_campaign with action=update_budget
-- Smart submission: dynamoi_launch_campaign returns a human workspace handoff; it never submits or funds a Smart Campaign. The human finishes its draft, consent and submission there. YouTube launch: dynamoi_list_media_assets → dynamoi_launch_campaign. every budget is funded from credit, then
-  prepaid funds, then the saved card, so it needs the user's funding consent
-  (DAILY: authorizeAutomaticDailyFunding with acceptedConsentVersion and acceptedConsentCopyHash;
-  TOTAL: acceptedTotalConsentVersion and acceptedTotalConsentCopyHash; neither accepts the other's).
+- Smart submission: dynamoi_launch_campaign returns a human workspace handoff; it never submits or funds a Smart Campaign. The human finishes its draft and submission there. YouTube launch: dynamoi_list_media_assets → dynamoi_launch_campaign. every budget is funded from credit, then prepaid funds, then the saved card under the existing funding checks.
 - Free Smart Link artist catalog creation: dynamoi_create_smart_links_from_spotify_artist: use phase=preview, then after approval call phase=confirm with the returned previewId and exact confirmedCount (at most 25). Each nextOffset requires a new preview and confirmation. Preview writes nothing; omit artistId for a brand-new user. Report only returned results.
 - Free Smart Link single-release creation: call dynamoi_create_smart_link_from_spotify
   directly when the artist and release are identified; resolve missing artist

@@ -102,10 +102,7 @@ releases to stores.
 
 - Before any tool that changes data, spends money or creates a checkout,
   restate the change and get explicit confirmation. A preview is not consent.
-- Every budget uses credit, then prepaid funds, then the saved card. After showing its consent, send DAILY `authorizeAutomaticDailyFunding=true`
-  with `acceptedConsentVersion`/`acceptedConsentCopyHash`, or TOTAL `acceptedTotalConsentVersion`/`acceptedTotalConsentCopyHash`. DAILY: "Charge my
-  default payment method daily for this campaign's budget, after my available credits, until I pause or end it." TOTAL: "Charge my default payment
-  method daily for this campaign, after my available credits, up to my total budget." A mismatch or none is refused.
+- Every budget uses credit, then prepaid funds, then the saved card.
 - Report success only when a tool returned it; read state back before retrying.
 - Keep money in its returned currency. Never promise streams, views,
   followers, placements, revenue or distribution approval.

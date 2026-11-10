@@ -6,7 +6,6 @@ const MobileCampaignFundingBreakdownResponseSchema = z.object({
 	appliedCreditsMinor: z.number().int().nonnegative().optional(),
 	budgetCents: z.number().int().nonnegative(),
 	budgetMinor: z.number().int().nonnegative().optional(),
-	/** The daily funding consent to show and accept; null when not required. */
 	consent: z
 		.object({
 			copy: z.string().min(1),
@@ -80,7 +79,7 @@ export const CAMPAIGN_RESUME_FUNDING_CONTRACT = {
 	kind: "query",
 	mcp: {
 		definition: {
-			description: "Read the existing campaign's resume funding breakdown before requesting funding consent: campaign budget, funded-window coverage, usable credits, immediate charge, payment method, refusal and current consent. Amounts carry their commercial currency and minor-unit exponent. This read never reserves funds, authorizes collection or resumes delivery. A refusal is not a zero-charge approval. Use dynamoi_update_campaign to resume only after explicit user consent when required.",
+			description: "Read the existing campaign's resume funding breakdown: campaign budget, funded-window coverage, usable credits, immediate charge, payment method, and refusal. Amounts carry their commercial currency and minor-unit exponent. This read never reserves funds, authorizes collection or resumes delivery. A refusal is not a zero-charge approval. Use dynamoi_update_campaign to resume only when the user requests it.",
 			destructiveHint: false,
 			name: "dynamoi_get_resume_funding",
 			openWorldHint: true,

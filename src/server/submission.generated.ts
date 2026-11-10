@@ -2,20 +2,15 @@
 
 import { z } from "zod";
 import {
-	FUNDING_CONSENT_BUDGET_TYPE_MISMATCH_MESSAGE,
-	PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY,
 	PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY_HASH,
 	PROSPECTIVE_BUDGET_FUNDING_CONSENT_VERSION,
-	TOTAL_BUDGET_FUNDING_CONSENT_COPY,
 	TOTAL_BUDGET_FUNDING_CONSENT_COPY_HASH,
 	TOTAL_BUDGET_FUNDING_CONSENT_VERSION,
 } from "./funding-consent.generated";
-const prospectiveFundingConsentCopy = PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY,
-	prospectiveFundingConsentCopyHash =
+const prospectiveFundingConsentCopyHash =
 		PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY_HASH,
 	prospectiveFundingConsentVersion = PROSPECTIVE_BUDGET_FUNDING_CONSENT_VERSION;
-const totalFundingConsentCopy = TOTAL_BUDGET_FUNDING_CONSENT_COPY,
-	totalFundingConsentCopyHash = TOTAL_BUDGET_FUNDING_CONSENT_COPY_HASH,
+const totalFundingConsentCopyHash = TOTAL_BUDGET_FUNDING_CONSENT_COPY_HASH,
 	totalFundingConsentVersion = TOTAL_BUDGET_FUNDING_CONSENT_VERSION;
 const YOUTUBE_CAMPAIGN_STRATEGIES_RESOURCE_URI =
 	"dynamoi://youtube/campaign-strategies";
@@ -110,47 +105,12 @@ const totalFundingConsentFields = {
 	acceptedTotalConsentCopyHash: z
 		.literal(totalFundingConsentCopyHash)
 		.describe(
-			`TOTAL budgets only, with acceptedTotalConsentVersion, after the client explicitly accepts: “${totalFundingConsentCopy}”`,
+			"Accepted for older clients; ignored.",
 		)
 		.optional(),
 	acceptedTotalConsentVersion: z.literal(totalFundingConsentVersion).optional(),
 };
 
-/** The TOTAL pair is whole, only for a TOTAL budget, and never sent with the DAILY fields. */
-function addFundingConsentFamilyIssue(
-	data: Partial<
-		Record<
-			| "acceptedConsentCopyHash"
-			| "acceptedConsentVersion"
-			| "acceptedTotalConsentCopyHash"
-			| "acceptedTotalConsentVersion"
-			| "authorizeAutomaticDailyFunding",
-			unknown
-		>
-	>,
-	ctx: z.RefinementCtx,
-	budgetType?: "DAILY" | "TOTAL",
-) {
-	const total = [
-		data.acceptedTotalConsentCopyHash,
-		data.acceptedTotalConsentVersion,
-	];
-	const daily =
-		data.acceptedConsentCopyHash ||
-		data.acceptedConsentVersion ||
-		data.authorizeAutomaticDailyFunding;
-	if (
-		(total.some(Boolean) &&
-			(!total.every(Boolean) || daily || budgetType === "DAILY")) ||
-		(daily && budgetType === "TOTAL")
-	) {
-		ctx.addIssue({
-			code: "custom",
-			message: FUNDING_CONSENT_BUDGET_TYPE_MISMATCH_MESSAGE,
-			path: ["acceptedTotalConsentVersion"],
-		});
-	}
-}
 const DynamoiLaunchCampaignInputSchema = z
 	.object({
 		acceptedConsentCopyHash: z
@@ -167,7 +127,7 @@ const DynamoiLaunchCampaignInputSchema = z
 		authorizeAutomaticDailyFunding: z
 			.literal(true)
 			.describe(
-				`Required for DAILY budgets. Set only after the client explicitly accepts: “${prospectiveFundingConsentCopy}”`,
+				"Accepted for older clients; ignored.",
 			)
 			.optional(),
 
@@ -210,24 +170,6 @@ const DynamoiLaunchCampaignInputSchema = z
 	})
 	.strict()
 	.superRefine((data, ctx) => {
-		if (
-			data.campaignType === "YOUTUBE" &&
-			data.budgetType === "DAILY" &&
-			!(
-				data.authorizeAutomaticDailyFunding &&
-				data.acceptedConsentCopyHash &&
-				data.acceptedConsentVersion
-			)
-		) {
-			ctx.addIssue({
-				code: "custom",
-				message:
-					"DAILY budgets require authorizeAutomaticDailyFunding with acceptedConsentCopyHash and acceptedConsentVersion",
-				path: ["authorizeAutomaticDailyFunding"],
-			});
-		}
-		addFundingConsentFamilyIssue(data, ctx, data.budgetType);
-
 		const sum = Object.values(data.budgetSplits ?? {}).reduce(
 			(acc, v) => acc + (Number.isFinite(v) ? v : 0),
 			0,
@@ -367,14 +309,14 @@ const SmartCampaignSubmissionHandoffSchema = z.strictObject({
 	submitted: z.literal(false),
 });
 
-const submissionHandoffOnly = {status:"partial",reason:"Smart agent submission is a no-write human handoff; it does not certify consent, funding or launch completion."} as const;
-const submissionScreenPending = {status:"partial",screenSpec:"packages/application-api-contract/native-specs/smart_campaign_submission.md",reason:"Native screen pending: packages/application-api-contract/native-specs/smart_campaign_submission.md; prove consent, durable request identity, retry after saved draft and revoked-access handling on both apps."} as const;
+const submissionHandoffOnly = {status:"partial",reason:"Smart agent submission is a no-write human handoff; it does not certify funding or launch completion."} as const;
+const submissionScreenPending = {status:"partial",screenSpec:"packages/application-api-contract/native-specs/smart_campaign_submission.md",reason:"Native screen pending: packages/application-api-contract/native-specs/smart_campaign_submission.md; prove durable request identity, retry after saved draft and revoked-access handling on both apps."} as const;
 export const SMART_CAMPAIGN_SUBMISSION_CONTRACT = {
  capabilityId:"smart_campaign_submission",kind:"command",version:1,
  parity:{ios:submissionScreenPending,android:submissionScreenPending,mcp:submissionHandoffOnly,cli:submissionHandoffOnly,webmcp:{status:"partial",reason:"Human-gated handoff only; final submission requires the human workspace. This binding does not certify an agent launch.",binding:{file:"apps/dashboard/app/dashboard/webmcp/dashboard-bindings.webmcp.generated.ts",export:"smartSubmissionHandoffWebMcp",tool:"dashboard_smart_campaign_submission_handoff",role:"consumer",intermediates:[{file:"apps/dashboard/app/dashboard/webmcp/submission-handoff.ts",export:"smartSubmissionHandoff"},{file:"apps/dashboard/app/lib/domains/campaign/launch.ts",export:"getSmartCampaignSubmissionHandoff"}]}}},
 	mcp: {
 		definition: {
-			description: `SMART_CAMPAIGN returns only a human-gated workspace handoff: it never saves these supplied compatibility fields, launches, authorizes funding or charges. Finish the current saved draft and confirm submission in that human flow. The following launch and funding instructions apply only to YOUTUBE. Use YOUTUBE only when the user explicitly wants to start its launch workflow. Ads are not necessarily live until the returned delivery state is ACTIVE. DAILY budgets require authorizeAutomaticDailyFunding=true plus the exact acceptedConsentVersion ("${PROSPECTIVE_BUDGET_FUNDING_CONSENT_VERSION}") and acceptedConsentCopyHash ("${PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY_HASH}"); first show the user this exact consent copy: "${PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY}". A TOTAL budget uses its own consent: show "${TOTAL_BUDGET_FUNDING_CONSENT_COPY}" and send acceptedTotalConsentVersion ("${TOTAL_BUDGET_FUNDING_CONSENT_VERSION}") and acceptedTotalConsentCopyHash ("${TOTAL_BUDGET_FUNDING_CONSENT_COPY_HASH}"), without authorizeAutomaticDailyFunding. Every budget is funded from credit first, then prepaid funds, then the saved card; a budget type refuses the other's consent, and without consent the launch is refused and never charged. YOUTUBE campaigns require youtubeStrategy and either legacy youtubeVideoId/youtubePlaylistId or ordered youtubeEntries (up to 10 videoId/playlistId pairs); playlistId is optional for CHEAPEST_VIEWS, which supports one video. After a successful launch, answer from the returned campaign details directly instead of chaining more tools unless the user explicitly asked for more.`,
+			description: `SMART_CAMPAIGN returns only a human-gated workspace handoff: it never saves these supplied compatibility fields, launches, authorizes funding or charges. Finish the current saved draft and confirm submission in that human flow. The following launch and funding instructions apply only to YOUTUBE. Use YOUTUBE only when the user explicitly wants to start its launch workflow. Ads are not necessarily live until the returned delivery state is ACTIVE. Every budget is funded from credit first, then prepaid funds, then the saved card. YOUTUBE campaigns require youtubeStrategy and either legacy youtubeVideoId/youtubePlaylistId or ordered youtubeEntries (up to 10 videoId/playlistId pairs); playlistId is optional for CHEAPEST_VIEWS, which supports one video. After a successful launch, answer from the returned campaign details directly instead of chaining more tools unless the user explicitly asked for more.`,
 			destructiveHint: true,
 			idempotentHint: true,
 			name: "dynamoi_launch_campaign",
@@ -407,7 +349,6 @@ export const SMART_CAMPAIGN_SUBMISSION_CONTRACT = {
 	youTubeEntriesSchema: YouTubeEntriesSchema,
 	validateYouTubeEntries,
 	totalFundingConsentFields,
-	addFundingConsentFamilyIssue,
 	recoverySelectionSchema: SmartCampaignRecoverySelectionSchema,
 	recoverySchema: SmartCampaignRecoverySchema,
 	launchProjectionSchema: SmartCampaignLaunchProjectionSchema,

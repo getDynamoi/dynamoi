@@ -65,8 +65,6 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - The README, About text and skill copy describe the two-tier model and the approved pricing.
 
-- **TOTAL budgets use the same funding path and consent as the web app.** `dynamoi_launch_campaign`, and `dynamoi_update_campaign` for `resume`, `update_budget` and `update_end_date`, now accept the TOTAL funding consent (`managed-ads-total-daily-v3`, exported from `@dynamoi/mcp/consent`): show the user its copy, then send its version and hash in the new optional `acceptedTotalConsentVersion` and `acceptedTotalConsentCopyHash` fields (the DAILY fields are unchanged). Every budget is funded from credit, then prepaid funds, then the saved card. A DAILY budget refuses the TOTAL consent and the reverse, stale versions are refused, and a TOTAL launch without consent is refused and never charged. The DAILY consent is unchanged.
-
 ### Removed
 
 - Retired the `monetizationQualificationMode` option and readback from `dynamoi_update_campaign`. YouTube goal toggles remain manually editable; existing campaigns retain their current goals.
@@ -242,16 +240,6 @@ below for reference.
   and campaign changes run the same shared backend checks as the Dynamoi web
   and mobile apps. The MCP client's own tool-approval settings decide whether
   a person approves each call.
-- **Funding consent is required for daily budgets.** `dynamoi_launch_campaign`
-  with a `DAILY` budget, and `dynamoi_update_campaign` for `update_budget` or a
-  `resume` that needs card funding, must pass
-  `authorizeAutomaticDailyFunding: true` with the exact
-  `acceptedConsentVersion` and `acceptedConsentCopyHash` (plus
-  `clientRequestId` for campaign updates), after the user has seen the consent
-  copy. Without them the request is refused. `TOTAL` budgets use existing
-  credit and need no consent. The consent constants changed to
-  `managed-ads-prospective-daily-v2` with new copy and hash, so clients pinned
-  to v1 values must update.
 - **YouTube launch inputs.** `YOUTUBE` launches now require `youtubeStrategy`
   (`CHEAPEST_VIEWS`, `ORGANIC_VIEWS`, `SUBSCRIBERS`,
   `ORGANIC_VIEWS_AND_SUBSCRIBERS` or `ADSENSE_ROI`). They also require
@@ -343,8 +331,6 @@ except that 1.0.0 removes the confirmation-receipt step described here.
 Prepared but never published to npm. Its changes ship in 1.0.0.
 
 ### Changed
-
-- Make campaign funding consent explicit about daily renewal, advance collection, and unused-fund reconciliation.
 
 ## [0.7.1] - 2026-08-27
 

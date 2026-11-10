@@ -1,5 +1,5 @@
 // Generated from application-api-contract/src/campaign/funding-consent.ts. Do not edit.
-/** Current wire terms; consent acceptance and renewal policy remain with the SDK owner. */
+// Wire compatibility for installed native builds; remove with the native build floor (iOS 63 / Android 52).
 export const PROSPECTIVE_BUDGET_FUNDING_CONSENT_VERSION =
 	"managed-ads-prospective-daily-v7";
 export const PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY =
@@ -12,5 +12,3 @@ export const TOTAL_BUDGET_FUNDING_CONSENT_COPY =
 	"Charge my default payment method daily for this campaign, after my available credits, up to my total budget.";
 export const TOTAL_BUDGET_FUNDING_CONSENT_COPY_HASH =
 	"8bece5f58e0c94b04b35ac1a98f0e8a142ed968bbe34dcc0d51fe52e2c0d75bd";
-export const FUNDING_CONSENT_BUDGET_TYPE_MISMATCH_MESSAGE =
-	"The funding consent does not match this budget type. Send acceptedConsentVersion and acceptedConsentCopyHash (with authorizeAutomaticDailyFunding) only for a DAILY budget, and acceptedTotalConsentVersion and acceptedTotalConsentCopyHash only for a TOTAL budget.";

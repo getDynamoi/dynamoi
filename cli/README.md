@@ -78,17 +78,16 @@ computer, it gets the full tool set.
 
 ## Paid actions need your yes
 
-Tools that spend money or submit something for you require explicit
-confirmation arguments (`confirm...`, `authorize...`, `accepted...`), and the
-CLI never fills them in for you.
+Some tools require explicit confirmation arguments (`confirm...`,
+`authorize...`, `accepted...`). The CLI never fills required confirmations
+without your approval.
 
 - In a terminal, it shows the tool's summary and asks `[y/N]` first.
 - In a script or an agent, you pass the flag yourself, for example
   `--confirm-application-submission`.
-- Budget consent versions and hashes are always passed explicitly. Find them
-  with `dynamoi help <tool>`.
 
-Without them, Dynamoi's server refuses the action and charges nothing.
+Without required confirmations, the server refuses that action.
+Legacy campaign funding fields are optional and ignored.
 
 ## Links
 

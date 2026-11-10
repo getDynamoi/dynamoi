@@ -12,7 +12,6 @@ import {CAMPAIGN_COUNTRIES_CONTRACT} from "./country-catalog.generated";
 import {SMART_CAMPAIGN_SUBMISSION_CONTRACT} from "./submission.generated";
 const YouTubeStrategySchema=SMART_CAMPAIGN_SUBMISSION_CONTRACT.youtubeStrategySchema;
 const totalFundingConsentFields=SMART_CAMPAIGN_SUBMISSION_CONTRACT.totalFundingConsentFields;
-const addFundingConsentFamilyIssue=SMART_CAMPAIGN_SUBMISSION_CONTRACT.addFundingConsentFamilyIssue;
 export const DynamoiLaunchCampaignInputSchema=SMART_CAMPAIGN_SUBMISSION_CONTRACT.mcp.definition.schema;
 import {CAMPAIGN_LIST_CONTRACT, CAMPAIGN_DETAIL_CONTRACT} from "./list.generated";
 import { CAMPAIGN_RESUME_FUNDING_CONTRACT } from "./resume-funding.generated";
@@ -23,10 +22,8 @@ import {REFERRALS_READ_CONTRACT,REFERRALS_CLAIM_CONTRACT} from "./referrals.gene
 import { AUDIT_SETTINGS_CONTRACT } from "./audit-log.generated";
 import * as z from "zod/v4";
 import {
-	PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY as prospectiveFundingConsentCopy,
 	PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY_HASH as prospectiveFundingConsentCopyHash,
 	PROSPECTIVE_BUDGET_FUNDING_CONSENT_VERSION as prospectiveFundingConsentVersion,
-	TOTAL_BUDGET_FUNDING_CONSENT_COPY as totalFundingConsentCopy,
 	TOTAL_BUDGET_FUNDING_CONSENT_COPY_HASH as totalFundingConsentCopyHash,
 	TOTAL_BUDGET_FUNDING_CONSENT_VERSION as totalFundingConsentVersion,
 } from "../consent";
@@ -167,17 +164,11 @@ export const DynamoiAddCampaignFundsInputSchema = z
 
 export const DynamoiGetResumeFundingInputSchema = CAMPAIGN_RESUME_FUNDING_CONTRACT.mcp.definition.schema;
 
-const staleConsent = {
-	error:
-		"Stale funding consent. Show the user the current consent copy from the tool description and send its version and hash.",
-};
 const FundingConsentVersionSchema = z.enum(
 	[prospectiveFundingConsentVersion, totalFundingConsentVersion],
-	staleConsent,
 );
 const FundingConsentCopyHashSchema = z.enum(
 	[prospectiveFundingConsentCopyHash, totalFundingConsentCopyHash],
-	staleConsent,
 );
 
 export const DynamoiResumeCampaignInputSchema = z
@@ -190,24 +181,7 @@ export const DynamoiResumeCampaignInputSchema = z
 		expectedCurrentStatus: ExpectedCampaignStatusSchema,
 		userIntentSummary: UserIntentSummarySchema,
 	})
-	.strict()
-	.superRefine((data, ctx) => {
-		if (
-			data.authorizeAutomaticDailyFunding &&
-			!(
-				data.acceptedConsentCopyHash &&
-				data.acceptedConsentVersion &&
-				data.clientRequestId
-			)
-		) {
-			ctx.addIssue({
-				code: "custom",
-				message:
-					"acceptedConsentCopyHash, acceptedConsentVersion, and clientRequestId are required with automatic daily funding authorization",
-				path: ["authorizeAutomaticDailyFunding"],
-			});
-		}
-	});
+	.strict();
 
 export const DynamoiUpdateBudgetInputSchema = z
 	.object({
@@ -216,7 +190,7 @@ export const DynamoiUpdateBudgetInputSchema = z
 		authorizeAutomaticDailyFunding: z
 			.literal(true)
 			.describe(
-				`Set only after the client explicitly accepts: “${prospectiveFundingConsentCopy}”`,
+				"Accepted for older clients; ignored.",
 			)
 			.optional(),
 		budgetAmount: z
@@ -241,24 +215,7 @@ export const DynamoiUpdateBudgetInputSchema = z
 			IsoCalendarDateSchema.describe("Last day ads run").optional(),
 		userIntentSummary: UserIntentSummarySchema,
 	})
-	.strict()
-	.superRefine((data, ctx) => {
-		if (
-			data.authorizeAutomaticDailyFunding &&
-			!(
-				data.acceptedConsentCopyHash &&
-				data.acceptedConsentVersion &&
-				data.clientRequestId
-			)
-		) {
-			ctx.addIssue({
-				code: "custom",
-				message:
-					"acceptedConsentCopyHash, acceptedConsentVersion, and clientRequestId are required with automatic daily funding authorization",
-				path: ["authorizeAutomaticDailyFunding"],
-			});
-		}
-	});
+	.strict();
 
 export const DynamoiUpdateCampaignInputSchema = z
 	.object({
@@ -283,7 +240,7 @@ export const DynamoiUpdateCampaignInputSchema = z
 		authorizeAutomaticDailyFunding: z
 			.literal(true)
 			.describe(
-				`Set only after the client explicitly accepts: “${prospectiveFundingConsentCopy}”`,
+				"Accepted for older clients; ignored.",
 			)
 			.optional(),
 		budgetAmount: z
@@ -460,22 +417,6 @@ export const DynamoiUpdateCampaignInputSchema = z
 				}
 			}
 		}
-		addFundingConsentFamilyIssue(data, ctx);
-		if (
-			data.authorizeAutomaticDailyFunding &&
-			!(
-				data.acceptedConsentCopyHash &&
-				data.acceptedConsentVersion &&
-				data.clientRequestId
-			)
-		) {
-			ctx.addIssue({
-				code: "custom",
-				message:
-					"acceptedConsentCopyHash, acceptedConsentVersion, and clientRequestId are required with automatic daily funding authorization",
-				path: ["authorizeAutomaticDailyFunding"],
-			});
-		}
 	});
 
 export {DynamoiListMediaAssetsInputSchema} from "./media-moderation.generated";
@@ -554,7 +495,7 @@ export const PHASE_2_TOOL_DEFINITIONS = [
 	},
 	{...YOUTUBE_DRAFT_SETUP_CONTRACT.mcp.definition,outputSchema:ManageYoutubeDraftOutputEnvelopeSchema},
 	{
-		description: `Use only when the user explicitly requests a campaign change. Resume isn't available for fixed-flight YouTube campaigns. Duplicate the campaign to relaunch it. For pause, resume, archive and unarchive, first request phase=preview with one clientRequestId. Show that exact preview to the human; only after approval send phase=confirm with its expectedUpdatedAt, expectedCurrentStatus and (for resume) expectedFundingHash and the same request ID. Omitting phase never executes these status actions. Actions: pause, resume, update_budget, update_end_date (DAILY or TOTAL budget; TOTAL end-date extensions may require the same funding consent fields as update_budget or resume), update_location (GLOBAL or catalog-valid countries), change_strategy (managed YouTube Demand Gen), update_goals (YouTube optimization toggles), archive (never deletes), unarchive (restores PAUSED without funding or activating providers). Inspect the campaign first and supply expectedCurrentStatus where possible. For resume, update_budget, or a TOTAL update_end_date that needs automatic daily card funding, first show the user the exact consent copy for the campaign's budget type, then pass the request's clientRequestId and, for DAILY, authorizeAutomaticDailyFunding=true with acceptedConsentVersion and acceptedConsentCopyHash: "${prospectiveFundingConsentCopy}" (version "${prospectiveFundingConsentVersion}", hash "${prospectiveFundingConsentCopyHash}"); for TOTAL, acceptedTotalConsentVersion and acceptedTotalConsentCopyHash: "${totalFundingConsentCopy}" (version "${totalFundingConsentVersion}", hash "${totalFundingConsentCopyHash}"). A budget type refuses the other's consent. Without them, a resume that needs card funding is refused with: "Review and accept the daily funding authorization to resume this campaign." When retrying the same action, reuse the same clientRequestId.`,
+		description: `Use only when the user explicitly requests a campaign change. Resume isn't available for fixed-flight YouTube campaigns. Duplicate the campaign to relaunch it. For pause, resume, archive and unarchive, first request phase=preview with one clientRequestId. Show that exact preview to the human; only after approval send phase=confirm with its expectedUpdatedAt, expectedCurrentStatus and (for resume) expectedFundingHash and the same request ID. Omitting phase never executes these status actions. Actions: pause, resume, update_budget, update_end_date (DAILY or TOTAL budget), update_location (GLOBAL or catalog-valid countries), change_strategy (managed YouTube Demand Gen), update_goals (YouTube optimization toggles), archive (never deletes), unarchive (restores PAUSED without funding or activating providers). Inspect the campaign first and supply expectedCurrentStatus where possible. When retrying the same action, reuse the same clientRequestId.`,
 		destructiveHint: true,
 		idempotentHint: true,
 		name: "dynamoi_update_campaign",

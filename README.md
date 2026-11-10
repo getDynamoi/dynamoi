@@ -15,7 +15,7 @@
 
 Dynamoi's MCP server lets your AI assistant promote music for independent
 artists, labels and managers. Ask it how a campaign is doing, build free
-Smart Links, and, with the artist's explicit consent, launch real Spotify and
+Smart Links, and, when the artist requests it, launch real Spotify and
 YouTube ad campaigns. It works with whatever distributor the artist already uses.
 
 ```txt
@@ -182,11 +182,9 @@ including what did not work.
 - **Smart Links are free.** Starter is $25/month per artist, and the plan
   includes monthly campaign credit. Campaigns run from $10 a day. See
   [pricing](https://dynamoi.com/pricing).
-- **Nothing is charged without consent.** Every launch, budget change or
-  card-funded resume needs the artist to accept the exact consent text, which
-  the agent passes back as a version and hash. Without it the server refuses
-  the call and charges nothing. The consent values are exported from
-  `@dynamoi/mcp/consent`.
+- **Campaign clicks authorize funding.** An authenticated launch, resume or budget
+  change uses the existing budget, currency, card and charge-cap checks. The server
+  supplies frozen compatibility values for its retained funding history.
 - **Agents never see payment details.** Plans and cards are set up only in the
   [Dynamoi dashboard](https://dynamoi.com/dashboard). Shop checkout tools
   return an unpaid Stripe link; the user pays on Stripe.
@@ -249,7 +247,7 @@ including what did not work.
 | `dynamoi_get_referrals` | Your referral snapshot; no attribution or commission writes. Pending and available amounts are not approved or paid payouts. | Reads | Both |
 | `dynamoi_get_billing` | Billing status, credit balance, promo limits and masked payment-method display | Reads | Both |
 | `dynamoi_add_campaign_funds` | Create the unpaid Add campaign funds Stripe Checkout link, after the user approves the amount and currency | Changes data | Full |
-| `dynamoi_get_resume_funding` | Campaign resume-funding breakdown, refusal, and consent requirements | Reads | Full |
+| `dynamoi_get_resume_funding` | Campaign resume-funding breakdown and refusal | Reads | Full |
 | `dynamoi_list_available_countries` | Countries a Smart Campaign or YouTube campaign can target | Reads | Both |
 | `dynamoi_get_campaign_readiness` | Check launch inputs before creating anything | Reads | Both |
 | `dynamoi_read_media_moderation` | Complete moderation receipts with provider, scan time, risk and errors | Reads | Full |
@@ -296,8 +294,7 @@ artist decides whether to apply.
 <details>
 <summary><b>Can the assistant spend money on its own?</b></summary>
 
-No. Paid calls are refused unless the artist accepted the consent text for
-that exact budget. Keep your client's approval prompt on for tools that change
+Campaign writes require the artist’s instruction and authenticated access. Keep your client's approval prompt on for tools that change
 data, and no tool starts a subscription.
 
 </details>
@@ -337,7 +334,7 @@ The package is ESM-only and built on MCP TypeScript SDK v2.
 | --- | --- |
 | `@dynamoi/mcp` | `createDynamoiMcpServer`, `handleMcpHttpRequest`, `getDynamoiToolDefinitions`, `DynamoiMcpToolProfile`, `Phase3Adapter`, tool schemas, About exports, result types, `DYNAMOI_MCP_VERSION` |
 | `@dynamoi/mcp/auth` | `DYNAMOI_BETTER_AUTH_MCP_SCOPES`, `DYNAMOI_MCP_TOOL_SCOPES`, `buildWwwAuthenticateHeader` |
-| `@dynamoi/mcp/consent` | Current and previous budget-funding consent versions, copy and hashes, plus `isCurrentProspectiveBudgetFundingConsent` and `isRenewableProspectiveBudgetFundingConsent` |
+| `@dynamoi/mcp/consent` | Frozen funding-history compatibility values and automatic-renewal predicates |
 
 A host supplies a `Phase3Adapter` that connects each tool to its services, and
 authenticates the request and checks scopes before calling

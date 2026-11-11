@@ -79,7 +79,7 @@ export const ACCOUNT_DELETION_CONTRACT = {
 		webmcp: {
 			binding: {
 				export: "accountDeletionWebMcp",
-				file: "apps/dashboard/app/dashboard/webmcp/dashboard-bindings.webmcp.generated.ts",
+				file: "apps/dashboard/app/dashboard/webmcp/dashboard-account.webmcp.generated.ts",
 				intermediates: [
 					{
 						export: "accountDeletion",

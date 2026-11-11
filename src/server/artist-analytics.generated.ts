@@ -56,5 +56,5 @@ export const ARTIST_ANALYTICS_CONTRACT={
  profiles:{full:"advertised",directory:"advertised"},
 	},scopes:["dynamoi:read"],directoryReason:"Existing artist report; full-only Smart Link aggregation and directory exposure remain unchanged."},
  mobile:{auth:"bearer",method:"GET",operationId:"getMobileArtistSmartLinkAnalytics",paramsSchema:z.object({artistId:z.string().trim().min(1)}),path:"/api/mobile/artists/{artistId}/smart-link-analytics",platforms:["android","ios"],querySchema:MobileAnalyticsQuerySchema,responseSchema:MobileSmartLinkAnalyticsSummaryResponseSchema},
- parity:{webmcp:{status:"complete",journeys:["WM-DASHBOARD-artistAnalytics"],binding:{file:"apps/dashboard/app/dashboard/webmcp/dashboard-bindings.webmcp.generated.ts",export:"artistAnalyticsWebMcp",tool:"dashboard_artist_analytics",intermediates:[{file:"apps/dashboard/app/dashboard/webmcp/reads.ts",export:"artistAnalytics"}]}}},
+ parity:{webmcp:{status:"complete",journeys:["WM-DASHBOARD-artistAnalytics"],binding:{file:"apps/dashboard/app/dashboard/webmcp/dashboard-campaigns.webmcp.generated.ts",export:"artistAnalyticsWebMcp",tool:"dashboard_artist_analytics",intermediates:[{file:"apps/dashboard/app/dashboard/webmcp/reads-campaigns.ts",export:"artistAnalytics"}]}}},
 } as const;

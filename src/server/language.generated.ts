@@ -69,7 +69,7 @@ export const ACCOUNT_LANGUAGE_CONTRACT = {
 		webmcp: {
 			binding: {
 				export: "accountLanguageWebMcp",
-				file: "apps/dashboard/app/dashboard/webmcp/dashboard-bindings.webmcp.generated.ts",
+				file: "apps/dashboard/app/dashboard/webmcp/dashboard-account.webmcp.generated.ts",
 				intermediates: [
 					{
 						export: "accountLanguage",

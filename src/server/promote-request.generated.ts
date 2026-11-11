@@ -75,7 +75,7 @@ export const SMART_LINK_PROMOTE_CONTRACT = {
 		webmcp: {
 			binding: {
 				export: "smartLinkPromoteRequestWebMcp",
-				file: "apps/dashboard/app/dashboard/webmcp/dashboard-bindings.webmcp.generated.ts",
+				file: "apps/dashboard/app/dashboard/webmcp/dashboard-smart-links.webmcp.generated.ts",
 				intermediates: [
 					{
 						export: "smartLinkPromoteRequest",

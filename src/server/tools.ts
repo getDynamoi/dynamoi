@@ -1,3 +1,5 @@
+import { BILLING_READ_MCP } from "./billing-read.generated";
+import { FUNDING_CHECKOUT_CONTRACT } from "./funding-checkout.generated";
 import {ARTIST_ANALYTICS_CONTRACT} from "./artist-analytics.generated";
 import {ONBOARDING_PLATFORM_STATUS_CONTRACT} from "./reads.generated";
 import {CAMPAIGN_READINESS_MCP} from "./readiness-input.generated";
@@ -63,7 +65,6 @@ export const DynamoiGetArtistInputSchema=ARTIST_CONTEXT_CONTRACT.detailInputSche
 export const DateRangeSchema = SharedDateRangeSchema;
 export const ToolFormatSchema = SharedToolFormatSchema;
 
-const OnboardingAttemptIdSchema = z.string().trim().min(1).max(120).optional();
 const ExpectedCampaignStatusEnum = z.enum([
 	"AWAITING_SMART_LINK",
 	"ACTIVE",
@@ -99,14 +100,7 @@ export const DynamoiListCampaignDraftsInputSchema =
 export const DynamoiGetAudienceAnalyticsInputSchema =
 	AUDIENCE_ANALYTICS_CONTRACT.mcp.definition.schema;
 
-export const DynamoiGetBillingInputSchema = z
-	.object({
-		action: z.enum(["summary", "native_commerce"]).optional(),
-		artistId: z.string().uuid(),
-		format: ToolFormatSchema.optional(),
-		onboardingAttemptId: OnboardingAttemptIdSchema,
-	})
-	.strict();
+export const DynamoiGetBillingInputSchema = BILLING_READ_MCP.definition.schema;
 
 export const DynamoiManageTeamInputSchema=TEAM_ROLE_CONTRACT.mcp.definition.schema;
 export const DynamoiGetTeamInputSchema=TEAM_READ_CONTRACT.mcp.definition.schema;
@@ -152,15 +146,7 @@ export const DynamoiPauseCampaignInputSchema = z
 	})
 	.strict();
 
-export const DynamoiAddCampaignFundsInputSchema = z
-	.object({
-		amountMinor: z.number().int().positive(),
-		artistId: z.string().uuid(),
-		confirm: z.boolean().optional(),
-		currency: z.string().length(3).optional(),
-		requestId: z.string().uuid(),
-	})
-	.strict();
+export const DynamoiAddCampaignFundsInputSchema = FUNDING_CHECKOUT_CONTRACT.mcp.definition.schema;
 
 export const DynamoiGetResumeFundingInputSchema = CAMPAIGN_RESUME_FUNDING_CONTRACT.mcp.definition.schema;
 
@@ -449,18 +435,7 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 		...AUDIENCE_ANALYTICS_CONTRACT.mcp.definition,
 		outputSchema: AnyOutputEnvelopeSchema,
 	},
-	{ ...YOUTUBE_CHANNEL_DATA_CONTRACT.mcp.definition, outputSchema: GetYouTubeChannelDataOutputEnvelopeSchema },	{
-		description:
-			"Use action=native_commerce for the native commerce projection (full profile, read-only; no subscription changes or invoices). Use this when the user asks about billing state, credit balance, promo limits, subscription status, campaign-fund deposits, or whether billing blocks launches for one artist. This is a read-only status check; it does not create checkout links or collect payment. paymentMethod contains only the shared masked display details (brand or bank, type, last four digits and expiry); null means details are unavailable, not proof that no method exists. Each deposit in prefundPayments is pending (payment not yet confirmed), cleared (Stripe says paid and the funds are usable), failed (the payment did not complete) or held (paid, but funding is on hold for review and not usable yet). A Checkout link alone is never a deposit. To add campaign funds, use the Dynamoi dashboard at https://dynamoi.com/dashboard; for other billing setup tell the user: 'You can do this in the Dynamoi dashboard at https://dynamoi.com/dashboard.' Then call this tool again to confirm the status. Do not use this for campaign analytics or platform connection troubleshooting.",
-		destructiveHint: false,
-		name: "dynamoi_get_billing",
-		openWorldHint: false,
-		outputSchema: AnyOutputEnvelopeSchema,
-		readOnlyHint: true,
-		schema: DynamoiGetBillingInputSchema,
-		title: "Get Billing",
-	},
-	{...PLATFORM_ACTION_CENTER_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
+	{ ...YOUTUBE_CHANNEL_DATA_CONTRACT.mcp.definition, outputSchema: GetYouTubeChannelDataOutputEnvelopeSchema },	{...BILLING_READ_MCP.definition,outputSchema:AnyOutputEnvelopeSchema},	{...PLATFORM_ACTION_CENTER_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
 	{...earningsDefinition, outputSchema: AnyOutputEnvelopeSchema},
 	{...TEAM_READ_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
 	{...TEAM_ROLE_CONTRACT.mcp.definition,outputSchema:TeamOutputEnvelopeSchema},
@@ -481,19 +456,7 @@ export const PHASE_ONBOARDING_TOOL_DEFINITIONS = [
 
 export const PHASE_2_TOOL_DEFINITIONS = [
 	{...SMART_AD_COPY_MCP.definition,outputSchema:AnyOutputEnvelopeSchema},
-	{
-		description:
-			"Create the same unpaid Stripe Checkout the dashboard's Add campaign funds button creates, in the artist's bound currency, and return its URL for the user to open and pay. Call it first WITHOUT confirm to get the exact amount and currency; show both to the user and obtain their explicit approval, then call again with confirm=true, that currency, the same amountMinor and the same requestId (retrying within 24 hours returns the same session; once a payment exists for that requestId, or after a day, use a new requestId). This never charges anyone or records a deposit: funds count as cleared only after Stripe says paid, which dynamoi_get_billing reports in prefundPayments (pending, cleared, failed or held). Refused when funding is on hold, billing setup is required, the amount is outside the allowed range or the currency is not live.",
-		destructiveHint: false,
-		idempotentHint: true,
-		name: "dynamoi_add_campaign_funds",
-		openWorldHint: true,
-		outputSchema: AnyOutputEnvelopeSchema,
-		readOnlyHint: false,
-		schema: DynamoiAddCampaignFundsInputSchema,
-		title: "Add Campaign Funds",
-	},
-	{...YOUTUBE_DRAFT_SETUP_CONTRACT.mcp.definition,outputSchema:ManageYoutubeDraftOutputEnvelopeSchema},
+	{...FUNDING_CHECKOUT_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},	{...YOUTUBE_DRAFT_SETUP_CONTRACT.mcp.definition,outputSchema:ManageYoutubeDraftOutputEnvelopeSchema},
 	{
 		description: `Use only when the user explicitly requests a campaign change. Resume isn't available for fixed-flight YouTube campaigns. Duplicate the campaign to relaunch it. For pause, resume, archive and unarchive, first request phase=preview with one clientRequestId. Show that exact preview to the human; only after approval send phase=confirm with its expectedUpdatedAt, expectedCurrentStatus and (for resume) expectedFundingHash and the same request ID. Omitting phase never executes these status actions. Actions: pause, resume, update_budget, update_end_date (DAILY or TOTAL budget), update_location (GLOBAL or catalog-valid countries), change_strategy (managed YouTube Demand Gen), update_goals (YouTube optimization toggles), archive (never deletes), unarchive (restores PAUSED without funding or activating providers). Inspect the campaign first and supply expectedCurrentStatus where possible. When retrying the same action, reuse the same clientRequestId.`,
 		destructiveHint: true,

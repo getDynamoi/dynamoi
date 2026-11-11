@@ -20,5 +20,5 @@ export const AGENT_ABOUT_CONTRACT = {
  capabilityId:"agent_orientation",kind:"query",version:1,
  mcp:{definition:{...definition,profiles:{full:"advertised",directory:"advertised"}},scopes:[],directoryReason:"Public profile-aware company orientation remains available before sign-in."},
  mobile:{auth:"bearer",method:"GET",operationId:"getMobileAbout",path:"/api/mobile/about",platforms:["ios","android"],responseSchema:AgentAboutResponseSchema},
- parity:{ios:screenPending,android:screenPending,webmcp:{status:"complete",journeys:["WM-DASHBOARD-agentAbout"],binding:{file:"apps/dashboard/app/dashboard/webmcp/dashboard-bindings.webmcp.generated.ts",export:"agentAboutWebMcp",tool:"dashboard_agent_about",role:"consumer",intermediates:[{file:"apps/dashboard/app/dashboard/webmcp/reads.ts",export:"agentAbout"}]}}},
+ parity:{ios:screenPending,android:screenPending,webmcp:{status:"complete",journeys:["WM-DASHBOARD-agentAbout"],binding:{file:"apps/dashboard/app/dashboard/webmcp/dashboard-reads.webmcp.generated.ts",export:"agentAboutWebMcp",tool:"dashboard_agent_about",role:"consumer",intermediates:[{file:"apps/dashboard/app/dashboard/webmcp/reads-discovery.ts",export:"agentAbout"}]}}},
 } as const;

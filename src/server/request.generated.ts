@@ -51,7 +51,7 @@ export const SUPPORT_REQUEST_CONTRACT = {
   responseSchema: ContactSupportDataSchema,
  },
  parity: {
-  webmcp: {status: "complete", binding: {file: "apps/dashboard/app/dashboard/webmcp/dashboard-bindings.webmcp.generated.ts", export: "supportRequestWebMcp", tool: "dashboard_contact_support", intermediates: [
+  webmcp: {status: "complete", binding: {file: "apps/dashboard/app/dashboard/webmcp/dashboard-account.webmcp.generated.ts", export: "supportRequestWebMcp", tool: "dashboard_contact_support", intermediates: [
    {file: "apps/dashboard/app/dashboard/webmcp/commands.ts", export: "supportRequest"},
    {file: "apps/dashboard/app/lib/domains/mcp/tools/contact-support.ts", export: "toolContactSupport"},
    {file: "apps/dashboard/app/lib/domains/email/contact-support.ts", export: "createCustomerSupportRequest"},

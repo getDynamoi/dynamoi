@@ -107,11 +107,11 @@ export const CAMPAIGN_RESUME_FUNDING_CONTRACT = {
 			status: "complete",
 			journeys: ["WM-DASHBOARD-resumeFunding"],
 			binding: {
-				file: "apps/dashboard/app/dashboard/webmcp/dashboard-bindings.webmcp.generated.ts",
+				file: "apps/dashboard/app/dashboard/webmcp/dashboard-campaigns.webmcp.generated.ts",
 				export: "resumeFundingWebMcp",
 				tool: "dashboard_resume_funding",
 				intermediates: [
-					{ file: "apps/dashboard/app/dashboard/webmcp/reads.ts", export: "resumeFunding" },
+					{ file: "apps/dashboard/app/dashboard/webmcp/reads-campaigns.ts", export: "resumeFunding" },
 					{ file: "apps/dashboard/app/lib/domains/mcp/tools/get-resume-funding.ts", export: "toolGetResumeFunding" },
 					{ file: "apps/dashboard/app/lib/domains/mobile-api/domain-campaigns-queries.ts", export: "getMobileCampaignFundingBreakdown" },
 				],

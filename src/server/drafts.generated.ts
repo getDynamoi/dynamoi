@@ -80,7 +80,7 @@ export const CAMPAIGN_DRAFTS_CONTRACT = {
 		webmcp: {
 			binding: {
 				export: "campaignDraftsWebMcp",
-				file: "apps/dashboard/app/dashboard/webmcp/dashboard-bindings.webmcp.generated.ts",
+				file: "apps/dashboard/app/dashboard/webmcp/dashboard-campaigns.webmcp.generated.ts",
 				intermediates: [
 					{
 						export: "campaignDrafts",

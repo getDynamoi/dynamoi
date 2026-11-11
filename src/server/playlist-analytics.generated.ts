@@ -92,6 +92,6 @@ export const PLAYLIST_ANALYTICS_CONTRACT = {
 		platforms: ["android", "ios"],
 		responseSchema: MobilePlaylistAnalyticsResponseSchema,
 	},
-	parity: { webmcp: { status: "complete", journeys: ["WM-DASHBOARD-playlistAnalytics"], binding: { file: "apps/dashboard/app/dashboard/webmcp/dashboard-bindings.webmcp.generated.ts", export: "playlistAnalyticsWebMcp", tool: "dashboard_playlist_analytics", role: "consumer", intermediates: [{file: "apps/dashboard/app/dashboard/webmcp/insight-reads.ts", export: "playlistAnalytics"}] } } },
+	parity: { webmcp: { status: "complete", journeys: ["WM-DASHBOARD-playlistAnalytics"], binding: { file: "apps/dashboard/app/dashboard/webmcp/dashboard-reads.webmcp.generated.ts", export: "playlistAnalyticsWebMcp", tool: "dashboard_playlist_analytics", role: "consumer", intermediates: [{file: "apps/dashboard/app/dashboard/webmcp/insight-reads.ts", export: "playlistAnalytics"}] } } },
 	version: 1,
 } as const;

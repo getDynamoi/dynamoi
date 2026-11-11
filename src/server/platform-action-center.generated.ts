@@ -130,7 +130,7 @@ export const PLATFORM_ACTION_CENTER_CONTRACT = {
 			status: "complete",
 			journeys: ["WM-DASHBOARD-actionCenter"],
 			binding: {
-				file: "apps/dashboard/app/dashboard/webmcp/dashboard-bindings.webmcp.generated.ts",
+				file: "apps/dashboard/app/dashboard/webmcp/dashboard-reads.webmcp.generated.ts",
 				export: "actionCenterWebMcp",
 				tool: "dashboard_action_center",
 				intermediates: [

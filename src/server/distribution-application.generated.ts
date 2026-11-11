@@ -72,7 +72,7 @@ export const DISTRIBUTION_APPLICATION_CONTRACT = {
 		responseSchema: MobileDistributionApplicationResponseSchema,
 	},
 	parity: {
-		webmcp:{status:"complete",journeys:["WM-DASHBOARD-distributionApply"],binding:{file:"apps/dashboard/app/dashboard/webmcp/dashboard-bindings.webmcp.generated.ts",export:"distributionApplyWebMcp",tool:"dashboard_apply_for_distribution",intermediates:[{file:"apps/dashboard/app/dashboard/webmcp/distribution-commands.ts",export:"distributionApply"}]}},
+		webmcp:{status:"complete",journeys:["WM-DASHBOARD-distributionApply"],binding:{file:"apps/dashboard/app/dashboard/webmcp/dashboard-distribution.webmcp.generated.ts",export:"distributionApplyWebMcp",tool:"dashboard_apply_for_distribution",intermediates:[{file:"apps/dashboard/app/dashboard/webmcp/distribution-commands.ts",export:"distributionApply"}]}},
 		android: pendingBehavior,
 		cli: pendingBehavior,
 		ios: pendingBehavior,

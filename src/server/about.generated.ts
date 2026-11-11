@@ -15,10 +15,10 @@ const definition = {
 	schema: z.object({}).strict(),
 	title: "About Dynamoi",
 } as const;
-const screenPending = {status:"partial",reason:"Native screen pending: packages/application-api-contract/native-specs/agent-about.md; paired current-revision receipts required."} as const;
+const excluded = {status:"excluded",reason:"Agent-surface read with no human screen.",decision:"repo:brain@24baa246f83fccb8887343fde16d92aa0cf70f8f#businesses/dynamoi/prds/request-independent-domain-operations.md"} as const;
 export const AGENT_ABOUT_CONTRACT = {
  capabilityId:"agent_orientation",kind:"query",version:1,
  mcp:{definition:{...definition,profiles:{full:"advertised",directory:"advertised"}},scopes:[],directoryReason:"Public profile-aware company orientation remains available before sign-in."},
- mobile:{auth:"bearer",method:"GET",operationId:"getMobileAbout",path:"/api/mobile/about",platforms:["ios","android"],responseSchema:AgentAboutResponseSchema},
- parity:{ios:screenPending,android:screenPending,webmcp:{status:"complete",journeys:["WM-DASHBOARD-agentAbout"],binding:{file:"apps/dashboard/app/dashboard/webmcp/dashboard-reads.webmcp.generated.ts",export:"agentAboutWebMcp",tool:"dashboard_agent_about",role:"consumer",intermediates:[{file:"apps/dashboard/app/dashboard/webmcp/reads-discovery.ts",export:"agentAbout"}]}}},
+ mobile:{auth:"bearer",method:"GET",operationId:"getMobileAbout",path:"/api/mobile/about",platforms: [], platformExclusions: {ios: "Agent-surface read with no human screen.", android: "Agent-surface read with no human screen."},responseSchema:AgentAboutResponseSchema},
+ parity:{ios:excluded,android:excluded,webmcp:{status:"complete",journeys:["WM-DASHBOARD-agentAbout"],binding:{file:"apps/dashboard/app/dashboard/webmcp/dashboard-reads.webmcp.generated.ts",export:"agentAboutWebMcp",tool:"dashboard_agent_about",role:"consumer",intermediates:[{file:"apps/dashboard/app/dashboard/webmcp/reads-discovery.ts",export:"agentAbout"}]}}},
 } as const;

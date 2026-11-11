@@ -13,9 +13,10 @@
 [![license](https://img.shields.io/npm/l/@dynamoi/mcp)](./LICENSE)
 [![MCP Registry](https://img.shields.io/badge/MCP_Registry-io.github.getDynamoi%2Fdynamoi-blue)](https://registry.modelcontextprotocol.io/v0/servers?search=io.github.getDynamoi/dynamoi)
 
-Dynamoi's MCP server lets your AI assistant promote music for independent
-artists, labels and managers. Ask it how a campaign is doing, build free
-Smart Links, and, when the artist requests it, launch real Spotify and
+Dynamoi's MCP server lets your AI assistant promote a song on Spotify or
+promote a video on YouTube for independent artists, labels and managers. Ask it
+how a campaign is doing, make a free smart link for music or a free link in bio
+for musicians, and, when the artist requests it, launch real Spotify and
 YouTube ad campaigns. It works with whatever distributor the artist already uses.
 
 ```txt
@@ -168,7 +169,7 @@ artists, labels, managers and YouTube creators, on any distributor.
   each release, optimized for listeners who go on to Spotify, not for likes.
 - **YouTube campaigns.** Google video ads optimized for the goal the channel
   picks: subscribers, organic views or measured AdSense return.
-- **Free tools.** Smart Links, analytics and growth audits on every plan.
+- **Free tools.** Smart Links (release pages and a link-in-bio artist hub), analytics and growth audits, with no plan needed.
 - **Distribution, if you want it.** Eligible artists can release to 100+
   stores and keep their masters and 90% of net receipts. Artists who prefer
   their current distributor keep it and use everything else.

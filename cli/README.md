@@ -6,9 +6,11 @@
 [![license](https://img.shields.io/npm/l/dynamoi)](./LICENSE)
 
 The `dynamoi` command line runs [Dynamoi](https://dynamoi.com) music promotion
-from a terminal, a script or any agent that can run shell commands. Check
-campaign results, build free Smart Links, and launch Spotify and YouTube ad
-campaigns, with the same account, tools and consent rules as the Dynamoi apps.
+from a terminal, a script or any agent that can run shell commands. Promote a
+song on Spotify or promote a video on YouTube: check campaign results, make a
+free smart link for music or a free link in bio for musicians, and launch
+Spotify and YouTube ad campaigns, with the same account, tools and consent
+rules as the Dynamoi apps.
 It works with any distributor.
 
 <p align="center">

@@ -10,6 +10,7 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Server instructions and the Dynamoi skill state that Dynamoi promotes AI-generated music but does not distribute music made with generative AI. No tool, schema or permission changes.
+- The registry and standard descriptions, server instructions, About text, README and Dynamoi skill now say Dynamoi is how artists promote a song on Spotify or promote a video on YouTube, and that Smart Links are free with no plan needed. The Shop mention is removed from the instructions summary and the skill overview. No tool, schema or permission changes.
 
 ## [1.0.11] - 2026-11-10
 

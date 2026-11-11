@@ -1,26 +1,26 @@
 ---
 name: dynamoi
-description: Use Dynamoi to inspect or manage music-promotion campaigns, Smart Links, artist analytics, platform connections, or distribution applications. Trigger for requests about the user's Dynamoi account or an explicit Dynamoi action; general music and marketing advice needs no account tools.
+description: Use Dynamoi to promote a song on Spotify or promote a video on YouTube, make a free smart link for music or a free link in bio for musicians, and inspect or manage campaigns, artist analytics, platform connections, or distribution applications. Trigger for requests about the user's Dynamoi account or an explicit Dynamoi action; general music and marketing advice needs no account tools.
 homepage: https://dynamoi.com
 metadata: {"openclaw":{"emoji":"🎵","homepage":"https://dynamoi.com"}}
 ---
 
 # Dynamoi: music promotion
 
-Dynamoi is a music promotion platform for independent artists, labels, managers
-and YouTube creators on any distributor:
+Dynamoi is how independent artists, labels, managers and YouTube creators
+promote a song on Spotify or promote a video on YouTube, on any distributor:
 
-- **Free Smart Links:** release pages and artist hubs from Spotify URLs, with
-  Meta, TikTok and Google Ads pixels and link analytics at no cost
+- **Free Smart Links:** a free smart link for music and a free link in bio for
+  musicians (release pages and artist hubs from Spotify URLs), with Meta,
+  TikTok and Google Ads pixels and link analytics, no plan needed
 - **Campaigns:** Smart Campaigns run managed Instagram and Facebook ads for
   Spotify releases; YouTube campaigns run real Google ads for music videos and
-  channels. Dynamoi runs the ad accounts; never bots or paid playlists.
-- **Shop:** one-off YouTube video promotion with no account or subscription
+  channels. Dynamoi runs the ad accounts on official ad networks.
 - **Distribution (optional):** releases delivered to 100+ stores, including Spotify,
   Apple Music, Amazon Music, YouTube Music, TikTok, Deezer and Tidal
 
 Use this skill to promote a song on Spotify, run Instagram ads for a release,
-promote a YouTube music video, make smart links, read campaign or streaming
+promote a video on YouTube, make smart links, read campaign or streaming
 analytics, or distribute music. General advice needs no Dynamoi tools.
 
 ## Setup
@@ -72,10 +72,9 @@ retry; redo the setup above or use https://dynamoi.com/dashboard instead.
   `dynamoi_get_playlist_analytics`, `dynamoi_get_audience_analytics`,
   `dynamoi_get_youtube_channel_data`. Keep dates and coverage with each number;
   missing data is unknown, not zero.
-- **Shop:** paste a video URL, pick a package, see price and estimated views,
-  pay once: https://dynamoi.com/shop?utm_source=clawhub&utm_medium=skill. With
-  write access, `dynamoi_shop_get_quote` estimates and, after the user asks to
-  buy, `dynamoi_shop_create_checkout` returns an unpaid Stripe Checkout link.
+- **One-off YouTube promotion:** with write access, `dynamoi_shop_get_quote`
+  estimates and, after the user asks to buy, `dynamoi_shop_create_checkout`
+  returns an unpaid Stripe Checkout link.
 
 ### Distribution
 

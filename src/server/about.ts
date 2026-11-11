@@ -5,7 +5,7 @@ import { AnyOutputEnvelopeSchema } from "./output-schemas";
 // Company facts mirror the canonical /about page
 // (apps/public-static/src/components/marketing/about/AboutPage.astro).
 const DYNAMOI_ABOUT_INTRO =
-	"Dynamoi is a music promotion platform founded in 2021 by Trevor Loucks. It runs managed Meta and YouTube ad campaigns for independent artists, labels, managers, and YouTube creators on any distributor, alongside free Smart Links and analytics. An artist can go from a Spotify URL to a shareable release page or a running campaign in one place. Artists who want everything in one account can also distribute through Dynamoi, which adds releases and royalties to the same system.";
+	"Dynamoi is a music promotion platform founded in 2021 by Trevor Loucks. It is how artists promote a song on Spotify or promote a video on YouTube: it runs managed Meta and YouTube ad campaigns for independent artists, labels, managers, and YouTube creators on any distributor, alongside free Smart Links and analytics. Smart Links need no plan or subscription: a free smart link for music, release pages, and a free link in bio for musicians through the artist hub. An artist can go from a Spotify URL to a shareable release page or a running campaign in one place. Artists who want everything in one account can also distribute through Dynamoi, which adds releases and royalties to the same system.";
 
 const DYNAMOI_ABOUT_COMPANY = `## Company
 
@@ -74,10 +74,10 @@ ${DYNAMOI_ABOUT_COMPANY}
 ${DYNAMOI_ABOUT_GETTING_STARTED}`;
 
 const DYNAMOI_ABOUT_SUMMARY =
-	"Dynamoi is a music promotion platform founded in 2021 by Trevor Loucks and based in Sioux Falls, South Dakota: free Smart Links and analytics, managed Meta Smart Campaigns and YouTube campaigns, a YouTube promotion Shop, and opt-in distribution to 100+ stores. Operated by humans, assisted by AI. In USD, Starter is $25/month per artist. Every plan includes monthly campaign credit. New artists get extra campaign credit the first time they subscribe. Campaign budgets start at $10/day. Other currencies use their own approved catalog prices and limits; consult the selected account’s billing response. Sign in at dynamoi.com, connect Spotify, and create a free Smart Link to start. Pricing: https://dynamoi.com/pricing. Support: support@dynamoi.com (replies within 24 hours).";
+	"Dynamoi is a music promotion platform founded in 2021 by Trevor Loucks and based in Sioux Falls, South Dakota: how artists promote a song on Spotify or promote a video on YouTube, with free Smart Links (a free smart link for music, a free link in bio for musicians) and analytics, managed Meta Smart Campaigns and YouTube campaigns, a YouTube promotion Shop, and opt-in distribution to 100+ stores. Operated by humans, assisted by AI. In USD, Starter is $25/month per artist. Every plan includes monthly campaign credit. New artists get extra campaign credit the first time they subscribe. Campaign budgets start at $10/day. Other currencies use their own approved catalog prices and limits; consult the selected account’s billing response. Sign in at dynamoi.com, connect Spotify, and create a free Smart Link to start. Pricing: https://dynamoi.com/pricing. Support: support@dynamoi.com (replies within 24 hours).";
 
 const DYNAMOI_ABOUT_DIRECTORY_SUMMARY =
-	"Dynamoi is a music promotion platform founded in 2021 by Trevor Loucks and based in Sioux Falls, South Dakota: free Smart Links and analytics, managed Meta Smart Campaigns and YouTube campaigns, and opt-in distribution to 100+ stores. Operated by humans, assisted by AI. Sign in at dynamoi.com, connect Spotify, and create a free Smart Link to start. Support: support@dynamoi.com (replies within 24 hours).";
+	"Dynamoi is a music promotion platform founded in 2021 by Trevor Loucks and based in Sioux Falls, South Dakota: how artists promote a song on Spotify or promote a video on YouTube, with free Smart Links (a free smart link for music, a free link in bio for musicians) and analytics, managed Meta Smart Campaigns and YouTube campaigns, and opt-in distribution to 100+ stores. Operated by humans, assisted by AI. Sign in at dynamoi.com, connect Spotify, and create a free Smart Link to start. Support: support@dynamoi.com (replies within 24 hours).";
 
 export const DYNAMOI_ABOUT_RESOURCE = {
 	description:

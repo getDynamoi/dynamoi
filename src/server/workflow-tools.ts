@@ -1,11 +1,9 @@
-import {SMART_CAMPAIGN_SUBMISSION_CONTRACT} from "./submission.generated";
+import { SMART_CAMPAIGN_SUBMISSION_CONTRACT } from "./submission.generated";
 import {
 	LaunchCampaignOutputEnvelopeSchema,
 	ListMediaAssetsOutputEnvelopeSchema,
 } from "./output-schemas";
-import {
-	DynamoiListMediaAssetsInputSchema,
-} from "./tools";
+import { DynamoiListMediaAssetsInputSchema } from "./tools";
 
 export const PHASE_3_TOOL_DEFINITIONS = [
 	{
@@ -19,5 +17,8 @@ export const PHASE_3_TOOL_DEFINITIONS = [
 		schema: DynamoiListMediaAssetsInputSchema,
 		title: "List Media Assets",
 	},
-	{...SMART_CAMPAIGN_SUBMISSION_CONTRACT.mcp.definition,outputSchema:LaunchCampaignOutputEnvelopeSchema},
+	{
+		...SMART_CAMPAIGN_SUBMISSION_CONTRACT.mcp.definition,
+		outputSchema: LaunchCampaignOutputEnvelopeSchema,
+	},
 ] as const;

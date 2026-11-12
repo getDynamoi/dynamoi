@@ -6,7 +6,8 @@ import { MobileSmartCampaignBudgetResponseSchema } from "./wire-smart-campaign-b
 import { MobileSmartCampaignCreativeResponseSchema } from "./wire-smart-campaign-creative-wire.generated";
 import { MobileSmartCampaignLocationResponseSchema } from "./wire-location-native.generated";
 import { MobileYouTubeCampaignSetupResponseSchema } from "./wire-youtube-wire.generated";
-const DraftYouTubeSetupResponseSchema: z.ZodObject<z.core.$ZodShape> = MobileYouTubeCampaignSetupResponseSchema;
+const DraftYouTubeSetupResponseSchema: z.ZodObject<z.core.$ZodShape> =
+	MobileYouTubeCampaignSetupResponseSchema;
 export const MobileCampaignDraftResponseSchema = z.object({
 	adCopy: z.nullable(MobileSmartCampaignAdCopyResponseSchema),
 	budget: z.nullable(MobileSmartCampaignBudgetResponseSchema),

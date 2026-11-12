@@ -59,7 +59,6 @@ export const PROSPECTIVE_BUDGET_FUNDING_CONSENT_V2_COPY =
 export const PROSPECTIVE_BUDGET_FUNDING_CONSENT_V2_COPY_HASH =
 	"06bbd517d58f345a767be9aaeb59f4959d11c6db16e7d07cb889f3ce7950f805";
 
-
 export function isCurrentTotalBudgetFundingConsent(input: {
 	copyHash: string;
 	copyVersion: string;
@@ -79,9 +78,6 @@ export function isCurrentProspectiveBudgetFundingConsent(input: {
 		input.copyHash === PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY_HASH
 	);
 }
-
-
-
 
 /** Previous exact consent pair; existing receipts remain renewable. */
 export const PROSPECTIVE_BUDGET_FUNDING_CONSENT_V6_VERSION =
@@ -124,11 +120,13 @@ export function isRenewableProspectiveBudgetFundingConsent(input: {
 
 /** Frozen storage compatibility values for an authenticated campaign click. */
 export function currentCampaignFundingPair(budgetType: string) {
- return budgetType === "TOTAL" ? {
- acceptedConsentCopyHash: TOTAL_BUDGET_FUNDING_CONSENT_COPY_HASH,
- acceptedConsentVersion: TOTAL_BUDGET_FUNDING_CONSENT_VERSION,
- } : {
- acceptedConsentCopyHash: PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY_HASH,
- acceptedConsentVersion: PROSPECTIVE_BUDGET_FUNDING_CONSENT_VERSION,
- };
+	return budgetType === "TOTAL"
+		? {
+				acceptedConsentCopyHash: TOTAL_BUDGET_FUNDING_CONSENT_COPY_HASH,
+				acceptedConsentVersion: TOTAL_BUDGET_FUNDING_CONSENT_VERSION,
+			}
+		: {
+				acceptedConsentCopyHash: PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY_HASH,
+				acceptedConsentVersion: PROSPECTIVE_BUDGET_FUNDING_CONSENT_VERSION,
+			};
 }

@@ -3,17 +3,89 @@ import { z } from "zod";
 const theme = z.enum(["classic", "brutalist", "aurora", "cinematic"]);
 const sampleText = z.string().trim().min(1).max(80);
 const MobileArtistThemePreviewQuerySchema = z.object({
- playLinkId:z.string().uuid().optional(),
- sampleIndex:z.string().trim().regex(/^\d+$/u,"Expected a decimal integer string.").transform(value=>Number(value)).refine(value=>Number.isSafeInteger(value),{message:"Expected a safe integer."}).pipe(z.number().int().nonnegative()).default(0),
- theme,
+	playLinkId: z.string().uuid().optional(),
+	sampleIndex: z
+		.string()
+		.trim()
+		.regex(/^\d+$/u, "Expected a decimal integer string.")
+		.transform((value) => Number(value))
+		.refine((value) => Number.isSafeInteger(value), {
+			message: "Expected a safe integer.",
+		})
+		.pipe(z.number().int().nonnegative())
+		.default(0),
+	theme,
 });
-const MobileArtistThemePreviewResponseSchema = z.object({html:z.string(),releaseTitle:z.string(),sampleCount:z.number().int().positive(),sampleIndex:z.number().int().nonnegative()});
+const MobileArtistThemePreviewResponseSchema = z.object({
+	html: z.string(),
+	releaseTitle: z.string(),
+	sampleCount: z.number().int().positive(),
+	sampleIndex: z.number().int().nonnegative(),
+});
 export const SMART_LINK_THEME_PREVIEW_CONTRACT = {
- capabilityId:"smart_link_theme_preview",journeys:["share-kit"],kind:"query",version:1,
- mcp:{definition:{
- description:"Use this when the user asks what Dynamoi Smart Link pages can look like, wants to compare Smart Link themes, or asks to preview the available themes before creating or updating a free Smart Link. This is a read-only visual preview and does not create, publish, update, or promote a Smart Link.",
- destructiveHint:false,name:"dynamoi_preview_smart_link_themes",openWorldHint:false,profiles:{directory:"advertised",full:"advertised"},readOnlyHint:true,schema:z.object({artistName:sampleText.optional(),releaseTitle:sampleText.optional()}).strict(),title:"Preview Smart Link Themes",
- },directoryReason:"Read-only existing theme preview, including fictional directory samples.",scopes:["dynamoi:read"]},
- mobile:{auth:"bearer",method:"GET",operationId:"getMobileArtistPlayLinkThemePreview",paramsSchema:z.object({artistId:z.string().trim().min(1)}),path:"/api/mobile/artists/{artistId}/play-link-theme-preview",platforms:["android","ios"],querySchema:MobileArtistThemePreviewQuerySchema,responseSchema:MobileArtistThemePreviewResponseSchema},
- parity:{ios:{status:"partial",reason:"Paired native journey receipt pending."},android:{status:"partial",reason:"Paired native journey receipt pending."},webmcp:{status:"complete",journeys:["WM-DASHBOARD-smartLinkThemePreview"],binding:{file:"apps/dashboard/app/dashboard/webmcp/dashboard-smart-links.webmcp.generated.ts",export:"smartLinkThemePreviewWebMcp",tool:"dashboard_smart_link_theme_preview",role:"consumer",intermediates:[{file:"apps/dashboard/app/dashboard/webmcp/reads-smart-links.ts",export:"smartLinkThemePreview"},{file:"apps/dashboard/app/lib/domains/mobile-api/domain.ts",export:"getMobileArtistSmartLinkThemePreview"}]}}},
+	capabilityId: "smart_link_theme_preview",
+	journeys: ["share-kit"],
+	kind: "query",
+	version: 1,
+	mcp: {
+		definition: {
+			description:
+				"Use this when the user asks what Dynamoi Smart Link pages can look like, wants to compare Smart Link themes, or asks to preview the available themes before creating or updating a free Smart Link. This is a read-only visual preview and does not create, publish, update, or promote a Smart Link.",
+			destructiveHint: false,
+			name: "dynamoi_preview_smart_link_themes",
+			openWorldHint: false,
+			profiles: { directory: "advertised", full: "advertised" },
+			readOnlyHint: true,
+			schema: z
+				.object({
+					artistName: sampleText.optional(),
+					releaseTitle: sampleText.optional(),
+				})
+				.strict(),
+			title: "Preview Smart Link Themes",
+		},
+		directoryReason:
+			"Read-only existing theme preview, including fictional directory samples.",
+		scopes: ["dynamoi:read"],
+	},
+	mobile: {
+		auth: "bearer",
+		method: "GET",
+		operationId: "getMobileArtistPlayLinkThemePreview",
+		paramsSchema: z.object({ artistId: z.string().trim().min(1) }),
+		path: "/api/mobile/artists/{artistId}/play-link-theme-preview",
+		platforms: ["android", "ios"],
+		querySchema: MobileArtistThemePreviewQuerySchema,
+		responseSchema: MobileArtistThemePreviewResponseSchema,
+	},
+	parity: {
+		ios: {
+			status: "partial",
+			reason: "Paired native journey receipt pending.",
+		},
+		android: {
+			status: "partial",
+			reason: "Paired native journey receipt pending.",
+		},
+		webmcp: {
+			status: "complete",
+			journeys: ["WM-DASHBOARD-smartLinkThemePreview"],
+			binding: {
+				file: "apps/dashboard/app/dashboard/webmcp/dashboard-smart-links.webmcp.generated.ts",
+				export: "smartLinkThemePreviewWebMcp",
+				tool: "dashboard_smart_link_theme_preview",
+				role: "consumer",
+				intermediates: [
+					{
+						file: "apps/dashboard/app/dashboard/webmcp/reads-smart-links.ts",
+						export: "smartLinkThemePreview",
+					},
+					{
+						file: "apps/dashboard/app/lib/domains/mobile-api/domain.ts",
+						export: "getMobileArtistSmartLinkThemePreview",
+					},
+				],
+			},
+		},
+	},
 } as const;

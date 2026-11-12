@@ -1,8 +1,10 @@
-import {SMART_CAMPAIGN_SUBMISSION_CONTRACT} from "./submission.generated";
+import { SMART_CAMPAIGN_SUBMISSION_CONTRACT } from "./submission.generated";
 import * as z from "zod/v4";
 
-export const YOUTUBE_CAMPAIGN_STRATEGIES_RESOURCE_URI=SMART_CAMPAIGN_SUBMISSION_CONTRACT.youtubeStrategiesResourceUri;
-export const YouTubeStrategyKeySchema=SMART_CAMPAIGN_SUBMISSION_CONTRACT.youtubeStrategyKeySchema;
+export const YOUTUBE_CAMPAIGN_STRATEGIES_RESOURCE_URI =
+	SMART_CAMPAIGN_SUBMISSION_CONTRACT.youtubeStrategiesResourceUri;
+export const YouTubeStrategyKeySchema =
+	SMART_CAMPAIGN_SUBMISSION_CONTRACT.youtubeStrategyKeySchema;
 
 export type YouTubeStrategyKey = z.infer<typeof YouTubeStrategyKeySchema>;
 

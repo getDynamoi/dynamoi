@@ -4,11 +4,12 @@ const DynamoiGetBillingInputSchema = z
 	.object({
 		action: z.enum(["summary", "native_commerce"]).optional(),
 		artistId: z.string().uuid(),
-		format: z.enum(["json","summary"]).optional(),
+		format: z.enum(["json", "summary"]).optional(),
 		onboardingAttemptId: z.string().trim().min(1).max(120).optional(),
 	})
 	.strict();
-export const BILLING_READ_MCP={definition:{
+export const BILLING_READ_MCP = {
+	definition: {
 		description:
 			"Use action=native_commerce for the native commerce projection (full profile, read-only; no subscription changes or invoices). Use this when the user asks about billing state, credit balance, promo limits, subscription status, campaign-fund deposits, or whether billing blocks launches for one artist. This is a read-only status check; it does not create checkout links or collect payment. paymentMethod contains only the shared masked display details (brand or bank, type, last four digits and expiry); null means details are unavailable, not proof that no method exists. Each deposit in prefundPayments is pending (payment not yet confirmed), cleared (Stripe says paid and the funds are usable), failed (the payment did not complete) or held (paid, but funding is on hold for review and not usable yet). A Checkout link alone is never a deposit. To add campaign funds, use the Dynamoi dashboard at https://dynamoi.com/dashboard; for other billing setup tell the user: 'You can do this in the Dynamoi dashboard at https://dynamoi.com/dashboard.' Then call this tool again to confirm the status. Do not use this for campaign analytics or platform connection troubleshooting.",
 		destructiveHint: false,
@@ -17,4 +18,9 @@ export const BILLING_READ_MCP={definition:{
 		readOnlyHint: true,
 		schema: DynamoiGetBillingInputSchema,
 		title: "Get Billing",
-	profiles:{full:"advertised",directory:"advertised"}},scopes:["dynamoi:read","dynamoi:billing.read"],directoryReason:"Existing read-only billing status and native commerce projection; subscription and invoice management remain user-present."} as const;
+		profiles: { full: "advertised", directory: "advertised" },
+	},
+	scopes: ["dynamoi:read", "dynamoi:billing.read"],
+	directoryReason:
+		"Existing read-only billing status and native commerce projection; subscription and invoice management remain user-present.",
+} as const;

@@ -14,16 +14,16 @@ const DynamoiGetDistributionStatusInputSchema = z
 	.strict();
 
 export const readDefinition = {
-		description:
-			"Read native foundation, application, agreement, catalog or release status for an accessible artist through the same owners as web/mobile. Release intake status requires editor access, as on web; catalog retains viewer scoping. Catalog is a status overview; releases returns the latest 20 submissions, not complete history. Rights and agreement attestation and sending releases to stores are done by the artist in web or the app.",
-		destructiveHint: false,
-		name: "dynamoi_get_distribution_status",
-		openWorldHint: false,
-		readOnlyHint: true,
-		profiles: { directory: "advertised", full: "advertised" },
-		schema: DynamoiGetDistributionStatusInputSchema,
-		title: "Read Distribution Status",
-	} as const;
+	description:
+		"Read native foundation, application, agreement, catalog or release status for an accessible artist through the same owners as web/mobile. Release intake status requires editor access, as on web; catalog retains viewer scoping. Catalog is a status overview; releases returns the latest 20 submissions, not complete history. Rights and agreement attestation and sending releases to stores are done by the artist in web or the app.",
+	destructiveHint: false,
+	name: "dynamoi_get_distribution_status",
+	openWorldHint: false,
+	readOnlyHint: true,
+	profiles: { directory: "advertised", full: "advertised" },
+	schema: DynamoiGetDistributionStatusInputSchema,
+	title: "Read Distribution Status",
+} as const;
 
 export const DynamoiPrepareDistributionReleaseInputSchema = z
 	.object({
@@ -57,18 +57,17 @@ export const DynamoiPrepareDistributionReleaseInputSchema = z
 	})
 	.strict();
 
-
 export const prepareDefinition = {
-		description:
-			"Prepare metadata, tracks and proposed splits for artist review in a private expiring web form. Does not submit a release, attest rights, accept agreements or invite collaborators.",
-		destructiveHint: true,
-		name: "dynamoi_prepare_distribution_release",
-		openWorldHint: false,
-		readOnlyHint: false,
-		profiles: { directory: "advertised", full: "advertised" },
-		schema: DynamoiPrepareDistributionReleaseInputSchema,
-		title: "Prepare Release Handoff",
-	} as const;
+	description:
+		"Prepare metadata, tracks and proposed splits for artist review in a private expiring web form. Does not submit a release, attest rights, accept agreements or invite collaborators.",
+	destructiveHint: true,
+	name: "dynamoi_prepare_distribution_release",
+	openWorldHint: false,
+	readOnlyHint: false,
+	profiles: { directory: "advertised", full: "advertised" },
+	schema: DynamoiPrepareDistributionReleaseInputSchema,
+	title: "Prepare Release Handoff",
+} as const;
 
 const RoyaltyMonthSchema = z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/);
 export const DynamoiGetEarningsInputSchema = z
@@ -100,13 +99,13 @@ export const DynamoiGetEarningsInputSchema = z
 	.strict();
 
 export const earningsDefinition = {
-		description:
-			"Read distribution earnings for the authenticated payee only, optionally restricted to their artistIds. Team or artist access never grants payee access. action=overview returns the payee's own share in USD, range totals, monthly totals and at most 50 detail rows, narrowed by trackKey, storeKey, storeFamily and countryCode (totals remain for the whole range). action=ranking returns up to 300 rows by dimension (track, artist, store, country), with their filtered totalUsd, narrowed by trackKey, storeFamily and countryCode. action=geography returns {rows} of the country map with optional prior-window comparison. action=statement returns the aggregate monthly statement for one statement month: use axis=statement and equal fromMonth/toMonth, with no exploration filters or cursor. No new files are created. The detailed CSV is a bulk file download; the human downloads it on web at https://dynamoi.com/dashboard/user/royalties. Rankings and prior-window geography read an equal preceding window within the owner's 60-month bound. For overview pagination, pass nextCursor unchanged to continue with the same range, axis, artists and filters. fromMonth/toMonth are inclusive YYYY-MM, at most 60 months. axis=statement groups by statement month; earned groups by royalty month, while payee share always follows statement month. Nullable amounts or counts mean unavailable; an explicit 0 is measured zero. Empty rows mean no matching data; an error means unavailable, never zero earnings. This grants no payout or tax authority and performs no writes.",
-		destructiveHint: false,
-		name: "dynamoi_get_earnings",
-		openWorldHint: false,
-		readOnlyHint: true,
-		profiles: {directory: "advertised", full: "advertised"},
- schema: DynamoiGetEarningsInputSchema,
-		title: "Get Distribution Earnings",
-	} as const;
+	description:
+		"Read distribution earnings for the authenticated payee only, optionally restricted to their artistIds. Team or artist access never grants payee access. action=overview returns the payee's own share in USD, range totals, monthly totals and at most 50 detail rows, narrowed by trackKey, storeKey, storeFamily and countryCode (totals remain for the whole range). action=ranking returns up to 300 rows by dimension (track, artist, store, country), with their filtered totalUsd, narrowed by trackKey, storeFamily and countryCode. action=geography returns {rows} of the country map with optional prior-window comparison. action=statement returns the aggregate monthly statement for one statement month: use axis=statement and equal fromMonth/toMonth, with no exploration filters or cursor. No new files are created. The detailed CSV is a bulk file download; the human downloads it on web at https://dynamoi.com/dashboard/user/royalties. Rankings and prior-window geography read an equal preceding window within the owner's 60-month bound. For overview pagination, pass nextCursor unchanged to continue with the same range, axis, artists and filters. fromMonth/toMonth are inclusive YYYY-MM, at most 60 months. axis=statement groups by statement month; earned groups by royalty month, while payee share always follows statement month. Nullable amounts or counts mean unavailable; an explicit 0 is measured zero. Empty rows mean no matching data; an error means unavailable, never zero earnings. This grants no payout or tax authority and performs no writes.",
+	destructiveHint: false,
+	name: "dynamoi_get_earnings",
+	openWorldHint: false,
+	readOnlyHint: true,
+	profiles: { directory: "advertised", full: "advertised" },
+	schema: DynamoiGetEarningsInputSchema,
+	title: "Get Distribution Earnings",
+} as const;

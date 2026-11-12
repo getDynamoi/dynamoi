@@ -136,7 +136,7 @@ const SmartLinkAnalyticsDateRangeSchema = DateRangeSchema.superRefine(
 	},
 );
 
-const ToolFormatSchema=z.enum(["json","summary"]);
+const ToolFormatSchema = z.enum(["json", "summary"]);
 const DynamoiGetSmartLinkInputShape = {
 	artistId: z.string().uuid().optional(),
 	dateRange: SmartLinkAnalyticsDateRangeSchema.optional(),
@@ -158,9 +158,11 @@ function validateDynamoiGetSmartLinkInput(
 		!data.playLinkId &&
 		!data.spotifyUrl &&
 		Boolean(data.artistId);
-	if (
-		!(data.playLinkId || (data.artistId && data.spotifyUrl) || settingsOnly)
-	) {
+	if (!(
+		data.playLinkId ||
+		(data.artistId && data.spotifyUrl) ||
+		settingsOnly
+	)) {
 		ctx.addIssue({
 			code: "custom",
 			message:
@@ -189,24 +191,67 @@ const StrictDynamoiGetSmartLinkInputSchema = z
 const DynamoiGetSmartLinkInputSchema =
 	StrictDynamoiGetSmartLinkInputSchema;
 
-
 export const SMART_LINK_ANALYTICS_CONTRACT = {
- capabilityId: "smart_link_analytics", kind: "query", version: 1, journeys: ["native-reads", "reads-link-states", "reads-revoked", "reads-switch-delay"],
- dateRangeSchema: DateRangeSchema, isoCalendarDateSchema: IsoCalendarDateSchema, analyticsDateRangeSchema: SmartLinkAnalyticsDateRangeSchema,
- mcp: { definition: {
-		description:
-			"Use this when the user wants full details for one free Smart Link, including release, Spotify URL, public play.dynamoi.com URL, current status, theme source, and next actions. Set includeAnalytics=true for visit/click analytics and includeArtistSettings=true for artist-level theme/pixel settings. In the final answer, lead with the public URL and do not expose internal IDs unless asked.",
-		destructiveHint: false,
-		name: "dynamoi_get_smart_link",
-		openWorldHint: true,
-		readOnlyHint: true,
-		schema: DynamoiGetSmartLinkInputSchema,
- profiles: {directory: "advertised", full: "advertised"},
-		title: "Get Smart Link",
-	}, scopes: ["dynamoi:read"], directoryReason: "Read-only per-link analytics are directory-safe." },
- mobile: {auth: "bearer", method: "GET", operationId: "getMobileSmartLinkAnalytics", paramsSchema: z.object({id: z.string().trim().min(1)}), path: "/api/mobile/smart-links/{id}/analytics", platforms: ["android", "ios"], querySchema: MobileAnalyticsQuerySchema, responseSchema: MobileAnalyticsResponseSchema},
- parity: {
- web: {status: "partial", reason: "Adapter proof pending."}, mcp: {status: "partial", reason: "Adapter proof pending."}, cli: {status: "partial", reason: "Adapter proof pending."},
- webmcp: {status: "complete", journeys: ["WM-DASHBOARD-smartLinkAnalytics"], binding: {file: "apps/dashboard/app/dashboard/webmcp/dashboard-smart-links.webmcp.generated.ts", export: "smartLinkAnalyticsWebMcp", tool: "dashboard_smart_link_analytics", role: "consumer", intermediates: [{file: "apps/dashboard/app/dashboard/webmcp/reads-smart-links.ts", export: "smartLinkAnalytics"}, {file: "apps/dashboard/app/lib/domains/mcp/tools/smart-links-analytics.ts", export: "toolGetSmartLinkAnalytics"}]}}
- }
+	capabilityId: "smart_link_analytics",
+	kind: "query",
+	version: 1,
+	journeys: [
+		"native-reads",
+		"reads-link-states",
+		"reads-revoked",
+		"reads-switch-delay",
+	],
+	dateRangeSchema: DateRangeSchema,
+	isoCalendarDateSchema: IsoCalendarDateSchema,
+	analyticsDateRangeSchema: SmartLinkAnalyticsDateRangeSchema,
+	mcp: {
+		definition: {
+			description:
+				"Use this when the user wants full details for one free Smart Link, including release, Spotify URL, public play.dynamoi.com URL, current status, theme source, and next actions. Set includeAnalytics=true for visit/click analytics and includeArtistSettings=true for artist-level theme/pixel settings. In the final answer, lead with the public URL and do not expose internal IDs unless asked.",
+			destructiveHint: false,
+			name: "dynamoi_get_smart_link",
+			openWorldHint: true,
+			readOnlyHint: true,
+			schema: DynamoiGetSmartLinkInputSchema,
+			profiles: { directory: "advertised", full: "advertised" },
+			title: "Get Smart Link",
+		},
+		scopes: ["dynamoi:read"],
+		directoryReason: "Read-only per-link analytics are directory-safe.",
+	},
+	mobile: {
+		auth: "bearer",
+		method: "GET",
+		operationId: "getMobileSmartLinkAnalytics",
+		paramsSchema: z.object({ id: z.string().trim().min(1) }),
+		path: "/api/mobile/smart-links/{id}/analytics",
+		platforms: ["android", "ios"],
+		querySchema: MobileAnalyticsQuerySchema,
+		responseSchema: MobileAnalyticsResponseSchema,
+	},
+	parity: {
+		web: { status: "partial", reason: "Adapter proof pending." },
+		mcp: { status: "partial", reason: "Adapter proof pending." },
+		cli: { status: "partial", reason: "Adapter proof pending." },
+		webmcp: {
+			status: "complete",
+			journeys: ["WM-DASHBOARD-smartLinkAnalytics"],
+			binding: {
+				file: "apps/dashboard/app/dashboard/webmcp/dashboard-smart-links.webmcp.generated.ts",
+				export: "smartLinkAnalyticsWebMcp",
+				tool: "dashboard_smart_link_analytics",
+				role: "consumer",
+				intermediates: [
+					{
+						file: "apps/dashboard/app/dashboard/webmcp/reads-smart-links.ts",
+						export: "smartLinkAnalytics",
+					},
+					{
+						file: "apps/dashboard/app/lib/domains/mcp/tools/smart-links-analytics.ts",
+						export: "toolGetSmartLinkAnalytics",
+					},
+				],
+			},
+		},
+	},
 } as const;

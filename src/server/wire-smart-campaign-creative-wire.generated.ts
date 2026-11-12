@@ -3,135 +3,154 @@ import { MAX_SOURCE_AUDIO_BYTES } from "../campaign-limits";
 import { z } from "zod";
 const MobileSmartCampaignUuidSchema = z.uuid();
 const MobileSmartCampaignRevisionSchema = z.iso.datetime();
-const MobileSmartCampaignCreativeItemSchema: z.ZodObject<z.core.$ZodShape> = z.object({
-	clipDurationSeconds: z.number().nonnegative(),
-	clipStartSeconds: z.number().nonnegative(),
-	errorMessage: z.string().nullable(),
-	id: MobileSmartCampaignUuidSchema,
-	progressPercent: z.number().min(0).max(100).nullable(),
-	status: z.enum(["PENDING", "PROCESSING", "COMPLETED", "FAILED"]),
-	templateVariant: z.string().min(1),
-	thumbnailUrl: z.string().regex(/^(?:https:\/\/|\/)/u),
-	videoUrl: z.string().regex(/^(?:https:\/\/|\/)/u),
-});
-const MobileSmartCampaignUploadedAssetSchema: z.ZodObject<z.core.$ZodShape> = z.object({
-	errorMessage: z.string().nullable().optional(),
-	fileName: z.string().min(1),
-	fileSize: z.number().int().nonnegative(),
-	fileType: z.string().min(1),
-	id: z.string().min(1),
-	mediaAssetId: z.string().nullable().optional(),
-	progress: z.number().min(0).max(100).optional(),
-	source: z.enum(["UPLOAD", "EXISTING"]).optional(),
-	storageKey: z.string().nullable().optional(),
-	storageProvider: z.enum(["R2", "CLOUDFLARE", "S3", "GCS"]).optional(),
-	tempUrl: z.string().nullable().optional(),
-	thumbnailUrl: z.string().nullable().optional(),
-	uploadStatus: z
-		.enum(["pending", "uploading", "success", "error"])
-		.optional(),
-});
-export const MobileSmartCampaignCreativeResponseSchema: z.ZodObject<z.core.$ZodShape> = z.object({
-	activeStep: z.literal("creative"),
-	campaignId: MobileSmartCampaignUuidSchema,
-	creative: z.object({
-		completed: z.boolean(),
-		generation: z.object({
-			completedCount: z.number().int().nonnegative(),
-			failedCount: z.number().int().nonnegative(),
-			inProgressCount: z.number().int().nonnegative(),
-			items: z.array(MobileSmartCampaignCreativeItemSchema),
-			jobErrorMessage: z.string().nullable(),
-			jobId: MobileSmartCampaignUuidSchema,
-			phase: z.enum([
-				"CHECKING_RENDERER",
-				"ANALYZING_AUDIO",
-				"PREPARING_TEMPLATES",
-				"RENDERING",
-				"FINALIZING",
-				"FAILED",
-			]),
-			totalCount: z.number().int().nonnegative(),
-		}).nullable(),
-		selectedCreativeIds: z.array(MobileSmartCampaignUuidSchema),
-		selectedSocialPosts: z.array(z.string()).default([]),
-		source: z.enum(["generate", "posts", "upload"]).nullable(),
-		sourceAudio: z.object({
-			fileName: z.string().nullable(),
-			fileSizeBytes: z.number().int().nonnegative().nullable(),
-			hookSeconds: z.array(z.number().int().nonnegative()).max(2),
-			isUploaded: z.boolean(),
-			trackDurationSeconds: z.number().nonnegative().nullable(),
-		}),
-		uploadedAssets: z
-			.array(MobileSmartCampaignUploadedAssetSchema)
-			.default([]),
-	}),
-	updatedAt: MobileSmartCampaignRevisionSchema.nullable(),
-});
-const MobileSmartCampaignSourceAudioIdentitySchema: z.ZodObject<z.core.$ZodShape> = z.object({
-	campaignId: MobileSmartCampaignUuidSchema,
-	expectedUpdatedAt: MobileSmartCampaignRevisionSchema,
-});
-const MobileSmartCampaignSourceAudioUploadRequestObjectSchema: z.ZodObject<z.core.$ZodShape> = z.object({
-	fileName: z
-		.string()
-		.trim()
-		.min(1)
-		.max(255)
-		.regex(/^[^/\\\p{Cc}]+$/u)
-		.describe(
-			"Original MP3, WAV, FLAC or M4A filename; omitted filenames retain MP3 compatibility.",
-		)
-		.optional(),
-	...MobileSmartCampaignSourceAudioIdentitySchema.shape,
-	fileSizeBytes: z.number().int().positive().max(MAX_SOURCE_AUDIO_BYTES),
-	hookSeconds: z.array(z.number().int().nonnegative()).max(2),
-	trackDurationSeconds: z.number().nonnegative(),
-});
-export const MobileSmartCampaignSourceAudioUploadRequestSchema: z.ZodObject<z.core.$ZodShape> = MobileSmartCampaignSourceAudioUploadRequestObjectSchema;
-export const MobileSmartCampaignSourceAudioUploadResponseSchema: z.ZodObject<z.core.$ZodShape> = z.object({
-	campaignId: MobileSmartCampaignUuidSchema,
-	expiresAt: MobileSmartCampaignRevisionSchema,
-	partSizeBytes: z.number().int().positive(),
-	presignedPartUrls: z.array(z.url()).min(1),
-	uploadId: z.string().min(1),
-	uploadSessionId: MobileSmartCampaignUuidSchema,
-});
-const MobileSmartCampaignSourceAudioUploadStatusRequestObjectSchema: z.ZodObject<z.core.$ZodShape> = z.object({
-	...MobileSmartCampaignSourceAudioIdentitySchema.shape,
-	uploadId: z.string().min(1),
-	uploadSessionId: MobileSmartCampaignUuidSchema,
-});
-export const MobileSmartCampaignSourceAudioUploadStatusRequestSchema: z.ZodObject<z.core.$ZodShape> = MobileSmartCampaignSourceAudioUploadStatusRequestObjectSchema;
-export const MobileSmartCampaignSourceAudioUploadStatusResponseSchema: z.ZodObject<z.core.$ZodShape> = z.object({
-	campaignId: MobileSmartCampaignUuidSchema,
-	uploadedParts: z.array(z.object({
-		etag: z.string().min(1),
-		partNumber: z.number().int().positive(),
-		sizeBytes: z.number().int().nonnegative(),
-	})),
-});
-export const MobileSmartCampaignSourceAudioUploadCompleteRequestSchema: z.ZodObject<z.core.$ZodShape> = z.object({
-	...MobileSmartCampaignSourceAudioUploadRequestObjectSchema.shape,
-	parts: z
-		.array(z.object({
-		etag: z.string().min(1),
-		partNumber: z.number().int().positive(),
-	}))
-		.min(1),
-	uploadId: z.string().min(1),
-	uploadSessionId: MobileSmartCampaignUuidSchema,
-});
-export const MobileSmartCampaignSourceAudioUploadCompleteResponseSchema: z.ZodObject<z.core.$ZodShape> = z.object({
-	campaignId: MobileSmartCampaignUuidSchema,
-	sourceAudio: z.object({
+const MobileSmartCampaignCreativeItemSchema: z.ZodObject<z.core.$ZodShape> =
+	z.object({
+		clipDurationSeconds: z.number().nonnegative(),
+		clipStartSeconds: z.number().nonnegative(),
+		errorMessage: z.string().nullable(),
+		id: MobileSmartCampaignUuidSchema,
+		progressPercent: z.number().min(0).max(100).nullable(),
+		status: z.enum(["PENDING", "PROCESSING", "COMPLETED", "FAILED"]),
+		templateVariant: z.string().min(1),
+		thumbnailUrl: z.string().regex(/^(?:https:\/\/|\/)/u),
+		videoUrl: z.string().regex(/^(?:https:\/\/|\/)/u),
+	});
+const MobileSmartCampaignUploadedAssetSchema: z.ZodObject<z.core.$ZodShape> =
+	z.object({
+		errorMessage: z.string().nullable().optional(),
 		fileName: z.string().min(1),
-		fileSizeBytes: z.number().int().positive(),
+		fileSize: z.number().int().nonnegative(),
+		fileType: z.string().min(1),
+		id: z.string().min(1),
+		mediaAssetId: z.string().nullable().optional(),
+		progress: z.number().min(0).max(100).optional(),
+		source: z.enum(["UPLOAD", "EXISTING"]).optional(),
+		storageKey: z.string().nullable().optional(),
+		storageProvider: z.enum(["R2", "CLOUDFLARE", "S3", "GCS"]).optional(),
+		tempUrl: z.string().nullable().optional(),
+		thumbnailUrl: z.string().nullable().optional(),
+		uploadStatus: z
+			.enum(["pending", "uploading", "success", "error"])
+			.optional(),
+	});
+export const MobileSmartCampaignCreativeResponseSchema: z.ZodObject<z.core.$ZodShape> =
+	z.object({
+		activeStep: z.literal("creative"),
+		campaignId: MobileSmartCampaignUuidSchema,
+		creative: z.object({
+			completed: z.boolean(),
+			generation: z
+				.object({
+					completedCount: z.number().int().nonnegative(),
+					failedCount: z.number().int().nonnegative(),
+					inProgressCount: z.number().int().nonnegative(),
+					items: z.array(MobileSmartCampaignCreativeItemSchema),
+					jobErrorMessage: z.string().nullable(),
+					jobId: MobileSmartCampaignUuidSchema,
+					phase: z.enum([
+						"CHECKING_RENDERER",
+						"ANALYZING_AUDIO",
+						"PREPARING_TEMPLATES",
+						"RENDERING",
+						"FINALIZING",
+						"FAILED",
+					]),
+					totalCount: z.number().int().nonnegative(),
+				})
+				.nullable(),
+			selectedCreativeIds: z.array(MobileSmartCampaignUuidSchema),
+			selectedSocialPosts: z.array(z.string()).default([]),
+			source: z.enum(["generate", "posts", "upload"]).nullable(),
+			sourceAudio: z.object({
+				fileName: z.string().nullable(),
+				fileSizeBytes: z.number().int().nonnegative().nullable(),
+				hookSeconds: z.array(z.number().int().nonnegative()).max(2),
+				isUploaded: z.boolean(),
+				trackDurationSeconds: z.number().nonnegative().nullable(),
+			}),
+			uploadedAssets: z
+				.array(MobileSmartCampaignUploadedAssetSchema)
+				.default([]),
+		}),
+		updatedAt: MobileSmartCampaignRevisionSchema.nullable(),
+	});
+const MobileSmartCampaignSourceAudioIdentitySchema: z.ZodObject<z.core.$ZodShape> =
+	z.object({
+		campaignId: MobileSmartCampaignUuidSchema,
+		expectedUpdatedAt: MobileSmartCampaignRevisionSchema,
+	});
+const MobileSmartCampaignSourceAudioUploadRequestObjectSchema: z.ZodObject<z.core.$ZodShape> =
+	z.object({
+		fileName: z
+			.string()
+			.trim()
+			.min(1)
+			.max(255)
+			.regex(/^[^/\\\p{Cc}]+$/u)
+			.describe(
+				"Original MP3, WAV, FLAC or M4A filename; omitted filenames retain MP3 compatibility.",
+			)
+			.optional(),
+		...MobileSmartCampaignSourceAudioIdentitySchema.shape,
+		fileSizeBytes: z.number().int().positive().max(MAX_SOURCE_AUDIO_BYTES),
 		hookSeconds: z.array(z.number().int().nonnegative()).max(2),
-		isUploaded: z.literal(true),
 		trackDurationSeconds: z.number().nonnegative(),
-	}),
-	updatedAt: MobileSmartCampaignRevisionSchema,
-});
-export const MobileSmartCampaignSourceAudioUploadAbortRequestSchema: z.ZodObject<z.core.$ZodShape> = z.object(MobileSmartCampaignSourceAudioUploadStatusRequestObjectSchema.shape);
+	});
+export const MobileSmartCampaignSourceAudioUploadRequestSchema: z.ZodObject<z.core.$ZodShape> =
+	MobileSmartCampaignSourceAudioUploadRequestObjectSchema;
+export const MobileSmartCampaignSourceAudioUploadResponseSchema: z.ZodObject<z.core.$ZodShape> =
+	z.object({
+		campaignId: MobileSmartCampaignUuidSchema,
+		expiresAt: MobileSmartCampaignRevisionSchema,
+		partSizeBytes: z.number().int().positive(),
+		presignedPartUrls: z.array(z.url()).min(1),
+		uploadId: z.string().min(1),
+		uploadSessionId: MobileSmartCampaignUuidSchema,
+	});
+const MobileSmartCampaignSourceAudioUploadStatusRequestObjectSchema: z.ZodObject<z.core.$ZodShape> =
+	z.object({
+		...MobileSmartCampaignSourceAudioIdentitySchema.shape,
+		uploadId: z.string().min(1),
+		uploadSessionId: MobileSmartCampaignUuidSchema,
+	});
+export const MobileSmartCampaignSourceAudioUploadStatusRequestSchema: z.ZodObject<z.core.$ZodShape> =
+	MobileSmartCampaignSourceAudioUploadStatusRequestObjectSchema;
+export const MobileSmartCampaignSourceAudioUploadStatusResponseSchema: z.ZodObject<z.core.$ZodShape> =
+	z.object({
+		campaignId: MobileSmartCampaignUuidSchema,
+		uploadedParts: z.array(
+			z.object({
+				etag: z.string().min(1),
+				partNumber: z.number().int().positive(),
+				sizeBytes: z.number().int().nonnegative(),
+			}),
+		),
+	});
+export const MobileSmartCampaignSourceAudioUploadCompleteRequestSchema: z.ZodObject<z.core.$ZodShape> =
+	z.object({
+		...MobileSmartCampaignSourceAudioUploadRequestObjectSchema.shape,
+		parts: z
+			.array(
+				z.object({
+					etag: z.string().min(1),
+					partNumber: z.number().int().positive(),
+				}),
+			)
+			.min(1),
+		uploadId: z.string().min(1),
+		uploadSessionId: MobileSmartCampaignUuidSchema,
+	});
+export const MobileSmartCampaignSourceAudioUploadCompleteResponseSchema: z.ZodObject<z.core.$ZodShape> =
+	z.object({
+		campaignId: MobileSmartCampaignUuidSchema,
+		sourceAudio: z.object({
+			fileName: z.string().min(1),
+			fileSizeBytes: z.number().int().positive(),
+			hookSeconds: z.array(z.number().int().nonnegative()).max(2),
+			isUploaded: z.literal(true),
+			trackDurationSeconds: z.number().nonnegative(),
+		}),
+		updatedAt: MobileSmartCampaignRevisionSchema,
+	});
+export const MobileSmartCampaignSourceAudioUploadAbortRequestSchema: z.ZodObject<z.core.$ZodShape> =
+	z.object(MobileSmartCampaignSourceAudioUploadStatusRequestObjectSchema.shape);

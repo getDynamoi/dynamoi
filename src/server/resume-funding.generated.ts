@@ -49,7 +49,8 @@ const MobileCampaignFundingBreakdownResponseSchema = z.object({
 
 
 const screenPending = {
-	reason: "Native screen pending: packages/application-api-contract/native-specs/campaigns.md; existing HTTP wire and native calls are preserved, current paired journey receipts remain required.",
+	reason:
+		"Native screen pending: packages/application-api-contract/native-specs/campaigns.md; existing HTTP wire and native calls are preserved, current paired journey receipts remain required.",
 	status: "partial",
 } as const;
 export const CAMPAIGN_RESUME_FUNDING_CONTRACT = {
@@ -79,16 +80,23 @@ export const CAMPAIGN_RESUME_FUNDING_CONTRACT = {
 	kind: "query",
 	mcp: {
 		definition: {
-			description: "Read the existing campaign's resume funding breakdown: campaign budget, funded-window coverage, usable credits, immediate charge, payment method, and refusal. Amounts carry their commercial currency and minor-unit exponent. This read never reserves funds, authorizes collection or resumes delivery. A refusal is not a zero-charge approval. Use dynamoi_update_campaign to resume only when the user requests it.",
+			description:
+				"Read the existing campaign's resume funding breakdown: campaign budget, funded-window coverage, usable credits, immediate charge, payment method, and refusal. Amounts carry their commercial currency and minor-unit exponent. This read never reserves funds, authorizes collection or resumes delivery. A refusal is not a zero-charge approval. Use dynamoi_update_campaign to resume only when the user requests it.",
 			destructiveHint: false,
 			name: "dynamoi_get_resume_funding",
 			openWorldHint: true,
 			readOnlyHint: true,
 			title: "Get Resume Funding",
 			profiles: { directory: "excluded", full: "advertised" },
-			schema: z.object({ campaignId: z.string().uuid(), format: z.enum(["json", "summary"]).optional() }).strict(),
+			schema: z
+				.object({
+					campaignId: z.string().uuid(),
+					format: z.enum(["json", "summary"]).optional(),
+				})
+				.strict(),
 		},
-		directoryReason: "Funding previews remain outside the reviewed directory profile.",
+		directoryReason:
+			"Funding previews remain outside the reviewed directory profile.",
 		scopes: ["dynamoi:read", "dynamoi:billing.read"],
 	},
 	mobile: {
@@ -111,9 +119,18 @@ export const CAMPAIGN_RESUME_FUNDING_CONTRACT = {
 				export: "resumeFundingWebMcp",
 				tool: "dashboard_resume_funding",
 				intermediates: [
-					{ file: "apps/dashboard/app/dashboard/webmcp/reads-campaigns.ts", export: "resumeFunding" },
-					{ file: "apps/dashboard/app/lib/domains/mcp/tools/get-resume-funding.ts", export: "toolGetResumeFunding" },
-					{ file: "apps/dashboard/app/lib/domains/mobile-api/domain-campaigns-queries.ts", export: "getMobileCampaignFundingBreakdown" },
+					{
+						file: "apps/dashboard/app/dashboard/webmcp/reads-campaigns.ts",
+						export: "resumeFunding",
+					},
+					{
+						file: "apps/dashboard/app/lib/domains/mcp/tools/get-resume-funding.ts",
+						export: "toolGetResumeFunding",
+					},
+					{
+						file: "apps/dashboard/app/lib/domains/mobile-api/domain-campaigns-queries.ts",
+						export: "getMobileCampaignFundingBreakdown",
+					},
 				],
 				role: "consumer",
 			},

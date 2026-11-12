@@ -6,7 +6,8 @@
 export const DYNAMOI_MCP_SERVER_NAME = "Dynamoi MCP Server";
 
 /** One-line tagline. */
-export const DYNAMOI_MCP_TAGLINE = "Music promotion and distribution, built for AI agents.";
+export const DYNAMOI_MCP_TAGLINE =
+	"Music promotion and distribution, built for AI agents.";
 
 /**
  * Short description. The MCP Registry caps `server.json` descriptions at 100

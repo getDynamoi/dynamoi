@@ -2,26 +2,276 @@
 import { z } from "zod";
 import { SHOP_CUSTOM_PRICING_VERSION } from "./wire-custom-package.generated";
 import { ShopNativeCheckoutRequestSchema } from "./wire-native-wire.generated";
-const range=z.object({min:z.number().int().nonnegative(),max:z.number().int().nonnegative()}).strict();
-const base=z.object({countryCodes:z.array(z.string().regex(/^[A-Z]{2}$/)).max(50).default([]),countryMode:z.enum(["GLOBAL","INCLUDE"]).default("GLOBAL"),currency:z.string().regex(/^[A-Z]{3}$/),marketLocale:z.string().min(2).max(30)}).strict();
-const ShopRebuyCustomRequestSchema=base.extend({targetViews:z.number().int().min(25000).max(1000000).multipleOf(25000)});
-const ShopRebuyPresetsRequestSchema=base.extend({budgets:z.array(z.object({key:z.string().min(1).max(64),budgetCents:z.number().int().positive()}).strict()).min(1).max(10)});
-const ShopRebuyQuoteSchema=z.object({amountCents:z.number().int().positive(),currency:z.string().regex(/^[A-Z]{3}$/),estimatedViews:range,pricingVersion:z.literal(SHOP_CUSTOM_PRICING_VERSION),reviewRequired:z.boolean(),targetViews:z.number().int().positive()}).strict();
-const ShopRebuyCustomResponseSchema=z.object({quote:ShopRebuyQuoteSchema}).strict();
-const ShopRebuyEstimateSchema=z.object({key:z.string(),estimatedViews:range,checkoutAvailable:z.boolean(),targetingIssue:z.literal("broaden_targeting_required").nullable()}).strict();
-const ShopRebuyPresetsResponseSchema=z.object({estimates:z.array(ShopRebuyEstimateSchema).max(10)}).strict();
-const ShopRebuyCheckoutRequestSchema=ShopNativeCheckoutRequestSchema.omit({requestId:true,slug:true,publicLocale:true}).extend({shopSlug:z.string().min(1).max(160),youtubeUrl:z.string().min(1).max(500),extensionSourceShopOrderId:z.string().min(1).max(255).nullable().optional(),returnToBuyer:z.boolean().default(true),clientRequestId:z.uuid(),phase:z.enum(["preview","confirm"]).default("preview")});
-const ShopRebuyProposalSchema=ShopRebuyCheckoutRequestSchema.omit({phase:true});
-const ShopRebuyCheckoutResponseSchema=z.object({phase:z.enum(["preview","created"]),proposed:ShopRebuyProposalSchema.optional(),url:z.url().optional()}).strict().superRefine((value,ctx)=>{if(value.phase==="preview"?!value.proposed:!value.url)ctx.addIssue({code:"custom",message:"Incomplete unpaid checkout result."});});
-export const SHOP_REBUY_CUSTOM_CONTRACT={capabilityId:"shop_orders",kind:"query",version:1,
- mobile:{auth:"bearer",method:"POST",operationId:"postMobileShopRebuyCustomQuote",path:"/api/mobile/artists/{artistId}/shop-rebuy/custom-quote",platforms:["ios","android"],paramsSchema:z.object({artistId:z.string().min(1)}),bodySchema:ShopRebuyCustomRequestSchema,responseSchema:ShopRebuyCustomResponseSchema},
- mcp:{definition:{name:"dynamoi_quote_shop_rebuy_custom",title:"Quote Returning Buyer Custom Promotion",description:"Read a custom promotion price and view estimate for an artist you can access, using the same returning-buyer offer and viewer-location rules as the website. Keep this market locale and currency when preparing checkout. Returned ranges already include any eligible offer; do not add a bonus again. No price is reserved.",schema:ShopRebuyCustomRequestSchema.extend({artistId:z.string().min(1).max(255)}),profiles:{directory:"excluded",full:"advertised"},readOnlyHint:true,destructiveHint:false,openWorldHint:false},scopes:["dynamoi:read","dynamoi:mcp.full"],directoryReason:"Full-only claimed buyer flow; public and order-capability buying remain distinct."},
- parity:{ios:{status:"partial",reason:"Native screen pending: native-specs/shop_orders.md; paired receipt required."},android:{status:"partial",reason:"Native screen pending: native-specs/shop_orders.md; paired receipt required."},webmcp:{status:"complete",binding:{file:"apps/dashboard/app/dashboard/webmcp/dashboard-commerce.webmcp.generated.ts",export:"shopRebuyCustomWebMcp",tool:"dashboard_shop_rebuy_custom",intermediates:[{file:"apps/dashboard/app/dashboard/webmcp/reads-commerce.ts",export:"shopRebuyCustom"}]},journeys:["WM-DASHBOARD-shopRebuyCustom"]}}} as const;
-export const SHOP_REBUY_PRESETS_CONTRACT={capabilityId:"shop_orders",kind:"query",version:1,
- mobile:{auth:"bearer",method:"POST",operationId:"postMobileShopRebuyPresetEstimates",path:"/api/mobile/artists/{artistId}/shop-rebuy/preset-estimates",platforms:["ios","android"],paramsSchema:z.object({artistId:z.string().min(1)}),bodySchema:ShopRebuyPresetsRequestSchema,responseSchema:ShopRebuyPresetsResponseSchema},
- mcp:{definition:{name:"dynamoi_estimate_shop_rebuy_packages",title:"Estimate Returning Buyer Packages",description:"Read view estimates for up to ten package prices using the same returning-buyer offer and viewer-location rules as the website. Returned ranges already include any eligible offer; do not add a bonus again. No price is reserved.",schema:ShopRebuyPresetsRequestSchema.extend({artistId:z.string().min(1).max(255)}),profiles:{directory:"excluded",full:"advertised"},readOnlyHint:true,destructiveHint:false,openWorldHint:false},scopes:["dynamoi:read","dynamoi:mcp.full"],directoryReason:"Full-only claimed buyer flow; public and order-capability buying remain distinct."},
- parity:{ios:{status:"partial",reason:"Native screen pending: native-specs/shop_orders.md; paired receipt required."},android:{status:"partial",reason:"Native screen pending: native-specs/shop_orders.md; paired receipt required."},webmcp:{status:"complete",binding:{file:"apps/dashboard/app/dashboard/webmcp/dashboard-commerce.webmcp.generated.ts",export:"shopRebuyPresetsWebMcp",tool:"dashboard_shop_rebuy_presets",intermediates:[{file:"apps/dashboard/app/dashboard/webmcp/reads-commerce.ts",export:"shopRebuyPresets"}]},journeys:["WM-DASHBOARD-shopRebuyPresets"]}}} as const;
-export const SHOP_REBUY_CHECKOUT_CONTRACT={capabilityId:"shop_orders",kind:"command",version:1,
- mobile:{auth:"bearer",method:"POST",operationId:"postMobileShopRebuyCheckout",path:"/api/mobile/artists/{artistId}/shop-rebuy/checkout",platforms:["ios","android"],paramsSchema:z.object({artistId:z.string().min(1)}),bodySchema:ShopRebuyCheckoutRequestSchema,responseSchema:ShopRebuyCheckoutResponseSchema},
- mcp:{definition:{name:"dynamoi_prepare_shop_rebuy_checkout",title:"Prepare Returning Buyer Checkout",description:"Preview the selected video, viewer locations and expected total. Use the quote market locale as locale. Confirm only after user approval, keeping the same clientRequestId and expectedTotal. Before opening unpaid Stripe Checkout, Dynamoi checks the current total and applies its existing buyer-offer and purchase-email rules. Creating checkout does not pay, create an order or launch a promotion. Reconcile uncertain outcomes with the original request ID and exact input.",schema:ShopRebuyCheckoutRequestSchema.extend({artistId:z.string().min(1).max(255)}),profiles:{directory:"excluded",full:"advertised"},readOnlyHint:false,destructiveHint:false,openWorldHint:true,idempotentHint:true},scopes:["dynamoi:read","dynamoi:mcp.full"],directoryReason:"Full-only claimed buyer flow; public and order-capability buying remain distinct."},
- parity:{ios:{status:"partial",reason:"Native screen pending: native-specs/shop_orders.md; paired receipt required."},android:{status:"partial",reason:"Native screen pending: native-specs/shop_orders.md; paired receipt required."},webmcp:{status:"complete",binding:{file:"apps/dashboard/app/dashboard/webmcp/dashboard-commerce.webmcp.generated.ts",export:"shopRebuyCheckoutWebMcp",tool:"dashboard_shop_rebuy_checkout",intermediates:[{file:"apps/dashboard/app/dashboard/webmcp/commands.ts",export:"shopRebuyCheckout"}]},journeys:["WM-DASHBOARD-shopRebuyCheckout"]}}} as const;
+const range = z
+	.object({
+		min: z.number().int().nonnegative(),
+		max: z.number().int().nonnegative(),
+	})
+	.strict();
+const base = z
+	.object({
+		countryCodes: z
+			.array(z.string().regex(/^[A-Z]{2}$/))
+			.max(50)
+			.default([]),
+		countryMode: z.enum(["GLOBAL", "INCLUDE"]).default("GLOBAL"),
+		currency: z.string().regex(/^[A-Z]{3}$/),
+		marketLocale: z.string().min(2).max(30),
+	})
+	.strict();
+const ShopRebuyCustomRequestSchema = base.extend({
+	targetViews: z.number().int().min(25000).max(1000000).multipleOf(25000),
+});
+const ShopRebuyPresetsRequestSchema = base.extend({
+	budgets: z
+		.array(
+			z
+				.object({
+					key: z.string().min(1).max(64),
+					budgetCents: z.number().int().positive(),
+				})
+				.strict(),
+		)
+		.min(1)
+		.max(10),
+});
+const ShopRebuyQuoteSchema = z
+	.object({
+		amountCents: z.number().int().positive(),
+		currency: z.string().regex(/^[A-Z]{3}$/),
+		estimatedViews: range,
+		pricingVersion: z.literal(SHOP_CUSTOM_PRICING_VERSION),
+		reviewRequired: z.boolean(),
+		targetViews: z.number().int().positive(),
+	})
+	.strict();
+const ShopRebuyCustomResponseSchema = z
+	.object({ quote: ShopRebuyQuoteSchema })
+	.strict();
+const ShopRebuyEstimateSchema = z
+	.object({
+		key: z.string(),
+		estimatedViews: range,
+		checkoutAvailable: z.boolean(),
+		targetingIssue: z.literal("broaden_targeting_required").nullable(),
+	})
+	.strict();
+const ShopRebuyPresetsResponseSchema = z
+	.object({ estimates: z.array(ShopRebuyEstimateSchema).max(10) })
+	.strict();
+const ShopRebuyCheckoutRequestSchema =
+	ShopNativeCheckoutRequestSchema.omit({
+		requestId: true,
+		slug: true,
+		publicLocale: true,
+	}).extend({
+		shopSlug: z.string().min(1).max(160),
+		youtubeUrl: z.string().min(1).max(500),
+		extensionSourceShopOrderId: z
+			.string()
+			.min(1)
+			.max(255)
+			.nullable()
+			.optional(),
+		returnToBuyer: z.boolean().default(true),
+		clientRequestId: z.uuid(),
+		phase: z.enum(["preview", "confirm"]).default("preview"),
+	});
+const ShopRebuyProposalSchema = ShopRebuyCheckoutRequestSchema.omit({
+	phase: true,
+});
+const ShopRebuyCheckoutResponseSchema = z
+	.object({
+		phase: z.enum(["preview", "created"]),
+		proposed: ShopRebuyProposalSchema.optional(),
+		url: z.url().optional(),
+	})
+	.strict()
+	.superRefine((value, ctx) => {
+		if (value.phase === "preview" ? !value.proposed : !value.url)
+			ctx.addIssue({
+				code: "custom",
+				message: "Incomplete unpaid checkout result.",
+			});
+	});
+export const SHOP_REBUY_CUSTOM_CONTRACT = {
+	capabilityId: "shop_orders",
+	kind: "query",
+	version: 1,
+	mobile: {
+		auth: "bearer",
+		method: "POST",
+		operationId: "postMobileShopRebuyCustomQuote",
+		path: "/api/mobile/artists/{artistId}/shop-rebuy/custom-quote",
+		platforms: ["ios", "android"],
+		paramsSchema: z.object({ artistId: z.string().min(1) }),
+		bodySchema: ShopRebuyCustomRequestSchema,
+		responseSchema: ShopRebuyCustomResponseSchema,
+	},
+	mcp: {
+		definition: {
+			name: "dynamoi_quote_shop_rebuy_custom",
+			title: "Quote Returning Buyer Custom Promotion",
+			description:
+				"Read a custom promotion price and view estimate for an artist you can access, using the same returning-buyer offer and viewer-location rules as the website. Keep this market locale and currency when preparing checkout. Returned ranges already include any eligible offer; do not add a bonus again. No price is reserved.",
+			schema: ShopRebuyCustomRequestSchema.extend({
+				artistId: z.string().min(1).max(255),
+			}),
+			profiles: { directory: "excluded", full: "advertised" },
+			readOnlyHint: true,
+			destructiveHint: false,
+			openWorldHint: false,
+		},
+		scopes: ["dynamoi:read", "dynamoi:mcp.full"],
+		directoryReason:
+			"Full-only claimed buyer flow; public and order-capability buying remain distinct.",
+	},
+	parity: {
+		ios: {
+			status: "partial",
+			reason:
+				"Native screen pending: native-specs/shop_orders.md; paired receipt required.",
+		},
+		android: {
+			status: "partial",
+			reason:
+				"Native screen pending: native-specs/shop_orders.md; paired receipt required.",
+		},
+		webmcp: {
+			status: "complete",
+			binding: {
+				file: "apps/dashboard/app/dashboard/webmcp/dashboard-commerce.webmcp.generated.ts",
+				export: "shopRebuyCustomWebMcp",
+				tool: "dashboard_shop_rebuy_custom",
+				intermediates: [
+					{
+						file: "apps/dashboard/app/dashboard/webmcp/reads-commerce.ts",
+						export: "shopRebuyCustom",
+					},
+				],
+			},
+			journeys: ["WM-DASHBOARD-shopRebuyCustom"],
+		},
+	},
+} as const;
+export const SHOP_REBUY_PRESETS_CONTRACT = {
+	capabilityId: "shop_orders",
+	kind: "query",
+	version: 1,
+	mobile: {
+		auth: "bearer",
+		method: "POST",
+		operationId: "postMobileShopRebuyPresetEstimates",
+		path: "/api/mobile/artists/{artistId}/shop-rebuy/preset-estimates",
+		platforms: ["ios", "android"],
+		paramsSchema: z.object({ artistId: z.string().min(1) }),
+		bodySchema: ShopRebuyPresetsRequestSchema,
+		responseSchema: ShopRebuyPresetsResponseSchema,
+	},
+	mcp: {
+		definition: {
+			name: "dynamoi_estimate_shop_rebuy_packages",
+			title: "Estimate Returning Buyer Packages",
+			description:
+				"Read view estimates for up to ten package prices using the same returning-buyer offer and viewer-location rules as the website. Returned ranges already include any eligible offer; do not add a bonus again. No price is reserved.",
+			schema: ShopRebuyPresetsRequestSchema.extend({
+				artistId: z.string().min(1).max(255),
+			}),
+			profiles: { directory: "excluded", full: "advertised" },
+			readOnlyHint: true,
+			destructiveHint: false,
+			openWorldHint: false,
+		},
+		scopes: ["dynamoi:read", "dynamoi:mcp.full"],
+		directoryReason:
+			"Full-only claimed buyer flow; public and order-capability buying remain distinct.",
+	},
+	parity: {
+		ios: {
+			status: "partial",
+			reason:
+				"Native screen pending: native-specs/shop_orders.md; paired receipt required.",
+		},
+		android: {
+			status: "partial",
+			reason:
+				"Native screen pending: native-specs/shop_orders.md; paired receipt required.",
+		},
+		webmcp: {
+			status: "complete",
+			binding: {
+				file: "apps/dashboard/app/dashboard/webmcp/dashboard-commerce.webmcp.generated.ts",
+				export: "shopRebuyPresetsWebMcp",
+				tool: "dashboard_shop_rebuy_presets",
+				intermediates: [
+					{
+						file: "apps/dashboard/app/dashboard/webmcp/reads-commerce.ts",
+						export: "shopRebuyPresets",
+					},
+				],
+			},
+			journeys: ["WM-DASHBOARD-shopRebuyPresets"],
+		},
+	},
+} as const;
+export const SHOP_REBUY_CHECKOUT_CONTRACT = {
+	capabilityId: "shop_orders",
+	kind: "command",
+	version: 1,
+	mobile: {
+		auth: "bearer",
+		method: "POST",
+		operationId: "postMobileShopRebuyCheckout",
+		path: "/api/mobile/artists/{artistId}/shop-rebuy/checkout",
+		platforms: ["ios", "android"],
+		paramsSchema: z.object({ artistId: z.string().min(1) }),
+		bodySchema: ShopRebuyCheckoutRequestSchema,
+		responseSchema: ShopRebuyCheckoutResponseSchema,
+	},
+	mcp: {
+		definition: {
+			name: "dynamoi_prepare_shop_rebuy_checkout",
+			title: "Prepare Returning Buyer Checkout",
+			description:
+				"Preview the selected video, viewer locations and expected total. Use the quote market locale as locale. Confirm only after user approval, keeping the same clientRequestId and expectedTotal. Before opening unpaid Stripe Checkout, Dynamoi checks the current total and applies its existing buyer-offer and purchase-email rules. Creating checkout does not pay, create an order or launch a promotion. Reconcile uncertain outcomes with the original request ID and exact input.",
+			schema: ShopRebuyCheckoutRequestSchema.extend({
+				artistId: z.string().min(1).max(255),
+			}),
+			profiles: { directory: "excluded", full: "advertised" },
+			readOnlyHint: false,
+			destructiveHint: false,
+			openWorldHint: true,
+			idempotentHint: true,
+		},
+		scopes: ["dynamoi:read", "dynamoi:mcp.full"],
+		directoryReason:
+			"Full-only claimed buyer flow; public and order-capability buying remain distinct.",
+	},
+	parity: {
+		ios: {
+			status: "partial",
+			reason:
+				"Native screen pending: native-specs/shop_orders.md; paired receipt required.",
+		},
+		android: {
+			status: "partial",
+			reason:
+				"Native screen pending: native-specs/shop_orders.md; paired receipt required.",
+		},
+		webmcp: {
+			status: "complete",
+			binding: {
+				file: "apps/dashboard/app/dashboard/webmcp/dashboard-commerce.webmcp.generated.ts",
+				export: "shopRebuyCheckoutWebMcp",
+				tool: "dashboard_shop_rebuy_checkout",
+				intermediates: [
+					{
+						file: "apps/dashboard/app/dashboard/webmcp/commands.ts",
+						export: "shopRebuyCheckout",
+					},
+				],
+			},
+			journeys: ["WM-DASHBOARD-shopRebuyCheckout"],
+		},
+	},
+} as const;

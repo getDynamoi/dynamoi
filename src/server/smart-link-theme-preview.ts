@@ -1,12 +1,16 @@
 import type { McpServer } from "@modelcontextprotocol/server";
-import {SMART_LINK_THEME_PREVIEW_CONTRACT} from "./theme-preview.generated";
+import { SMART_LINK_THEME_PREVIEW_CONTRACT } from "./theme-preview.generated";
 import { AnyOutputEnvelopeSchema } from "./output-schemas";
 
 export const SMART_LINK_THEME_PREVIEW_RESOURCE_URI =
 	"ui://dynamoi/smart-link-theme-preview-v1.html";
 
-export const DynamoiPreviewSmartLinkThemesInputSchema = SMART_LINK_THEME_PREVIEW_CONTRACT.mcp.definition.schema;
-export const SMART_LINK_THEME_PREVIEW_TOOL_DEFINITION = {...SMART_LINK_THEME_PREVIEW_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema};
+export const DynamoiPreviewSmartLinkThemesInputSchema =
+	SMART_LINK_THEME_PREVIEW_CONTRACT.mcp.definition.schema;
+export const SMART_LINK_THEME_PREVIEW_TOOL_DEFINITION = {
+	...SMART_LINK_THEME_PREVIEW_CONTRACT.mcp.definition,
+	outputSchema: AnyOutputEnvelopeSchema,
+};
 
 const SMART_LINK_THEME_PREVIEW_HTML = `
 <div id="themes"></div>

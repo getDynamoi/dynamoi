@@ -11,8 +11,7 @@ app.addEventListener("toolresult", (result) => view.initial(result));
 app.addEventListener("toolcancelled", () => view.unsupported());
 function hostContext(context: Record<string, unknown>, hydration = false) {
 	const styles = context.styles as
-		| { variables?: Parameters<typeof applyHostStyleVariables>[0] }
-		| undefined;
+		{ variables?: Parameters<typeof applyHostStyleVariables>[0] } | undefined;
 	if (styles?.variables) {
 		applyHostStyleVariables(styles.variables);
 	}

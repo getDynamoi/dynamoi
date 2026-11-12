@@ -1,4 +1,4 @@
-import {ARTIST_WORKSPACE_CONTRACT} from "../context.generated";
+import { ARTIST_WORKSPACE_CONTRACT } from "../context.generated";
 import type { McpServer } from "@modelcontextprotocol/server";
 import * as z from "zod/v4";
 import type { ResultEnvelope } from "../../types";
@@ -69,7 +69,10 @@ const WorkspaceOutputSchema = z
 			});
 		}
 	});
-export const WORKSPACE_TOOL_DEFINITION={...ARTIST_WORKSPACE_CONTRACT.mcp.definition,outputSchema:WorkspaceOutputSchema} as const;
+export const WORKSPACE_TOOL_DEFINITION = {
+	...ARTIST_WORKSPACE_CONTRACT.mcp.definition,
+	outputSchema: WorkspaceOutputSchema,
+} as const;
 export type WorkspaceReaders = {
 	getCurrentUser(input: unknown): Promise<ResultEnvelope<object>>;
 	listArtists(input: unknown): Promise<ResultEnvelope<object>>;

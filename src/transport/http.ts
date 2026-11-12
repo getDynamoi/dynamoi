@@ -45,12 +45,9 @@ async function handleLegacyRequest(options: HandleOptions): Promise<Response> {
 	const enableJsonResponse = !acceptsEventStream && Boolean(acceptsJson);
 
 	let effectiveRequest = options.request;
-	if (
-		!(
-			accept?.includes("application/json") &&
-			accept.includes("text/event-stream")
-		)
-	) {
+	if (!(
+		accept?.includes("application/json") && accept.includes("text/event-stream")
+	)) {
 		const headers = new Headers(options.request.headers);
 		headers.set("accept", "application/json, text/event-stream");
 		// parsedBody is handed to the transport, so the request body is never read.

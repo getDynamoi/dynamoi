@@ -3,8 +3,7 @@ import type { ProposalReadinessOutputSchema } from "./server/output-schemas";
 import type { CampaignDisplayStatus, CampaignType } from "./types";
 
 export type CountryCatalogSource =
-	| "SMART_CAMPAIGN_COUNTRIES"
-	| "GOOGLE_ADS_COUNTRIES";
+	"SMART_CAMPAIGN_COUNTRIES" | "GOOGLE_ADS_COUNTRIES";
 
 export type AvailableCountry = {
 	code: string;

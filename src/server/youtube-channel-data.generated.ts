@@ -265,7 +265,6 @@ const MobileYouTubeChannelDataResponseSchema = z.object({
 });
 
 
-
 const YouTubeAdsenseSchema = MobileYouTubeAdsenseSchema.extend({
 	campaigns: z.array(MobileYouTubeAdsenseCampaignSchema.strict()),
 	countries: z.array(MobileYouTubeAdsenseCountrySchema.strict()),
@@ -340,10 +339,19 @@ export const YouTubeChannelDataSchema = z.strictObject({
 });
 
 
-const IsoCalendarDateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/).refine((value) => {
-	const date = new Date(`${value}T00:00:00.000Z`);
-	return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value;
-}, { message: "must be a valid calendar date" });
+const IsoCalendarDateSchema = z
+	.string()
+	.regex(/^\d{4}-\d{2}-\d{2}$/)
+	.refine(
+		(value) => {
+			const date = new Date(`${value}T00:00:00.000Z`);
+			return (
+				Number.isFinite(date.getTime()) &&
+				date.toISOString().slice(0, 10) === value
+			);
+		},
+		{ message: "must be a valid calendar date" },
+	);
 const ToolFormatSchema = z.enum(["json", "summary"]);
 
 const YouTubeVideoIdSchema = z.string().regex(/^[A-Za-z0-9_-]{11}$/, {
@@ -390,7 +398,8 @@ const DynamoiGetYouTubeChannelDataInputSchema = z
 		}
 		if (
 			data.videoIds &&
-			data.dataset !== "video_daily" && data.dataset !== "video_catalog"
+			data.dataset !== "video_daily" &&
+			data.dataset !== "video_catalog"
 		) {
 			ctx.addIssue({
 				code: "custom",
@@ -402,33 +411,68 @@ const DynamoiGetYouTubeChannelDataInputSchema = z
 
 export const YOUTUBE_CHANNEL_DATA_CONTRACT = {
 	capabilityId: "youtube_channel_data",
-	journeys: ["native-reads", "reads-youtube-states", "reads-revoked", "reads-switch-delay"],
+	journeys: [
+		"native-reads",
+		"reads-youtube-states",
+		"reads-revoked",
+		"reads-switch-delay",
+	],
 	kind: "query",
 	defaultLimit: MOBILE_YOUTUBE_CHANNEL_DATA_DEFAULT_LIMIT,
 	mcp: {
 		definition: {
-		description:
-			'Use this for "how is my YouTube channel doing?" or "what is growing my channel?" once a channel is linked. Use this to analyze an artist\'s own connected YouTube channel\'s estimated ad revenue to inform AdSense strategy and channel growth, alongside subscribers, views, watch time or country, device and subscribed-status breakdowns: paged channel data from the YouTube Analytics warehouse or explicitly qualified synthetic/sample data. Pick one dataset: channel_daily (views, watch time, subscribers gained and lost, likes, shares, playlist starts, estimated revenue, ad revenue, gross revenue, monetized playbacks, CPM and playback-based CPM), video_daily (per-video metrics with titles; filter with videoIds), country_daily, traffic_source_daily, search_term_daily (YouTube search terms for the whole channel), subscribed_status_daily, device_daily, operating_system_daily, playback_location_daily, creator_content_type_daily, or video_catalog (video titles and publish dates). traffic_source_daily rows with source ADVERTISING carry trafficClass=paid and every other source carries trafficClass=organic, but that label only groups sources and is not organic proof: ad clicks that land in a playlist are credited mostly to PLAYLIST and SUBSCRIBER, so trafficClass=organic rows include ad sessions. Organic lift is growth in sources ads do not touch (YT_SEARCH, RELATED_VIDEO, browse features) or lift that persists after spend stops. Warehouse data is observed on the channel, not attributed to any campaign. Preserve the returned source, coverage, freshness, and synthetic/sample qualifications; do not treat synthetic/sample data as observed channel results, campaign attribution, or actual earnings/payouts. Treat returned ad revenue as estimated revenue, not an AdSense payout. The first page of any dataset (including format=summary) also carries one adsense block, the same figures the Dynamoi dashboard and app show: formats (long-form versus Shorts AdSense revenue and RPM), recovery and campaigns (incremental AdSense since each campaign and whether it earned back the billed amount), and countries (AdSense per ad playback against similar channels). It is estimated, not a payout, and covers windowFromDay to windowThroughDay, which is not always the requested range: compare against those fields. recovery.state building or unavailable and null figures mean unknown, never zero; adsense is null outside the YouTube Partner Program, on later pages, or when temporarily unavailable (adsenseNote explains). Compare periods yourself and use the campaigns block (dates, strategy, promoted videos) as context. YouTube data arrives about 2-3 days late and revenue can lag further: check coverage before comparing, and treat placeholderDays and missingDays as unknown, never zero. Not available yet: audience demographics, per-video traffic sources and per-video search terms. Needs a connected channel; a channel that must be reconnected is refused. Returns no ad spend. Before judging a campaign\'s strategy, read the strategyGuide from dynamoi_get_campaign. Page with nextCursor; format=summary returns only the summary, coverage and adsense.',
-		destructiveHint: false,
-		name: "dynamoi_get_youtube_channel_data",
-		openWorldHint: false,
-		profiles: { directory: "advertised", full: "advertised" },
-		readOnlyHint: true,
-		schema: DynamoiGetYouTubeChannelDataInputSchema,
-		title: "Get YouTube Channel Data",
-	},
+			description:
+				'Use this for "how is my YouTube channel doing?" or "what is growing my channel?" once a channel is linked. Use this to analyze an artist\'s own connected YouTube channel\'s estimated ad revenue to inform AdSense strategy and channel growth, alongside subscribers, views, watch time or country, device and subscribed-status breakdowns: paged channel data from the YouTube Analytics warehouse or explicitly qualified synthetic/sample data. Pick one dataset: channel_daily (views, watch time, subscribers gained and lost, likes, shares, playlist starts, estimated revenue, ad revenue, gross revenue, monetized playbacks, CPM and playback-based CPM), video_daily (per-video metrics with titles; filter with videoIds), country_daily, traffic_source_daily, search_term_daily (YouTube search terms for the whole channel), subscribed_status_daily, device_daily, operating_system_daily, playback_location_daily, creator_content_type_daily, or video_catalog (video titles and publish dates). traffic_source_daily rows with source ADVERTISING carry trafficClass=paid and every other source carries trafficClass=organic, but that label only groups sources and is not organic proof: ad clicks that land in a playlist are credited mostly to PLAYLIST and SUBSCRIBER, so trafficClass=organic rows include ad sessions. Organic lift is growth in sources ads do not touch (YT_SEARCH, RELATED_VIDEO, browse features) or lift that persists after spend stops. Warehouse data is observed on the channel, not attributed to any campaign. Preserve the returned source, coverage, freshness, and synthetic/sample qualifications; do not treat synthetic/sample data as observed channel results, campaign attribution, or actual earnings/payouts. Treat returned ad revenue as estimated revenue, not an AdSense payout. The first page of any dataset (including format=summary) also carries one adsense block, the same figures the Dynamoi dashboard and app show: formats (long-form versus Shorts AdSense revenue and RPM), recovery and campaigns (incremental AdSense since each campaign and whether it earned back the billed amount), and countries (AdSense per ad playback against similar channels). It is estimated, not a payout, and covers windowFromDay to windowThroughDay, which is not always the requested range: compare against those fields. recovery.state building or unavailable and null figures mean unknown, never zero; adsense is null outside the YouTube Partner Program, on later pages, or when temporarily unavailable (adsenseNote explains). Compare periods yourself and use the campaigns block (dates, strategy, promoted videos) as context. YouTube data arrives about 2-3 days late and revenue can lag further: check coverage before comparing, and treat placeholderDays and missingDays as unknown, never zero. Not available yet: audience demographics, per-video traffic sources and per-video search terms. Needs a connected channel; a channel that must be reconnected is refused. Returns no ad spend. Before judging a campaign\'s strategy, read the strategyGuide from dynamoi_get_campaign. Page with nextCursor; format=summary returns only the summary, coverage and adsense.',
+			destructiveHint: false,
+			name: "dynamoi_get_youtube_channel_data",
+			openWorldHint: false,
+			profiles: { directory: "advertised", full: "advertised" },
+			readOnlyHint: true,
+			schema: DynamoiGetYouTubeChannelDataInputSchema,
+			title: "Get YouTube Channel Data",
+		},
 		directoryReason: "Read-only observed channel data is directory-safe.",
 		scopes: ["dynamoi:read"],
 	},
 	mobile: {
-		auth: "bearer", method: "GET", operationId: "getMobileArtistYouTubeChannelData",
+		auth: "bearer",
+		method: "GET",
+		operationId: "getMobileArtistYouTubeChannelData",
 		paramsSchema: z.object({ artistId: z.string().trim().min(1) }),
 		path: "/api/mobile/artists/{artistId}/youtube-channel-data",
 		platforms: ["android", "ios"],
-		querySchema: MobileYouTubeChannelDataQuerySchema, responseSchema: MobileYouTubeChannelDataResponseSchema,
+		querySchema: MobileYouTubeChannelDataQuerySchema,
+		responseSchema: MobileYouTubeChannelDataResponseSchema,
 	},
 	parity: {
-		webmcp: { status: "complete", journeys: ["WM-DASHBOARD-youtubeChannelData"], binding: { file: "apps/dashboard/app/dashboard/webmcp/dashboard-campaigns.webmcp.generated.ts", export: "youtubeChannelDataWebMcp", tool: "dashboard_youtube_channel_data", role: "consumer", intermediates: [{ file: "apps/dashboard/app/dashboard/webmcp/reads-campaigns.ts", export: "youtubeChannelData" }, { file: "apps/dashboard/app/lib/domains/mcp/tools/get-youtube-channel-data.ts", export: "toolGetYouTubeChannelData" }, { file: "apps/dashboard/app/lib/domains/youtube-campaign/analytics/readers/read-artist-youtube-channel-data.ts", export: "readArtistYouTubeChannelReport" }, { file: "apps/dashboard/app/lib/domains/youtube-campaign/analytics/readers/read-artist-youtube-channel-data.ts", export: "readArtistYouTubeChannelData" }] } },
+		webmcp: {
+			status: "complete",
+			journeys: ["WM-DASHBOARD-youtubeChannelData"],
+			binding: {
+				file: "apps/dashboard/app/dashboard/webmcp/dashboard-campaigns.webmcp.generated.ts",
+				export: "youtubeChannelDataWebMcp",
+				tool: "dashboard_youtube_channel_data",
+				role: "consumer",
+				intermediates: [
+					{
+						file: "apps/dashboard/app/dashboard/webmcp/reads-campaigns.ts",
+						export: "youtubeChannelData",
+					},
+					{
+						file: "apps/dashboard/app/lib/domains/mcp/tools/get-youtube-channel-data.ts",
+						export: "toolGetYouTubeChannelData",
+					},
+					{
+						file: "apps/dashboard/app/lib/domains/youtube-campaign/analytics/readers/read-artist-youtube-channel-data.ts",
+						export: "readArtistYouTubeChannelReport",
+					},
+					{
+						file: "apps/dashboard/app/lib/domains/youtube-campaign/analytics/readers/read-artist-youtube-channel-data.ts",
+						export: "readArtistYouTubeChannelData",
+					},
+				],
+			},
+		},
 		web: { status: "partial", reason: "Adapter behavior proof pending." },
 		mcp: { status: "partial", reason: "Adapter behavior proof pending." },
 		cli: { status: "partial", reason: "Adapter behavior proof pending." },

@@ -1,26 +1,41 @@
 import { BILLING_READ_MCP } from "./billing-read.generated";
 import { FUNDING_CHECKOUT_CONTRACT } from "./funding-checkout.generated";
-import {ARTIST_ANALYTICS_CONTRACT} from "./artist-analytics.generated";
-import {ONBOARDING_PLATFORM_STATUS_CONTRACT} from "./reads.generated";
-import {CAMPAIGN_READINESS_MCP} from "./readiness-input.generated";
+import { ARTIST_ANALYTICS_CONTRACT } from "./artist-analytics.generated";
+import { ONBOARDING_PLATFORM_STATUS_CONTRACT } from "./reads.generated";
+import { CAMPAIGN_READINESS_MCP } from "./readiness-input.generated";
 import { SMART_AD_COPY_MCP } from "./smart-ad-copy.generated";
 export { DynamoiSmartCampaignAdCopyInputSchema } from "./smart-ad-copy.generated";
-import {PLATFORM_ACTION_CENTER_CONTRACT} from "./platform-action-center.generated";
-import {META_CAMPAIGN_GROUPS_CONTRACT} from "./meta-groups.generated";
-import {CAMPAIGN_MANAGEMENT_READ_CONTRACT} from "./management-read.generated";
-import {AGENT_SEARCH_CONTRACT} from "./search.generated";
-import {YOUTUBE_DRAFT_SETUP_CONTRACT} from "./youtube-draft.generated";
-import {CAMPAIGN_COUNTRIES_CONTRACT} from "./country-catalog.generated";
-import {SMART_CAMPAIGN_SUBMISSION_CONTRACT} from "./submission.generated";
-const YouTubeStrategySchema=SMART_CAMPAIGN_SUBMISSION_CONTRACT.youtubeStrategySchema;
-const totalFundingConsentFields=SMART_CAMPAIGN_SUBMISSION_CONTRACT.totalFundingConsentFields;
-export const DynamoiLaunchCampaignInputSchema=SMART_CAMPAIGN_SUBMISSION_CONTRACT.mcp.definition.schema;
-import {CAMPAIGN_LIST_CONTRACT, CAMPAIGN_DETAIL_CONTRACT} from "./list.generated";
+import { PLATFORM_ACTION_CENTER_CONTRACT } from "./platform-action-center.generated";
+import { META_CAMPAIGN_GROUPS_CONTRACT } from "./meta-groups.generated";
+import { CAMPAIGN_MANAGEMENT_READ_CONTRACT } from "./management-read.generated";
+import { AGENT_SEARCH_CONTRACT } from "./search.generated";
+import { YOUTUBE_DRAFT_SETUP_CONTRACT } from "./youtube-draft.generated";
+import { CAMPAIGN_COUNTRIES_CONTRACT } from "./country-catalog.generated";
+import { SMART_CAMPAIGN_SUBMISSION_CONTRACT } from "./submission.generated";
+const YouTubeStrategySchema =
+	SMART_CAMPAIGN_SUBMISSION_CONTRACT.youtubeStrategySchema;
+const totalFundingConsentFields =
+	SMART_CAMPAIGN_SUBMISSION_CONTRACT.totalFundingConsentFields;
+export const DynamoiLaunchCampaignInputSchema =
+	SMART_CAMPAIGN_SUBMISSION_CONTRACT.mcp.definition.schema;
+import {
+	CAMPAIGN_LIST_CONTRACT,
+	CAMPAIGN_DETAIL_CONTRACT,
+} from "./list.generated";
 import { CAMPAIGN_RESUME_FUNDING_CONTRACT } from "./resume-funding.generated";
-import {earningsDefinition,DynamoiGetEarningsInputSchema as EarningsInputSchema} from "./distribution-wire";
-import {META_CONNECTION_CONTRACT,YOUTUBE_CONNECTION_CONTRACT} from "./connections.generated";
-import {TEAM_READ_CONTRACT,TEAM_ROLE_CONTRACT} from "./team.generated";
-import {REFERRALS_READ_CONTRACT,REFERRALS_CLAIM_CONTRACT} from "./referrals.generated";
+import {
+	earningsDefinition,
+	DynamoiGetEarningsInputSchema as EarningsInputSchema,
+} from "./distribution-wire";
+import {
+	META_CONNECTION_CONTRACT,
+	YOUTUBE_CONNECTION_CONTRACT,
+} from "./connections.generated";
+import { TEAM_READ_CONTRACT, TEAM_ROLE_CONTRACT } from "./team.generated";
+import {
+	REFERRALS_READ_CONTRACT,
+	REFERRALS_CLAIM_CONTRACT,
+} from "./referrals.generated";
 import { AUDIT_SETTINGS_CONTRACT } from "./audit-log.generated";
 import * as z from "zod/v4";
 import {
@@ -29,7 +44,11 @@ import {
 	TOTAL_BUDGET_FUNDING_CONSENT_COPY_HASH as totalFundingConsentCopyHash,
 	TOTAL_BUDGET_FUNDING_CONSENT_VERSION as totalFundingConsentVersion,
 } from "../consent";
-import {ACCOUNT_OVERVIEW_CONTRACT,ARTIST_ROSTER_CONTRACT,ARTIST_CONTEXT_CONTRACT} from "./context.generated";
+import {
+	ACCOUNT_OVERVIEW_CONTRACT,
+	ARTIST_ROSTER_CONTRACT,
+	ARTIST_CONTEXT_CONTRACT,
+} from "./context.generated";
 import { AUDIENCE_ANALYTICS_CONTRACT } from "./audience-analytics.generated";
 import { CAMPAIGN_DRAFTS_CONTRACT } from "./drafts.generated";
 import { GROWTH_AUDIT_CONTRACT } from "./growth-audit.generated";
@@ -37,7 +56,7 @@ import { OPENAI_TOOL_DEFINITIONS } from "./openai-tools";
 import {
 	createOutputEnvelopeSchema,
 	AnyOutputEnvelopeSchema,
-    TeamOutputEnvelopeSchema,
+	TeamOutputEnvelopeSchema,
 	GetCampaignOutputEnvelopeSchema,
 	GetCampaignReadinessOutputEnvelopeSchema,
 	GetResumeFundingOutputEnvelopeSchema,
@@ -61,7 +80,8 @@ export {
 	DynamoiListArtistsInputSchema,
 } from "./account-schema.generated";
 
-export const DynamoiGetArtistInputSchema=ARTIST_CONTEXT_CONTRACT.detailInputSchema;
+export const DynamoiGetArtistInputSchema =
+	ARTIST_CONTEXT_CONTRACT.detailInputSchema;
 export const DateRangeSchema = SharedDateRangeSchema;
 export const ToolFormatSchema = SharedToolFormatSchema;
 
@@ -79,14 +99,19 @@ const ExpectedCampaignStatusEnum = z.enum([
 ]);
 const ExpectedCampaignStatusSchema = ExpectedCampaignStatusEnum.optional();
 
-export const DynamoiSearchInputSchema = AGENT_SEARCH_CONTRACT.mcp.definition.schema;
+export const DynamoiSearchInputSchema =
+	AGENT_SEARCH_CONTRACT.mcp.definition.schema;
 
-export const DynamoiListCampaignsInputSchema = CAMPAIGN_LIST_CONTRACT.mcp.definition.schema;
-export const DynamoiGetCampaignInputSchema = CAMPAIGN_DETAIL_CONTRACT.mcp.definition.schema;
+export const DynamoiListCampaignsInputSchema =
+	CAMPAIGN_LIST_CONTRACT.mcp.definition.schema;
+export const DynamoiGetCampaignInputSchema =
+	CAMPAIGN_DETAIL_CONTRACT.mcp.definition.schema;
 
-export const DynamoiGetCampaignAnalyticsInputSchema = CAMPAIGN_DETAIL_CONTRACT.analyticsInputSchema;
+export const DynamoiGetCampaignAnalyticsInputSchema =
+	CAMPAIGN_DETAIL_CONTRACT.analyticsInputSchema;
 
-export const DynamoiGetArtistAnalyticsInputSchema = ARTIST_ANALYTICS_CONTRACT.mcp.definition.schema;
+export const DynamoiGetArtistAnalyticsInputSchema =
+	ARTIST_ANALYTICS_CONTRACT.mcp.definition.schema;
 
 export const DynamoiGetGrowthAuditInputSchema =
 	GROWTH_AUDIT_CONTRACT.mcp.definition.schema;
@@ -102,22 +127,32 @@ export const DynamoiGetAudienceAnalyticsInputSchema =
 
 export const DynamoiGetBillingInputSchema = BILLING_READ_MCP.definition.schema;
 
-export const DynamoiManageTeamInputSchema=TEAM_ROLE_CONTRACT.mcp.definition.schema;
-export const DynamoiGetTeamInputSchema=TEAM_READ_CONTRACT.mcp.definition.schema;
-export const DynamoiGetAuditLogInputSchema = AUDIT_SETTINGS_CONTRACT.mcp.definition.schema;
-export const DynamoiClaimReferralCodeInputSchema = REFERRALS_CLAIM_CONTRACT.mcp.definition.schema;
-export const DynamoiGetReferralsInputSchema = REFERRALS_READ_CONTRACT.mcp.definition.schema;
+export const DynamoiManageTeamInputSchema =
+	TEAM_ROLE_CONTRACT.mcp.definition.schema;
+export const DynamoiGetTeamInputSchema =
+	TEAM_READ_CONTRACT.mcp.definition.schema;
+export const DynamoiGetAuditLogInputSchema =
+	AUDIT_SETTINGS_CONTRACT.mcp.definition.schema;
+export const DynamoiClaimReferralCodeInputSchema =
+	REFERRALS_CLAIM_CONTRACT.mcp.definition.schema;
+export const DynamoiGetReferralsInputSchema =
+	REFERRALS_READ_CONTRACT.mcp.definition.schema;
 
-export const DynamoiGetActionCenterInputSchema = PLATFORM_ACTION_CENTER_CONTRACT.mcp.definition.schema;
+export const DynamoiGetActionCenterInputSchema =
+	PLATFORM_ACTION_CENTER_CONTRACT.mcp.definition.schema;
 
 export const DynamoiGetEarningsInputSchema = EarningsInputSchema;
 
-export const DynamoiGetPlatformStatusInputSchema = ONBOARDING_PLATFORM_STATUS_CONTRACT.mcp.definition.schema;
+export const DynamoiGetPlatformStatusInputSchema =
+	ONBOARDING_PLATFORM_STATUS_CONTRACT.mcp.definition.schema;
 
-export const DynamoiStartYoutubeChannelLinkInputSchema=YOUTUBE_CONNECTION_CONTRACT.mcp.definition.schema;
-export const DynamoiStartMetaConnectionInputSchema=META_CONNECTION_CONTRACT.mcp.definition.schema;
+export const DynamoiStartYoutubeChannelLinkInputSchema =
+	YOUTUBE_CONNECTION_CONTRACT.mcp.definition.schema;
+export const DynamoiStartMetaConnectionInputSchema =
+	META_CONNECTION_CONTRACT.mcp.definition.schema;
 
-export const DynamoiListAvailableCountriesInputSchema = CAMPAIGN_COUNTRIES_CONTRACT.mcp.definition.schema;
+export const DynamoiListAvailableCountriesInputSchema =
+	CAMPAIGN_COUNTRIES_CONTRACT.mcp.definition.schema;
 
 export const DynamoiGetOnboardingStatusInputSchema = z
 	.object({
@@ -128,7 +163,8 @@ export const DynamoiGetOnboardingStatusInputSchema = z
 
 // Keep this standalone package's public limit in sync with web-shared's
 // MAX_PROMOTED_VIDEOS_PER_CAMPAIGN (10).
-export const DynamoiManageYoutubeDraftInputSchema=YOUTUBE_DRAFT_SETUP_CONTRACT.mcp.definition.schema;
+export const DynamoiManageYoutubeDraftInputSchema =
+	YOUTUBE_DRAFT_SETUP_CONTRACT.mcp.definition.schema;
 
 export const DynamoiGetCampaignDeploymentStatusInputSchema = z
 	.object({
@@ -146,16 +182,20 @@ export const DynamoiPauseCampaignInputSchema = z
 	})
 	.strict();
 
-export const DynamoiAddCampaignFundsInputSchema = FUNDING_CHECKOUT_CONTRACT.mcp.definition.schema;
+export const DynamoiAddCampaignFundsInputSchema =
+	FUNDING_CHECKOUT_CONTRACT.mcp.definition.schema;
 
-export const DynamoiGetResumeFundingInputSchema = CAMPAIGN_RESUME_FUNDING_CONTRACT.mcp.definition.schema;
+export const DynamoiGetResumeFundingInputSchema =
+	CAMPAIGN_RESUME_FUNDING_CONTRACT.mcp.definition.schema;
 
-const FundingConsentVersionSchema = z.enum(
-	[prospectiveFundingConsentVersion, totalFundingConsentVersion],
-);
-const FundingConsentCopyHashSchema = z.enum(
-	[prospectiveFundingConsentCopyHash, totalFundingConsentCopyHash],
-);
+const FundingConsentVersionSchema = z.enum([
+	prospectiveFundingConsentVersion,
+	totalFundingConsentVersion,
+]);
+const FundingConsentCopyHashSchema = z.enum([
+	prospectiveFundingConsentCopyHash,
+	totalFundingConsentCopyHash,
+]);
 
 export const DynamoiResumeCampaignInputSchema = z
 	.object({
@@ -175,9 +215,7 @@ export const DynamoiUpdateBudgetInputSchema = z
 		acceptedConsentVersion: FundingConsentVersionSchema.optional(),
 		authorizeAutomaticDailyFunding: z
 			.literal(true)
-			.describe(
-				"Accepted for older clients; ignored.",
-			)
+			.describe("Accepted for older clients; ignored.")
 			.optional(),
 		budgetAmount: z
 			.number()
@@ -225,9 +263,7 @@ export const DynamoiUpdateCampaignInputSchema = z
 		]),
 		authorizeAutomaticDailyFunding: z
 			.literal(true)
-			.describe(
-				"Accepted for older clients; ignored.",
-			)
+			.describe("Accepted for older clients; ignored.")
 			.optional(),
 		budgetAmount: z
 			.number()
@@ -252,8 +288,16 @@ export const DynamoiUpdateCampaignInputSchema = z
 			IsoCalendarDateSchema.describe("Last day ads run").optional(),
 		expectedCurrentStatus: ExpectedCampaignStatusSchema,
 		expectedUpdatedAt: z.iso.datetime().optional(),
-		expectedFundingHash: z.string().regex(/^[a-f0-9]{64}$/u).optional(),
-		phase: z.enum(["preview", "confirm"]).describe("Pause, resume and archive require preview first; confirm only after the human approves that exact preview.").optional(),
+		expectedFundingHash: z
+			.string()
+			.regex(/^[a-f0-9]{64}$/u)
+			.optional(),
+		phase: z
+			.enum(["preview", "confirm"])
+			.describe(
+				"Pause, resume and archive require preview first; confirm only after the human approves that exact preview.",
+			)
+			.optional(),
 		locationTargets: z
 			.union([
 				z.object({ mode: z.literal("GLOBAL") }).strict(),
@@ -272,7 +316,16 @@ export const DynamoiUpdateCampaignInputSchema = z
 	})
 	.strict()
 	.superRefine((data, ctx) => {
-		if(data.phase && !["pause","resume","archive","unarchive"].includes(data.action)) ctx.addIssue({code:"custom",message:"Review phase is only supported for pause, resume, archive and unarchive",path:["phase"]});
+		if (
+			data.phase &&
+			!["pause", "resume", "archive", "unarchive"].includes(data.action)
+		)
+			ctx.addIssue({
+				code: "custom",
+				message:
+					"Review phase is only supported for pause, resume, archive and unarchive",
+				path: ["phase"],
+			});
 		if (
 			[
 				"pause",
@@ -405,20 +458,49 @@ export const DynamoiUpdateCampaignInputSchema = z
 		}
 	});
 
-export {DynamoiListMediaAssetsInputSchema} from "./media-moderation.generated";
+export { DynamoiListMediaAssetsInputSchema } from "./media-moderation.generated";
 
-export const DynamoiGetCampaignReadinessInputSchema=CAMPAIGN_READINESS_MCP.definition.schema;
+export const DynamoiGetCampaignReadinessInputSchema =
+	CAMPAIGN_READINESS_MCP.definition.schema;
 
 export const PHASE_1_TOOL_DEFINITIONS = [
- {...META_CAMPAIGN_GROUPS_CONTRACT.mcp.definition,outputSchema:createOutputEnvelopeSchema(META_CAMPAIGN_GROUPS_CONTRACT.mobile.responseSchema)},
- {...CAMPAIGN_MANAGEMENT_READ_CONTRACT.mcp.definition,outputSchema:createOutputEnvelopeSchema(CAMPAIGN_MANAGEMENT_READ_CONTRACT.mobile.responseSchema)},
- { ...ACCOUNT_OVERVIEW_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
- { ...ARTIST_ROSTER_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
-	{...AGENT_SEARCH_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
+	{
+		...META_CAMPAIGN_GROUPS_CONTRACT.mcp.definition,
+		outputSchema: createOutputEnvelopeSchema(
+			META_CAMPAIGN_GROUPS_CONTRACT.mobile.responseSchema,
+		),
+	},
+	{
+		...CAMPAIGN_MANAGEMENT_READ_CONTRACT.mcp.definition,
+		outputSchema: createOutputEnvelopeSchema(
+			CAMPAIGN_MANAGEMENT_READ_CONTRACT.mobile.responseSchema,
+		),
+	},
+	{
+		...ACCOUNT_OVERVIEW_CONTRACT.mcp.definition,
+		outputSchema: AnyOutputEnvelopeSchema,
+	},
+	{
+		...ARTIST_ROSTER_CONTRACT.mcp.definition,
+		outputSchema: AnyOutputEnvelopeSchema,
+	},
+	{
+		...AGENT_SEARCH_CONTRACT.mcp.definition,
+		outputSchema: AnyOutputEnvelopeSchema,
+	},
 	...OPENAI_TOOL_DEFINITIONS,
-	{...CAMPAIGN_LIST_CONTRACT.mcp.definition, outputSchema: AnyOutputEnvelopeSchema},
-	{...CAMPAIGN_DETAIL_CONTRACT.mcp.definition, outputSchema: GetCampaignOutputEnvelopeSchema},
-	{...ARTIST_ANALYTICS_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
+	{
+		...CAMPAIGN_LIST_CONTRACT.mcp.definition,
+		outputSchema: AnyOutputEnvelopeSchema,
+	},
+	{
+		...CAMPAIGN_DETAIL_CONTRACT.mcp.definition,
+		outputSchema: GetCampaignOutputEnvelopeSchema,
+	},
+	{
+		...ARTIST_ANALYTICS_CONTRACT.mcp.definition,
+		outputSchema: AnyOutputEnvelopeSchema,
+	},
 	{
 		...GROWTH_AUDIT_CONTRACT.mcp.definition,
 		outputSchema: AnyOutputEnvelopeSchema,
@@ -435,28 +517,77 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 		...AUDIENCE_ANALYTICS_CONTRACT.mcp.definition,
 		outputSchema: AnyOutputEnvelopeSchema,
 	},
-	{ ...YOUTUBE_CHANNEL_DATA_CONTRACT.mcp.definition, outputSchema: GetYouTubeChannelDataOutputEnvelopeSchema },	{...BILLING_READ_MCP.definition,outputSchema:AnyOutputEnvelopeSchema},	{...PLATFORM_ACTION_CENTER_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
-	{...earningsDefinition, outputSchema: AnyOutputEnvelopeSchema},
-	{...TEAM_READ_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
-	{...TEAM_ROLE_CONTRACT.mcp.definition,outputSchema:TeamOutputEnvelopeSchema},
-	{ ...AUDIT_SETTINGS_CONTRACT.mcp.definition, outputSchema: AnyOutputEnvelopeSchema.or(AUDIT_SETTINGS_CONTRACT.mcp.accountResponseSchema) },
-	{...REFERRALS_CLAIM_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
-	{...REFERRALS_READ_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
+	{
+		...YOUTUBE_CHANNEL_DATA_CONTRACT.mcp.definition,
+		outputSchema: GetYouTubeChannelDataOutputEnvelopeSchema,
+	},
+	{ ...BILLING_READ_MCP.definition, outputSchema: AnyOutputEnvelopeSchema },
+	{
+		...PLATFORM_ACTION_CENTER_CONTRACT.mcp.definition,
+		outputSchema: AnyOutputEnvelopeSchema,
+	},
+	{ ...earningsDefinition, outputSchema: AnyOutputEnvelopeSchema },
+	{
+		...TEAM_READ_CONTRACT.mcp.definition,
+		outputSchema: AnyOutputEnvelopeSchema,
+	},
+	{
+		...TEAM_ROLE_CONTRACT.mcp.definition,
+		outputSchema: TeamOutputEnvelopeSchema,
+	},
+	{
+		...AUDIT_SETTINGS_CONTRACT.mcp.definition,
+		outputSchema: AnyOutputEnvelopeSchema.or(
+			AUDIT_SETTINGS_CONTRACT.mcp.accountResponseSchema,
+		),
+	},
+	{
+		...REFERRALS_CLAIM_CONTRACT.mcp.definition,
+		outputSchema: AnyOutputEnvelopeSchema,
+	},
+	{
+		...REFERRALS_READ_CONTRACT.mcp.definition,
+		outputSchema: AnyOutputEnvelopeSchema,
+	},
 	{
 		...CAMPAIGN_RESUME_FUNDING_CONTRACT.mcp.definition,
 		outputSchema: GetResumeFundingOutputEnvelopeSchema,
-	},	{...ONBOARDING_PLATFORM_STATUS_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
-	{...CAMPAIGN_COUNTRIES_CONTRACT.mcp.definition,outputSchema:ListAvailableCountriesOutputEnvelopeSchema},
-	{...CAMPAIGN_READINESS_MCP.definition,outputSchema:GetCampaignReadinessOutputEnvelopeSchema},] as const;
+	},
+	{
+		...ONBOARDING_PLATFORM_STATUS_CONTRACT.mcp.definition,
+		outputSchema: AnyOutputEnvelopeSchema,
+	},
+	{
+		...CAMPAIGN_COUNTRIES_CONTRACT.mcp.definition,
+		outputSchema: ListAvailableCountriesOutputEnvelopeSchema,
+	},
+	{
+		...CAMPAIGN_READINESS_MCP.definition,
+		outputSchema: GetCampaignReadinessOutputEnvelopeSchema,
+	},
+] as const;
 
 export const PHASE_ONBOARDING_TOOL_DEFINITIONS = [
- {...YOUTUBE_CONNECTION_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
- {...META_CONNECTION_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
+	{
+		...YOUTUBE_CONNECTION_CONTRACT.mcp.definition,
+		outputSchema: AnyOutputEnvelopeSchema,
+	},
+	{
+		...META_CONNECTION_CONTRACT.mcp.definition,
+		outputSchema: AnyOutputEnvelopeSchema,
+	},
 ] as const;
 
 export const PHASE_2_TOOL_DEFINITIONS = [
-	{...SMART_AD_COPY_MCP.definition,outputSchema:AnyOutputEnvelopeSchema},
-	{...FUNDING_CHECKOUT_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},	{...YOUTUBE_DRAFT_SETUP_CONTRACT.mcp.definition,outputSchema:ManageYoutubeDraftOutputEnvelopeSchema},
+	{ ...SMART_AD_COPY_MCP.definition, outputSchema: AnyOutputEnvelopeSchema },
+	{
+		...FUNDING_CHECKOUT_CONTRACT.mcp.definition,
+		outputSchema: AnyOutputEnvelopeSchema,
+	},
+	{
+		...YOUTUBE_DRAFT_SETUP_CONTRACT.mcp.definition,
+		outputSchema: ManageYoutubeDraftOutputEnvelopeSchema,
+	},
 	{
 		description: `Use only when the user explicitly requests a campaign change. Resume isn't available for fixed-flight YouTube campaigns. Duplicate the campaign to relaunch it. For pause, resume, archive and unarchive, first request phase=preview with one clientRequestId. Show that exact preview to the human; only after approval send phase=confirm with its expectedUpdatedAt, expectedCurrentStatus and (for resume) expectedFundingHash and the same request ID. Omitting phase never executes these status actions. Actions: pause, resume, update_budget, update_end_date (DAILY or TOTAL budget), update_location (GLOBAL or catalog-valid countries), change_strategy (managed YouTube Demand Gen), update_goals (YouTube optimization toggles), archive (never deletes), unarchive (restores PAUSED without funding or activating providers). Inspect the campaign first and supply expectedCurrentStatus where possible. When retrying the same action, reuse the same clientRequestId.`,
 		destructiveHint: true,

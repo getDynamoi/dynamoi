@@ -17,7 +17,7 @@ export const DynamoiSmartCampaignAdCopyInputSchema = z
 	.strict();
 
 export const SMART_AD_COPY_MCP = {
- definition: {
+	definition: {
 		description:
 			"Read ad copy for a Smart Campaign creation draft, or save copy by providing save with the revision read. Editor access required. Refuses submitted campaigns. Never launches, submits or publishes.",
 		destructiveHint: true,
@@ -25,9 +25,10 @@ export const SMART_AD_COPY_MCP = {
 		openWorldHint: false,
 		readOnlyHint: false,
 		schema: DynamoiSmartCampaignAdCopyInputSchema,
-		profiles: {full: "advertised", directory: "advertised"},
+		profiles: { full: "advertised", directory: "advertised" },
 		title: "Smart Campaign Ad Copy",
 	},
- scopes: ["dynamoi:read", "dynamoi:campaign.write"],
- directoryReason: "Existing reviewed draft ad-copy tool; never launches or funds a campaign.",
+	scopes: ["dynamoi:read", "dynamoi:campaign.write"],
+	directoryReason:
+		"Existing reviewed draft ad-copy tool; never launches or funds a campaign.",
 } as const;

@@ -1,5 +1,8 @@
 import type { z } from "zod/v4";
-import type { MediaAssetModerationOutputSchema, GetResumeFundingData } from "./server/output-schemas";
+import type {
+	MediaAssetModerationOutputSchema,
+	GetResumeFundingData,
+} from "./server/output-schemas";
 import type {
 	ArtistTier,
 	BillingStatus,
@@ -188,7 +191,22 @@ export type UpdateBudgetData = {
 	actionRequired?: string[] | undefined;
 };
 
-export type CampaignStatusPreviewData = {phase: "preview"; preview: {action: "pause"|"resume"|"archive"|"unarchive"; campaignId: string; artistId:string; contentTitle:string; currentStatus:string; expected: {expectedUpdatedAt:string; expectedCurrentStatus:string; expectedFundingHash?:string}; funding:GetResumeFundingData|null}};
+export type CampaignStatusPreviewData = {
+	phase: "preview";
+	preview: {
+		action: "pause" | "resume" | "archive" | "unarchive";
+		campaignId: string;
+		artistId: string;
+		contentTitle: string;
+		currentStatus: string;
+		expected: {
+			expectedUpdatedAt: string;
+			expectedCurrentStatus: string;
+			expectedFundingHash?: string;
+		};
+		funding: GetResumeFundingData | null;
+	};
+};
 
 export type UpdateCampaignData =
 	| CampaignStatusPreviewData

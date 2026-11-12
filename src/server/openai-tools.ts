@@ -1,5 +1,8 @@
 import { AnyOutputEnvelopeSchema } from "./output-schemas";
-import {OPENAI_SEARCH_CONTRACT,OPENAI_FETCH_CONTRACT} from "./protocols.generated";
+import {
+	OPENAI_SEARCH_CONTRACT,
+	OPENAI_FETCH_CONTRACT,
+} from "./protocols.generated";
 
 /**
  * OpenAI ChatGPT Connectors / Deep Research spec requires every connector
@@ -33,9 +36,17 @@ export type OpenAiFetchData = {
 	metadata?: Record<string, unknown>;
 };
 
-export const DynamoiOpenAiSearchInputSchema=OPENAI_SEARCH_CONTRACT.mcp.definition.schema;
-export const DynamoiOpenAiFetchInputSchema=OPENAI_FETCH_CONTRACT.mcp.definition.schema;
-export const OPENAI_TOOL_DEFINITIONS=[
- {...OPENAI_SEARCH_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
- {...OPENAI_FETCH_CONTRACT.mcp.definition,outputSchema:AnyOutputEnvelopeSchema},
+export const DynamoiOpenAiSearchInputSchema =
+	OPENAI_SEARCH_CONTRACT.mcp.definition.schema;
+export const DynamoiOpenAiFetchInputSchema =
+	OPENAI_FETCH_CONTRACT.mcp.definition.schema;
+export const OPENAI_TOOL_DEFINITIONS = [
+	{
+		...OPENAI_SEARCH_CONTRACT.mcp.definition,
+		outputSchema: AnyOutputEnvelopeSchema,
+	},
+	{
+		...OPENAI_FETCH_CONTRACT.mcp.definition,
+		outputSchema: AnyOutputEnvelopeSchema,
+	},
 ] as const;

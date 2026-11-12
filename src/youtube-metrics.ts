@@ -27,10 +27,7 @@
  *   it only under its own "Interactions" label.
  */
 export type YouTubeMetricClass =
-	| "credited"
-	| "inferred"
-	| "context"
-	| "internal";
+	"credited" | "inferred" | "context" | "internal";
 
 /**
  * Freshness clocks. A figure follows exactly one clock, and the clocks are

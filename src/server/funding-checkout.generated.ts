@@ -9,19 +9,33 @@ const DynamoiAddCampaignFundsInputSchema = z
 		requestId: z.string().uuid(),
 	})
 	.strict();
-const hostedCheckout={status:"excluded",reason:"Hosted Checkout stays user-present; native store purchase mechanics use their separately registered operations.",decision:"repo:brain@e7013bc221be142e5c7bf74e64011f5449bf3d8b#businesses/dynamoi/prds/request-independent-domain-operations.md"} as const;
-export const FUNDING_CHECKOUT_CONTRACT={
- operationId:"billing.funding-checkout.handoff",capabilityId:"campaign_actions",kind:"command",version:1,
- mcp:{definition:{
-		description:
-			"Create the same unpaid Stripe Checkout the dashboard's Add campaign funds button creates, in the artist's bound currency, and return its URL for the user to open and pay. Call it first WITHOUT confirm to get the exact amount and currency; show both to the user and obtain their explicit approval, then call again with confirm=true, that currency, the same amountMinor and the same requestId (retrying within 24 hours returns the same session; once a payment exists for that requestId, or after a day, use a new requestId). This never charges anyone or records a deposit: funds count as cleared only after Stripe says paid, which dynamoi_get_billing reports in prefundPayments (pending, cleared, failed or held). Refused when funding is on hold, billing setup is required, the amount is outside the allowed range or the currency is not live.",
-		destructiveHint: false,
-		idempotentHint: true,
-		name: "dynamoi_add_campaign_funds",
-		openWorldHint: true,
-		readOnlyHint: false,
-		schema: DynamoiAddCampaignFundsInputSchema,
-		title: "Add Campaign Funds",
-	profiles:{full:"advertised",directory:"excluded"}},scopes:["dynamoi:read","dynamoi:mcp.full"],directoryReason:"Existing full-profile hosted Checkout handoff."},
- parity:{ios:hostedCheckout,android:hostedCheckout},
+const hostedCheckout = {
+	status: "excluded",
+	reason:
+		"Hosted Checkout stays user-present; native store purchase mechanics use their separately registered operations.",
+	decision:
+		"repo:brain@e7013bc221be142e5c7bf74e64011f5449bf3d8b#businesses/dynamoi/prds/request-independent-domain-operations.md",
+} as const;
+export const FUNDING_CHECKOUT_CONTRACT = {
+	operationId: "billing.funding-checkout.handoff",
+	capabilityId: "campaign_actions",
+	kind: "command",
+	version: 1,
+	mcp: {
+		definition: {
+			description:
+				"Create the same unpaid Stripe Checkout the dashboard's Add campaign funds button creates, in the artist's bound currency, and return its URL for the user to open and pay. Call it first WITHOUT confirm to get the exact amount and currency; show both to the user and obtain their explicit approval, then call again with confirm=true, that currency, the same amountMinor and the same requestId (retrying within 24 hours returns the same session; once a payment exists for that requestId, or after a day, use a new requestId). This never charges anyone or records a deposit: funds count as cleared only after Stripe says paid, which dynamoi_get_billing reports in prefundPayments (pending, cleared, failed or held). Refused when funding is on hold, billing setup is required, the amount is outside the allowed range or the currency is not live.",
+			destructiveHint: false,
+			idempotentHint: true,
+			name: "dynamoi_add_campaign_funds",
+			openWorldHint: true,
+			readOnlyHint: false,
+			schema: DynamoiAddCampaignFundsInputSchema,
+			title: "Add Campaign Funds",
+			profiles: { full: "advertised", directory: "excluded" },
+		},
+		scopes: ["dynamoi:read", "dynamoi:mcp.full"],
+		directoryReason: "Existing full-profile hosted Checkout handoff.",
+	},
+	parity: { ios: hostedCheckout, android: hostedCheckout },
 } as const;

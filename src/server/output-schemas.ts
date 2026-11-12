@@ -1,5 +1,5 @@
 import { BulkSmartLinkResponseSchema } from "./intake-native.generated";
-import {SMART_CAMPAIGN_SUBMISSION_CONTRACT} from "./submission.generated";
+import { SMART_CAMPAIGN_SUBMISSION_CONTRACT } from "./submission.generated";
 import { SUPPORT_REQUEST_CONTRACT } from "./request.generated";
 import * as z from "zod/v4";
 import type { GetCampaignReadinessData } from "../readiness-types";
@@ -7,10 +7,15 @@ import { ChannelResultsSchema } from "./channel-results-schema";
 import { CampaignFundingPreviewOutputSchema } from "./funding-preview-schema.generated";
 import { YouTubeChannelDataSchema } from "./youtube-channel-data-schema";
 
-export const SmartCampaignRecoverySelectionSchema = SMART_CAMPAIGN_SUBMISSION_CONTRACT.recoverySelectionSchema;
-export const SmartCampaignRecoverySchema = SMART_CAMPAIGN_SUBMISSION_CONTRACT.recoverySchema;
-export const SmartCampaignLaunchProjectionSchema = SMART_CAMPAIGN_SUBMISSION_CONTRACT.launchProjectionSchema;
-export type SmartCampaignLaunchProjection = z.infer<typeof SmartCampaignLaunchProjectionSchema>;
+export const SmartCampaignRecoverySelectionSchema =
+	SMART_CAMPAIGN_SUBMISSION_CONTRACT.recoverySelectionSchema;
+export const SmartCampaignRecoverySchema =
+	SMART_CAMPAIGN_SUBMISSION_CONTRACT.recoverySchema;
+export const SmartCampaignLaunchProjectionSchema =
+	SMART_CAMPAIGN_SUBMISSION_CONTRACT.launchProjectionSchema;
+export type SmartCampaignLaunchProjection = z.infer<
+	typeof SmartCampaignLaunchProjectionSchema
+>;
 
 const ResultErrorCodeSchema = z.enum([
 	"ACCOUNT_READ_ONLY",
@@ -135,7 +140,11 @@ export function createOutputEnvelopeSchema(
 	return z
 		.object({
 			data: dataSchema.optional(),
-            ...(options?.team ? {reason: z.enum(["member_changed", "invitation_changed"]).optional()} : {}),
+			...(options?.team
+				? {
+						reason: z.enum(["member_changed", "invitation_changed"]).optional(),
+					}
+				: {}),
 			kind: z
 				.enum(["validation", "business", "platform", "unknown"])
 				.optional(),
@@ -424,7 +433,8 @@ const CreateSmartLinkFromSpotifyDataOutputSchema =
 		workflowWarning: z.string().nullable(),
 	}).strict();
 
-const CreateSmartLinksFromSpotifyArtistDataOutputSchema = BulkSmartLinkResponseSchema;
+const CreateSmartLinksFromSpotifyArtistDataOutputSchema =
+	BulkSmartLinkResponseSchema;
 
 const LaunchCampaignDataOutputSchema = z
 	.object({
@@ -455,7 +465,10 @@ const LaunchCampaignDataOutputSchema = z
 	})
 	.strict();
 
-export const TeamOutputEnvelopeSchema = createOutputEnvelopeSchema(AnyToolDataOutputSchema, {allowPartial: true, team: true});
+export const TeamOutputEnvelopeSchema = createOutputEnvelopeSchema(
+	AnyToolDataOutputSchema,
+	{ allowPartial: true, team: true },
+);
 
 export const AnyOutputEnvelopeSchema = createOutputEnvelopeSchema(
 	AnyToolDataOutputSchema,
@@ -485,7 +498,31 @@ export const GetCampaignOutputEnvelopeSchema = createOutputEnvelopeSchema(
 
 export const UpdateCampaignOutputEnvelopeSchema = createOutputEnvelopeSchema(
 	z.union([
-		z.object({phase:z.literal("preview"),preview:z.object({action:z.enum(["pause","resume","archive","unarchive"]),campaignId:z.string(),artistId:z.string(),contentTitle:z.string(),currentStatus:z.string(),expected:z.object({expectedUpdatedAt:z.iso.datetime(),expectedCurrentStatus:z.string(),expectedFundingHash:z.string().regex(/^[a-f0-9]{64}$/u).optional()}).strict(),funding:z.lazy(()=>ResumeFundingDataSchema).nullable()}).strict()}).strict(),
+		z
+			.object({
+				phase: z.literal("preview"),
+				preview: z
+					.object({
+						action: z.enum(["pause", "resume", "archive", "unarchive"]),
+						campaignId: z.string(),
+						artistId: z.string(),
+						contentTitle: z.string(),
+						currentStatus: z.string(),
+						expected: z
+							.object({
+								expectedUpdatedAt: z.iso.datetime(),
+								expectedCurrentStatus: z.string(),
+								expectedFundingHash: z
+									.string()
+									.regex(/^[a-f0-9]{64}$/u)
+									.optional(),
+							})
+							.strict(),
+						funding: z.lazy(() => ResumeFundingDataSchema).nullable(),
+					})
+					.strict(),
+			})
+			.strict(),
 		z
 			.object({
 				actionRequired: z.array(z.string()).optional(),
@@ -631,7 +668,8 @@ export const CreateSmartLinkFromSpotifyOutputEnvelopeSchema =
 export const CreateSmartLinksFromSpotifyArtistOutputEnvelopeSchema =
 	createOutputEnvelopeSchema(CreateSmartLinksFromSpotifyArtistDataOutputSchema);
 
-export const ContactSupportDataSchema = SUPPORT_REQUEST_CONTRACT.mobile.responseSchema;
+export const ContactSupportDataSchema =
+	SUPPORT_REQUEST_CONTRACT.mobile.responseSchema;
 
 export type ContactSupportData = z.infer<typeof ContactSupportDataSchema>;
 

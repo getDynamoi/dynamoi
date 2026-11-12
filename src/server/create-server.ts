@@ -1,8 +1,11 @@
-import {MEDIA_MODERATION_READ_CONTRACT,MediaModerationResponseSchema} from "./media-moderation.generated";
-import {META_CAMPAIGN_GROUPS_CONTRACT} from "./meta-groups.generated";
-import {CAMPAIGN_MANAGEMENT_READ_CONTRACT} from "./management-read.generated";
-import {SHOP_REBUY_TOOL_DEFINITIONS} from "./shop-rebuy";
-import {SHOP_VIDEO_TOOL_DEFINITIONS} from "./shop-order-video";
+import {
+	MEDIA_MODERATION_READ_CONTRACT,
+	MediaModerationResponseSchema,
+} from "./media-moderation.generated";
+import { META_CAMPAIGN_GROUPS_CONTRACT } from "./meta-groups.generated";
+import { CAMPAIGN_MANAGEMENT_READ_CONTRACT } from "./management-read.generated";
+import { SHOP_REBUY_TOOL_DEFINITIONS } from "./shop-rebuy";
+import { SHOP_VIDEO_TOOL_DEFINITIONS } from "./shop-order-video";
 import { SHOP_HISTORY_TOOL_DEFINITION } from "./shop-purchase-history";
 import { SHOP_STATUS_TOOL_DEFINITIONS } from "./shop-order-status";
 import { DRAFT_MEDIA_READ_TOOL_DEFINITION } from "./draft-media-read";
@@ -89,7 +92,7 @@ import {
 	type ContactSupportData,
 	type GetResumeFundingData,
 	ResultErrorRecoverySchema,
- createOutputEnvelopeSchema,
+	createOutputEnvelopeSchema,
 } from "./output-schemas";
 import { registerDynamoiPrompts } from "./prompts";
 import { registerDynamoiResources } from "./resources";
@@ -125,8 +128,7 @@ import {
 import type { GetYouTubeChannelDataData } from "./youtube-channel-data-schema";
 
 type DynamoiToolSecurityScheme =
-	| { scopes: string[]; type: "oauth2" }
-	| { type: "noauth" };
+	{ scopes: string[]; type: "oauth2" } | { type: "noauth" };
 
 /** A tool that needs no scopes is public and callable before sign-in. */
 function buildDynamoiToolSecuritySchemes(
@@ -152,8 +154,10 @@ type DynamoiToolAnnotations = {
 };
 
 const DIRECTORY_DESCRIPTIVE_DATA_SCHEMAS = {
- dynamoi_get_meta_campaign_groups:META_CAMPAIGN_GROUPS_CONTRACT.mobile.responseSchema,
- dynamoi_get_campaign_management:CAMPAIGN_MANAGEMENT_READ_CONTRACT.mobile.responseSchema,
+	dynamoi_get_meta_campaign_groups:
+		META_CAMPAIGN_GROUPS_CONTRACT.mobile.responseSchema,
+	dynamoi_get_campaign_management:
+		CAMPAIGN_MANAGEMENT_READ_CONTRACT.mobile.responseSchema,
 	dynamoi_get_account_overview: DynamoiAccountOverviewDescriptiveDataSchema,
 	dynamoi_get_artist_analytics: z
 		.object({
@@ -313,12 +317,15 @@ const DYNAMOI_TOOL_DEFINITIONS = [
 	...PHASE_3_TOOL_DEFINITIONS,
 	SMART_CAMPAIGN_CREATIVE_TOOL_DEFINITION,
 	DRAFT_MEDIA_READ_TOOL_DEFINITION,
- {...MEDIA_MODERATION_READ_CONTRACT.mcp.definition,outputSchema:createOutputEnvelopeSchema(MediaModerationResponseSchema)},
+	{
+		...MEDIA_MODERATION_READ_CONTRACT.mcp.definition,
+		outputSchema: createOutputEnvelopeSchema(MediaModerationResponseSchema),
+	},
 	...DISTRIBUTION_TOOL_DEFINITIONS,
 	...SHOP_TOOL_DEFINITIONS,
 	SHOP_HISTORY_TOOL_DEFINITION,
- ...SHOP_VIDEO_TOOL_DEFINITIONS,
- ...SHOP_REBUY_TOOL_DEFINITIONS,
+	...SHOP_VIDEO_TOOL_DEFINITIONS,
+	...SHOP_REBUY_TOOL_DEFINITIONS,
 	...SHOP_STATUS_TOOL_DEFINITIONS,
 	...SUPPORT_TOOL_DEFINITIONS,
 	SMART_LINK_THEME_PREVIEW_TOOL_DEFINITION,
@@ -396,16 +403,18 @@ export function getDynamoiToolCompatibilityDefinitions(_options?: {
 }
 
 export type Phase3Adapter = {
-	shopAttachVideo(input:unknown):Promise<ResultEnvelope<unknown>>;
-	shopReplaceVideo(input:unknown):Promise<ResultEnvelope<unknown>>;
-	shopRebuyCustom(input:unknown):Promise<ResultEnvelope<unknown>>;
-	shopRebuyPresets(input:unknown):Promise<ResultEnvelope<unknown>>;
-	shopRebuyCheckout(input:unknown):Promise<ResultEnvelope<unknown>>;
-	shopPurchaseHistory(input:unknown):Promise<ResultEnvelope<unknown>>;
-	pauseShopPromotion(input:unknown):Promise<ResultEnvelope<unknown>>;
-	resumeShopPromotion(input:unknown):Promise<ResultEnvelope<unknown>>;
-	restartShopPromotion(input:unknown):Promise<ResultEnvelope<unknown>>;
-	about?(input: { toolProfile?: DynamoiMcpToolProfile | undefined }): Promise<ReturnType<typeof getDynamoiAbout>>;
+	shopAttachVideo(input: unknown): Promise<ResultEnvelope<unknown>>;
+	shopReplaceVideo(input: unknown): Promise<ResultEnvelope<unknown>>;
+	shopRebuyCustom(input: unknown): Promise<ResultEnvelope<unknown>>;
+	shopRebuyPresets(input: unknown): Promise<ResultEnvelope<unknown>>;
+	shopRebuyCheckout(input: unknown): Promise<ResultEnvelope<unknown>>;
+	shopPurchaseHistory(input: unknown): Promise<ResultEnvelope<unknown>>;
+	pauseShopPromotion(input: unknown): Promise<ResultEnvelope<unknown>>;
+	resumeShopPromotion(input: unknown): Promise<ResultEnvelope<unknown>>;
+	restartShopPromotion(input: unknown): Promise<ResultEnvelope<unknown>>;
+	about?(input: {
+		toolProfile?: DynamoiMcpToolProfile | undefined;
+	}): Promise<ReturnType<typeof getDynamoiAbout>>;
 	deleteAccount(input: unknown): Promise<ResultEnvelope<object>>;
 	getActionCenter(input: unknown): Promise<ResultEnvelope<unknown>>;
 	getTeam(input: unknown): Promise<ResultEnvelope<unknown>>;
@@ -455,8 +464,8 @@ export type Phase3Adapter = {
 	getGrowthAudit(input: unknown): Promise<ResultEnvelope<unknown>>;
 	getPlaylistAnalytics(input: unknown): Promise<ResultEnvelope<unknown>>;
 	getAudienceAnalytics(input: unknown): Promise<ResultEnvelope<unknown>>;
-	getMetaCampaignGroups(input:unknown):Promise<ResultEnvelope<unknown>>;
-	getCampaignManagement(input:unknown):Promise<ResultEnvelope<unknown>>;
+	getMetaCampaignGroups(input: unknown): Promise<ResultEnvelope<unknown>>;
+	getCampaignManagement(input: unknown): Promise<ResultEnvelope<unknown>>;
 	listCampaignDrafts(input: unknown): Promise<ResultEnvelope<unknown>>;
 	listCampaigns(
 		input: unknown,
@@ -501,7 +510,9 @@ export type Phase3Adapter = {
 	smartCampaignCreative(input: unknown): Promise<ResultEnvelope<unknown>>;
 	manageYoutubeDraft(input: unknown): Promise<ResultEnvelope<unknown>>;
 	updateCampaign(input: unknown): Promise<ResultEnvelope<UpdateCampaignData>>;
- readMediaModeration(input:unknown):Promise<ResultEnvelope<z.infer<typeof MediaModerationResponseSchema>>>;
+	readMediaModeration(
+		input: unknown,
+	): Promise<ResultEnvelope<z.infer<typeof MediaModerationResponseSchema>>>;
 	listMediaAssets(
 		input: unknown,
 	): Promise<ResultEnvelope<ListMediaAssetsData | ListMediaAssetsSummaryData>>;
@@ -548,7 +559,9 @@ export type Phase3Adapter = {
 };
 
 type DynamoiToolDispatcher = (
-	adapter: Phase3Adapter & { about(input: unknown): Promise<ReturnType<typeof getDynamoiAbout>> },
+	adapter: Phase3Adapter & {
+		about(input: unknown): Promise<ReturnType<typeof getDynamoiAbout>>;
+	},
 	input: unknown,
 	toolProfile?: DynamoiMcpToolProfile,
 ) => Promise<ResultEnvelope<unknown>>;
@@ -811,8 +824,10 @@ function normalizeKnownErrorRecovery(
 }
 
 const DYNAMOI_TOOL_DISPATCHERS = {
- dynamoi_get_meta_campaign_groups:(adapter,input)=>adapter.getMetaCampaignGroups(input),
- dynamoi_get_campaign_management:(adapter,input)=>adapter.getCampaignManagement(input),
+	dynamoi_get_meta_campaign_groups: (adapter, input) =>
+		adapter.getMetaCampaignGroups(input),
+	dynamoi_get_campaign_management: (adapter, input) =>
+		adapter.getCampaignManagement(input),
 	dynamoi_about: (adapter, input) => adapter.about(input),
 	dynamoi_add_campaign_funds: (adapter, input) =>
 		adapter.addCampaignFunds(input),
@@ -864,10 +879,12 @@ const DYNAMOI_TOOL_DISPATCHERS = {
 	dynamoi_list_campaign_drafts: (adapter, input) =>
 		adapter.listCampaignDrafts(input),
 	dynamoi_list_campaigns: (adapter, input) => adapter.listCampaigns(input),
- dynamoi_read_media_moderation:(adapter,input)=>adapter.readMediaModeration(input),
+	dynamoi_read_media_moderation: (adapter, input) =>
+		adapter.readMediaModeration(input),
 	dynamoi_list_media_assets: (adapter, input) => adapter.listMediaAssets(input),
 	dynamoi_list_smart_links: (adapter, input) => adapter.listSmartLinks(input),
-	dynamoi_read_campaign_draft_media: (adapter, input) => adapter.readCampaignDraftMedia(input),
+	dynamoi_read_campaign_draft_media: (adapter, input) =>
+		adapter.readCampaignDraftMedia(input),
 	dynamoi_manage_smart_campaign_creative: (adapter, input) =>
 		adapter.smartCampaignCreative(input),
 	dynamoi_manage_team: (adapter, input) => adapter.manageTeam(input),
@@ -885,15 +902,24 @@ const DYNAMOI_TOOL_DISPATCHERS = {
 	dynamoi_shop_create_checkout: (adapter, input) =>
 		adapter.shopCreateCheckout(input),
 	dynamoi_shop_get_quote: (adapter, input) => adapter.shopGetQuote(input),
-	dynamoi_pause_shop_promotion: (adapter,input)=>adapter.pauseShopPromotion(input),
-	dynamoi_resume_shop_promotion: (adapter,input)=>adapter.resumeShopPromotion(input),
-	dynamoi_restart_shop_promotion: (adapter,input)=>adapter.restartShopPromotion(input),
-	dynamoi_attach_shop_order_video: (adapter,input)=>adapter.shopAttachVideo(input),
-	dynamoi_replace_shop_promotion_video: (adapter,input)=>adapter.shopReplaceVideo(input),
-	dynamoi_quote_shop_rebuy_custom: (adapter,input)=>adapter.shopRebuyCustom(input),
-	dynamoi_estimate_shop_rebuy_packages: (adapter,input)=>adapter.shopRebuyPresets(input),
-	dynamoi_prepare_shop_rebuy_checkout: (adapter,input)=>adapter.shopRebuyCheckout(input),
-	dynamoi_get_shop_purchase_history: (adapter,input)=>adapter.shopPurchaseHistory(input),
+	dynamoi_pause_shop_promotion: (adapter, input) =>
+		adapter.pauseShopPromotion(input),
+	dynamoi_resume_shop_promotion: (adapter, input) =>
+		adapter.resumeShopPromotion(input),
+	dynamoi_restart_shop_promotion: (adapter, input) =>
+		adapter.restartShopPromotion(input),
+	dynamoi_attach_shop_order_video: (adapter, input) =>
+		adapter.shopAttachVideo(input),
+	dynamoi_replace_shop_promotion_video: (adapter, input) =>
+		adapter.shopReplaceVideo(input),
+	dynamoi_quote_shop_rebuy_custom: (adapter, input) =>
+		adapter.shopRebuyCustom(input),
+	dynamoi_estimate_shop_rebuy_packages: (adapter, input) =>
+		adapter.shopRebuyPresets(input),
+	dynamoi_prepare_shop_rebuy_checkout: (adapter, input) =>
+		adapter.shopRebuyCheckout(input),
+	dynamoi_get_shop_purchase_history: (adapter, input) =>
+		adapter.shopPurchaseHistory(input),
 	dynamoi_shop_list_orders: (adapter, input) => adapter.shopListOrders(input),
 	dynamoi_smart_campaign_ad_copy: (adapter, input) =>
 		adapter.smartCampaignAdCopy(input),
@@ -1279,11 +1305,15 @@ export function createDynamoiMcpServer(options: {
 				}
 				const startedAt = Date.now();
 				try {
-					const invocationAdapter = def.name === "dynamoi_about"
-						? { about: () => options.adapter.about
-							? options.adapter.about({ toolProfile })
-							: Promise.resolve(getDynamoiAbout({ toolProfile })) }
-						: options.adapter;
+					const invocationAdapter =
+						def.name === "dynamoi_about"
+							? {
+									about: () =>
+										options.adapter.about
+											? options.adapter.about({ toolProfile })
+											: Promise.resolve(getDynamoiAbout({ toolProfile })),
+								}
+							: options.adapter;
 					const envelope = await dispatcher(
 						invocationAdapter as Parameters<DynamoiToolDispatcher>[0],
 						input,

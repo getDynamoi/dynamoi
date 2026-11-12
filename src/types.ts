@@ -8,7 +8,7 @@ export type ResultEnvelope<T> =
 	| { status: "partial_success"; data: T; message: string }
 	| {
 			status: "error";
-            reason?: "member_changed" | "invitation_changed";
+			reason?: "member_changed" | "invitation_changed";
 			recovery?: import("./server/output-schemas").SmartCampaignLaunchProjection["recovery"];
 			validationCode?: string | undefined;
 			validationStage?: string | undefined;
@@ -116,10 +116,7 @@ export type MoneyDisplay = {
 export type AccessRole = "admin" | "editor" | "viewer";
 export type ArtistTier = "none" | "starter" | "plus";
 export type BillingStatus =
-	| "ACTIVE"
-	| "SUSPENDED"
-	| "INACTIVE"
-	| "NEVER_SUBSCRIBED";
+	"ACTIVE" | "SUSPENDED" | "INACTIVE" | "NEVER_SUBSCRIBED";
 
 export type CampaignType = "SMART_CAMPAIGN" | "YOUTUBE";
 export type CampaignDisplayStatus =
@@ -234,10 +231,7 @@ export type SmartLinkClaimStatus =
 export type SmartLinkPublishState = "published" | "unpublished";
 export type SmartLinkTakedownStatus = "none" | "active" | "resolved";
 export type SmartLinkRenderState =
-	| "queued"
-	| "rendering"
-	| "rendered"
-	| "failed";
+	"queued" | "rendering" | "rendered" | "failed";
 export type SmartLinkTheme = "classic" | "brutalist" | "aurora" | "cinematic";
 
 export type SmartLinkSummary = {

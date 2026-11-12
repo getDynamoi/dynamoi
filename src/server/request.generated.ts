@@ -15,7 +15,13 @@ const DYNAMOI_SUPPORT_CATEGORIES = [
 const DynamoiContactSupportInputSchema = z
 	.object({
 		category: z.enum(DYNAMOI_SUPPORT_CATEGORIES),
-		requestId: z.string().uuid().optional().describe("Reuse this ID when retrying the same request; use a new ID for a new request."),
+		requestId: z
+			.string()
+			.uuid()
+			.optional()
+			.describe(
+				"Reuse this ID when retrying the same request; use a new ID for a new request.",
+			),
 		errorMessage: z.string().trim().max(1000).optional(),
 		failedTool: z
 			.string()
@@ -26,37 +32,79 @@ const DynamoiContactSupportInputSchema = z
 	})
 	.strict();
 
-const ContactSupportDataSchema = z.object({
- kind: z.literal("support_request"), reference: z.string().min(1),
- replyChannel: z.literal("account_email"), status: z.literal("received"),
-}).strict();
+const ContactSupportDataSchema = z
+	.object({
+		kind: z.literal("support_request"),
+		reference: z.string().min(1),
+		replyChannel: z.literal("account_email"),
+		status: z.literal("received"),
+	})
+	.strict();
 export const SUPPORT_REQUEST_CONTRACT = {
- capabilityId: "agent_support", kind: "command", version: 1,
- mcp: {
-  definition: {
-		description:
-			"Use this when the user wants to report a problem with Dynamoi (a tool error, sign-in or permission problem, wrong data, a billing, campaign or distribution question) or send Dynamoi feedback. Show the user the subject and message and get their OK before sending. Dynamoi attaches the signed-in account and this agent's identity, and support replies by email to the account address. Never include passwords, tokens, API keys or card numbers. Sending changes no campaign, billing or account data.",
-   destructiveHint: true, idempotentHint: false, name: "dynamoi_contact_support",
-   openWorldHint: false, readOnlyHint: false, title: "Contact Dynamoi Support",
-   profiles: {directory: "advertised", full: "advertised"},
-   schema: DynamoiContactSupportInputSchema,
-  },
-  directoryReason: "Authenticated customer support request; no provider or campaign write.",
-  scopes: ["dynamoi:read"],
- },
- mobile: {
-  auth: "bearer", method: "POST", operationId: "postMobileSupportRequest",
-  path: "/api/mobile/support", platforms: ["ios", "android"],
-  bodySchema: DynamoiContactSupportInputSchema.extend({requestId: z.uuid()}),
-  responseSchema: ContactSupportDataSchema,
- },
- parity: {
-  webmcp: {status: "complete", binding: {file: "apps/dashboard/app/dashboard/webmcp/dashboard-account.webmcp.generated.ts", export: "supportRequestWebMcp", tool: "dashboard_contact_support", intermediates: [
-   {file: "apps/dashboard/app/dashboard/webmcp/commands.ts", export: "supportRequest"},
-   {file: "apps/dashboard/app/lib/domains/mcp/tools/contact-support.ts", export: "toolContactSupport"},
-   {file: "apps/dashboard/app/lib/domains/email/contact-support.ts", export: "createCustomerSupportRequest"},
-  ]}, journeys: ["WM-DASHBOARD-supportRequest"]},
-  ios: {status: "partial", reason: "Native screen pending: native-specs/agent_support.md; exact-revision journey receipt required."},
-  android: {status: "partial", reason: "Native screen pending: native-specs/agent_support.md; exact-revision journey receipt required."},
- },
+	capabilityId: "agent_support",
+	kind: "command",
+	version: 1,
+	mcp: {
+		definition: {
+			description:
+				"Use this when the user wants to report a problem with Dynamoi (a tool error, sign-in or permission problem, wrong data, a billing, campaign or distribution question) or send Dynamoi feedback. Show the user the subject and message and get their OK before sending. Dynamoi attaches the signed-in account and this agent's identity, and support replies by email to the account address. Never include passwords, tokens, API keys or card numbers. Sending changes no campaign, billing or account data.",
+			destructiveHint: true,
+			idempotentHint: false,
+			name: "dynamoi_contact_support",
+			openWorldHint: false,
+			readOnlyHint: false,
+			title: "Contact Dynamoi Support",
+			profiles: { directory: "advertised", full: "advertised" },
+			schema: DynamoiContactSupportInputSchema,
+		},
+		directoryReason:
+			"Authenticated customer support request; no provider or campaign write.",
+		scopes: ["dynamoi:read"],
+	},
+	mobile: {
+		auth: "bearer",
+		method: "POST",
+		operationId: "postMobileSupportRequest",
+		path: "/api/mobile/support",
+		platforms: ["ios", "android"],
+		bodySchema: DynamoiContactSupportInputSchema.extend({
+			requestId: z.uuid(),
+		}),
+		responseSchema: ContactSupportDataSchema,
+	},
+	parity: {
+		webmcp: {
+			status: "complete",
+			binding: {
+				file: "apps/dashboard/app/dashboard/webmcp/dashboard-account.webmcp.generated.ts",
+				export: "supportRequestWebMcp",
+				tool: "dashboard_contact_support",
+				intermediates: [
+					{
+						file: "apps/dashboard/app/dashboard/webmcp/commands.ts",
+						export: "supportRequest",
+					},
+					{
+						file: "apps/dashboard/app/lib/domains/mcp/tools/contact-support.ts",
+						export: "toolContactSupport",
+					},
+					{
+						file: "apps/dashboard/app/lib/domains/email/contact-support.ts",
+						export: "createCustomerSupportRequest",
+					},
+				],
+			},
+			journeys: ["WM-DASHBOARD-supportRequest"],
+		},
+		ios: {
+			status: "partial",
+			reason:
+				"Native screen pending: native-specs/agent_support.md; exact-revision journey receipt required.",
+		},
+		android: {
+			status: "partial",
+			reason:
+				"Native screen pending: native-specs/agent_support.md; exact-revision journey receipt required.",
+		},
+	},
 } as const;

@@ -2,16 +2,160 @@
 import { z } from "zod";
 import { SHOP_AGENT_TOOL_DEFINITIONS, DynamoiShopOrdersDataSchema } from "./wire-shop-agent-wire.generated";
 import { ShopNativePromotionSchema, ShopNativeQuoteResponseSchema, ShopNativeCheckoutRequestSchema, ShopNativeCheckoutResponseSchema } from "./wire-native-wire.generated";
-const screens={ios:{status:"partial",reason:"Native screen pending: native-specs/shop_orders.md; anonymous storefront and order-bound claim stay distinct from authenticated history."},android:{status:"partial",reason:"Native screen pending: native-specs/shop_orders.md; exact-revision journey receipt required."}} as const;
-export const SHOP_ORDERS_CONTRACT={
-capabilityId:"shop_orders",kind:"query",version:1,
- mcp:{definition:SHOP_AGENT_TOOL_DEFINITIONS[0],scopes:["dynamoi:read","dynamoi:mcp.full"],directoryReason:"Existing Shop full-only order read; directory stays excluded."},
- mobile:{operationId:"getMobileShopOrders",auth:"bearer",method:"GET",path:"/api/mobile/artists/{artistId}/shop-orders",platforms: [], platformExclusions: {ios: "Shop order management is web-only (Trevor decision O.38).", android: "Shop order management is web-only (Trevor decision O.38)."},paramsSchema:z.object({artistId:z.string().min(1)}),querySchema:z.object({limit:z.coerce.number().int().min(1).max(20).default(10),orderId:z.string().min(1).max(255).optional()}),responseSchema:DynamoiShopOrdersDataSchema},parity:{ios:{status:"excluded",reason:"Shop order management is web-only (Trevor decision O.38).",decision:"repo:brain@24baa246f83fccb8887343fde16d92aa0cf70f8f#businesses/dynamoi/prds/request-independent-domain-operations.md"},android:{status:"excluded",reason:"Shop order management is web-only (Trevor decision O.38).",decision:"repo:brain@24baa246f83fccb8887343fde16d92aa0cf70f8f#businesses/dynamoi/prds/request-independent-domain-operations.md"},webmcp:{status:"complete",binding:{file:"apps/dashboard/app/dashboard/webmcp/dashboard-commerce.webmcp.generated.ts",export:"shopOrdersWebMcp",tool:"dashboard_shop_orders",intermediates:[{file:"apps/dashboard/app/dashboard/webmcp/reads-commerce.ts",export:"shopOrders"}]},journeys:["WM-DASHBOARD-shopOrders"]}}} as const;
-export const SHOP_QUOTE_CONTRACT={capabilityId:"shop_orders",kind:"query",version:1,
- mcp:{definition:SHOP_AGENT_TOOL_DEFINITIONS[1],scopes:["dynamoi:read","dynamoi:mcp.full"],directoryReason:"Existing Shop full-only promotion quote; no directory expansion."},
- mobile:{operationId:"postMobileShopQuote",auth:"none",method:"POST",path:"/api/mobile/shop/quote",platforms:["ios","android"],bodySchema:ShopNativePromotionSchema,responseSchema:ShopNativeQuoteResponseSchema},
- parity:{...screens,webmcp:{status:"complete",binding:{file:"apps/dashboard/app/dashboard/webmcp/shop.ts",export:"getShopQuoteWebMcp",tool:"get_promotion_quote",intermediates:[{file:"apps/dashboard/app/shop/[slug]/shop-web-mcp-product.ts",export:"getShopQuoteWebMcp"},{file:"apps/dashboard/app/lib/domains/shop/actions/get-promotion-quote.ts",export:"getShopPromotionQuote"}]},journeys:["WM-SHOP-quote"]}}} as const;
-export const SHOP_CHECKOUT_CONTRACT={capabilityId:"shop_orders",kind:"command",version:1,
- mcp:{definition:SHOP_AGENT_TOOL_DEFINITIONS[2],scopes:["dynamoi:read","dynamoi:mcp.full"],directoryReason:"Existing full-only unpaid Checkout Session; human payment remains required."},
- mobile:{operationId:"postMobileShopCheckout",auth:"none",method:"POST",path:"/api/mobile/shop/checkout",platforms:["ios","android"],bodySchema:ShopNativeCheckoutRequestSchema,responseSchema:ShopNativeCheckoutResponseSchema},
- parity:{...screens,webmcp:{status:"complete",binding:{file:"apps/dashboard/app/dashboard/webmcp/shop.ts",export:"createShopCheckoutWebMcp",tool:"create_shop_checkout_session",intermediates:[{file:"apps/dashboard/app/shop/[slug]/shop-web-mcp-product.ts",export:"createShopCheckoutWebMcp"},{file:"apps/dashboard/app/shop/[slug]/shop-web-mcp-product.ts",export:"executeShopCheckoutWebMcp"},{file:"apps/dashboard/app/lib/domains/shop/actions/create-checkout.ts",export:"createShopCheckoutSession"}]},journeys:["WM-SHOP-checkout"]}}} as const;
+const screens = {
+	ios: {
+		status: "partial",
+		reason:
+			"Native screen pending: native-specs/shop_orders.md; anonymous storefront and order-bound claim stay distinct from authenticated history.",
+	},
+	android: {
+		status: "partial",
+		reason:
+			"Native screen pending: native-specs/shop_orders.md; exact-revision journey receipt required.",
+	},
+} as const;
+export const SHOP_ORDERS_CONTRACT = {
+	capabilityId: "shop_orders",
+	kind: "query",
+	version: 1,
+	mcp: {
+		definition: SHOP_AGENT_TOOL_DEFINITIONS[0],
+		scopes: ["dynamoi:read", "dynamoi:mcp.full"],
+		directoryReason:
+			"Existing Shop full-only order read; directory stays excluded.",
+	},
+	mobile: {
+		operationId: "getMobileShopOrders",
+		auth: "bearer",
+		method: "GET",
+		path: "/api/mobile/artists/{artistId}/shop-orders",
+		platforms: [],
+		platformExclusions: {
+			ios: "Shop order management is web-only (Trevor decision O.38).",
+			android: "Shop order management is web-only (Trevor decision O.38).",
+		},
+		paramsSchema: z.object({ artistId: z.string().min(1) }),
+		querySchema: z.object({
+			limit: z.coerce.number().int().min(1).max(20).default(10),
+			orderId: z.string().min(1).max(255).optional(),
+		}),
+		responseSchema: DynamoiShopOrdersDataSchema,
+	},
+	parity: {
+		ios: {
+			status: "excluded",
+			reason: "Shop order management is web-only (Trevor decision O.38).",
+			decision:
+				"repo:brain@24baa246f83fccb8887343fde16d92aa0cf70f8f#businesses/dynamoi/prds/request-independent-domain-operations.md",
+		},
+		android: {
+			status: "excluded",
+			reason: "Shop order management is web-only (Trevor decision O.38).",
+			decision:
+				"repo:brain@24baa246f83fccb8887343fde16d92aa0cf70f8f#businesses/dynamoi/prds/request-independent-domain-operations.md",
+		},
+		webmcp: {
+			status: "complete",
+			binding: {
+				file: "apps/dashboard/app/dashboard/webmcp/dashboard-commerce.webmcp.generated.ts",
+				export: "shopOrdersWebMcp",
+				tool: "dashboard_shop_orders",
+				intermediates: [
+					{
+						file: "apps/dashboard/app/dashboard/webmcp/reads-commerce.ts",
+						export: "shopOrders",
+					},
+				],
+			},
+			journeys: ["WM-DASHBOARD-shopOrders"],
+		},
+	},
+} as const;
+export const SHOP_QUOTE_CONTRACT = {
+	capabilityId: "shop_orders",
+	kind: "query",
+	version: 1,
+	mcp: {
+		definition: SHOP_AGENT_TOOL_DEFINITIONS[1],
+		scopes: ["dynamoi:read", "dynamoi:mcp.full"],
+		directoryReason:
+			"Existing Shop full-only promotion quote; no directory expansion.",
+	},
+	mobile: {
+		operationId: "postMobileShopQuote",
+		auth: "none",
+		method: "POST",
+		path: "/api/mobile/shop/quote",
+		platforms: ["ios", "android"],
+		bodySchema: ShopNativePromotionSchema,
+		responseSchema: ShopNativeQuoteResponseSchema,
+	},
+	parity: {
+		...screens,
+		webmcp: {
+			status: "complete",
+			binding: {
+				file: "apps/dashboard/app/dashboard/webmcp/shop.ts",
+				export: "getShopQuoteWebMcp",
+				tool: "get_promotion_quote",
+				intermediates: [
+					{
+						file: "apps/dashboard/app/shop/[slug]/shop-web-mcp-product.ts",
+						export: "getShopQuoteWebMcp",
+					},
+					{
+						file: "apps/dashboard/app/lib/domains/shop/actions/get-promotion-quote.ts",
+						export: "getShopPromotionQuote",
+					},
+				],
+			},
+			journeys: ["WM-SHOP-quote"],
+		},
+	},
+} as const;
+export const SHOP_CHECKOUT_CONTRACT = {
+	capabilityId: "shop_orders",
+	kind: "command",
+	version: 1,
+	mcp: {
+		definition: SHOP_AGENT_TOOL_DEFINITIONS[2],
+		scopes: ["dynamoi:read", "dynamoi:mcp.full"],
+		directoryReason:
+			"Existing full-only unpaid Checkout Session; human payment remains required.",
+	},
+	mobile: {
+		operationId: "postMobileShopCheckout",
+		auth: "none",
+		method: "POST",
+		path: "/api/mobile/shop/checkout",
+		platforms: ["ios", "android"],
+		bodySchema: ShopNativeCheckoutRequestSchema,
+		responseSchema: ShopNativeCheckoutResponseSchema,
+	},
+	parity: {
+		...screens,
+		webmcp: {
+			status: "complete",
+			binding: {
+				file: "apps/dashboard/app/dashboard/webmcp/shop.ts",
+				export: "createShopCheckoutWebMcp",
+				tool: "create_shop_checkout_session",
+				intermediates: [
+					{
+						file: "apps/dashboard/app/shop/[slug]/shop-web-mcp-product.ts",
+						export: "createShopCheckoutWebMcp",
+					},
+					{
+						file: "apps/dashboard/app/shop/[slug]/shop-web-mcp-product.ts",
+						export: "executeShopCheckoutWebMcp",
+					},
+					{
+						file: "apps/dashboard/app/lib/domains/shop/actions/create-checkout.ts",
+						export: "createShopCheckoutSession",
+					},
+				],
+			},
+			journeys: ["WM-SHOP-checkout"],
+		},
+	},
+} as const;

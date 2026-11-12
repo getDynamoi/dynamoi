@@ -89,8 +89,8 @@ export const DYNAMOI_ABOUT_RESOURCE = {
 } as const;
 
 export const DYNAMOI_ABOUT_TOOL_DEFINITION = {
- ...AGENT_ABOUT_CONTRACT.mcp.definition,
- outputSchema: AnyOutputEnvelopeSchema,
+	...AGENT_ABOUT_CONTRACT.mcp.definition,
+	outputSchema: AnyOutputEnvelopeSchema,
 } as const;
 
 export function getDynamoiAbout(options?: {

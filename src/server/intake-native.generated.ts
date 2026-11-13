@@ -31,8 +31,20 @@ const BulkSmartLinkItemSchema = z
 		status: z.enum(["created", "existing", "failed"]),
 	})
 	.strict();
+const BulkSmartLinkWorkspaceSchema = z.discriminatedUnion("kind", [
+	z
+		.object({
+			kind: z.literal("existing"),
+			organizationId: z.string(),
+			organizationName: z.string(),
+		})
+		.strict(),
+	z.object({ kind: z.literal("new") }).strict(),
+]);
 export const BulkSmartLinkResponseSchema = z
 	.object({
+		settlement: z.literal("expired_before_execution").optional(),
+		workspace: BulkSmartLinkWorkspaceSchema.optional(),
 		artistId: z.string().nullable(),
 		count: z.number().int().min(0).max(25),
 		existingCount: z.number().int().min(0).max(25),

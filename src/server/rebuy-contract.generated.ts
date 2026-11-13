@@ -21,6 +21,13 @@ const base = z
 	})
 	.strict();
 const ShopRebuyCustomRequestSchema = base.extend({
+	budgetAmountMajor: z
+		.number()
+		.int()
+		.positive()
+		.max(Number.MAX_SAFE_INTEGER)
+		.optional()
+		.nullable(),
 	targetViews: z.number().int().min(25000).max(1000000).multipleOf(25000),
 });
 const ShopRebuyPresetsRequestSchema = base.extend({

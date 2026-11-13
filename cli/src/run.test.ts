@@ -75,9 +75,8 @@ test("never fills optional or non-boolean consent fields, even after a yes", asy
 });
 
 test("local CLI rejects stale, foreign, production and non-loopback preview targets", async () => {
-	const { previewEndpoint, readLocalTarget } = await import(
-		"./local-target.ts"
-	);
+	const { previewEndpoint, readLocalTarget } =
+		await import("./local-target.ts");
 	const manifest = {
 		state: "ready",
 		data: "synthetic",

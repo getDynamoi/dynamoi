@@ -2,11 +2,15 @@ import type { JsonSchema, Tool } from "./mcp.ts";
 
 /** The live catalog and generated coverage use the same command eligibility. */
 export const isToolCommand = (tool: Pick<Tool, "name">): boolean =>
-	tool.name.startsWith("dynamoi_") || tool.name === "search" || tool.name === "fetch";
+	tool.name.startsWith("dynamoi_") ||
+	tool.name === "search" ||
+	tool.name === "fetch";
 
 /** `dynamoi_get_campaign` is `dynamoi get-campaign`. */
 export const commandName = (tool: Tool): string =>
-	["search", "fetch"].includes(tool.name) ? `openai-${tool.name}` : tool.name.replace(/^dynamoi_/u, "").replaceAll("_", "-");
+	["search", "fetch"].includes(tool.name)
+		? `openai-${tool.name}`
+		: tool.name.replace(/^dynamoi_/u, "").replaceAll("_", "-");
 
 export const flagName = (property: string): string =>
 	property.replace(/([a-z0-9])([A-Z])/gu, "$1-$2").toLowerCase();

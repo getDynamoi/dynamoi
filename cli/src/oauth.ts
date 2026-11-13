@@ -74,11 +74,12 @@ function toCredentials(
 	clientId: string,
 	previous?: Credentials,
 ): Credentials {
+	const refreshToken = token.refresh_token ?? previous?.refreshToken;
 	return {
 		accessToken: token.access_token,
 		clientId,
 		expiresAt: Date.now() + (token.expires_in ?? 3600) * 1000,
-		refreshToken: token.refresh_token ?? previous?.refreshToken,
+		...(refreshToken === undefined ? {} : { refreshToken }),
 		scope: token.scope ?? previous?.scope ?? "",
 	};
 }

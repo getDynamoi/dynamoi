@@ -8,15 +8,21 @@ catalog access are authorization capabilities, not evidence of workflow parity.
 The canonical catalog owner is `getDynamoiToolDefinitions` in
 `src/server/create-server.ts`; do not maintain a second availability registry here.
 
-The full profile serves 56 tools: 54 Dynamoi operations plus `search` and `fetch`. The directory profile advertises 24 tools:
-22 Dynamoi operations and the OpenAI Connector `search` and `fetch` tools.
-It uses separate directory-only tools for Smart Link description and artist
-settings updates. The prior combined schema remains callable for compatibility
-requests from already-approved clients. On `/mcp`, the host picks the profile
-from the verified OAuth client ID; `/mcp/directory` always serves the directory
-profile. Every other authenticated client on `/mcp` gets the full profile,
-whatever its vendor or client-ID format. Each call still requires its own
-scopes and resource RBAC; the Shop tools also require `dynamoi:mcp.full`.
+Both profiles include the OpenAI Connector `search` and `fetch` tools. The
+directory profile adds separate directory-only tools for Smart Link description
+and artist settings updates; the full profile keeps the prior combined schema,
+which remains callable for compatibility requests from already-approved
+clients. Tool counts per profile are what `getDynamoiToolDefinitions` returns;
+the public [MCP overview](https://dynamoi.com/docs/mcp-server) states them.
+
+`/mcp/directory` always serves the directory profile. On `/mcp`,
+`apps/dashboard/app/mcp/tool-profile.ts` serves the full profile only to a
+verified client outside the named directory clients (ChatGPT) whose token holds
+every full-catalog scope; any other token gets the directory profile. A client
+without those scopes is stepped up to them only when its registration can hold
+them and it is a reviewed client or signs in on the user's own computer.
+Authentication alone never grants the full profile. Each call still requires its
+own scopes and resource RBAC; the Shop tools also require `dynamoi:mcp.full`.
 Unauthenticated requests get the directory profile, where only discovery
 methods, the public `dynamoi_about` tool and the `dynamoi://about` resource
 work. Everything else is refused.
@@ -31,7 +37,7 @@ work. Everything else is refused.
 | Analytics | Campaign-provider rollups, growth audit (`dynamoi_get_growth_audit`), tracked playlist analytics (`dynamoi_get_playlist_analytics`), streaming audience analytics (`dynamoi_get_audience_analytics`), per-link analytics and observed YouTube channel data (`dynamoi_get_youtube_channel_data`) | Link unique counts are sums across days and links; requested-window completeness remains unverified |
 | Connections | Meta and YouTube browser OAuth handoffs, status reads and full-profile Action Center revision/tasks/actions | Headless provider login, owner selection or bypass of ownership verification |
 | Distribution | Five scored requirements, application, agreement, scoped catalog and latest release status (`dynamoi_get_distribution_status`, full only), private expiring release preparation handoffs (`dynamoi_prepare_distribution_release`), and explicit adult-attested application submission for manual review; full-profile payee own-USD totals, bounded filtered detail pages, rankings with filtered totals, geographic views and statement export data with statement/earned month axis | Rights and agreement attestation and sending releases to stores stay with the artist in web/app; tax, payout and takedown workflows |
-| Billing and Shop | Managed billing observations including masked payment-method display, and read-only existing-campaign resume funding breakdown (`dynamoi_get_resume_funding`); unpaid Add campaign funds Checkout creation (`dynamoi_add_campaign_funds`); full-profile Shop quote, unpaid Stripe checkout creation and bounded authorized-artist order status/fulfillment reads | Managed subscription changes, invoice/funding workflows or agent payment settlement. Shop checkout is not a campaign launch or paid order. |
+| Billing and Shop | Managed billing observations including masked payment-method display, and read-only existing-campaign resume funding breakdown (`dynamoi_get_resume_funding`); unpaid Add campaign funds Checkout creation (`dynamoi_add_campaign_funds`); full-profile Shop quote, unpaid Stripe checkout creation, bounded authorized-artist order status/fulfillment reads and purchase history, add/replace order video, pause/resume/restart promotion, and returning-buyer rebuy estimates, custom quote and unpaid rebuy checkout | Managed subscription changes, invoice/funding workflows or agent payment settlement. A Shop checkout link is unpaid and separate from campaign funding: the user pays on Stripe, it never spends plan credit, and it is not a campaign launch or paid order. PayPal stays in the browser. |
 
 A real campaign launch, budget edit or pause/resume runs the same shared
 backend functions as web and mobile. The user reviews the funding summary and submits.

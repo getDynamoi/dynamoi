@@ -5,7 +5,7 @@ import {
 } from "./data";
 export type Page = {
 	rows: WorkspaceRecord[];
-	next?: string;
+	next?: string | undefined;
 	loading: boolean;
 	error?: string;
 	warning?: string;
@@ -39,7 +39,7 @@ export function createWorkspaceRenderer(doc: Document) {
 	}: {
 		page: Page;
 		tab: "campaign" | "smartlink";
-		selectedId?: string;
+		selectedId?: string | undefined;
 		loadPage: (append?: boolean) => Promise<void>;
 		chooseRecord: (kind: "campaign" | "smartlink", id: string) => Promise<void>;
 	}) {
@@ -171,10 +171,10 @@ export function createWorkspaceRenderer(doc: Document) {
 		useInConversation,
 	}: {
 		detailLoading: boolean;
-		detailError?: string;
-		selectedId?: string;
+		detailError?: string | undefined;
+		selectedId?: string | undefined;
 		tab: "campaign" | "smartlink";
-		detail?: WorkspaceRecord;
+		detail?: WorkspaceRecord | undefined;
 		shareMessage: string;
 		canShare: boolean;
 		canOpen: boolean;

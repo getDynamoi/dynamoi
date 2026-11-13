@@ -54,7 +54,15 @@ export const DynamoiShopGetQuoteInputSchema = z
 			.max(160)
 			.regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
 		targeting: DynamoiShopTargetingInputSchema,
-		youtubeUrl: z.string().trim().url().max(500),
+		// Pay first, video later, as on every other purchase surface: omit the
+		// URL or send "" or "pending" to add the video after payment.
+		youtubeUrl: z
+			.union([
+				z.literal(""),
+				z.literal("pending"),
+				z.string().trim().url().max(500),
+			])
+			.optional(),
 	})
 	.strict();
 export const DynamoiShopCreateCheckoutInputSchema = z
@@ -110,12 +118,14 @@ export const DynamoiShopQuoteDataSchema = z
 			.strict(),
 		targeting: ShopTargetingOutputSchema,
 		total: ShopMoneyOutputSchema,
+		/** Null while the video is pending; it is added after payment. */
 		video: z
 			.object({
 				normalizedUrl: z.string().url(),
 				videoId: z.string().regex(/^[A-Za-z0-9_-]{11}$/),
 			})
-			.strict(),
+			.strict()
+			.nullable(),
 	})
 	.strict();
 export const DynamoiShopCheckoutDataSchema = z
@@ -184,7 +194,7 @@ export const SHOP_AGENT_TOOL_DEFINITIONS = [
 	},
 	{
 		description:
-			"Calculate a read-only Dynamoi Shop estimate for a one-off YouTube video promotion. The server derives storefront price, currency, targeting, and estimated views. This does not reserve a price, create checkout, collect payment, create an order, or launch a campaign.",
+			"Calculate a read-only Dynamoi Shop estimate for a one-off YouTube video promotion. The server derives storefront price, currency, targeting, and estimated views. The YouTube video is optional: omit youtubeUrl to add it after payment. This does not reserve a price, create checkout, collect payment, create an order, or launch a campaign.",
 		destructiveHint: false,
 		idempotentHint: true,
 		name: "dynamoi_shop_get_quote",

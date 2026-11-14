@@ -192,7 +192,7 @@ including what did not work.
 - **Each client gets one of two tool sets**, chosen from the identity it signs
   in with. Reviewed clients and apps that sign in on your own computer
   (Claude Code, Codex, Cursor, VS Code, Gemini CLI, OpenClaw and the `dynamoi`
-  CLI) get All 71 tools. ChatGPT, Claude added from its directory listing and other web apps get 53 review-safe advertised tools: reads, Smart Links,
+  CLI) get All 72 tools. ChatGPT, Claude added from its directory listing and other web apps get 53 review-safe advertised tools: reads, Smart Links,
   billing and earnings status, draft preparation, account management and connection links, with no purchases, launches or checkout.
 - **Sign-in is OAuth 2.1**, and every call still checks its scopes and the
   user's role for that artist. See
@@ -220,6 +220,7 @@ including what did not work.
 | `dynamoi_get_growth_audit` | Spotify growth score, recommendations, listener trends, and playlist reach with status and coverage evidence | Reads | Both |
 | `dynamoi_get_playlist_analytics` | Tracked playlist placements, reach, and movement with freshness and snapshot dates | Reads | Both |
 | `dynamoi_get_audience_analytics` | Streaming audience by date range, country, service, and paid/free tier | Reads | Both |
+| `dynamoi_export_audience_rows` | Export current authorized audience rows as a protected CSV, with range, filters and sort | Reads | Full |
 | `dynamoi_get_youtube_channel_data` | Observed YouTube channel data by dataset, with coverage and campaign dates | Reads | Both |
 | `dynamoi_onboard_artist` | Search or preview Spotify artists; intake Spotify or YouTube artists with workspace caps and claim checks | Changes data | Both |
 | `dynamoi_get_platform_status` | Spotify, Meta, and YouTube connection status and setup blockers | Reads | Both |

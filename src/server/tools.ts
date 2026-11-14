@@ -1,3 +1,4 @@
+import { AUDIENCE_ROWS_EXPORT_CONTRACT } from "./audience-export.generated";
 import { BILLING_READ_MCP } from "./billing-read.generated";
 import { FUNDING_CHECKOUT_CONTRACT } from "./funding-checkout.generated";
 import { ARTIST_ANALYTICS_CONTRACT } from "./artist-analytics.generated";
@@ -121,6 +122,9 @@ export const DynamoiGetPlaylistAnalyticsInputSchema =
 
 export const DynamoiListCampaignDraftsInputSchema =
 	CAMPAIGN_DRAFTS_CONTRACT.mcp.definition.schema;
+
+export const DynamoiExportAudienceRowsInputSchema =
+	AUDIENCE_ROWS_EXPORT_CONTRACT.mcp.definition.schema;
 
 export const DynamoiGetAudienceAnalyticsInputSchema =
 	AUDIENCE_ANALYTICS_CONTRACT.mcp.definition.schema;
@@ -511,6 +515,10 @@ export const PHASE_1_TOOL_DEFINITIONS = [
 	},
 	{
 		...CAMPAIGN_DRAFTS_CONTRACT.mcp.definition,
+		outputSchema: AnyOutputEnvelopeSchema,
+	},
+	{
+		...AUDIENCE_ROWS_EXPORT_CONTRACT.mcp.definition,
 		outputSchema: AnyOutputEnvelopeSchema,
 	},
 	{

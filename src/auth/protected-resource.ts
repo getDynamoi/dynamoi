@@ -1,3 +1,4 @@
+import { AUDIENCE_ROWS_EXPORT_CONTRACT } from "../server/audience-export.generated";
 import { AUDIENCE_ANALYTICS_CONTRACT } from "../server/audience-analytics.generated";
 import {
 	BILLING_COUNTRY_READ_CONTRACT,
@@ -19,6 +20,8 @@ export const DYNAMOI_BETTER_AUTH_MCP_SCOPES = [
 	"dynamoi:smart_links.write",
 ] as const;
 export const DYNAMOI_MCP_TOOL_SCOPES = {
+	[AUDIENCE_ROWS_EXPORT_CONTRACT.mcp.definition.name]:
+		AUDIENCE_ROWS_EXPORT_CONTRACT.mcp.scopes,
 	dynamoi_get_meta_campaign_groups: ["dynamoi:read"],
 	dynamoi_get_campaign_management: ["dynamoi:read"],
 	// Public product information; callable before sign-in.

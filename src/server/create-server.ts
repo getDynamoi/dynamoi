@@ -463,6 +463,7 @@ export type Phase3Adapter = {
 	>;
 	getGrowthAudit(input: unknown): Promise<ResultEnvelope<unknown>>;
 	getPlaylistAnalytics(input: unknown): Promise<ResultEnvelope<unknown>>;
+	exportAudienceRows(input: unknown): Promise<ResultEnvelope<unknown>>;
 	getAudienceAnalytics(input: unknown): Promise<ResultEnvelope<unknown>>;
 	getMetaCampaignGroups(input: unknown): Promise<ResultEnvelope<unknown>>;
 	getCampaignManagement(input: unknown): Promise<ResultEnvelope<unknown>>;
@@ -848,6 +849,8 @@ const DYNAMOI_TOOL_DISPATCHERS = {
 		adapter.getArtistAnalytics(input),
 	dynamoi_get_artist_billing_country: (adapter, input) =>
 		adapter.getArtistBillingCountry(input),
+	dynamoi_export_audience_rows: (adapter, input) =>
+		adapter.exportAudienceRows(input),
 	dynamoi_get_audience_analytics: (adapter, input) =>
 		adapter.getAudienceAnalytics(input),
 	dynamoi_get_audit_log: (adapter, input) => adapter.getAuditLog(input),

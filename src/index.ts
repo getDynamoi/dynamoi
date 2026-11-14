@@ -131,6 +131,7 @@ export {
 	DynamoiGetArtistAnalyticsInputSchema,
 	DynamoiGetArtistInputSchema,
 	DynamoiGetAudienceAnalyticsInputSchema,
+	DynamoiExportAudienceRowsInputSchema,
 	DynamoiGetAuditLogInputSchema,
 	DynamoiGetBillingInputSchema,
 	DynamoiGetCampaignAnalyticsInputSchema,

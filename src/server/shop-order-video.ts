@@ -1,3 +1,4 @@
+import { z } from "zod/v4";
 import { createOutputEnvelopeSchema } from "./output-schemas";
 import {
 	SHOP_ATTACH_VIDEO_CONTRACT,
@@ -12,12 +13,12 @@ export const SHOP_VIDEO_TOOL_DEFINITIONS = [
 		...SHOP_ATTACH_VIDEO_CONTRACT.mcp.definition,
 		outputSchema: createOutputEnvelopeSchema(
 			SHOP_ATTACH_VIDEO_CONTRACT.mobile.responseSchema,
-		),
+		).safeExtend({ validationCode: z.string().optional() }),
 	},
 	{
 		...SHOP_REPLACE_VIDEO_CONTRACT.mcp.definition,
 		outputSchema: createOutputEnvelopeSchema(
 			SHOP_REPLACE_VIDEO_CONTRACT.mobile.responseSchema,
-		),
+		).safeExtend({ validationCode: z.string().optional() }),
 	},
 ] as const;

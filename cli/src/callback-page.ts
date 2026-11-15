@@ -36,5 +36,5 @@ export function callbackPage(ok: boolean): string {
 				"Go back to your terminal and run <code>dynamoi login</code> again.",
 				ALERT,
 			];
-	return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title} · Dynamoi</title><style>${STYLE}</style></head><body><main><div class="lockup">${BLOOM}<span class="word">dynamoi</span></div><div class="status">${icon}</div><h1>${title}</h1><p>${body}</p><footer><a href="https://dynamoi.com">dynamoi.com</a></footer></main></body></html>`;
+	return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="text-scale" content="scale"><title>${title} · Dynamoi</title><style>${STYLE}</style></head><body><main><div class="lockup">${BLOOM}<span class="word">dynamoi</span></div><div class="status">${icon}</div><h1>${title}</h1><p>${body}</p><footer><a href="https://dynamoi.com">dynamoi.com</a></footer></main></body></html>`;
 }

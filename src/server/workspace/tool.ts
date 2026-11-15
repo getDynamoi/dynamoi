@@ -136,7 +136,7 @@ export async function openWorkspace(
 	return { data, status: "success" };
 }
 function workspaceHtml(): string {
-	return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dynamoi workspace</title><style>${WORKSPACE_STYLE}</style></head><body><main id="workspace"><header><h1>Dynamoi workspace</h1><p>Artists, campaigns and Smart Links</p></header><p role="status" id="connection">Connecting to your host…</p><section id="content" aria-label="Artist workspace"></section><noscript>This workspace needs JavaScript. Use Dynamoi’s individual read tools to inspect your account.</noscript></main><script>${WORKSPACE_SCRIPT.replaceAll("</script", "<\\/script")}</script></body></html>`;
+	return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="text-scale" content="scale"><title>Dynamoi workspace</title><style>${WORKSPACE_STYLE}</style></head><body><main id="workspace"><header><h1>Dynamoi workspace</h1><p>Artists, campaigns and Smart Links</p></header><p role="status" id="connection">Connecting to your host…</p><section id="content" aria-label="Artist workspace"></section><noscript>This workspace needs JavaScript. Use Dynamoi’s individual read tools to inspect your account.</noscript></main><script>${WORKSPACE_SCRIPT.replaceAll("</script", "<\\/script")}</script></body></html>`;
 }
 export function registerWorkspaceResource(
 	server: McpServer,

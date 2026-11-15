@@ -28,7 +28,7 @@ const ShopRebuyCustomRequestSchema = base.extend({
 		.max(Number.MAX_SAFE_INTEGER)
 		.optional()
 		.nullable(),
-	targetViews: z.number().int().min(25000).max(1000000).multipleOf(25000),
+	targetViews: z.number().int().min(25000).max(1000000),
 });
 const ShopRebuyPresetsRequestSchema = base.extend({
 	budgets: z

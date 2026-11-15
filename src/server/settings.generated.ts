@@ -12,19 +12,6 @@ const pending = {
 		"packages/application-api-contract/native-specs/account-settings.md",
 	status: "partial",
 } as const;
-const DeleteAccountSchema = z
-	.object({
-		authProvider: z.enum(["apple", "google", "email"]).nullable().optional(),
-		confirm: z.boolean().optional(),
-		siwaAuthorizationCode: z
-			.string()
-			.trim()
-			.min(1)
-			.max(4096)
-			.nullable()
-			.optional(),
-	})
-	.strict();
 const MobileAccountDeleteRequestSchema = z.object({
 	authProvider: z.enum(["apple", "google", "email"]).nullable().default(null),
 	siwaAuthorizationCode: z
@@ -41,7 +28,27 @@ const MobileAccountDeleteResponseSchema = z.object({
 });
 
 
-
+const AccountDeletionWebMcpSchema = z
+	.object({
+		clientRequestId: z.string().uuid(),
+		confirmation: z.literal("DELETE MY ACCOUNT").optional(),
+		expectedSnapshot: z.string().optional(),
+		phase: z.enum(["preview", "confirm"]).default("preview"),
+	})
+	.strict();
+const DeleteAccountSchema = z
+	.object({
+		authProvider: z.enum(["apple", "google", "email"]).nullable().optional(),
+		...AccountDeletionWebMcpSchema.shape,
+		siwaAuthorizationCode: z
+			.string()
+			.trim()
+			.min(1)
+			.max(4096)
+			.nullable()
+			.optional(),
+	})
+	.strict();
 
 export const ACCOUNT_DELETION_CONTRACT = {
 	capabilityId: "account",
@@ -49,7 +56,7 @@ export const ACCOUNT_DELETION_CONTRACT = {
 	mcp: {
 		definition: {
 			description:
-				"Preview account deletion eligibility and blockers without changing anything. Show the irreversible consequences, then obtain explicit confirmation and call with confirm=true. Deletion starts cleanup; it does not promise all records are erased.",
+				"Preview account deletion eligibility and blockers without changing anything. Show the irreversible consequences, then obtain DELETE MY ACCOUNT and call with phase=confirm, clientRequestId, confirmation and the preview expectedSnapshot. Deletion starts cleanup; it does not promise all records are erased.",
 			destructiveHint: true,
 			name: "dynamoi_delete_account",
 			openWorldHint: true,

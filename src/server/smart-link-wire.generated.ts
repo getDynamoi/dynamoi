@@ -320,7 +320,7 @@ export const LIST_SMART_LINKS_DEFINITION = {
 
 export const UPDATE_SMART_LINK_DEFINITION = {
 	description:
-		"Use this when the user wants to change one Smart Link's public description or update artist-level Smart Link theme/pixel settings. Set action to update_description or update_artist_settings. Public availability is artist-wide in the dashboard; this tool does not publish or unpublish individual links. Theme-only updates switch instantly; description or pixel changes may queue background rendering.",
+		"Use this when the user wants to change one Smart Link's public description or update artist-level Smart Link theme/pixel settings. Set action to update_description or update_artist_settings. Public availability requires both artist-wide availability and per-release publication; this tool does not publish or unpublish individual links. Theme-only updates switch instantly; description or pixel changes may queue background rendering.",
 	destructiveHint: true,
 	idempotentHint: true,
 	name: "dynamoi_update_smart_link",
@@ -372,7 +372,7 @@ export const UPDATE_SMART_LINK_ARTIST_HUB_SETTINGS_DEFINITION = {
 
 export const UPDATE_SMART_LINK_RELEASE_SETTINGS_DEFINITION = {
 	description:
-		"Use this when the user wants to change one Smart Link's release video or catalog destination visibility. Pass the read version as expectedVersion. Set any of customDescription, youtubeUrl or serviceOverrides; omitted fields preserve stored values and null explicitly clears supported fields. Public availability is artist-wide in the dashboard; this tool does not publish or unpublish individual links. Confirm the requested settings before calling. The result includes the saved releaseSettings readback; after an ambiguous failure, read it with dynamoi_get_smart_link (playLinkId; see releaseSettings) before retrying. A description or video change may queue background rendering.",
+		"Use this when the user wants to change one Smart Link's release video or catalog destination visibility. Pass the read version as expectedVersion. Set any of customDescription, youtubeUrl or serviceOverrides; omitted fields preserve stored values and null explicitly clears supported fields. Public availability requires both artist-wide availability and per-release publication; this tool does not publish or unpublish individual links. Confirm the requested settings before calling. The result includes the saved releaseSettings readback; after an ambiguous failure, read it with dynamoi_get_smart_link (playLinkId; see releaseSettings) before retrying. A description or video change may queue background rendering.",
 	destructiveHint: true,
 	idempotentHint: true,
 	name: "dynamoi_update_smart_link_release_settings",

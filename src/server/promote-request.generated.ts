@@ -12,7 +12,7 @@ const DynamoiSmartLinkControlsInputSchema = z
 		]),
 		artistId: z.string().uuid(),
 		clientRequestId: z.string().uuid().optional(),
-		confirmedArtistName: z.string().max(500).optional(),
+		confirm: z.boolean().optional(),
 		expectedVersion: z.string().min(1).max(128).optional(),
 		isEnabled: z.boolean().optional(),
 		platform: z.enum(["ios", "android"]).nullable().optional(),
@@ -40,7 +40,7 @@ export const SMART_LINK_PROMOTE_CONTRACT = {
 		action: "promote_request",
 		definition: {
 			description:
-				"Sync the native catalog, change artist-wide Smart Link availability, replace tracking IDs, or record a promote request. Confirm the requested change first. Disabling requires confirmedArtistName matching the artist name. Tracking requires all three IDs (null clears) and forwards expectedVersion from artistHub.version. Availability is unversioned. Catalog sync previews at most 25 frozen links. Show the exact count and titles, then repeat the original limit/offset with phase=confirm, previewId and matching confirmedCount. No background catalog continuation is started; another batch requires a new preview and confirmation. Promote request requires playLinkId; it only records the native platform analytics event, sends no message and starts no paid work. Omitted platform uses the native default (iOS).",
+				"Sync the native catalog, change artist-wide Smart Link availability, replace tracking IDs, or record a promote request. Confirm the requested change first. Before disabling, preview which artist hub and release Smart Links go offline, then send confirm: true after the user confirms. Tracking requires all three IDs (null clears) and forwards expectedVersion from artistHub.version. Availability is unversioned. Catalog sync previews at most 25 frozen links. Show the exact count and titles, then repeat the original limit/offset with phase=confirm, previewId and matching confirmedCount. No background catalog continuation is started; another batch requires a new preview and confirmation. Promote request requires playLinkId; it only records the native platform analytics event, sends no message and starts no paid work. Omitted platform uses the native default (iOS).",
 			destructiveHint: true,
 			idempotentHint: false,
 			name: "dynamoi_smart_link_controls",

@@ -7,11 +7,17 @@ import { type Credentials, loadCredentials, saveCredentials } from "./store.ts";
 
 const BASE_URL = "https://dynamoi.com";
 export const MCP_URL = `${BASE_URL}/mcp`;
+/**
+ * Dynamoi's reviewed client metadata document for this CLI. The URL is the
+ * client id, so only dynamoi.com defines the client and the sign-in page can
+ * name it. Its redirects are loopback only: `http://127.0.0.1/callback`, with
+ * any port (RFC 8252).
+ */
+const CLIENT_ID = "https://dynamoi.com/api/oauth/clients/dynamoi-cli";
 
 type ServerMetadata = {
 	authorization_endpoint: string;
 	issuer: string;
-	registration_endpoint: string;
 	revocation_endpoint?: string;
 	scopes_supported?: string[];
 	token_endpoint: string;
@@ -149,28 +155,10 @@ export async function login(
 	const { port, result } = await listenForRedirect(state);
 	const redirectUri = `http://127.0.0.1:${port}/callback`;
 	const scope = (meta.scopes_supported ?? []).join(" ");
-	const registration = await fetch(meta.registration_endpoint, {
-		body: JSON.stringify({
-			client_name: "Dynamoi CLI",
-			grant_types: ["authorization_code", "refresh_token"],
-			redirect_uris: [redirectUri],
-			response_types: ["code"],
-			scope,
-			token_endpoint_auth_method: "none",
-		}),
-		headers: { "content-type": "application/json" },
-		method: "POST",
-	});
-	const client = await jsonBody<{ client_id: string }>(registration);
-	if (!(registration.ok && client.client_id)) {
-		throw new Error(
-			`Could not register the CLI (HTTP ${registration.status}).`,
-		);
-	}
 	const verifier = b64url(randomBytes(32));
 	const authorize = new URL(meta.authorization_endpoint);
 	authorize.search = new URLSearchParams({
-		client_id: client.client_id,
+		client_id: CLIENT_ID,
 		code_challenge: b64url(createHash("sha256").update(verifier).digest()),
 		code_challenge_method: "S256",
 		redirect_uri: redirectUri,
@@ -195,14 +183,14 @@ export async function login(
 		throw new Error("Sign-in response came from an unexpected issuer.");
 	}
 	const token = await postForm<TokenResponse>(meta.token_endpoint, {
-		client_id: client.client_id,
+		client_id: CLIENT_ID,
 		code,
 		code_verifier: verifier,
 		grant_type: "authorization_code",
 		redirect_uri: redirectUri,
 		resource: MCP_URL,
 	});
-	const credentials = toCredentials(token, client.client_id);
+	const credentials = toCredentials(token, CLIENT_ID);
 	await saveCredentials(credentials);
 	return credentials;
 }

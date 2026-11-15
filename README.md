@@ -231,7 +231,7 @@ including what did not work.
 | `dynamoi_preview_smart_link_themes` | Visual preview of the Smart Link themes | Reads | Both |
 | `dynamoi_create_smart_link_from_spotify` | Create a free Smart Link from a Spotify album or track | Changes data | Both |
 | `dynamoi_create_smart_links_from_spotify_artist` | Import an artist's catalog as free Smart Links and return the artist hub | Changes data | Both |
-| `dynamoi_list_smart_links` | An artist's Smart Links and public URLs | Reads | Both |
+| `dynamoi_list_smart_links` | An artist's Smart Links and URLs; public availability requires artist-wide and per-release controls | Reads | Both |
 | `dynamoi_get_smart_link` | One Smart Link, with optional analytics and artist settings | Reads | Both |
 | `dynamoi_update_smart_link_description` | Update one Smart Link's public description | Changes data | Directory |
 | `dynamoi_update_smart_link_artist_settings` | Update an artist's Smart Link theme or validated pixel settings | Changes data | Directory |
@@ -245,7 +245,7 @@ including what did not work.
 | `dynamoi_get_artist_billing_country` | Read current billing country; not tax residency. | Reads | Both |
 | `dynamoi_manage_team` | Change organization member roles, remove members or revoke pending invitations with web authority and owner protections. | Changes data | Both |
 | `dynamoi_get_audit_log` | Sanitized artist/organization audit events with scope-bound cursors, plus your 12 recent account activity entries. | Reads | Both |
-| `dynamoi_claim_referral_code` | Claim or change your own referral code. Accept program terms yourself in the app or web. | Changes data | Both |
+| `dynamoi_claim_referral_code` | Claim or change your own referral code. | Changes data | Both |
 | `dynamoi_get_referrals` | Your referral snapshot; no attribution or commission writes. Pending and available amounts are not approved or paid payouts. | Reads | Both |
 | `dynamoi_get_billing` | Billing status, credit balance, promo limits and masked payment-method display | Reads | Both |
 | `dynamoi_add_campaign_funds` | Create the unpaid Add campaign funds Stripe Checkout link, after the user approves the amount and currency | Changes data | Full |
@@ -262,7 +262,7 @@ including what did not work.
 | `dynamoi_start_meta_connection` | Start the Facebook Page and Instagram connection in the browser | Changes data | Both |
 | `dynamoi_start_youtube_channel_link` | Start the YouTube channel connection in the browser | Changes data | Both |
 | `dynamoi_contact_support` | Send a support request or feedback to Dynamoi | Changes data | Both |
-| `dynamoi_delete_account` | Preview eligibility and explicitly start irreversible account deletion; cleanup is asynchronous and required records may be retained | Changes data | Full |
+| `dynamoi_delete_account` | Preview eligibility, then confirm irreversible deletion with DELETE MY ACCOUNT and the fresh expectedSnapshot; cleanup is asynchronous and required records may be retained | Changes data | Full |
 | `dynamoi_update_account_profile` | Preview or explicitly confirm a display name or preferred language change | Changes data | Both |
 | `dynamoi_set_artist_billing_country` | Preview or explicitly confirm an artist checkout-currency suggestion country; existing currency stays fixed | Changes data | Full |
 | `dynamoi_pause_shop_promotion` | Preview and confirm an owned Shop promotion pause; existing safeguards remain authoritative | Changes data | Full |

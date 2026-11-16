@@ -25,11 +25,6 @@ const NativeResponseSchema = z.object({
 	source: z.enum(["SMART_CAMPAIGN_COUNTRIES", "GOOGLE_ADS_COUNTRIES"]),
 	notes: z.array(z.string()),
 });
-const screenPending = {
-	status: "partial",
-	reason:
-		"Native screen pending: packages/application-api-contract/native-specs/campaign-country-catalog.md; exact-revision paired receipts required.",
-} as const;
 export const CAMPAIGN_COUNTRIES_CONTRACT = {
 	capabilityId: "campaign_country_catalog",
 	kind: "query",
@@ -61,8 +56,6 @@ export const CAMPAIGN_COUNTRIES_CONTRACT = {
 		responseSchema: NativeResponseSchema,
 	},
 	parity: {
-		ios: screenPending,
-		android: screenPending,
 		webmcp: {
 			status: "complete",
 			journeys: ["WM-DASHBOARD-campaignCountries"],

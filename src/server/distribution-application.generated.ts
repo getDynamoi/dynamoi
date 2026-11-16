@@ -41,6 +41,7 @@ const pendingBehavior = {
 } as const;
 
 export const DISTRIBUTION_APPLICATION_CONTRACT = {
+	journeys: ["distribution-application-submit"],
 	capabilityId: "distribution_application",
 	kind: "command",
 	mcp: {

@@ -52,6 +52,7 @@ const AudienceExportResponseSchema = z.object({
 
 
 export const AUDIENCE_ROWS_EXPORT_CONTRACT = {
+	journeys: ["audience-export-save"],
 	operationId: "audience.rows.export",
 	capabilityId: "audience_rows_export",
 	kind: "query",

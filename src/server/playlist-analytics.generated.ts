@@ -65,6 +65,7 @@ const PlaylistAnalyticsMcpInputSchema = z
 	.strict();
 
 export const PLAYLIST_ANALYTICS_CONTRACT = {
+	journeys: ["native-reads"],
 	capabilityId: "playlist_analytics",
 	kind: "query",
 	mcp: {

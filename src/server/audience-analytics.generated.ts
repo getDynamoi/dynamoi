@@ -32,6 +32,7 @@ const MobileAudienceAnalyticsResponseSchema = z.object({
 });
 
 export const AUDIENCE_ANALYTICS_CONTRACT = {
+	journeys: ["native-reads"],
 	capabilityId: "ios_audience_analytics",
 	kind: "query",
 	mcp: {

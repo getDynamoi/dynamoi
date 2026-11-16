@@ -134,6 +134,7 @@ const partial = {
 	status: "partial",
 } as const;
 export const GROWTH_AUDIT_CONTRACT = {
+	journeys: ["growth-audit-sample-en-US"],
 	capabilityId: "growth_audit",
 	kind: "query",
 	mcp: {

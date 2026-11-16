@@ -677,6 +677,19 @@ export const ContactSupportOutputEnvelopeSchema = createOutputEnvelopeSchema(
 	ContactSupportDataSchema,
 );
 
+export const SendFeedbackDataSchema = z
+	.object({
+		message: z.literal("Thanks — recorded."),
+		status: z.literal("recorded"),
+	})
+	.strict();
+
+export type SendFeedbackData = z.infer<typeof SendFeedbackDataSchema>;
+
+export const SendFeedbackOutputEnvelopeSchema = createOutputEnvelopeSchema(
+	SendFeedbackDataSchema,
+);
+
 export const ListSmartLinksOutputEnvelopeSchema = createOutputEnvelopeSchema(
 	z.union([ListSmartLinksDataOutputSchema, ListSmartLinksSummaryOutputSchema]),
 );

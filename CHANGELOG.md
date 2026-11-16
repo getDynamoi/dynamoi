@@ -7,6 +7,10 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- `dynamoi_send_feedback` lets an agent tell Dynamoi, in a short redacted note, when a tool failed, was confusing, or lacked a capability. The note is stored with the user's account, deleted with it, rate limited per user, and available in both the directory and full profiles.
+
 ## [1.0.12] - 2026-11-12
 
 ### Changed

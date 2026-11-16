@@ -192,7 +192,7 @@ including what did not work.
 - **Each client gets one of two tool sets**, chosen from the identity it signs
   in with. Reviewed clients and apps that sign in on your own computer
   (Claude Code, Codex, Cursor, VS Code, Gemini CLI, OpenClaw and the `dynamoi`
-  CLI) get All 72 tools. ChatGPT, Claude added from its directory listing and other web apps get 53 review-safe advertised tools: reads, Smart Links,
+  CLI) get All 73 tools. ChatGPT, Claude added from its directory listing and other web apps get 54 review-safe advertised tools: reads, Smart Links,
   billing and earnings status, draft preparation, account management and connection links, with no purchases, launches or checkout.
 - **Sign-in is OAuth 2.1**, and every call still checks its scopes and the
   user's role for that artist. See
@@ -262,6 +262,7 @@ including what did not work.
 | `dynamoi_start_meta_connection` | Start the Facebook Page and Instagram connection in the browser | Changes data | Both |
 | `dynamoi_start_youtube_channel_link` | Start the YouTube channel connection in the browser | Changes data | Both |
 | `dynamoi_contact_support` | Send a support request or feedback to Dynamoi | Changes data | Both |
+| `dynamoi_send_feedback` | Send brief product feedback when a Dynamoi tool failed, was confusing, or lacked a capability; stored with the user's account | Changes data | Both |
 | `dynamoi_delete_account` | Preview eligibility, then confirm irreversible deletion with DELETE MY ACCOUNT and the fresh expectedSnapshot; cleanup is asynchronous and required records may be retained | Changes data | Full |
 | `dynamoi_update_account_profile` | Preview or explicitly confirm a display name or preferred language change | Changes data | Both |
 | `dynamoi_set_artist_billing_country` | Preview or explicitly confirm an artist checkout-currency suggestion country; existing currency stays fixed | Changes data | Full |

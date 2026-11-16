@@ -57,6 +57,7 @@ export {
 export {
 	type ContactSupportData,
 	type GetResumeFundingData,
+	type SendFeedbackData,
 	type SmartCampaignLaunchProjection,
 	SmartCampaignLaunchProjectionSchema,
 	SmartCampaignRecoverySchema,
@@ -121,6 +122,8 @@ export {
 	DYNAMOI_SUPPORT_CATEGORIES,
 	type DynamoiContactSupportInput,
 	DynamoiContactSupportInputSchema,
+	type DynamoiSendFeedbackInput,
+	DynamoiSendFeedbackInputSchema,
 	SUPPORT_TOOL_DEFINITIONS,
 } from "./server/support-tools";
 export {

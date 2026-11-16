@@ -94,6 +94,7 @@ export const DYNAMOI_MCP_TOOL_SCOPES = {
 	dynamoi_open_workspace: ["dynamoi:read"],
 	dynamoi_preview_smart_link_themes: ["dynamoi:read"],
 	dynamoi_search: ["dynamoi:read"],
+	dynamoi_send_feedback: ["dynamoi:read"],
 	[BILLING_COUNTRY_SET_CONTRACT.mcp.definition.name]:
 		BILLING_COUNTRY_SET_CONTRACT.mcp.scopes,
 	dynamoi_shop_create_checkout: ["dynamoi:read", "dynamoi:mcp.full"],

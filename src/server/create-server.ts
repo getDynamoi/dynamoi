@@ -92,6 +92,7 @@ import {
 	type ContactSupportData,
 	type GetResumeFundingData,
 	ResultErrorRecoverySchema,
+	type SendFeedbackData,
 	createOutputEnvelopeSchema,
 } from "./output-schemas";
 import { registerDynamoiPrompts } from "./prompts";
@@ -557,6 +558,7 @@ export type Phase3Adapter = {
 		input: unknown,
 	): Promise<ResultEnvelope<DynamoiShopCheckoutData>>;
 	contactSupport(input: unknown): Promise<ResultEnvelope<ContactSupportData>>;
+	sendFeedback(input: unknown): Promise<ResultEnvelope<SendFeedbackData>>;
 };
 
 type DynamoiToolDispatcher = (
@@ -900,6 +902,7 @@ const DYNAMOI_TOOL_DISPATCHERS = {
 	dynamoi_preview_smart_link_themes: (adapter, input) =>
 		adapter.previewSmartLinkThemes(input),
 	dynamoi_search: (adapter, input) => adapter.search(input),
+	dynamoi_send_feedback: (adapter, input) => adapter.sendFeedback(input),
 	dynamoi_set_artist_billing_country: (adapter, input) =>
 		adapter.setArtistBillingCountry(input),
 	dynamoi_shop_create_checkout: (adapter, input) =>

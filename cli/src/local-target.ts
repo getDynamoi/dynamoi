@@ -15,7 +15,7 @@ type Preview = {
 };
 type Metadata = { clones?: Record<string, { source?: string }> };
 
-export function previewEndpoint(
+function previewEndpoint(
 	manifest: Preview,
 	metadata: Metadata,
 	identity: string,

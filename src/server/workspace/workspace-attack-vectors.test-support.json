@@ -1,9 +1,0 @@
-{
-  "unsafePublicUrls": [
-    "javascript:alert(1)",
-    "https://evil.test",
-    "https://play.dynamoi.com@evil.test/x",
-    "https://play.dynamoi.com/x?token=secret",
-    "https://play.dynamoi.com:443/x#x"
-  ]
-}

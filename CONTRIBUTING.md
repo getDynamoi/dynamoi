@@ -16,7 +16,6 @@ Requirements:
 Common commands:
 - Install: `bun install`
 - Build: `bun run build`
-- Test: `bun test`
 - Typecheck: `bun x tsrs --noEmit -p tsconfig.json`
 - Registry metadata check: `bun run registry:validate`
 
@@ -33,7 +32,7 @@ package consumers or MCP clients under **Breaking changes**.
 2. Bump the version in all three places together: `package.json`, the
    `version` in `server.json`, and the fallback in `src/version.ts`.
    Never publish a lower version.
-3. Run `bun run build`, `bun test` and `bun run registry:validate`.
+3. Run `bun run build` and `bun run registry:validate`.
 4. Merge to `main`. The `publish` workflow runs `changeset publish`, which
    publishes the `package.json` version to npm only if that version is not on
    npm yet. It authenticates with npm Trusted Publishing (GitHub OIDC, no
@@ -47,7 +46,7 @@ Versions are bumped by hand, so do not add Changeset files or run
 The `dynamoi` CLI lives in `cli/` with its own `package.json` version, and the
 same workflow publishes it (`workspaces` lets `changeset publish` see both
 packages). Bump `cli/package.json` when the CLI changes; it needs no
-`server.json` or `src/version.ts` entry. Test it with `bun test cli`.
+`server.json` or `src/version.ts` entry. Verify it with `(cd cli && bun run build)`.
 
 ## README
 

@@ -13,6 +13,7 @@ const MobileCampaignDraftsResponseSchema = z.object({
 	drafts: z.array(MobileCampaignDraftSchema),
 });
 export const CAMPAIGN_DRAFTS_CONTRACT = {
+	journeys: ["campaign-draft-reopen"],
 	capabilityId: "campaign_draft_listing",
 	currencyProof: {
 		currency: {
@@ -67,16 +68,6 @@ export const CAMPAIGN_DRAFTS_CONTRACT = {
 		responseSchema: MobileCampaignDraftsResponseSchema,
 	},
 	parity: {
-		android: {
-			reason:
-				"Preserves the native drafts/media cohort's partial journey acceptance.",
-			status: "partial",
-		},
-		ios: {
-			reason:
-				"Preserves the native drafts/media cohort's partial journey acceptance.",
-			status: "partial",
-		},
 		webmcp: {
 			binding: {
 				export: "campaignDraftsWebMcp",

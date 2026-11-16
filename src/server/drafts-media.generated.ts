@@ -82,6 +82,7 @@ const DRAFT_MEDIA_READ_TOOL = {
 	openWorldHint: false,
 } as const;
 export const DRAFT_REOPEN_CONTRACT = {
+	journeys: ["campaign-draft-reopen"],
 	capabilityId: "native_drafts_media",
 	kind: "query",
 	version: 1,
@@ -148,6 +149,7 @@ export const DRAFT_REOPEN_CONTRACT = {
 	},
 } as const;
 export const MEDIA_CATALOG_CONTRACT = {
+	journeys: ["campaign-media-chooser"],
 	capabilityId: "native_drafts_media",
 	kind: "query",
 	version: 1,
@@ -234,6 +236,13 @@ const sourceAudioBrowser = (parent: string, action: string, verb: string) => [
 	},
 ];
 export const MEDIA_UPLOAD_START_CONTRACT = {
+	journeys: [
+		"media-upload-unknown",
+		"media-upload-denied",
+		"media-upload-race",
+		"campaign-media-cancel",
+		"campaign-media-cancel-ar-dark-large",
+	],
 	webmcpAliases: sourceAudioBrowser(
 		"postMobileArtistMediaUploadStart",
 		"sourceAudioStart",
@@ -306,6 +315,7 @@ export const MEDIA_UPLOAD_START_CONTRACT = {
 	},
 } as const;
 export const MEDIA_UPLOAD_STATUS_CONTRACT = {
+	journeys: ["media-upload-unknown", "media-upload-race"],
 	webmcpAliases: sourceAudioBrowser(
 		"postMobileArtistMediaUploadStatus",
 		"sourceAudioStatus",
@@ -378,6 +388,7 @@ export const MEDIA_UPLOAD_STATUS_CONTRACT = {
 	},
 } as const;
 export const MEDIA_UPLOAD_COMPLETE_CONTRACT = {
+	journeys: ["media-upload-unknown", "media-upload-race"],
 	webmcpAliases: sourceAudioBrowser(
 		"postMobileArtistMediaUploadComplete",
 		"sourceAudioComplete",
@@ -450,6 +461,13 @@ export const MEDIA_UPLOAD_COMPLETE_CONTRACT = {
 	},
 } as const;
 export const MEDIA_UPLOAD_ABORT_CONTRACT = {
+	journeys: [
+		"media-upload-unknown",
+		"media-upload-denied",
+		"media-upload-race",
+		"campaign-media-cancel",
+		"campaign-media-cancel-ar-dark-large",
+	],
 	webmcpAliases: sourceAudioBrowser(
 		"deleteMobileArtistMediaUpload",
 		"sourceAudioAbort",

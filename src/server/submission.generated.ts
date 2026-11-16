@@ -318,6 +318,7 @@ const submissionScreenPending = {
 		"Native screen pending: packages/application-api-contract/native-specs/smart_campaign_submission.md; prove durable request identity, retry after saved draft and revoked-access handling on both apps.",
 } as const;
 export const SMART_CAMPAIGN_SUBMISSION_CONTRACT = {
+	journeys: ["smart-campaign-human-native"],
 	capabilityId: "smart_campaign_submission",
 	kind: "command",
 	version: 1,

@@ -3,13 +3,6 @@ import { z } from "zod";
 
 
 import { MOBILE_PLATFORM_STATUS_OPERATION } from "./connections.generated";
-const pending = {
-	status: "partial",
-	reason:
-		"Existing native onboarding reads require current paired journey receipts.",
-	screenSpec:
-		"packages/application-api-contract/native-specs/onboarding-workflows.md",
-} as const;
 
 
 const PlatformStatusInputSchema = z
@@ -24,6 +17,7 @@ const PlatformStatusInputSchema = z
 
 export const ONBOARDING_PLATFORM_STATUS_CONTRACT = {
 	capabilityId: "onboarding_and_auth",
+	journeys: ["account-native-recovery"],
 	kind: "query",
 	version: 1,
 	mcp: {
@@ -43,8 +37,6 @@ export const ONBOARDING_PLATFORM_STATUS_CONTRACT = {
 	},
 	mobile: MOBILE_PLATFORM_STATUS_OPERATION,
 	parity: {
-		ios: pending,
-		android: pending,
 		webmcp: {
 			status: "complete",
 			journeys: ["WM-DASHBOARD-onboardingPlatformStatus"],

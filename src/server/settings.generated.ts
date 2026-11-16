@@ -6,12 +6,6 @@ import { z } from "zod/v4";
 
 
 
-const pending = {
-	reason: "Paired account screens await Reflex behavior proof.",
-	screenSpec:
-		"packages/application-api-contract/native-specs/account-settings.md",
-	status: "partial",
-} as const;
 const MobileAccountDeleteRequestSchema = z.object({
 	authProvider: z.enum(["apple", "google", "email"]).nullable().default(null),
 	siwaAuthorizationCode: z
@@ -52,6 +46,18 @@ const DeleteAccountSchema = z
 
 export const ACCOUNT_DELETION_CONTRACT = {
 	capabilityId: "account",
+	journeys: [
+		"account-delete-accepted",
+		"account-delete-admin",
+		"account-delete-retained",
+		"account-delete-pending",
+		"account-delete-unknown",
+		"account-delete-invalid-receipt",
+		"account-delete-session",
+		"account-delete-denied",
+		"account-delete-empty-roster",
+		"account-delete-retained-ar-dark-large",
+	],
 	kind: "command",
 	mcp: {
 		definition: {
@@ -81,8 +87,6 @@ export const ACCOUNT_DELETION_CONTRACT = {
 		status: 202,
 	},
 	parity: {
-		android: pending,
-		ios: pending,
 		webmcp: {
 			binding: {
 				export: "accountDeletionWebMcp",

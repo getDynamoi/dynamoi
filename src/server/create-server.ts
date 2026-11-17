@@ -288,8 +288,7 @@ function getDynamoiToolOAuthScopes(
 
 /**
  * `directory` is the review-safe catalog for agent-directory clients;
- * `full` is every tool. The host selects the profile from the verified
- * OAuth client identity.
+ * `full` is every tool.
  */
 export type DynamoiMcpToolProfile = "full" | "directory";
 

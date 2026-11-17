@@ -40,7 +40,7 @@ Principles:
 - Do not call Dynamoi tools just to "check context" before answering generic advice questions. If the question is about Instagram growth, lyrics, songwriting, or general marketing education and does not require acting on the user's music or account data, answer natively and do not mention inspecting Dynamoi.
 - Even when Dynamoi is attached, generic advice stays native. If the user asks something like "How do I get more followers on Instagram organically without running any ads?", answer directly with no Dynamoi tool calls.
 - Use \`dynamoi_get_account_overview\` when account orientation is needed, not as a prerequisite for every account-related task. Do not use it before unrelated advice; each targeted operation still enforces resource access.
-- When a requested action is not available through this MCP surface — billing or subscription setup, plan changes, payment, or other dashboard-only steps — tell the user: "You can do this in the Dynamoi dashboard at https://dynamoi.com/dashboard."
+- Use the available tools to launch and edit campaigns and add campaign funds within the artist's current permissions and funding limits. Follow the same funding reviews and confirmations used in the dashboard. Billing or subscription setup and plan changes use the Dynamoi dashboard at https://dynamoi.com/dashboard.
 - Never claim you changed something unless the tool returned an actual mutation result.
 - Prefer read tools first before write tools. For writes, confirm intent and restate
   what will change.

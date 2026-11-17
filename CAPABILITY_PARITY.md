@@ -15,17 +15,13 @@ which remains callable for compatibility requests from already-approved
 clients. Tool counts per profile are what `getDynamoiToolDefinitions` returns;
 the public [MCP overview](https://dynamoi.com/docs/mcp-server) states them.
 
-`/mcp/directory` always serves the directory profile. On `/mcp`,
-`apps/dashboard/app/mcp/tool-profile.ts` serves the full profile only to a
-verified client outside the named directory clients (ChatGPT) whose token holds
-every full-catalog scope; any other token gets the directory profile. A client
-without those scopes is stepped up to them only when its registration can hold
-them and it is a reviewed client or signs in on the user's own computer.
-Authentication alone never grants the full profile. Each call still requires its
-own scopes and resource RBAC; the Shop tools also require `dynamoi:mcp.full`.
-Unauthenticated requests get the directory profile, where only discovery
-methods, the public `dynamoi_about` tool and the `dynamoi://about` resource
-work. Everything else is refused.
+On https://dynamoi.com/mcp, grants with all full-catalog scopes receive the full catalog; narrower grants receive the directory catalog. https://dynamoi.com/mcp/directory always serves the directory catalog.
+
+Each call still requires its own scopes and
+resource RBAC; the Shop tools also require `dynamoi:mcp.full`. Unauthenticated
+requests can discover the endpoint's catalog, but only the public
+`dynamoi_about` tool and `dynamoi://about` resource work before sign-in.
+Everything else is refused.
 
 ## Implemented boundaries and gaps
 

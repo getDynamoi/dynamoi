@@ -189,11 +189,8 @@ including what did not work.
 - **Agents never see payment details.** Plans and cards are set up only in the
   [Dynamoi dashboard](https://dynamoi.com/dashboard). Shop checkout tools
   return an unpaid Stripe link; the user pays on Stripe.
-- **Each client gets one of two tool sets**, chosen from the identity it signs
-  in with. Reviewed clients and apps that sign in on your own computer
-  (Claude Code, Codex, Cursor, VS Code, Gemini CLI, OpenClaw and the `dynamoi`
-  CLI) get All 73 tools. ChatGPT, Claude added from its directory listing and other web apps get 54 review-safe advertised tools: reads, Smart Links,
-  billing and earnings status, draft preparation, account management and connection links, with no purchases, launches or checkout.
+- On https://dynamoi.com/mcp, an app that holds every Dynamoi permission gets all tools, including campaign launches and budget changes. An app with fewer permissions gets the smaller directory set. https://dynamoi.com/mcp/directory always gives the smaller directory set.
+  All 73 tools; 54 review-safe advertised tools.
 - **Sign-in is OAuth 2.1**, and every call still checks its scopes and the
   user's role for that artist. See
   [client permissions](https://dynamoi.com/docs/mcp-server/client-permissions).
@@ -299,15 +296,6 @@ artist decides whether to apply.
 
 Campaign writes require the artist’s instruction and authenticated access. Keep your client's approval prompt on for tools that change
 data, and no tool starts a subscription.
-
-</details>
-
-<details>
-<summary><b>Why does ChatGPT see fewer tools than Claude Code?</b></summary>
-
-Directory-listed and web clients get the review-safe set. Apps that sign in
-on your own computer get the full set. The server decides from the OAuth
-client identity, not from what the client says about itself.
 
 </details>
 

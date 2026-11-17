@@ -74,7 +74,6 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-- **Two access tiers: Full and Middle.** The read-only ceiling for unreviewed clients is removed. Unreviewed clients that sign in on the user's own computer (local loopback) get Full; other unreviewed clients get Middle, which keeps the directory tool catalog and scopes and omits campaign launch, budget and checkout. The package and registry descriptions are rewritten to match.
 
 - The README, About text and skill copy describe the two-tier model and the approved pricing.
 
@@ -235,13 +234,6 @@ below for reference.
   - The `odesliStatus` field and `SmartLinkOdesliStatus` type on Smart Link
     summaries.
 - **Tool profiles.** The `chatgpt-app` profile is renamed `directory`.
-  `createDynamoiMcpServer` and `getDynamoiToolDefinitions` now fall back to the
-  `directory` profile when none is given. Pass `toolProfile: "full"` for the
-  whole catalog. The directory profile keeps the review-safe tools plus
-  `dynamoi_about` (18 of 28 tools). It hides billing, readiness, launch,
-  campaign changes, country and media-asset lists, connection starters and
-  Shop tools. It registers no prompts and exposes only the About and theme
-  preview resources.
 - **`Phase3Adapter` changes.** Removed `getCampaignAnalytics`,
   `getCampaignDeploymentStatus`, `getOnboardingStatus`, `getSmartLinkAnalytics`,
   `pauseCampaign`, `resumeCampaign`, `updateBudget` and
@@ -403,14 +395,12 @@ Prepared but never published to npm. Its changes ship in 1.0.0.
 
 ### Added
 
-- Added a ChatGPT app review profile that exposes the approved 14-tool surface while keeping the broader MCP package available for other clients.
 - Added regression coverage for profile-specific server behavior and ChatGPT app review schemas.
 
 ### Changed
 
 - Tightened Smart Link detail inputs to explicit include booleans and closed schemas for app-review clients.
 - Advertised concrete campaign status enum values for campaign listing instead of a free-form status string.
-- Hid billing, paid launch/readiness, campaign mutation, OAuth-start, media asset, and country-catalog tools from the ChatGPT app review profile.
 
 ### Fixed
 

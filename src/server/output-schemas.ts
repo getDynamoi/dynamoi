@@ -1,3 +1,7 @@
+import {
+	DailyBudgetReviewOutputSchema,
+	TotalBudgetRaiseOutputSchema,
+} from "./budget-review-schemas.generated";
 import { BulkSmartLinkResponseSchema } from "./intake-native.generated";
 import { SMART_CAMPAIGN_SUBMISSION_CONTRACT } from "./submission.generated";
 import { SUPPORT_REQUEST_CONTRACT } from "./request.generated";
@@ -496,8 +500,39 @@ export const GetCampaignOutputEnvelopeSchema = createOutputEnvelopeSchema(
 	{ allowPartial: true },
 );
 
+export const CampaignBudgetPreviewDataSchema = z
+	.object({
+		phase: z.literal("preview"),
+		preview: z
+			.object({
+				action: z.literal("update_budget"),
+				campaignId: z.string(),
+				artistId: z.string(),
+				contentTitle: z.string(),
+				budgetType: z.enum(["DAILY", "TOTAL"]),
+				previousBudget: MoneyDisplayOutputSchema,
+				newBudget: MoneyDisplayOutputSchema,
+				endDate: CampaignEndDateOutputSchema.nullable(),
+				expected: z
+					.object({
+						expectedFundingHash: z
+							.string()
+							.regex(/^[a-f0-9]{64}$/u)
+							.optional(),
+					})
+					.strict(),
+				review: z.union([
+					DailyBudgetReviewOutputSchema,
+					TotalBudgetRaiseOutputSchema,
+				]),
+			})
+			.strict(),
+	})
+	.strict();
+
 export const UpdateCampaignOutputEnvelopeSchema = createOutputEnvelopeSchema(
 	z.union([
+		CampaignBudgetPreviewDataSchema,
 		z
 			.object({
 				phase: z.literal("preview"),

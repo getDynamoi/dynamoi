@@ -2,6 +2,7 @@ import type { z } from "zod/v4";
 import type {
 	MediaAssetModerationOutputSchema,
 	GetResumeFundingData,
+	CampaignBudgetPreviewDataSchema,
 } from "./server/output-schemas";
 import type {
 	ArtistTier,
@@ -208,7 +209,12 @@ export type CampaignStatusPreviewData = {
 	};
 };
 
+export type CampaignBudgetPreviewData = z.infer<
+	typeof CampaignBudgetPreviewDataSchema
+>;
+
 export type UpdateCampaignData =
+	| CampaignBudgetPreviewData
 	| CampaignStatusPreviewData
 	| PauseResumeCampaignData
 	| UpdateBudgetData

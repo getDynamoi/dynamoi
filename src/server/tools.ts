@@ -228,6 +228,11 @@ export const DynamoiUpdateBudgetInputSchema = z
 			.describe(
 				"Budget in the artist's commercial currency (major units; use only exact minor units).",
 			),
+		phase: z.enum(["preview", "confirm"]).optional(),
+		expectedFundingHash: z
+			.string()
+			.regex(/^[a-f0-9]{64}$/u)
+			.optional(),
 		campaignId: z.string().uuid(),
 		clientRequestId: ClientRequestIdSchema,
 		endDate: IsoCalendarDateSchema.describe("Last day ads run").optional(),
@@ -299,7 +304,7 @@ export const DynamoiUpdateCampaignInputSchema = z
 		phase: z
 			.enum(["preview", "confirm"])
 			.describe(
-				"Pause, resume and archive require preview first; confirm only after the human approves that exact preview.",
+				"Pause, resume, archive and reviewed budget changes require preview first; confirm only after the human approves that exact preview.",
 			)
 			.optional(),
 		locationTargets: z
@@ -322,12 +327,14 @@ export const DynamoiUpdateCampaignInputSchema = z
 	.superRefine((data, ctx) => {
 		if (
 			data.phase &&
-			!["pause", "resume", "archive", "unarchive"].includes(data.action)
+			!["pause", "resume", "archive", "unarchive", "update_budget"].includes(
+				data.action,
+			)
 		)
 			ctx.addIssue({
 				code: "custom",
 				message:
-					"Review phase is only supported for pause, resume, archive and unarchive",
+					"Review phase is only supported for pause, resume, archive, unarchive and update_budget",
 				path: ["phase"],
 			});
 		if (

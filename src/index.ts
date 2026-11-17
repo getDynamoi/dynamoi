@@ -261,6 +261,7 @@ export type {
 	SmartLinkSummary,
 	StartMetaConnectionData,
 	StartYoutubeChannelLinkData,
+	CampaignBudgetPreviewData,
 	UpdateBudgetData,
 	UpdateCampaignData,
 	UpdateSmartLinkArtistSettingsData,

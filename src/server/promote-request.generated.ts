@@ -37,6 +37,7 @@ const MobilePromoteRequestSchema = z.object({
 });
 export const SMART_LINK_PROMOTE_CONTRACT = {
 	capabilityId: "smart_link_promote_request",
+	journeys: ["publication-readiness"],
 	kind: "command",
 	mcp: {
 		action: "promote_request",

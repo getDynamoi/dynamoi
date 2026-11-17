@@ -152,6 +152,9 @@ const MobileYouTubeChannelDataRowSchema = z.object({
 });
 
 const MobileYouTubeChannelDataCoverageSchema = z.object({
+	// Optional for shipped clients and older served responses; native never infers these decisions.
+	freshness: z.enum(["empty", "stale", "pending", "current"]).optional(),
+	undeliveredDayCount: z.number().int().min(0).optional(),
 	datasetLatestDay: nullableString,
 	latestCompleteDay: z.string(),
 	missingDays: z.array(z.string()),

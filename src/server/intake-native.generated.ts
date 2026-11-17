@@ -41,8 +41,18 @@ const BulkSmartLinkWorkspaceSchema = z.discriminatedUnion("kind", [
 		.strict(),
 	z.object({ kind: z.literal("new") }).strict(),
 ]);
+const BulkSmartLinkReceiptSchema = z.object({
+	artistId: z.string().nullable(),
+	clientRequestId: z.string().nullable(),
+	inputKind: z.enum(["spotify_url", "connected_artist"]),
+	limit: z.number().int(),
+	offset: z.number().int(),
+	spotifyArtistId: z.string(),
+	spotifyArtistUrl: z.string().nullable(),
+});
 export const BulkSmartLinkResponseSchema = z
 	.object({
+		receipt: BulkSmartLinkReceiptSchema.optional(),
 		settlement: z.literal("expired_before_execution").optional(),
 		workspace: BulkSmartLinkWorkspaceSchema.optional(),
 		artistId: z.string().nullable(),
@@ -61,3 +71,5 @@ export const BulkSmartLinkResponseSchema = z
 	.strict();
 
 export type BulkSmartLinkResponse = z.infer<typeof BulkSmartLinkResponseSchema>;
+
+// The optional read-only mode belongs to the mobile adapter; command owners keep their original request.

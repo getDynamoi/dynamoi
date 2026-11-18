@@ -151,8 +151,6 @@ export const YOUTUBE_DRAFT_SETUP_CONTRACT = {
 		"youtube-library-denied",
 	],
 	parity: {
-		ios: { status: "partial", reason: "native journey receipt pending" },
-		android: { status: "partial", reason: "native journey receipt pending" },
 		webmcp: {
 			status: "complete",
 			journeys: ["WM-DASHBOARD-youtubeSetup"],

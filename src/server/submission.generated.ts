@@ -310,21 +310,12 @@ const submissionHandoffOnly = {
 	reason:
 		"Smart agent submission is a no-write human handoff; it does not certify funding or launch completion.",
 } as const;
-const submissionScreenPending = {
-	status: "partial",
-	screenSpec:
-		"packages/application-api-contract/native-specs/smart_campaign_submission.md",
-	reason:
-		"Native screen pending: packages/application-api-contract/native-specs/smart_campaign_submission.md; prove durable request identity, retry after saved draft and revoked-access handling on both apps.",
-} as const;
 export const SMART_CAMPAIGN_SUBMISSION_CONTRACT = {
 	journeys: ["smart-campaign-human-native"],
 	capabilityId: "smart_campaign_submission",
 	kind: "command",
 	version: 1,
 	parity: {
-		ios: submissionScreenPending,
-		android: submissionScreenPending,
 		mcp: submissionHandoffOnly,
 		cli: submissionHandoffOnly,
 		webmcp: {

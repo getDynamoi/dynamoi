@@ -136,16 +136,6 @@ export const DRAFT_REOPEN_CONTRACT = {
 			},
 			journeys: ["WM-DASHBOARD-draftReopen"],
 		},
-		ios: {
-			status: "partial",
-			reason:
-				"Native screen pending: native-specs/native_drafts_media.md; exact-revision journey receipt required.",
-		},
-		android: {
-			status: "partial",
-			reason:
-				"Native screen pending: native-specs/native_drafts_media.md; exact-revision journey receipt required.",
-		},
 	},
 } as const;
 export const MEDIA_CATALOG_CONTRACT = {
@@ -202,16 +192,6 @@ export const MEDIA_CATALOG_CONTRACT = {
 				],
 			},
 			journeys: ["WM-DASHBOARD-mediaCatalog"],
-		},
-		ios: {
-			status: "partial",
-			reason:
-				"Native screen pending: native-specs/native_drafts_media.md; exact-revision journey receipt required.",
-		},
-		android: {
-			status: "partial",
-			reason:
-				"Native screen pending: native-specs/native_drafts_media.md; exact-revision journey receipt required.",
 		},
 	},
 } as const;
@@ -302,16 +282,6 @@ export const MEDIA_UPLOAD_START_CONTRACT = {
 			},
 			journeys: ["WM-DASHBOARD-mediaUploadStart"],
 		},
-		ios: {
-			status: "partial",
-			reason:
-				"Native screen pending: native-specs/native_drafts_media.md; exact-revision journey receipt required.",
-		},
-		android: {
-			status: "partial",
-			reason:
-				"Native screen pending: native-specs/native_drafts_media.md; exact-revision journey receipt required.",
-		},
 	},
 } as const;
 export const MEDIA_UPLOAD_STATUS_CONTRACT = {
@@ -375,16 +345,6 @@ export const MEDIA_UPLOAD_STATUS_CONTRACT = {
 			},
 			journeys: ["WM-DASHBOARD-mediaUploadStatus"],
 		},
-		ios: {
-			status: "partial",
-			reason:
-				"Native screen pending: native-specs/native_drafts_media.md; exact-revision journey receipt required.",
-		},
-		android: {
-			status: "partial",
-			reason:
-				"Native screen pending: native-specs/native_drafts_media.md; exact-revision journey receipt required.",
-		},
 	},
 } as const;
 export const MEDIA_UPLOAD_COMPLETE_CONTRACT = {
@@ -447,16 +407,6 @@ export const MEDIA_UPLOAD_COMPLETE_CONTRACT = {
 				],
 			},
 			journeys: ["WM-DASHBOARD-mediaUploadComplete"],
-		},
-		ios: {
-			status: "partial",
-			reason:
-				"Native screen pending: native-specs/native_drafts_media.md; exact-revision journey receipt required.",
-		},
-		android: {
-			status: "partial",
-			reason:
-				"Native screen pending: native-specs/native_drafts_media.md; exact-revision journey receipt required.",
 		},
 	},
 } as const;
@@ -526,16 +476,6 @@ export const MEDIA_UPLOAD_ABORT_CONTRACT = {
 				],
 			},
 			journeys: ["WM-DASHBOARD-mediaUploadAbort"],
-		},
-		ios: {
-			status: "partial",
-			reason:
-				"Native screen pending: native-specs/native_drafts_media.md; exact-revision journey receipt required.",
-		},
-		android: {
-			status: "partial",
-			reason:
-				"Native screen pending: native-specs/native_drafts_media.md; exact-revision journey receipt required.",
 		},
 	},
 } as const;

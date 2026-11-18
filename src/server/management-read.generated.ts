@@ -27,14 +27,9 @@ const CampaignManagementResponseSchema = z.object({
 	nextOffset: z.number().int().nullable(),
 	totalCount: z.number().int(),
 });
-const pending = {
-	status: "partial",
-	reason: "Paired native campaign management state requires journey receipts.",
-	screenSpec:
-		"packages/application-api-contract/native-specs/campaign-management.md",
-} as const;
 export const CAMPAIGN_MANAGEMENT_READ_CONTRACT = {
 	capabilityId: "campaign_management_rows",
+	journeys: ["campaign-management-rows"],
 	kind: "query",
 	version: 1,
 	mcp: {
@@ -64,8 +59,6 @@ export const CAMPAIGN_MANAGEMENT_READ_CONTRACT = {
 		responseSchema: CampaignManagementResponseSchema,
 	},
 	parity: {
-		ios: pending,
-		android: pending,
 		webmcp: {
 			status: "complete",
 			journeys: ["WM-DASHBOARD-campaignManagement"],

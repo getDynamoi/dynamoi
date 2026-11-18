@@ -428,13 +428,9 @@ const currencyProof = {
 	fixtures: [],
 	responseFixtures: {},
 } as const;
-const screenPending = {
-	status: "partial",
-	reason:
-		"Native screen pending: packages/application-api-contract/native-specs/campaigns.md; current paired journey receipts required.",
-} as const;
 export const CAMPAIGN_LIST_CONTRACT = {
 	capabilityId: "campaigns",
+	journeys: ["campaign-management-rows"],
 	kind: "query",
 	version: 1,
 	currencyProof,
@@ -464,8 +460,6 @@ export const CAMPAIGN_LIST_CONTRACT = {
 		responseSchema: MobileCampaignsListResponseSchema,
 	},
 	parity: {
-		ios: screenPending,
-		android: screenPending,
 		webmcp: {
 			status: "complete",
 			journeys: ["WM-DASHBOARD-campaignList"],
@@ -512,6 +506,7 @@ export const CAMPAIGN_DETAIL_CONTRACT = {
 	],
 	analyticsInputSchema: CampaignAnalyticsInputSchema,
 	capabilityId: "smart_campaign_location",
+	journeys: ["campaign-settings-native"],
 	kind: "query",
 	version: 1,
 	currencyProof,
@@ -541,8 +536,6 @@ export const CAMPAIGN_DETAIL_CONTRACT = {
 		responseSchema: MobileCampaignDetailResponseSchema,
 	},
 	parity: {
-		ios: screenPending,
-		android: screenPending,
 		webmcp: {
 			status: "complete",
 			journeys: ["WM-DASHBOARD-campaignDetail"],

@@ -48,13 +48,9 @@ const MobileCampaignFundingBreakdownResponseSchema = z.object({
 });
 
 
-const screenPending = {
-	reason:
-		"Native screen pending: packages/application-api-contract/native-specs/campaigns.md; existing HTTP wire and native calls are preserved, current paired journey receipts remain required.",
-	status: "partial",
-} as const;
 export const CAMPAIGN_RESUME_FUNDING_CONTRACT = {
 	capabilityId: "campaign_resume_funding",
+	journeys: ["campaign-settings-native"],
 	currencyProof: {
 		currency: {
 			evidence: [
@@ -109,8 +105,6 @@ export const CAMPAIGN_RESUME_FUNDING_CONTRACT = {
 		responseSchema: MobileCampaignFundingBreakdownResponseSchema,
 	},
 	parity: {
-		ios: screenPending,
-		android: screenPending,
 		webmcp: {
 			status: "complete",
 			journeys: ["WM-DASHBOARD-resumeFunding"],

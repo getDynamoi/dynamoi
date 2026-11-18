@@ -162,9 +162,7 @@ export const GROWTH_AUDIT_CONTRACT = {
 		responseSchema: MobileSpotifyGrowthAuditResponseSchema,
 	},
 	parity: {
-		android: partial,
 		cli: partial,
-		ios: partial,
 		mcp: partial,
 		web: partial,
 		webmcp: {

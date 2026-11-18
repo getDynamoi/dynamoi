@@ -24,7 +24,7 @@ const MobileArtistThemePreviewResponseSchema = z.object({
 });
 export const SMART_LINK_THEME_PREVIEW_CONTRACT = {
 	capabilityId: "smart_link_theme_preview",
-	journeys: ["share-kit"],
+	journeys: ["studio-settings"],
 	kind: "query",
 	version: 1,
 	mcp: {
@@ -59,14 +59,6 @@ export const SMART_LINK_THEME_PREVIEW_CONTRACT = {
 		responseSchema: MobileArtistThemePreviewResponseSchema,
 	},
 	parity: {
-		ios: {
-			status: "partial",
-			reason: "Paired native journey receipt pending.",
-		},
-		android: {
-			status: "partial",
-			reason: "Paired native journey receipt pending.",
-		},
 		webmcp: {
 			status: "complete",
 			journeys: ["WM-DASHBOARD-smartLinkThemePreview"],

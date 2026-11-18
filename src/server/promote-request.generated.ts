@@ -67,14 +67,6 @@ export const SMART_LINK_PROMOTE_CONTRACT = {
 		responseSchema: MobileOkResponseSchema,
 	},
 	parity: {
-		android: {
-			reason: "Paired native journey receipt pending.",
-			status: "partial",
-		},
-		ios: {
-			reason: "Paired native journey receipt pending.",
-			status: "partial",
-		},
 		webmcp: {
 			binding: {
 				export: "smartLinkPromoteRequestWebMcp",

@@ -69,14 +69,8 @@ export const MediaModerationResponseSchema = z.object({
 	assets: z.array(MediaModerationAssetSchema),
 	nextCursor: z.string().optional(),
 });
-const pending = {
-	status: "partial",
-	reason:
-		"Full receipt screen pending; authenticated read preserves the existing paginated list.",
-	screenSpec:
-		"packages/application-api-contract/native-specs/media-moderation.md",
-} as const;
 export const MEDIA_MODERATION_READ_CONTRACT = {
+	journeys: ["campaign-media-chooser"],
 	capabilityId: "campaign_media_moderation",
 	kind: "query",
 	version: 1,
@@ -112,8 +106,6 @@ export const MEDIA_MODERATION_READ_CONTRACT = {
 			reason:
 				"Shared browser read action is bound; human receipt presentation is pending.",
 		},
-		ios: pending,
-		android: pending,
 		webmcp: {
 			status: "complete",
 			journeys: ["WM-DASHBOARD-mediaModeration"],

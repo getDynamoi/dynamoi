@@ -26,6 +26,7 @@ const NativeResponseSchema = z.object({
 	notes: z.array(z.string()),
 });
 export const CAMPAIGN_COUNTRIES_CONTRACT = {
+	journeys: ["campaign-countries-native"],
 	capabilityId: "campaign_country_catalog",
 	kind: "query",
 	version: 1,

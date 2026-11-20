@@ -1084,7 +1084,7 @@ function asTextResult(envelope: unknown) {
 	return result;
 }
 
-function asValidatedTextResult(options: {
+export function asValidatedTextResult(options: {
 	envelope: unknown;
 	outputSchema: z.ZodType;
 	toolName: string;

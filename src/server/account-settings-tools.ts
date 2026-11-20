@@ -3,7 +3,10 @@ import {
 	BILLING_COUNTRY_SET_CONTRACT,
 } from "./billing-country.generated";
 import { ACCOUNT_LANGUAGE_CONTRACT } from "./language.generated";
-import { AnyOutputEnvelopeSchema } from "./output-schemas";
+import {
+	AnyOutputEnvelopeSchema,
+	createOutputEnvelopeSchema,
+} from "./output-schemas";
 import { ACCOUNT_DELETION_CONTRACT } from "./settings.generated";
 export const UpdateAccountProfileSchema =
 	ACCOUNT_LANGUAGE_CONTRACT.mcp.definition.schema;
@@ -31,6 +34,8 @@ export const DeleteAccountSchema =
 export const DELETE_ACCOUNT_TOOL_DEFINITIONS = [
 	{
 		...ACCOUNT_DELETION_CONTRACT.mcp.definition,
-		outputSchema: AnyOutputEnvelopeSchema,
+		outputSchema: createOutputEnvelopeSchema(
+			ACCOUNT_DELETION_CONTRACT.mcp.dataSchema,
+		),
 	},
 ] as const;

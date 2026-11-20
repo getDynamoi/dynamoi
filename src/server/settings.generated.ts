@@ -60,6 +60,40 @@ export const ACCOUNT_DELETION_CONTRACT = {
 	],
 	kind: "command",
 	mcp: {
+		dataSchema: z.union([
+			z
+				.object({
+					clientRequestId: z.string().uuid(),
+					preview: z
+						.object({
+							current: z
+								.object({
+									blockers: z.array(z.string()),
+									membershipCount: z.number().int().nonnegative(),
+									ownedArtistIds: z.array(z.string()),
+									ownedSmartLinkIds: z.array(z.string()),
+								})
+								.strict(),
+							proposed: AccountDeletionWebMcpSchema.omit({ phase: true }),
+							expected: z
+								.object({
+									expectedSnapshot: z.string(),
+									confirmation: z.literal("DELETE MY ACCOUNT"),
+								})
+								.strict(),
+							consequence: z.string(),
+						})
+						.strict(),
+					confirmation: z
+						.object({
+							expectedSnapshot: z.string(),
+							confirmation: z.literal("DELETE MY ACCOUNT"),
+						})
+						.strict(),
+				})
+				.strict(),
+			MobileAccountDeleteResponseSchema,
+		]),
 		definition: {
 			description:
 				"Preview account deletion eligibility and blockers without changing anything. Show the irreversible consequences, then obtain DELETE MY ACCOUNT and call with phase=confirm, clientRequestId, confirmation and the preview expectedSnapshot. Deletion starts cleanup; it does not promise all records are erased.",

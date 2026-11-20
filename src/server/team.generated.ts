@@ -39,7 +39,7 @@ const manage = z
 			.string()
 			.uuid()
 			.describe(
-				"Organization membership or pending invitation row ID from dynamoi_get_team.",
+				"Artist ID for invite_editor; artist or organization membership row ID for update_role/remove_member; pending invitation row ID for revoke_invitation. Read row IDs from dynamoi_get_team.",
 			),
 	})
 	.strict()

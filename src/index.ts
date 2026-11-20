@@ -29,6 +29,7 @@ export type { ChannelResults } from "./server/channel-results-schema";
 export { ChannelResultsSchema } from "./server/channel-results-schema";
 export type { Phase3Adapter } from "./server/create-server";
 export {
+	asValidatedTextResult,
 	createDynamoiMcpServer,
 	type DynamoiMcpToolProfile,
 	getDynamoiToolCompatibilityDefinitions,

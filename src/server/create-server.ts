@@ -772,7 +772,8 @@ function mapKnownErrorRecovery(
 	}
 
 	if (
-		toolName === "dynamoi_shop_create_checkout" &&
+		(toolName === "dynamoi_shop_create_checkout" ||
+			toolName === "dynamoi_prepare_shop_rebuy_checkout") &&
 		message ===
 			"The Shop quote changed. Get a new quote before creating checkout."
 	) {
@@ -782,8 +783,7 @@ function mapKnownErrorRecovery(
 			nextAction: {
 				field: "expectedTotal",
 				kind: "provide_input",
-				reason:
-					"Get a fresh quote, ask the user to confirm its total, then submit with that total and the same requestId.",
+				reason: `Get a fresh quote, ask the user to confirm its total, then submit with that total and the same ${toolName === "dynamoi_prepare_shop_rebuy_checkout" ? "clientRequestId" : "requestId"}.`,
 			},
 			prerequisite:
 				"Get a fresh Shop quote and obtain renewed user confirmation for its total before creating checkout.",

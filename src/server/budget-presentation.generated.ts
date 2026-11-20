@@ -3,6 +3,8 @@ import { z } from "zod";
 import { MinorAmountSchema } from "./list.generated";
 
 export const MobileCampaignBudgetPresentationSchema = z.object({
+	minimumBudgetMinor: MinorAmountSchema.nullable().optional(),
+	maximumBudgetMinor: MinorAmountSchema.nullable().optional(),
 	presetAmountsMinor: z.array(MinorAmountSchema),
 	defaultEndDate: z.iso.date().optional(),
 	flightDays: z.number().int().positive().nullable(),

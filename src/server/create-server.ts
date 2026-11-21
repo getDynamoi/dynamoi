@@ -810,9 +810,13 @@ function normalizeKnownErrorRecovery(
 	if (typeof envelope !== "object" || Array.isArray(envelope)) {
 		return typeof envelope === "object" ? envelope : null;
 	}
-	const record = envelope as Record<string, unknown>;
+	let record = envelope as Record<string, unknown>;
 	if (record["status"] !== "error") {
 		return record;
+	}
+	if (toolName === "dynamoi_update_campaign" && "commandAdmission" in record) {
+		const { commandAdmission: _commandAdmission, ...publicRecord } = record;
+		record = publicRecord;
 	}
 	const message = record["message"];
 	if (
@@ -822,7 +826,7 @@ function normalizeKnownErrorRecovery(
 		return record;
 	}
 	const recovery = mapKnownErrorRecovery(toolName, record["kind"], message);
-	return recovery ? { ...record, ...recovery } : envelope;
+	return recovery ? { ...record, ...recovery } : record;
 }
 
 const DYNAMOI_TOOL_DISPATCHERS = {

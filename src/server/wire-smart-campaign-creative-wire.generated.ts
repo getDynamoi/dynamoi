@@ -40,6 +40,11 @@ const MobileSmartCampaignUploadedAssetSchema: z.ZodObject<z.core.$ZodShape> =
 			.enum(["pending", "uploading", "success", "error"])
 			.optional(),
 	});
+const UploadedAssetResponseSchema =
+	MobileSmartCampaignUploadedAssetSchema.extend({
+		moderationReasonCode: z.string().optional(),
+		moderationStatus: z.string().nullable().optional(),
+	});
 export const MobileSmartCampaignCreativeResponseSchema: z.ZodObject<z.core.$ZodShape> =
 	z.object({
 		activeStep: z.literal("creative"),
@@ -75,9 +80,7 @@ export const MobileSmartCampaignCreativeResponseSchema: z.ZodObject<z.core.$ZodS
 				isUploaded: z.boolean(),
 				trackDurationSeconds: z.number().nonnegative().nullable(),
 			}),
-			uploadedAssets: z
-				.array(MobileSmartCampaignUploadedAssetSchema)
-				.default([]),
+			uploadedAssets: z.array(UploadedAssetResponseSchema).default([]),
 		}),
 		updatedAt: MobileSmartCampaignRevisionSchema.nullable(),
 	});

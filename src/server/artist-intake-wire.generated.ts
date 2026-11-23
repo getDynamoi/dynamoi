@@ -13,7 +13,7 @@ export const ArtistIntakeInputSchema = z
 	.strict();
 export const ARTIST_INTAKE_TOOL_DEFINITION = {
 	description:
-		"Search Spotify artists by query, preview a Spotify artist URL, or intake an artist from a Spotify or YouTube URL. organizationId selects an existing editable workspace. Existing claims, entitlements, caps and provider quotas apply. Sign in through the app or web first.",
+		"Search Spotify artists by query, preview a Spotify artist URL, or intake an artist from a Spotify or YouTube URL. Intake creates a workspace when you have no editable workspace, and organizationId selects an existing editable workspace. Existing claims, entitlements, caps and provider quotas apply. Sign in through the app or web first.",
 	destructiveHint: true,
 	name: "dynamoi_onboard_artist",
 	openWorldHint: true,

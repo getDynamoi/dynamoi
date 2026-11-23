@@ -24,7 +24,7 @@ const YouTubeStrategySchema = z
 		"ADSENSE_ROI",
 	])
 	.describe(
-		`YouTube campaign strategy. Labels for users: CHEAPEST_VIEWS = Views, ORGANIC_VIEWS = Watch Time, SUBSCRIBERS = Subscribers, ORGANIC_VIEWS_AND_SUBSCRIBERS = Channel Growth (default for non-monetized channels), ADSENSE_ROI = Revenue (monetized channels only). Read dynamoi://youtube/campaign-strategies before recommending or changing one.`,
+		`YouTube campaign strategy. Labels for users: CHEAPEST_VIEWS = Views, ORGANIC_VIEWS = Watch Time, SUBSCRIBERS = Subscribers, ORGANIC_VIEWS_AND_SUBSCRIBERS = Channel Growth (default for non-monetized channels), ADSENSE_ROI = Revenue (monetized channels only).`,
 	);
 
 const DynamoiManageYoutubeDraftInputSchema = z

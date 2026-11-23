@@ -363,7 +363,7 @@ export const ARTIST_WORKSPACE_CONTRACT = {
 		directoryReason: "Existing read-only artist workspace.",
 		definition: {
 			description:
-				"Open the read-only Dynamoi workspace when the user wants to browse their existing artists, campaigns, Smart Links and observed results in ChatGPT. Returns an authorized artist roster or an honest empty account state. Does not create links, change campaigns, start purchases or connect accounts. Use individual read tools for follow-up details.",
+				"Open the read-only Dynamoi workspace when the user wants to browse their existing artists, campaigns, Smart Links and observed results. Returns an authorized artist roster or an honest empty account state. Does not create links, change campaigns, start purchases or connect accounts. Use individual read tools for follow-up details.",
 			destructiveHint: false,
 			name: "dynamoi_open_workspace",
 			openWorldHint: false,

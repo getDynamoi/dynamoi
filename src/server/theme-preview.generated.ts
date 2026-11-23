@@ -22,15 +22,19 @@ const MobileArtistThemePreviewResponseSchema = z.object({
 	sampleCount: z.number().int().positive(),
 	sampleIndex: z.number().int().nonnegative(),
 });
+const smartLinkThemePreviewDescription =
+	"Use this when the user asks what Dynamoi Smart Link pages can look like, wants to compare Smart Link themes, or asks to preview the available themes before creating or updating a free Smart Link. This is a read-only visual preview and does not create, publish, update, or promote a Smart Link.";
 export const SMART_LINK_THEME_PREVIEW_CONTRACT = {
 	capabilityId: "smart_link_theme_preview",
 	journeys: ["studio-settings"],
 	kind: "query",
 	version: 1,
 	mcp: {
+		descriptions: {
+			full: `${smartLinkThemePreviewDescription} When you can access more than one artist, pass artistName with the exact name of the artist to preview.`,
+		},
 		definition: {
-			description:
-				"Use this when the user asks what Dynamoi Smart Link pages can look like, wants to compare Smart Link themes, or asks to preview the available themes before creating or updating a free Smart Link. This is a read-only visual preview and does not create, publish, update, or promote a Smart Link.",
+			description: smartLinkThemePreviewDescription,
 			destructiveHint: false,
 			name: "dynamoi_preview_smart_link_themes",
 			openWorldHint: false,

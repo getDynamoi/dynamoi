@@ -109,6 +109,8 @@ import {
 	SMART_LINK_THEME_PREVIEW_RESOURCE_URI,
 	SMART_LINK_THEME_PREVIEW_TOOL_DEFINITION,
 } from "./smart-link-theme-preview";
+import { ARTIST_ANALYTICS_CONTRACT } from "./artist-analytics.generated";
+import { SMART_LINK_THEME_PREVIEW_CONTRACT } from "./theme-preview.generated";
 import {
 	FULL_SMART_LINK_STUDIO_TOOL_DEFINITIONS,
 	PHASE_4_TOOL_DEFINITIONS,
@@ -366,6 +368,12 @@ const DIRECTORY_ONLY_TOOL_NAMES = new Set<string>([
 	"dynamoi_update_smart_link_description",
 ]);
 
+const FULL_PROFILE_DESCRIPTIONS: Record<string, string> = {
+	dynamoi_get_artist_analytics: ARTIST_ANALYTICS_CONTRACT.mcp.descriptions.full,
+	dynamoi_preview_smart_link_themes:
+		SMART_LINK_THEME_PREVIEW_CONTRACT.mcp.descriptions.full,
+};
+
 export function getDynamoiToolDefinitions(options?: {
 	toolProfile?: DynamoiMcpToolProfile;
 }): DynamoiToolDefinition[] {
@@ -379,14 +387,11 @@ export function getDynamoiToolDefinitions(options?: {
 					? definition.profiles.full === "advertised"
 					: !DIRECTORY_ONLY_TOOL_NAMES.has(definition.name),
 			)
-			.map((definition) =>
-				definition.name === "dynamoi_get_artist_analytics"
-					? {
-							...definition,
-							description: `${definition.description} Full-profile responses also include smartLinks: artist-wide link totals, up to ten top links, source freshness and service-click evidence for the requested dates. Unique figures sum daily per-link users, not distinct people across the window. Missing or partial evidence is not zero.`,
-						}
-					: definition,
-			);
+			.map((definition) => ({
+				...definition,
+				description:
+					FULL_PROFILE_DESCRIPTIONS[definition.name] ?? definition.description,
+			}));
 	}
 	return definitions.filter((definition) =>
 		definition.profiles

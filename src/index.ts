@@ -32,7 +32,6 @@ export {
 	asValidatedTextResult,
 	createDynamoiMcpServer,
 	type DynamoiMcpToolProfile,
-	getDynamoiToolCompatibilityDefinitions,
 	getDynamoiToolDefinitions,
 } from "./server/create-server";
 export {

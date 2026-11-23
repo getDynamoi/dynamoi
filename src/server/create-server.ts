@@ -400,13 +400,6 @@ export function getDynamoiToolDefinitions(options?: {
 	);
 }
 
-/** All supported directory names are advertised directly. */
-export function getDynamoiToolCompatibilityDefinitions(_options?: {
-	toolProfile?: DynamoiMcpToolProfile;
-}): DynamoiToolDefinition[] {
-	return [];
-}
-
 export type Phase3Adapter = {
 	shopAttachVideo(input: unknown): Promise<ResultEnvelope<unknown>>;
 	shopReplaceVideo(input: unknown): Promise<ResultEnvelope<unknown>>;
@@ -1236,10 +1229,7 @@ export function createDynamoiMcpServer(options: {
 	const advertisedNames = new Set(
 		advertisedDefinitions.map((definition) => definition.name),
 	);
-	const definitionsToRegister = [
-		...advertisedDefinitions,
-		...getDynamoiToolCompatibilityDefinitions({ toolProfile }),
-	];
+	const definitionsToRegister = [...advertisedDefinitions];
 	const advertisedTools: AdvertisedTool[] = [];
 	for (const def of definitionsToRegister) {
 		const title = def.title;

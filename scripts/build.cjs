@@ -122,7 +122,9 @@ async function main() {
 
 	watchFiles(sourceRoot, { recursive: true }, () => {
 		clearTimeout(rebuildTimer);
-		rebuildTimer = setTimeout(rebuild, 50);
+		rebuildTimer = setTimeout(() => {
+			void rebuild();
+		}, 50);
 	});
 	console.log("Watching packages/mcp/src for changes...");
 }

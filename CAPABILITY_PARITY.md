@@ -10,9 +10,7 @@ The canonical catalog owner is `getDynamoiToolDefinitions` in
 
 Both profiles include the OpenAI Connector `search` and `fetch` tools. The
 directory profile adds separate directory-only tools for Smart Link description
-and artist settings updates; the full profile keeps the prior combined schema,
-which remains callable for compatibility requests from already-approved
-clients. Tool counts per profile are what `getDynamoiToolDefinitions` returns;
+and artist settings updates; the full profile keeps the prior combined schema. Tool counts per profile are what `getDynamoiToolDefinitions` returns;
 the public [MCP overview](https://dynamoi.com/docs/mcp-server) states them.
 
 On https://dynamoi.com/mcp, grants with all full-catalog scopes receive the full catalog; narrower grants receive the directory catalog. https://dynamoi.com/mcp/directory always serves the directory catalog.
@@ -27,12 +25,12 @@ Everything else is refused.
 
 | Family | Existing agent surface | Not equivalent or still missing |
 | --- | --- | --- |
-| Account/artist orientation | Account overview, roster and single-artist reads | Organization invites/roles, full artist settings and confirmed account profile/deletion bindings |
+| Account/artist orientation | Account overview, roster and single-artist reads | Organization invites, full artist settings |
 | Smart Links | Spotify ingestion, list/detail, description, artist theme/pixels, per-link analytics, full-profile artist-wide link aggregation and theme previews | Full studio/availability controls, every field and promotion request workflow |
 | Campaigns | List/detail, provider analytics, readiness, existing-asset launch, YouTube draft inspect/discard, Smart Campaign draft ad-copy read/save, Smart Campaign generation/source-audio reads, asynchronous generation start/retry/clear (poll with read), generated selection, direct source-audio multipart upload with status/abort and public Dropbox source-MP3 import on a draft, pause/resume and eligible single-provider budgets | Draft state machines, Google Drive import (unsupported: Google API key required), artist approval/submission, screening, existing targeting edits and multi-provider budgets |
 | Analytics | Campaign-provider rollups, growth audit (`dynamoi_get_growth_audit`), tracked playlist analytics (`dynamoi_get_playlist_analytics`), streaming audience analytics (`dynamoi_get_audience_analytics`), per-link analytics and observed YouTube channel data (`dynamoi_get_youtube_channel_data`) | Link unique counts are sums across days and links; requested-window completeness remains unverified |
-| Connections | Meta and YouTube browser OAuth handoffs, status reads and full-profile Action Center revision/tasks/actions | Headless provider login, owner selection or bypass of ownership verification |
-| Distribution | Five scored requirements, application, agreement, scoped catalog and latest release status (`dynamoi_get_distribution_status`, full only), private expiring release preparation handoffs (`dynamoi_prepare_distribution_release`), and explicit adult-attested application submission for manual review; full-profile payee own-USD totals, bounded filtered detail pages, rankings with filtered totals, geographic views and statement export data with statement/earned month axis | Rights and agreement attestation and sending releases to stores stay with the artist in web/app; tax, payout and takedown workflows |
+| Connections | Meta and YouTube browser OAuth handoffs, status reads and Action Center revision/tasks/actions | Headless provider login, owner selection or bypass of ownership verification |
+| Distribution | Five scored requirements, application, agreement, scoped catalog and latest release status (`dynamoi_get_distribution_status`), private expiring release preparation handoffs (`dynamoi_prepare_distribution_release`), and explicit adult-attested application submission for manual review; payee own-USD totals, bounded filtered detail pages, rankings with filtered totals, geographic views and statement export data with statement/earned month axis | Rights and agreement attestation and sending releases to stores stay with the artist in web/app; tax, payout and takedown workflows |
 | Billing and Shop | Managed billing observations including masked payment-method display, and read-only existing-campaign resume funding breakdown (`dynamoi_get_resume_funding`); unpaid Add campaign funds Checkout creation (`dynamoi_add_campaign_funds`); full-profile Shop quote, unpaid Stripe checkout creation, bounded authorized-artist order status/fulfillment reads and purchase history, add/replace order video, pause/resume/restart promotion, and returning-buyer rebuy estimates, custom quote and unpaid rebuy checkout | Managed subscription changes, invoice/funding workflows or agent payment settlement. A Shop checkout link is unpaid and separate from campaign funding: the user pays on Stripe, it never spends plan credit, and it is not a campaign launch or paid order. PayPal stays in the browser. |
 
 A real campaign launch, budget edit or pause/resume runs the same shared

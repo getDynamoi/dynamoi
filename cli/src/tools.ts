@@ -89,7 +89,24 @@ export function parseArgs(tool: Tool, argv: string[]): ParsedArgs {
 		}
 		if (name === "input") {
 			const value = inline ?? next() ?? "";
-			Object.assign(parsed.flags, JSON.parse(value));
+			const inputValue: unknown = JSON.parse(value);
+			if (
+				typeof inputValue !== "object" ||
+				inputValue === null ||
+				Array.isArray(inputValue)
+			) {
+				throw new Error("--input must be a JSON object.");
+			}
+			for (const [key, entry] of Object.entries(inputValue)) {
+				if (
+					key === "__proto__" ||
+					key === "constructor" ||
+					key === "prototype"
+				) {
+					continue;
+				}
+				parsed.flags[key] = entry;
+			}
 			continue;
 		}
 		let negated = false;

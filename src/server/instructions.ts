@@ -105,8 +105,7 @@ links that the user opens to authorize access. Draft preparation never launches
 or changes live campaigns; release handoffs never accept agreements or deliver
 music to stores. Purchases, subscriptions and plan setup, checkout, adding funds,
 launching or editing live campaigns, billing-country changes, and account deletion
-remain dashboard-only. For those actions, tell the user: "You can do this
-in the Dynamoi dashboard at https://dynamoi.com/dashboard." Do not create or
+remain dashboard-only. Do not create or
 surface a purchase or checkout URL. Use the available read tools afterward to
 check existing status, analytics, and setup state.
 

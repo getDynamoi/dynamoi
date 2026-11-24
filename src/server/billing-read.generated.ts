@@ -8,10 +8,16 @@ const DynamoiGetBillingInputSchema = z
 		onboardingAttemptId: z.string().trim().min(1).max(120).optional(),
 	})
 	.strict();
+const billingHead =
+	"Use action=native_commerce for the native commerce projection (read-only; no subscription changes or invoices). Use this when the user asks about billing state, credit balance, promo limits, subscription status, campaign-fund deposits, or whether billing blocks launches for one artist. This is a read-only status check; it does not create checkout links or collect payment. paymentMethod contains only the shared masked display details (brand or bank, type, last four digits and expiry); null means details are unavailable, not proof that no method exists. Each deposit in prefundPayments is pending (payment not yet confirmed), cleared (Stripe says paid and the funds are usable), failed (the payment did not complete) or held (paid, but funding is on hold for review and not usable yet). A Checkout link alone is never a deposit.";
+const billingTail =
+	" Do not use this for campaign analytics or platform connection troubleshooting.";
+const billingFunds =
+	" To add campaign funds, call dynamoi_add_campaign_funds if this connection has that tool; if not, use the Dynamoi dashboard at https://dynamoi.com/dashboard/marketing/billing. For other billing setup tell the user: 'You can do this in the Dynamoi dashboard at https://dynamoi.com/dashboard/marketing/billing.' Then call this tool again to confirm the status.";
 export const BILLING_READ_MCP = {
+	descriptions: { full: billingHead + billingFunds + billingTail },
 	definition: {
-		description:
-			"Use action=native_commerce for the native commerce projection (read-only; no subscription changes or invoices). Use this when the user asks about billing state, credit balance, promo limits, subscription status, campaign-fund deposits, or whether billing blocks launches for one artist. This is a read-only status check; it does not create checkout links or collect payment. paymentMethod contains only the shared masked display details (brand or bank, type, last four digits and expiry); null means details are unavailable, not proof that no method exists. Each deposit in prefundPayments is pending (payment not yet confirmed), cleared (Stripe says paid and the funds are usable), failed (the payment did not complete) or held (paid, but funding is on hold for review and not usable yet). A Checkout link alone is never a deposit. To add campaign funds, call dynamoi_add_campaign_funds if this connection has that tool; if not, use the Dynamoi dashboard at https://dynamoi.com/dashboard/marketing/billing. For other billing setup tell the user: 'You can do this in the Dynamoi dashboard at https://dynamoi.com/dashboard/marketing/billing.' Then call this tool again to confirm the status. Do not use this for campaign analytics or platform connection troubleshooting.",
+		description: billingHead + billingTail,
 		destructiveHint: false,
 		name: "dynamoi_get_billing",
 		openWorldHint: false,

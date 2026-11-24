@@ -110,6 +110,7 @@ import {
 	SMART_LINK_THEME_PREVIEW_TOOL_DEFINITION,
 } from "./smart-link-theme-preview";
 import { ARTIST_ANALYTICS_CONTRACT } from "./artist-analytics.generated";
+import { BILLING_READ_MCP } from "./billing-read.generated";
 import { SMART_LINK_THEME_PREVIEW_CONTRACT } from "./theme-preview.generated";
 import {
 	FULL_SMART_LINK_STUDIO_TOOL_DEFINITIONS,
@@ -370,6 +371,7 @@ const DIRECTORY_ONLY_TOOL_NAMES = new Set<string>([
 
 const FULL_PROFILE_DESCRIPTIONS: Record<string, string> = {
 	dynamoi_get_artist_analytics: ARTIST_ANALYTICS_CONTRACT.mcp.descriptions.full,
+	dynamoi_get_billing: BILLING_READ_MCP.descriptions.full,
 	dynamoi_preview_smart_link_themes:
 		SMART_LINK_THEME_PREVIEW_CONTRACT.mcp.descriptions.full,
 };

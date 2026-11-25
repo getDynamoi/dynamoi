@@ -468,6 +468,8 @@ export type ListCampaignsJsonData = {
 		/** Last day ads run (Pacific time). */
 		endDate?: string;
 		endDateLabel?: string;
+		/** Why the status needs attention, when the status alone does not say. */
+		statusReason?: string;
 	}>;
 	nextCursor?: string;
 };

@@ -16,7 +16,7 @@ export function registerPlaybookResources(server: McpServer) {
 					mimeType: "application/json",
 					text: JSON.stringify({
 						fastestPath:
-							"Ask for the Spotify artist URL. With dynamoi_create_smart_links_from_spotify_artist, use phase=preview, then after approval call phase=confirm with the returned previewId and exact confirmedCount (at most 25). Each nextOffset requires a new preview and confirmation. Preview writes nothing; return only confirmed results and available public URLs.",
+							"Ask for the Spotify artist URL. With dynamoi_create_smart_links_from_spotify_artist, use phase=preview, then after approval call phase=confirm with the returned previewId and exact confirmedCount (at most 25). Each nextOffset requires a new preview and confirmation. Return only confirmed results and available public URLs.",
 						freePlanReminder:
 							"Free Smart Links have no per-link fee for creation or management. High-popularity or unverifiable artist links may stay unpublished in verification hold until Dynamoi can verify the client relationship. Creating a Smart Link does not create a paid campaign or spend ad budget.",
 						persona:

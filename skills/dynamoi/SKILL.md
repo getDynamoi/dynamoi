@@ -56,7 +56,7 @@ retry; redo the setup above or use https://dynamoi.com/dashboard instead.
 
 - **Smart Links:** `dynamoi_list_smart_links`, `dynamoi_get_smart_link`,
   `dynamoi_preview_smart_link_themes`. With write access,
-  `dynamoi_create_smart_links_from_spotify_artist`: use phase=preview, then after approval call phase=confirm with the returned previewId and exact confirmedCount (at most 25). Each nextOffset requires a new preview and confirmation. Preview writes nothing.
+  `dynamoi_create_smart_links_from_spotify_artist`: use phase=preview, then after approval call phase=confirm with the returned previewId and exact confirmedCount (at most 25). Each nextOffset requires a new preview and confirmation.
   `dynamoi_create_smart_link_from_spotify` builds one release. Lead with the hub URL when returned and report publication/rendering/verification state. Inspecting
   existing links never requires creating one. Smart Links are free and never start
   a paid campaign.
@@ -64,17 +64,17 @@ retry; redo the setup above or use https://dynamoi.com/dashboard instead.
   `dynamoi_get_artist_analytics`; read a YouTube campaign's `strategyGuide`
   first. Request `includeAnalytics=true` for one campaign's paid results; channel
   results combine paid and organic activity and are not campaign-attributed.
-  For a stuck campaign, check `dynamoi_get_platform_status`. With write
-  access, launch with `dynamoi_get_campaign_readiness`,
-  `dynamoi_list_media_assets`, then `dynamoi_launch_campaign`; budget minimums
-  come from the readiness response. Plans: https://dynamoi.com/pricing
+  Use `dynamoi_get_platform_status` for a stuck campaign. If `dynamoi_launch_campaign` is advertised
+  and authorized, first use `dynamoi_get_campaign_readiness` and `dynamoi_list_media_assets`. For
+  the selected artist, budget minimums come from the readiness response. Use
+  `dynamoi_launch_campaign` for a Smart Campaign workspace handoff or a user-confirmed YouTube launch. If unavailable, use https://dynamoi.com/dashboard.
 - **Analytics:** `dynamoi_get_growth_audit` (Spotify growth),
   `dynamoi_get_playlist_analytics`, `dynamoi_get_audience_analytics`,
   `dynamoi_get_youtube_channel_data`. Keep dates and coverage with each number;
   missing data is unknown, not zero.
-- **One-off YouTube promotion:** with write access, `dynamoi_shop_get_quote`
-  estimates and, after the user asks to buy, `dynamoi_shop_create_checkout`
-  returns an unpaid Stripe Checkout link.
+- **One-off YouTube promotion:** if both Shop tools are advertised and authorized, use
+  `dynamoi_shop_get_quote` and get the user's confirmation before requesting an unpaid Stripe Checkout
+  link with `dynamoi_shop_create_checkout`. Otherwise, direct the user to https://dynamoi.com/dashboard.
 
 ### Distribution
 

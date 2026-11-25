@@ -71,9 +71,13 @@ export function parseArgs(tool: Tool, argv: string[]): ParsedArgs {
 		global: { help: false, json: false },
 	};
 	let i = 0;
-	const next = () => {
+	const nextValue = (message: string) => {
+		const value = argv[i + 1];
+		if (value === undefined || value.startsWith("--")) {
+			throw new Error(message);
+		}
 		i += 1;
-		return argv[i];
+		return value;
 	};
 	for (; i < argv.length; i += 1) {
 		const arg = argv[i] as string;
@@ -88,7 +92,7 @@ export function parseArgs(tool: Tool, argv: string[]): ParsedArgs {
 			continue;
 		}
 		if (name === "input") {
-			const value = inline ?? next() ?? "";
+			const value = inline ?? nextValue("--input needs a JSON object value.");
 			const inputValue: unknown = JSON.parse(value);
 			if (
 				typeof inputValue !== "object" ||
@@ -130,10 +134,7 @@ export function parseArgs(tool: Tool, argv: string[]): ParsedArgs {
 			parsed.flags[property] = convert(property, schema, inline);
 			continue;
 		}
-		const raw = inline ?? next();
-		if (raw === undefined) {
-			throw new Error(`--${name} needs a value.`);
-		}
+		const raw = inline ?? nextValue(`--${name} needs a value.`);
 		if (kind(schema) === "array") {
 			const itemKind = schema.items ? kind(schema.items) : "string";
 			const items =

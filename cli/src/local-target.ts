@@ -63,7 +63,9 @@ export function readLocalTarget(args: string[]): {
 		args[0] !== flags[0] ||
 		args[2] !== flags[1] ||
 		!args[1] ||
+		args[1].startsWith("--") ||
 		!args[3] ||
+		args[3].startsWith("--") ||
 		args.slice(4).some((arg) => flags.includes(arg))
 	)
 		throw new Error(

@@ -208,7 +208,7 @@ export const SMART_LINK_ANALYTICS_CONTRACT = {
 	mcp: {
 		definition: {
 			description:
-				"Use this when the user wants full details for one free Smart Link, including release, Spotify URL, public play.dynamoi.com URL, current status, theme source, and next actions. Set includeAnalytics=true for visit/click analytics and includeArtistSettings=true for artist-level theme/pixel settings. In the final answer, lead with the public URL and do not expose internal IDs unless asked.",
+				"Use this when the user wants full details for one free Smart Link, including release, Spotify URL, public streamit.fm URL, current status, theme source, and next actions. Set includeAnalytics=true for visit/click analytics and includeArtistSettings=true for artist-level theme/pixel settings. In the final answer, lead with the public URL and do not expose internal IDs unless asked.",
 			destructiveHint: false,
 			name: "dynamoi_get_smart_link",
 			openWorldHint: true,

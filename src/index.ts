@@ -18,6 +18,7 @@ export {
 	DYNAMOI_ABOUT_TOOL_DEFINITION,
 	getDynamoiAbout,
 } from "./server/about";
+export { DYNAMOI_PUBLIC_SKILL_URIS } from "./server/embedded-skills";
 export {
 	DeleteAccountSchema,
 	GetArtistBillingCountrySchema,

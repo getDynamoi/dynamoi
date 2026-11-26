@@ -81,6 +81,10 @@ import {
 	ACCOUNT_SETTINGS_TOOL_DEFINITIONS,
 	DELETE_ACCOUNT_TOOL_DEFINITIONS,
 } from "./account-settings-tools";
+import {
+	DYNAMOI_SKILLS_CAPABILITY,
+	registerDynamoiEmbeddedSkills,
+} from "./embedded-skills";
 import { ARTIST_INTAKE_TOOL_DEFINITION } from "./artist-intake-tools";
 import { DISTRIBUTION_TOOL_DEFINITIONS } from "./distribution-tools";
 import {
@@ -1223,6 +1227,7 @@ export function createDynamoiMcpServer(options: {
 			cacheHints: DYNAMOI_CACHE_HINTS,
 			// Every request builds a fresh server, so lists never change mid-connection.
 			capabilities: {
+				extensions: DYNAMOI_SKILLS_CAPABILITY,
 				resources: { listChanged: false },
 				tools: { listChanged: false },
 				...(toolProfile === "full" ? { prompts: { listChanged: false } } : {}),
@@ -1389,6 +1394,7 @@ export function createDynamoiMcpServer(options: {
 	);
 	registerSmartLinkThemePreviewResource(server, options.uiDomain);
 	registerWorkspaceResource(server, options.uiDomain);
+	registerDynamoiEmbeddedSkills(server, toolProfile);
 
 	if (toolProfile === "full") {
 		registerDynamoiPrompts(server);

@@ -7,8 +7,11 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-11-26
+
 ### Added
 
+- The server advertises the MCP Skills extension (`io.modelcontextprotocol/skills`, SEP-2640) on both profiles. `skills/list`, `skills/get` and `resources/read` for `skill://<name>/SKILL.md` serve Dynamoi's seven workflow skills, generated from the canonical `skills/` source, and are readable before sign-in. The directory profile serves the directory-safe wording. No tool, schema or permission changes.
 - `dynamoi_send_feedback` lets an agent tell Dynamoi, in a short redacted note, when a tool failed, was confusing, or lacked a capability. The note is stored with the user's account, deleted with it, rate limited per user, and available in both the directory and full profiles.
 
 ## [1.0.12] - 2026-11-12

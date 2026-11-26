@@ -27,6 +27,7 @@ import {
 import {
 	DYNAMOI_BETTER_AUTH_MCP_SCOPES,
 	DYNAMOI_MCP_TOOL_SCOPES,
+	getDynamoiToolScopes,
 } from "../auth/protected-resource";
 import type {
 	ApplyForDistributionData,
@@ -295,8 +296,9 @@ function getAdvertisedToolOutputSchema(options: {
 function getDynamoiToolOAuthScopes(
 	toolName: keyof typeof DYNAMOI_MCP_TOOL_SCOPES,
 	providerScopes: readonly string[],
+	toolProfile: DynamoiMcpToolProfile,
 ): readonly string[] {
-	const requiredScopes = DYNAMOI_MCP_TOOL_SCOPES[toolName];
+	const requiredScopes = getDynamoiToolScopes(toolName, toolProfile);
 	const missingScopes = requiredScopes.filter(
 		(scope) => !providerScopes.includes(scope),
 	);
@@ -1282,6 +1284,7 @@ export function createDynamoiMcpServer(options: {
 				getDynamoiToolOAuthScopes(
 					def.name,
 					options.oauthScopes ?? DYNAMOI_BETTER_AUTH_MCP_SCOPES,
+					toolProfile,
 				),
 			),
 		};

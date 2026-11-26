@@ -2,6 +2,7 @@ export {
 	buildWwwAuthenticateHeader,
 	DYNAMOI_BETTER_AUTH_MCP_SCOPES,
 	DYNAMOI_MCP_TOOL_SCOPES,
+	getDynamoiToolScopes,
 } from "./auth/protected-resource";
 export {
 	PROSPECTIVE_BUDGET_FUNDING_CONSENT_COPY,

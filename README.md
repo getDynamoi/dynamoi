@@ -189,7 +189,7 @@ including what did not work.
 - **Agents never see payment details.** Plans and cards are set up only in the
   [Dynamoi dashboard](https://dynamoi.com/dashboard). Shop checkout tools
   return an unpaid Stripe link; the user pays on Stripe.
-- On https://dynamoi.com/mcp, an app that holds every Dynamoi permission gets all tools, including campaign launches and budget changes. An app with fewer permissions gets the smaller directory set. https://dynamoi.com/mcp/directory always gives the smaller directory set.
+- https://dynamoi.com/mcp connects with read-only baseline scopes and steps up incrementally (SEP-2350): a call that needs a missing scope (for example `dynamoi:platform.write` for contact support and send feedback, `dynamoi:campaign.launch` for launches, `dynamoi:mcp.full` for audience export and unpaid checkouts) gets `insufficient_scope` and the client asks for the cumulative scope set. Only a legacy ChatGPT grant made before the directory endpoint keeps the smaller directory set. https://dynamoi.com/mcp/directory always gives the smaller directory set with one catalog-wide grant.
   All 75 tools; 54 review-safe advertised tools.
 - **Sign-in is OAuth 2.1**, and every call still checks its scopes and the
   user's role for that artist. See

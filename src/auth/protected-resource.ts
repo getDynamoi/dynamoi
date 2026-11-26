@@ -162,6 +162,25 @@ export const DYNAMOI_MCP_TOOL_SCOPES = {
 	search: ["dynamoi:read"],
 } as const satisfies Record<string, readonly string[]>;
 
+/**
+ * Scopes one tool needs on a catalog. Support and feedback create persistent
+ * records, so the full `/mcp` endpoint (read-only baseline) gates them behind
+ * platform.write; the directory catalog keeps its single read grant.
+ */
+export function getDynamoiToolScopes(
+	toolName: keyof typeof DYNAMOI_MCP_TOOL_SCOPES,
+	toolProfile: "full" | "directory" = "directory",
+): readonly string[] {
+	if (
+		toolProfile === "full" &&
+		(toolName === "dynamoi_contact_support" ||
+			toolName === "dynamoi_send_feedback")
+	) {
+		return ["dynamoi:read", "dynamoi:platform.write"];
+	}
+	return DYNAMOI_MCP_TOOL_SCOPES[toolName];
+}
+
 export function buildWwwAuthenticateHeader(options: {
 	resourceMetadataUrl: string;
 	errorDescription?: string;

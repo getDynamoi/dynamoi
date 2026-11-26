@@ -29,6 +29,7 @@ export { ArtistIntakeInputSchema } from "./server/artist-intake-tools";
 export type { ChannelResults } from "./server/channel-results-schema";
 export { ChannelResultsSchema } from "./server/channel-results-schema";
 export type { Phase3Adapter } from "./server/create-server";
+export { createUrlElicitationOptions } from "./server/url-elicitation";
 export { PUBLIC_TRY_TOOL_DEFINITIONS } from "./server/public-tools";
 export {
 	asValidatedTextResult,

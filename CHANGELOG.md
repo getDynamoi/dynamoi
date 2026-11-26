@@ -7,6 +7,12 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-11-26
+
+### Added
+
+- On the full profile, hosts that speak MCP `2026-07-28` and declare URL-mode elicitation get Meta and YouTube connection links and campaign-funds and Shop checkout links as a native browser prompt (`inputRequired.elicitUrl`). Only `https` Dynamoi, Stripe Checkout, Google and Facebook hosts are prompted. The tool runs once; the answer returns the original result with a status note. Hosts without URL elicitation, 2025-era hosts and the directory profile still receive the plain URL, unchanged.
+
 ## [1.2.0] - 2026-11-26
 
 ### Added

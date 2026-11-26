@@ -13,11 +13,17 @@ import {
 	type CacheHint,
 	type CallToolResult,
 	McpServer,
+	type ServerContext,
 	type ServerOptions,
 	type StandardSchemaWithJSON,
 	type Tool,
 } from "@modelcontextprotocol/server";
 import * as z from "zod/v4";
+import {
+	requestUrlElicitation,
+	resumeUrlElicitation,
+	type UrlElicitationOptions,
+} from "./url-elicitation";
 import {
 	DYNAMOI_BETTER_AUTH_MCP_SCOPES,
 	DYNAMOI_MCP_TOOL_SCOPES,
@@ -1218,6 +1224,11 @@ export function createDynamoiMcpServer(options: {
 	/** Bounds how long a tool response waits for `onToolCall`. */
 	observerTimeoutMs?: number;
 	oauthScopes?: readonly string[];
+	/**
+	 * Signed state for stateless URL-mode elicitation of browser handoffs.
+	 * Honored only on the full profile; absent, handoffs stay plain URLs.
+	 */
+	urlElicitation?: UrlElicitationOptions | undefined;
 	toolProfile?: DynamoiMcpToolProfile;
 	uiDomain?: string | undefined;
 	websiteUrl?: string;
@@ -1225,6 +1236,8 @@ export function createDynamoiMcpServer(options: {
 	const toolProfile = options.toolProfile ?? "directory";
 	const observerTimeoutMs =
 		options.observerTimeoutMs ?? DEFAULT_OBSERVER_TIMEOUT_MS;
+	const urlElicitation =
+		toolProfile === "full" ? options.urlElicitation : undefined;
 	const server = new McpServer(
 		{
 			name: "dynamoi",
@@ -1245,6 +1258,9 @@ export function createDynamoiMcpServer(options: {
 					? DYNAMOI_CHATGPT_APP_INSTRUCTIONS
 					: DYNAMOI_MCP_INSTRUCTIONS,
 			maxToolInputElements: 10_000,
+			...(urlElicitation
+				? { requestState: { verify: urlElicitation.requestState.verify } }
+				: {}),
 		},
 	);
 
@@ -1317,10 +1333,17 @@ export function createDynamoiMcpServer(options: {
 				outputSchema,
 				title,
 			},
-			async (input: unknown) => {
+			async (input: unknown, ctx: ServerContext) => {
 				const denied = options.authorizeToolCall?.(def.name);
 				if (denied) {
 					return denied;
+				}
+				// Round 2 answers from sealed state; the tool never runs twice.
+				const resumed = urlElicitation
+					? resumeUrlElicitation(def.name, ctx, urlElicitation)
+					: undefined;
+				if (resumed) {
+					return resumed;
 				}
 				const startedAt = Date.now();
 				try {
@@ -1352,7 +1375,15 @@ export function createDynamoiMcpServer(options: {
 							}),
 						observerTimeoutMs,
 					);
-					return finalized;
+					const elicited = urlElicitation
+						? await requestUrlElicitation({
+								ctx,
+								finalized,
+								options: urlElicitation,
+								toolName: def.name,
+							})
+						: undefined;
+					return elicited ?? finalized;
 				} catch (error) {
 					// Preserve the dispatcher failure when observability also fails.
 					await runObserverBounded(

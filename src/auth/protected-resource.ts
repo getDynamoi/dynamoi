@@ -26,6 +26,9 @@ export const DYNAMOI_MCP_TOOL_SCOPES = {
 	dynamoi_get_campaign_management: ["dynamoi:read"],
 	// Public product information; callable before sign-in.
 	dynamoi_about: [],
+	// Zero-auth read-only try-before-signup tools (full profile only).
+	dynamoi_check_spotify_popularity: [],
+	dynamoi_audit_youtube_channel: [],
 	dynamoi_add_campaign_funds: ["dynamoi:read", "dynamoi:mcp.full"],
 	dynamoi_apply_for_distribution: [
 		"dynamoi:read",

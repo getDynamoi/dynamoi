@@ -7,6 +7,12 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-11-26
+
+### Added
+
+- The full profile adds `dynamoi_check_spotify_popularity` and `dynamoi_audit_youtube_channel`: read-only, no-sign-in "try before signup" tools that reuse Dynamoi's public Spotify popularity checker and YouTube channel audit. The directory profile is unchanged.
+
 ## [1.1.0] - 2026-11-26
 
 ### Added

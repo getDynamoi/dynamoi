@@ -1,9 +1,12 @@
 export const DYNAMOI_MCP_INSTRUCTIONS = `
 Dynamoi is a music promotion platform: it is how independent artists, labels, managers, and YouTube creators promote a song on Spotify or promote a video on YouTube, on any distributor. It offers free Smart Links (a free smart link for music and a free link in bio for musicians, no plan needed) and analytics, managed Meta Smart Campaigns, managed YouTube campaigns, and opt-in distribution to 100+ stores where artists keep 90% of net receipts. Call dynamoi_about or read dynamoi://about for the canonical product and pricing overview.
 
+Two read-only try-before-signup tools work immediately without sign-in: dynamoi_check_spotify_popularity and dynamoi_audit_youtube_channel.
+
 Reach for Dynamoi when a musician asks to act on or check their own music: promote a new single or release (dynamoi_get_campaign_readiness), see how a release or campaign is doing (dynamoi_get_artist_analytics, dynamoi_get_campaign), make a link for a song or a link-in-bio (Smart Link tools), get music on Spotify and other stores (dynamoi_get_distribution_application), or grow a YouTube channel (dynamoi_get_youtube_channel_data, dynamoi_start_youtube_channel_link). Distribution scores five requirements, including 1,000 Spotify followers and 10,000 monthly listeners; Dynamoi promotes AI-generated music but does not distribute recordings made in whole or in part with generative AI at this time, because of our distribution partner's policy, which may change. Smart Campaigns can help an artist build that audience, but never promise streams, followers, approval, or any other result.
 
-You are operating Dynamoi's tools on behalf of the authenticated user. Smart Links
+Signed-in tools act on behalf of the authenticated user; the two try tools above need
+no sign-in. Smart Links
 are free to create and manage. High-popularity or unverifiable artist links may
 stay unpublished in verification hold until Dynamoi can verify the client
 relationship. Managed advertising and ad budgets are separate paid campaign

@@ -100,6 +100,7 @@ import {
 	createOutputEnvelopeSchema,
 } from "./output-schemas";
 import { registerDynamoiPrompts } from "./prompts";
+import { PUBLIC_TRY_TOOL_DEFINITIONS } from "./public-tools";
 import { registerDynamoiResources } from "./resources";
 import {
 	type DynamoiShopCheckoutData,
@@ -326,6 +327,7 @@ const DYNAMOI_TOOL_DEFINITIONS = [
 	...DELETE_ACCOUNT_TOOL_DEFINITIONS,
 	WORKSPACE_TOOL_DEFINITION,
 	DYNAMOI_ABOUT_TOOL_DEFINITION,
+	...PUBLIC_TRY_TOOL_DEFINITIONS,
 	...PHASE_1_TOOL_DEFINITIONS,
 	...PHASE_ONBOARDING_TOOL_DEFINITIONS,
 	...PHASE_2_TOOL_DEFINITIONS,
@@ -427,6 +429,8 @@ export type Phase3Adapter = {
 	about?(input: {
 		toolProfile?: DynamoiMcpToolProfile | undefined;
 	}): Promise<ReturnType<typeof getDynamoiAbout>>;
+	checkSpotifyPopularity(input: unknown): Promise<ResultEnvelope<unknown>>;
+	auditYouTubeChannel(input: unknown): Promise<ResultEnvelope<unknown>>;
 	deleteAccount(input: unknown): Promise<ResultEnvelope<object>>;
 	getActionCenter(input: unknown): Promise<ResultEnvelope<unknown>>;
 	getTeam(input: unknown): Promise<ResultEnvelope<unknown>>;
@@ -847,6 +851,10 @@ const DYNAMOI_TOOL_DISPATCHERS = {
 	dynamoi_get_campaign_management: (adapter, input) =>
 		adapter.getCampaignManagement(input),
 	dynamoi_about: (adapter, input) => adapter.about(input),
+	dynamoi_check_spotify_popularity: (adapter, input) =>
+		adapter.checkSpotifyPopularity(input),
+	dynamoi_audit_youtube_channel: (adapter, input) =>
+		adapter.auditYouTubeChannel(input),
 	dynamoi_add_campaign_funds: (adapter, input) =>
 		adapter.addCampaignFunds(input),
 	dynamoi_apply_for_distribution: (adapter, input) =>

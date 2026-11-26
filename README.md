@@ -190,7 +190,7 @@ including what did not work.
   [Dynamoi dashboard](https://dynamoi.com/dashboard). Shop checkout tools
   return an unpaid Stripe link; the user pays on Stripe.
 - On https://dynamoi.com/mcp, an app that holds every Dynamoi permission gets all tools, including campaign launches and budget changes. An app with fewer permissions gets the smaller directory set. https://dynamoi.com/mcp/directory always gives the smaller directory set.
-  All 73 tools; 54 review-safe advertised tools.
+  All 75 tools; 54 review-safe advertised tools.
 - **Sign-in is OAuth 2.1**, and every call still checks its scopes and the
   user's role for that artist. See
   [client permissions](https://dynamoi.com/docs/mcp-server/client-permissions).
@@ -202,6 +202,8 @@ including what did not work.
 | Tool | What it does | Access | Catalog |
 | --- | --- | --- | --- |
 | `dynamoi_about` | What Dynamoi is and how to start. Works before sign-in. | Reads | Both |
+| `dynamoi_check_spotify_popularity` | Spotify artist popularity and audience evidence from a Spotify URL. Works before sign-in. | Reads | Full |
+| `dynamoi_audit_youtube_channel` | Public YouTube channel audit with its ad-eligible videos. Works before sign-in. | Reads | Full |
 | `dynamoi_open_workspace` | Open a read-only workspace for the authorized artist roster; supported hosts can browse campaigns and Smart Links | Reads | Both |
 | `dynamoi_get_account_overview` | Signed-in account, access counts and suggested next steps | Reads | Both |
 | `dynamoi_list_artists` | Artist roster, or one artist's profile and readiness | Reads | Both |

@@ -337,7 +337,7 @@ export const YouTubeChannelDataSchema = z.strictObject({
 		)
 		.optional(),
 	source: z.strictObject({ attribution: z.string(), name: z.string() }),
-	strategyGuideResource: z.string(),
+	strategyGuideResource: z.string().optional(),
 	summary: z.string(),
 });
 

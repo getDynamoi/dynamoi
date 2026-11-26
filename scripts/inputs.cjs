@@ -184,7 +184,7 @@ function packageInventory(outdir, expected) {
   const wanted = ["package.json", ...metadata.files];
   if (result.length !== 1 || result[0].files.map(file => file.path).sort().join() !== wanted.sort().join()) fail();
   for (const file of wanted.filter(file => !file.startsWith("dist/"))) {
-   if (!fs.lstatSync(path.join(root, file)).isFile() || /sourcesContent|sourceMappingURL\s*=/.test(fs.readFileSync(path.join(root, file), "utf8"))) fail();
+   if (!fs.lstatSync(path.join(root, file)).isFile() || /sourcesContent|sourceMappingURL\s*=|repo:brain@/.test(fs.readFileSync(path.join(root, file), "utf8"))) fail();
   }
   inventory(path.join(copy, "dist"), expected);
  } finally { fs.rmSync(temporary, { recursive: true, force: true }); }
@@ -198,7 +198,7 @@ function inventory(dir, expected) {
    if (item.isDirectory()) walk(file);
    else {
     const name = path.relative(dir, file);
-    if (!item.isFile() || !expected.includes(name) || /sourcesContent|sourceMappingURL\s*=/.test(fs.readFileSync(file, "utf8"))) fail();
+    if (!item.isFile() || !expected.includes(name) || /sourcesContent|sourceMappingURL\s*=|repo:brain@/.test(fs.readFileSync(file, "utf8"))) fail();
     found.push(name);
    }
   }

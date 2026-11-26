@@ -27,8 +27,6 @@ const MetaCampaignGroupsResponseSchema = z.object({
 const excluded = {
 	status: "excluded",
 	reason: "Meta campaign groups comparison is a web-only view.",
-	decision:
-		"repo:brain@d72cb64a6cb35272a761ec67841e11fe129e8c6d#businesses/dynamoi/prds/request-independent-domain-operations.md",
 } as const;
 export const META_CAMPAIGN_GROUPS_CONTRACT = {
 	capabilityId: "meta_campaign_groups",

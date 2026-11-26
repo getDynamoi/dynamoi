@@ -3,8 +3,6 @@ const reason = "Shop order management is web-only (Trevor decision O.38).";
 const excluded = {
 	status: "excluded",
 	reason,
-	decision:
-		"repo:brain@24baa246f83fccb8887343fde16d92aa0cf70f8f#businesses/dynamoi/prds/request-independent-domain-operations.md",
 } as const;
 export const SHOP_NATIVE_MOBILE_SCOPE = {
 	platforms: [],

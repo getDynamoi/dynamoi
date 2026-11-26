@@ -13,8 +13,6 @@ const hostedCheckout = {
 	status: "excluded",
 	reason:
 		"Hosted Checkout stays user-present; native store purchase mechanics use their separately registered operations.",
-	decision:
-		"repo:brain@e7013bc221be142e5c7bf74e64011f5449bf3d8b#businesses/dynamoi/prds/request-independent-domain-operations.md",
 } as const;
 export const FUNDING_CHECKOUT_CONTRACT = {
 	operationId: "billing.funding-checkout.handoff",

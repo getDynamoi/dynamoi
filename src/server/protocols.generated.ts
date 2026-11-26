@@ -42,8 +42,6 @@ const fetchDefinition = {
 
 const protocolOnly = {
 	status: "excluded",
-	decision:
-		"repo:brain@e5d9a0b6c5ce9baff316f3d1bcc6005760f82a11#businesses/dynamoi/prds/request-independent-domain-operations.md",
 	reason:
 		"OpenAI citation envelope and prefixed-ID routing are agent-protocol mechanics. Customer search, orientation, account and artist context remain native-applicable.",
 } as const;

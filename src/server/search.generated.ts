@@ -54,8 +54,6 @@ const definition = {
 const excluded = {
 	status: "excluded",
 	reason: "Agent-surface read with no human screen.",
-	decision:
-		"repo:brain@24baa246f83fccb8887343fde16d92aa0cf70f8f#businesses/dynamoi/prds/request-independent-domain-operations.md",
 } as const;
 export const AGENT_SEARCH_CONTRACT = {
 	capabilityId: "agent_discovery",

@@ -140,7 +140,13 @@ async function main(args: string[]): Promise<number> {
 	if (command === "help") {
 		const tool = find(rest[0]);
 		if (!tool) {
-			out(USAGE);
+			out(
+				rest.includes("--json")
+					? JSON.stringify({
+							error: `Unknown command "${rest[0]}". Run \`dynamoi tools\` to list what is available.`,
+						})
+					: USAGE,
+			);
 			return rest[0] ? 1 : 0;
 		}
 		out(rest.includes("--json") ? JSON.stringify(tool) : describeTool(tool));

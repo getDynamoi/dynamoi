@@ -29,8 +29,6 @@ const excluded = {
 	status: "excluded",
 	reason:
 		"Agent-surface write with no human screen; people reach the same team through support.",
-	decision:
-		"repo:brain@e5d9a0b6c5ce9baff316f3d1bcc6005760f82a11#businesses/dynamoi/prds/request-independent-domain-operations.md",
 } as const;
 export const AGENT_FEEDBACK_CONTRACT = {
 	operationId: "agent.send-feedback",

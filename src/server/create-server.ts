@@ -129,7 +129,10 @@ import {
 	WORKSPACE_METADATA,
 	WORKSPACE_TOOL_DEFINITION,
 } from "./workspace/tool";
-import type { GetYouTubeChannelDataData } from "./youtube-channel-data-schema";
+import {
+	type GetYouTubeChannelDataData,
+	YouTubeChannelDataSchema,
+} from "./youtube-channel-data-schema";
 
 type DynamoiToolSecurityScheme =
 	{ scopes: string[]; type: "oauth2" } | { type: "noauth" };
@@ -253,6 +256,11 @@ function getAdvertisedToolOutputSchema(options: {
 	toolProfile: DynamoiMcpToolProfile;
 }): z.ZodType & StandardSchemaWithJSON {
 	if (options.toolProfile !== "directory") {
+		if (options.toolName === "dynamoi_get_youtube_channel_data") {
+			return createOutputEnvelopeSchema(
+				YouTubeChannelDataSchema.required({ strategyGuideResource: true }),
+			);
+		}
 		return options.canonical;
 	}
 	const dataSchema =
@@ -1318,7 +1326,8 @@ export function createDynamoiMcpServer(options: {
 					);
 					const finalized = asValidatedTextResult({
 						envelope,
-						outputSchema: def.outputSchema,
+						outputSchema:
+							toolProfile === "full" ? outputSchema : def.outputSchema,
 						toolName: def.name,
 					});
 					await runObserverBounded(

@@ -1,3 +1,5 @@
+import type { Schema } from "effect";
+import { wireJsonSchema, mcpWireSchema } from "./wire-schema.generated";
 import {
 	MEDIA_MODERATION_READ_CONTRACT,
 	MediaModerationResponseSchema,
@@ -325,7 +327,7 @@ type DynamoiToolRegistrationDescriptor = {
 	profiles?: Readonly<Record<DynamoiMcpToolProfile, "advertised" | "excluded">>;
 	outputSchema: z.ZodType & StandardSchemaWithJSON;
 	readOnlyHint: boolean;
-	schema: z.ZodObject<z.ZodRawShape>;
+	schema: z.ZodType | Schema.Codec<unknown, unknown>;
 	title: string;
 };
 
@@ -1192,11 +1194,11 @@ function isObjectShapedJsonSchema(schema: JsonSchemaObject): boolean {
 
 /** The JSON Schema the SDK would advertise, without the `$schema` dialect key. */
 function toAdvertisedJsonSchema(
-	schema: z.ZodType,
+	schema: z.ZodType | Schema.Codec<unknown, unknown>,
 	io: "input" | "output",
 ): JsonSchemaObject {
 	// Some MCP clients reject schemas that carry `$schema`; it is informational.
-	const { $schema: _dialect, ...jsonSchema } = z.toJSONSchema(schema, {
+	const { $schema: _dialect, ...jsonSchema } = wireJsonSchema(schema, {
 		io,
 		target: "draft-2020-12",
 	}) as JsonSchemaObject;
@@ -1332,7 +1334,7 @@ export function createDynamoiMcpServer(options: {
 				_meta: meta,
 				annotations,
 				description: def.description,
-				inputSchema: def.schema,
+				inputSchema: mcpWireSchema(def.schema),
 				outputSchema,
 				title,
 			},

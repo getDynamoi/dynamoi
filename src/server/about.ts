@@ -1,4 +1,3 @@
-import * as z from "zod/v4";
 import { AGENT_ABOUT_CONTRACT } from "./about.generated";
 import { AnyOutputEnvelopeSchema } from "./output-schemas";
 
@@ -95,7 +94,7 @@ export const DYNAMOI_ABOUT_TOOL_DEFINITION = {
 
 export function getDynamoiAbout(options?: {
 	toolProfile?: "full" | "directory" | undefined;
-}): z.output<typeof AGENT_ABOUT_CONTRACT.mobile.responseSchema> {
+}): typeof AGENT_ABOUT_CONTRACT.mobile.responseSchema.Type {
 	// Fail closed: the pricing/Shop-bearing variant requires an explicit full profile.
 	const isFull = options?.toolProfile === "full";
 	return {

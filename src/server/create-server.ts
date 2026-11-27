@@ -1,5 +1,17 @@
-import type { Schema } from "effect";
-import { wireJsonSchema, mcpWireSchema } from "./wire-schema.generated";
+import {
+	extendWire,
+	optionalWire,
+	passthroughWire,
+	safeParseWire,
+	type WireSchema,
+	unwrapWire,
+	enumWire,
+	nullableWire,
+	wireJsonSchema,
+	mcpWireSchema,
+} from "./wire-schema.generated";
+import { Schema } from "effect";
+
 import {
 	MEDIA_MODERATION_READ_CONTRACT,
 	MediaModerationResponseSchema,
@@ -17,10 +29,8 @@ import {
 	McpServer,
 	type ServerContext,
 	type ServerOptions,
-	type StandardSchemaWithJSON,
 	type Tool,
 } from "@modelcontextprotocol/server";
-import * as z from "zod/v4";
 import {
 	requestUrlElicitation,
 	resumeUrlElicitation,
@@ -147,10 +157,14 @@ import {
 	type GetYouTubeChannelDataData,
 	YouTubeChannelDataSchema,
 } from "./youtube-channel-data-schema";
-
 type DynamoiToolSecurityScheme =
-	{ scopes: string[]; type: "oauth2" } | { type: "noauth" };
-
+	| {
+			scopes: string[];
+			type: "oauth2";
+	  }
+	| {
+			type: "noauth";
+	  };
 /** A tool that needs no scopes is public and callable before sign-in. */
 function buildDynamoiToolSecuritySchemes(
 	scopes: readonly string[],
@@ -159,120 +173,140 @@ function buildDynamoiToolSecuritySchemes(
 		? [{ type: "noauth" }]
 		: [{ scopes: [...scopes], type: "oauth2" }];
 }
-
 type DynamoiToolMetadata = {
 	securitySchemes: ReturnType<typeof buildDynamoiToolSecuritySchemes>;
-	ui?: { resourceUri: string };
+	ui?: {
+		resourceUri: string;
+	};
 	"openai/outputTemplate"?: string;
 	"openai/ui"?: (typeof WORKSPACE_METADATA)["openai/ui"];
 };
-
 type DynamoiToolAnnotations = {
 	destructiveHint: boolean;
 	idempotentHint?: boolean;
 	openWorldHint: boolean;
 	readOnlyHint: boolean;
 };
-
 const DIRECTORY_DESCRIPTIVE_DATA_SCHEMAS = {
 	dynamoi_get_meta_campaign_groups:
 		META_CAMPAIGN_GROUPS_CONTRACT.mobile.responseSchema,
 	dynamoi_get_campaign_management:
 		CAMPAIGN_MANAGEMENT_READ_CONTRACT.mobile.responseSchema,
 	dynamoi_get_account_overview: DynamoiAccountOverviewDescriptiveDataSchema,
-	dynamoi_get_artist_analytics: z
-		.object({
-			artistId: z.string().optional(),
-			artistName: z.string().optional(),
-			dateRange: z.object({ end: z.string(), start: z.string() }).optional(),
-			summary: z.string().optional(),
-		})
-		.passthrough(),
-	dynamoi_get_campaign: DescriptiveEntitySchema.extend({
-		artistId: z.string().optional(),
-		contentTitle: z.string().optional(),
-		nextActions: z.array(z.string()).optional(),
-		status: z.string().optional(),
-	}).passthrough(),
-	dynamoi_get_platform_status: z
-		.object({
-			artistId: z.string().optional(),
-			artistName: z.string().optional(),
-			platforms: z.object({}).passthrough().optional(),
-			summary: z.string().optional(),
-		})
-		.passthrough(),
-	dynamoi_get_smart_link: DescriptiveEntitySchema.extend({
-		artistId: z.string().optional(),
-		artistName: z.string().optional(),
-		nextActions: z.array(z.string()).optional(),
-		publishState: z.string().optional(),
-		releaseTitle: z.string().optional(),
-		theme: z.string().optional(),
-	}).passthrough(),
-	dynamoi_get_youtube_channel_data: z
-		.object({
-			artistId: z.string().optional(),
-			channelName: z.string().nullable().optional(),
-			dataset: z.string().optional(),
-			nextCursor: z.string().optional(),
-			rowCount: z.number().optional(),
-			summary: z.string().optional(),
-		})
-		.passthrough(),
+	dynamoi_get_artist_analytics: passthroughWire(
+		Schema.Struct({
+			artistId: optionalWire(Schema.String),
+			artistName: optionalWire(Schema.String),
+			dateRange: optionalWire(
+				Schema.Struct({ end: Schema.String, start: Schema.String }),
+			),
+			summary: optionalWire(Schema.String),
+		}),
+	),
+	dynamoi_get_campaign: passthroughWire(
+		extendWire(Schema.Struct(DescriptiveEntitySchema.fields), {
+			artistId: optionalWire(Schema.String),
+			contentTitle: optionalWire(Schema.String),
+			nextActions: optionalWire(Schema.mutable(Schema.Array(Schema.String))),
+			status: optionalWire(Schema.String),
+		}),
+	),
+	dynamoi_get_platform_status: passthroughWire(
+		Schema.Struct({
+			artistId: optionalWire(Schema.String),
+			artistName: optionalWire(Schema.String),
+			platforms: optionalWire(passthroughWire(Schema.Struct({}))),
+			summary: optionalWire(Schema.String),
+		}),
+	),
+	dynamoi_get_smart_link: passthroughWire(
+		extendWire(Schema.Struct(DescriptiveEntitySchema.fields), {
+			artistId: optionalWire(Schema.String),
+			artistName: optionalWire(Schema.String),
+			nextActions: optionalWire(Schema.mutable(Schema.Array(Schema.String))),
+			publishState: optionalWire(Schema.String),
+			releaseTitle: optionalWire(Schema.String),
+			theme: optionalWire(Schema.String),
+		}),
+	),
+	dynamoi_get_youtube_channel_data: passthroughWire(
+		Schema.Struct({
+			artistId: optionalWire(Schema.String),
+			channelName: optionalWire(nullableWire(Schema.String)),
+			dataset: optionalWire(Schema.String),
+			nextCursor: optionalWire(Schema.String),
+			rowCount: optionalWire(Schema.Finite),
+			summary: optionalWire(Schema.String),
+		}),
+	),
 	dynamoi_list_artists: DynamoiArtistListDescriptiveDataSchema,
-	dynamoi_list_campaigns: z
-		.object({
-			campaigns: z.array(DescriptiveEntitySchema).optional(),
-			nextCursor: z.string().optional(),
-			summary: z.string().optional(),
-			totalCount: z.number().optional(),
-		})
-		.passthrough(),
-	dynamoi_preview_smart_link_themes: z
-		.object({
-			artistName: z.string(),
-			releaseTitle: z.string(),
-			themes: z.array(DescriptiveEntitySchema),
-		})
-		.passthrough(),
-	dynamoi_search: z
-		.object({
-			nextCursor: z.string().optional(),
-			results: z.array(DescriptiveEntitySchema).optional(),
-			summary: z.string().optional(),
-			totalCount: z.number().optional(),
-		})
-		.passthrough(),
-	dynamoi_update_smart_link_artist_settings: DescriptiveEntitySchema.extend({
-		artistId: z.string().optional(),
-		artistName: z.string().optional(),
-		defaultTheme: z.string().optional(),
-		renderQueuedCount: z.number().optional(),
-		renderWarning: z.string().nullable().optional(),
-	}).passthrough(),
-	dynamoi_update_smart_link_description: DescriptiveEntitySchema.extend({
-		artistId: z.string().optional(),
-		artistName: z.string().optional(),
-		defaultTheme: z.string().optional(),
-		renderQueuedCount: z.number().optional(),
-		renderWarning: z.string().nullable().optional(),
-	}).passthrough(),
+	dynamoi_list_campaigns: passthroughWire(
+		Schema.Struct({
+			campaigns: optionalWire(
+				Schema.mutable(Schema.Array(DescriptiveEntitySchema)),
+			),
+			nextCursor: optionalWire(Schema.String),
+			summary: optionalWire(Schema.String),
+			totalCount: optionalWire(Schema.Finite),
+		}),
+	),
+	dynamoi_preview_smart_link_themes: passthroughWire(
+		Schema.Struct({
+			artistName: Schema.String,
+			releaseTitle: Schema.String,
+			themes: Schema.mutable(Schema.Array(DescriptiveEntitySchema)),
+		}),
+	),
+	dynamoi_search: passthroughWire(
+		Schema.Struct({
+			nextCursor: optionalWire(Schema.String),
+			results: optionalWire(
+				Schema.mutable(Schema.Array(DescriptiveEntitySchema)),
+			),
+			summary: optionalWire(Schema.String),
+			totalCount: optionalWire(Schema.Finite),
+		}),
+	),
+	dynamoi_update_smart_link_artist_settings: passthroughWire(
+		extendWire(Schema.Struct(DescriptiveEntitySchema.fields), {
+			artistId: optionalWire(Schema.String),
+			artistName: optionalWire(Schema.String),
+			defaultTheme: optionalWire(Schema.String),
+			renderQueuedCount: optionalWire(Schema.Finite),
+			renderWarning: optionalWire(nullableWire(Schema.String)),
+		}),
+	),
+	dynamoi_update_smart_link_description: passthroughWire(
+		extendWire(Schema.Struct(DescriptiveEntitySchema.fields), {
+			artistId: optionalWire(Schema.String),
+			artistName: optionalWire(Schema.String),
+			defaultTheme: optionalWire(Schema.String),
+			renderQueuedCount: optionalWire(Schema.Finite),
+			renderWarning: optionalWire(nullableWire(Schema.String)),
+		}),
+	),
 	fetch: DescriptiveEntitySchema,
-	search: z
-		.object({ results: z.array(DescriptiveEntitySchema).optional() })
-		.passthrough(),
+	search: passthroughWire(
+		Schema.Struct({
+			results: optionalWire(
+				Schema.mutable(Schema.Array(DescriptiveEntitySchema)),
+			),
+		}),
+	),
 } as const;
-
 function getAdvertisedToolOutputSchema(options: {
-	canonical: z.ZodType & StandardSchemaWithJSON;
+	canonical: WireSchema;
 	toolName: string;
 	toolProfile: DynamoiMcpToolProfile;
-}): z.ZodType & StandardSchemaWithJSON {
+}): WireSchema {
 	if (options.toolProfile !== "directory") {
 		if (options.toolName === "dynamoi_get_youtube_channel_data") {
 			return createOutputEnvelopeSchema(
-				YouTubeChannelDataSchema.required({ strategyGuideResource: true }),
+				extendWire(YouTubeChannelDataSchema, {
+					strategyGuideResource: unwrapWire(
+						YouTubeChannelDataSchema.fields.strategyGuideResource,
+					),
+				}),
 			);
 		}
 		return options.canonical;
@@ -284,17 +318,16 @@ function getAdvertisedToolOutputSchema(options: {
 	if (!dataSchema) {
 		return options.canonical;
 	}
-	return z
-		.object({
-			data: dataSchema.optional(),
-			kind: z.string().optional(),
-			message: z.string().optional(),
-			...ResultErrorRecoverySchema.shape,
-			status: z.enum(["success", "partial_success", "error"]),
-		})
-		.passthrough();
+	return passthroughWire(
+		Schema.Struct({
+			data: optionalWire(dataSchema),
+			kind: optionalWire(Schema.String),
+			message: optionalWire(Schema.String),
+			...ResultErrorRecoverySchema.fields,
+			status: enumWire(["success", "partial_success", "error"]),
+		}),
+	);
 }
-
 function getDynamoiToolOAuthScopes(
 	toolName: keyof typeof DYNAMOI_MCP_TOOL_SCOPES,
 	providerScopes: readonly string[],
@@ -311,13 +344,11 @@ function getDynamoiToolOAuthScopes(
 	}
 	return requiredScopes;
 }
-
 /**
  * `directory` is the review-safe catalog for agent-directory clients;
  * `full` is every tool.
  */
 export type DynamoiMcpToolProfile = "full" | "directory";
-
 type DynamoiToolRegistrationDescriptor = {
 	description: string;
 	destructiveHint: boolean;
@@ -325,12 +356,11 @@ type DynamoiToolRegistrationDescriptor = {
 	name: string;
 	openWorldHint: boolean;
 	profiles?: Readonly<Record<DynamoiMcpToolProfile, "advertised" | "excluded">>;
-	outputSchema: z.ZodType & StandardSchemaWithJSON;
+	outputSchema: WireSchema;
 	readOnlyHint: boolean;
-	schema: z.ZodType | Schema.Codec<unknown, unknown>;
+	schema: WireSchema;
 	title: string;
 };
-
 const DYNAMOI_TOOL_DEFINITIONS = [
 	ARTIST_INTAKE_TOOL_DEFINITION,
 	...ACCOUNT_SETTINGS_TOOL_DEFINITIONS,
@@ -360,7 +390,6 @@ const DYNAMOI_TOOL_DEFINITIONS = [
 	...SMART_LINK_UPDATE_OPERATION_TOOL_DEFINITIONS,
 	...FULL_SMART_LINK_STUDIO_TOOL_DEFINITIONS,
 ] as const satisfies readonly DynamoiToolRegistrationDescriptor[];
-
 // Keep the public name union separate from the schema-rich source tuple.
 const DYNAMOI_TOOL_NAMES = DYNAMOI_TOOL_DEFINITIONS.map(
 	(definition) => definition.name,
@@ -369,13 +398,11 @@ type DynamoiToolName = (typeof DYNAMOI_TOOL_NAMES)[number];
 type DynamoiToolDefinition = Omit<DynamoiToolRegistrationDescriptor, "name"> & {
 	name: DynamoiToolName;
 };
-
 const MUTATING_TOOL_NAMES = new Set<string>(
 	DYNAMOI_TOOL_DEFINITIONS.filter((definition) => !definition.readOnlyHint).map(
 		(definition) => definition.name,
 	),
 );
-
 const DIRECTORY_EXCLUDED_TOOL_NAMES = new Set<string>([
 	"dynamoi_add_campaign_funds",
 	"dynamoi_launch_campaign",
@@ -387,19 +414,16 @@ const DIRECTORY_EXCLUDED_TOOL_NAMES = new Set<string>([
 	"dynamoi_get_resume_funding",
 	"dynamoi_delete_account",
 ]);
-
 const DIRECTORY_ONLY_TOOL_NAMES = new Set<string>([
 	"dynamoi_update_smart_link_artist_settings",
 	"dynamoi_update_smart_link_description",
 ]);
-
 const FULL_PROFILE_DESCRIPTIONS: Record<string, string> = {
 	dynamoi_get_artist_analytics: ARTIST_ANALYTICS_CONTRACT.mcp.descriptions.full,
 	dynamoi_get_billing: BILLING_READ_MCP.descriptions.full,
 	dynamoi_preview_smart_link_themes:
 		SMART_LINK_THEME_PREVIEW_CONTRACT.mcp.descriptions.full,
 };
-
 export function getDynamoiToolDefinitions(options?: {
 	toolProfile?: DynamoiMcpToolProfile;
 }): DynamoiToolDefinition[] {
@@ -425,7 +449,6 @@ export function getDynamoiToolDefinitions(options?: {
 			: !DIRECTORY_EXCLUDED_TOOL_NAMES.has(definition.name),
 	);
 }
-
 export type Phase3Adapter = {
 	shopAttachVideo(input: unknown): Promise<ResultEnvelope<unknown>>;
 	shopReplaceVideo(input: unknown): Promise<ResultEnvelope<unknown>>;
@@ -503,9 +526,14 @@ export type Phase3Adapter = {
 	addCampaignFunds(
 		input: unknown,
 	): Promise<ResultEnvelope<Record<string, unknown>>>;
-	getResumeFunding(
-		input: unknown,
-	): Promise<ResultEnvelope<GetResumeFundingData | { summary: string }>>;
+	getResumeFunding(input: unknown): Promise<
+		ResultEnvelope<
+			| GetResumeFundingData
+			| {
+					summary: string;
+			  }
+		>
+	>;
 	getBilling(
 		input: unknown,
 	): Promise<ResultEnvelope<GetBillingData | GetBillingSummaryData>>;
@@ -539,7 +567,7 @@ export type Phase3Adapter = {
 	updateCampaign(input: unknown): Promise<ResultEnvelope<UpdateCampaignData>>;
 	readMediaModeration(
 		input: unknown,
-	): Promise<ResultEnvelope<z.infer<typeof MediaModerationResponseSchema>>>;
+	): Promise<ResultEnvelope<(typeof MediaModerationResponseSchema)["Type"]>>;
 	listMediaAssets(
 		input: unknown,
 	): Promise<ResultEnvelope<ListMediaAssetsData | ListMediaAssetsSummaryData>>;
@@ -585,7 +613,6 @@ export type Phase3Adapter = {
 	contactSupport(input: unknown): Promise<ResultEnvelope<ContactSupportData>>;
 	sendFeedback(input: unknown): Promise<ResultEnvelope<SendFeedbackData>>;
 };
-
 type DynamoiToolDispatcher = (
 	adapter: Phase3Adapter & {
 		about(input: unknown): Promise<ReturnType<typeof getDynamoiAbout>>;
@@ -593,16 +620,18 @@ type DynamoiToolDispatcher = (
 	input: unknown,
 	toolProfile?: DynamoiMcpToolProfile,
 ) => Promise<ResultEnvelope<unknown>>;
-
 type ErrorRecoveryMetadata = Partial<
 	Omit<
-		Extract<ResultEnvelope<never>, { status: "error" }>,
+		Extract<
+			ResultEnvelope<never>,
+			{
+				status: "error";
+			}
+		>,
 		"message" | "status"
 	>
 >;
-
 type NormalizedEnvelope = object | string | number | boolean | null | undefined;
-
 const RECOVERY_METADATA_FIELDS = [
 	"draftId",
 	"failureStage",
@@ -614,7 +643,6 @@ const RECOVERY_METADATA_FIELDS = [
 	"retryable",
 	"retryAfterSeconds",
 ] as const;
-
 const SMART_LINK_STATE_CONFLICT_TOOLS = new Set([
 	"dynamoi_update_smart_link",
 	"dynamoi_update_smart_link_description",
@@ -636,7 +664,6 @@ const SMART_LINK_STATE_CONFLICT_FIELDS = new Map([
 		"expectedVersion",
 	],
 ]);
-
 const SPOTIFY_SOURCE_ERROR_MESSAGES = new Set([
 	"Paste a valid Spotify artist, album, or track URL.",
 	"Paste a Spotify artist, album, or track URL.",
@@ -647,11 +674,9 @@ const SPOTIFY_SOURCE_ERROR_MESSAGES = new Set([
 	"Spotify link redirected too many times.",
 	"Spotify link could not be opened. Paste the full Spotify URL instead.",
 ]);
-
 const SPOTIFY_ARTIST_CATALOG_ERROR_MESSAGES = new Set([
 	"Use a Spotify artist URL for full-catalog Smart Link import. For album or track URLs, use dynamoi_create_smart_link_from_spotify.",
 ]);
-
 const REVIEWER_WRITE_TOOL_NAMES = new Set([
 	"dynamoi_manage_youtube_draft",
 	"dynamoi_manage_smart_campaign_creative",
@@ -668,18 +693,15 @@ const REVIEWER_WRITE_TOOL_NAMES = new Set([
 	"dynamoi_update_smart_link_artist_hub_settings",
 	"dynamoi_update_smart_link_release_settings",
 ]);
-
 const SHOP_RATE_LIMIT_RETRY_AFTER_SECONDS = {
 	checkout: 10 * 60,
 	quote: 60,
 } as const;
-
 const SHOP_RATE_LIMIT_ERROR_PATTERNS = {
 	checkout:
 		/^Too many Shop checkout requests\. Try again in ([1-9]\d*) seconds\.$/,
 	quote: /^Too many Shop quote requests\. Try again in ([1-9]\d*) seconds\.$/,
 } as const;
-
 function mapShopRateLimitRecovery(
 	toolName: string,
 	message: string,
@@ -693,7 +715,6 @@ function mapShopRateLimitRecovery(
 	if (!kind) {
 		return undefined;
 	}
-
 	const match = SHOP_RATE_LIMIT_ERROR_PATTERNS[kind].exec(message);
 	if (!match || match[0] !== message) {
 		return undefined;
@@ -712,7 +733,6 @@ function mapShopRateLimitRecovery(
 		retryable: true,
 	};
 }
-
 function mapKnownErrorRecovery(
 	toolName: string,
 	kind: unknown,
@@ -752,7 +772,6 @@ function mapKnownErrorRecovery(
 			retryable: false,
 		};
 	}
-
 	const isSingleReleaseSpotifyTool =
 		toolName === "dynamoi_create_smart_link_from_spotify";
 	const isArtistCatalogSpotifyTool =
@@ -781,7 +800,6 @@ function mapKnownErrorRecovery(
 			retryable: false,
 		};
 	}
-
 	const conflictField = SMART_LINK_STATE_CONFLICT_FIELDS.get(message);
 	if (SMART_LINK_STATE_CONFLICT_TOOLS.has(toolName) && conflictField) {
 		return {
@@ -796,7 +814,6 @@ function mapKnownErrorRecovery(
 			retryable: false,
 		};
 	}
-
 	if (
 		(toolName === "dynamoi_shop_create_checkout" ||
 			toolName === "dynamoi_prepare_shop_rebuy_checkout") &&
@@ -816,10 +833,8 @@ function mapKnownErrorRecovery(
 			retryable: false,
 		};
 	}
-
 	return undefined;
 }
-
 function normalizeKnownErrorRecovery(
 	envelope: unknown,
 	toolName: string,
@@ -854,7 +869,6 @@ function normalizeKnownErrorRecovery(
 	const recovery = mapKnownErrorRecovery(toolName, record["kind"], message);
 	return recovery ? { ...record, ...recovery } : record;
 }
-
 const DYNAMOI_TOOL_DISPATCHERS = {
 	dynamoi_get_meta_campaign_groups: (adapter, input) =>
 		adapter.getMetaCampaignGroups(input),
@@ -989,10 +1003,8 @@ const DYNAMOI_TOOL_DISPATCHERS = {
 	fetch: (adapter, input) => adapter.openAiFetch(input),
 	search: (adapter, input) => adapter.openAiSearch(input),
 } satisfies Record<DynamoiToolName, DynamoiToolDispatcher>;
-
 /** Longest a tool response waits for the host's observer before answering. */
 const DEFAULT_OBSERVER_TIMEOUT_MS = 3000;
-
 /**
  * Runs the host observer without letting it change or delay a tool result.
  * Throws, rejections and hangs are all absorbed: a hung observer is abandoned
@@ -1020,7 +1032,6 @@ async function runObserverBounded(
 		clearTimeout(timer);
 	}
 }
-
 function snapshotForObserver(value: unknown) {
 	try {
 		return structuredClone(value);
@@ -1071,42 +1082,59 @@ function snapshotForObserver(value: unknown) {
 		};
 	}
 }
-
 function asTextResult(envelope: unknown) {
 	const isToolError =
 		Boolean(envelope) &&
 		typeof envelope === "object" &&
-		(envelope as { status?: unknown }).status === "error";
+		(
+			envelope as {
+				status?: unknown;
+			}
+		).status === "error";
 	const plainText = (() => {
 		if (!envelope || typeof envelope !== "object") {
 			return JSON.stringify(envelope);
 		}
-
-		const status = (envelope as { status?: unknown }).status;
+		const status = (
+			envelope as {
+				status?: unknown;
+			}
+		).status;
 		if (status === "error") {
-			const message = (envelope as { message?: unknown }).message;
+			const message = (
+				envelope as {
+					message?: unknown;
+				}
+			).message;
 			return typeof message === "string" && message.trim().length > 0
 				? message
 				: JSON.stringify(envelope);
 		}
-
-		const data = (envelope as { data?: unknown }).data;
+		const data = (
+			envelope as {
+				data?: unknown;
+			}
+		).data;
 		if (data && typeof data === "object") {
-			const summary = (data as { summary?: unknown }).summary;
+			const summary = (
+				data as {
+					summary?: unknown;
+				}
+			).summary;
 			if (typeof summary === "string" && summary.trim().length > 0) {
 				return summary;
 			}
 		}
-
 		return JSON.stringify(envelope);
 	})();
-
 	type McpToolCallResult = {
-		content: Array<{ text: string; type: "text" }>;
+		content: Array<{
+			text: string;
+			type: "text";
+		}>;
 		structuredContent: Record<string, unknown>;
 		isError?: boolean;
 	};
-
 	const result: McpToolCallResult = {
 		content: [{ text: plainText, type: "text" as const }],
 		structuredContent: envelope as Record<string, unknown>,
@@ -1114,20 +1142,18 @@ function asTextResult(envelope: unknown) {
 	if (isToolError) {
 		result.isError = true;
 	}
-
 	return result;
 }
-
 export function asValidatedTextResult(options: {
 	envelope: unknown;
-	outputSchema: z.ZodType;
+	outputSchema: WireSchema;
 	toolName: string;
 }) {
 	const envelope = normalizeKnownErrorRecovery(
 		options.envelope,
 		options.toolName,
 	);
-	const parsed = options.outputSchema.safeParse(envelope);
+	const parsed = safeParseWire(options.outputSchema, envelope);
 	if (!parsed.success) {
 		return asTextResult({
 			code: "OUTPUT_INVALID",
@@ -1145,14 +1171,12 @@ export function asValidatedTextResult(options: {
 	}
 	return asTextResult(envelope);
 }
-
 // Lists vary by the caller's authorization, so clients may reuse them briefly
 // but never share them across principals.
 const PRIVATE_LIST_CACHE_HINT: CacheHint = {
 	cacheScope: "private",
-	ttlMs: 60_000,
+	ttlMs: 60000,
 };
-
 const DYNAMOI_CACHE_HINTS: NonNullable<ServerOptions["cacheHints"]> = {
 	"prompts/list": PRIVATE_LIST_CACHE_HINT,
 	"resources/list": PRIVATE_LIST_CACHE_HINT,
@@ -1160,9 +1184,7 @@ const DYNAMOI_CACHE_HINTS: NonNullable<ServerOptions["cacheHints"]> = {
 	"server/discover": PRIVATE_LIST_CACHE_HINT,
 	"tools/list": PRIVATE_LIST_CACHE_HINT,
 };
-
 type JsonSchemaObject = Record<string, unknown>;
-
 function isObjectShapedJsonSchema(schema: JsonSchemaObject): boolean {
 	if (schema["type"] !== undefined) {
 		return schema["type"] === "object";
@@ -1191,10 +1213,9 @@ function isObjectShapedJsonSchema(schema: JsonSchemaObject): boolean {
 		);
 	});
 }
-
 /** The JSON Schema the SDK would advertise, without the `$schema` dialect key. */
 function toAdvertisedJsonSchema(
-	schema: z.ZodType | Schema.Codec<unknown, unknown>,
+	schema: WireSchema,
 	io: "input" | "output",
 ): JsonSchemaObject {
 	// Some MCP clients reject schemas that carry `$schema`; it is informational.
@@ -1207,11 +1228,9 @@ function toAdvertisedJsonSchema(
 		? { type: "object", ...jsonSchema }
 		: jsonSchema;
 }
-
 type AdvertisedTool = Tool & {
 	securitySchemes: DynamoiToolMetadata["securitySchemes"];
 };
-
 export function createDynamoiMcpServer(options: {
 	adapter: Phase3Adapter;
 	/**
@@ -1261,13 +1280,12 @@ export function createDynamoiMcpServer(options: {
 				toolProfile === "directory"
 					? DYNAMOI_CHATGPT_APP_INSTRUCTIONS
 					: DYNAMOI_MCP_INSTRUCTIONS,
-			maxToolInputElements: 10_000,
+			maxToolInputElements: 10000,
 			...(urlElicitation
 				? { requestState: { verify: urlElicitation.requestState.verify } }
 				: {}),
 		},
 	);
-
 	const advertisedDefinitions = getDynamoiToolDefinitions({ toolProfile });
 	const advertisedNames = new Set(
 		advertisedDefinitions.map((definition) => definition.name),
@@ -1335,7 +1353,7 @@ export function createDynamoiMcpServer(options: {
 				annotations,
 				description: def.description,
 				inputSchema: mcpWireSchema(def.schema),
-				outputSchema,
+				outputSchema: mcpWireSchema(outputSchema),
 				title,
 			},
 			async (input: unknown, ctx: ServerContext) => {
@@ -1405,7 +1423,6 @@ export function createDynamoiMcpServer(options: {
 			},
 		);
 	}
-
 	// OpenAI reads per-tool auth from a top-level `securitySchemes` field that
 	// the SDK's generated list omits, so this server advertises the final tool
 	// shape itself. Both eras and both response modes serve the same list.
@@ -1413,7 +1430,6 @@ export function createDynamoiMcpServer(options: {
 	server.server.setRequestHandler("tools/list", () => ({
 		tools: advertisedTools,
 	}));
-
 	server.registerResource(
 		DYNAMOI_ABOUT_RESOURCE.name,
 		DYNAMOI_ABOUT_RESOURCE.uri,
@@ -1439,11 +1455,9 @@ export function createDynamoiMcpServer(options: {
 	registerSmartLinkThemePreviewResource(server, options.uiDomain);
 	registerWorkspaceResource(server, options.uiDomain);
 	registerDynamoiEmbeddedSkills(server, toolProfile);
-
 	if (toolProfile === "full") {
 		registerDynamoiPrompts(server);
 		registerDynamoiResources(server, options.adapter);
 	}
-
 	return server;
 }

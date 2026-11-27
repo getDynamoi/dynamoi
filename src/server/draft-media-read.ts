@@ -1,4 +1,4 @@
-import { z } from "zod/v4";
+import { Schema } from "effect";
 import { createOutputEnvelopeSchema } from "./output-schemas";
 import {
 	DRAFT_REOPEN_CONTRACT,
@@ -9,7 +9,7 @@ export const DraftMediaReadInputSchema =
 export const DRAFT_MEDIA_READ_TOOL_DEFINITION = {
 	...DRAFT_REOPEN_CONTRACT.mcp.definition,
 	outputSchema: createOutputEnvelopeSchema(
-		z.union([
+		Schema.Union([
 			DRAFT_REOPEN_CONTRACT.mobile.responseSchema,
 			MEDIA_CATALOG_CONTRACT.mobile.responseSchema,
 		]),

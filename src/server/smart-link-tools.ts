@@ -1,4 +1,12 @@
-import { z } from "zod/v4";
+import { Schema } from "effect";
+import {
+	WireUuid,
+	formatWire,
+	optionalWire,
+	parseWire,
+	strictWire,
+	enumWire,
+} from "./wire-schema.generated";
 import { ToolFormatSchema } from "./shared-schemas";
 import {
 	CREATE_SMART_LINK_FROM_SPOTIFY_DEFINITION,
@@ -18,7 +26,6 @@ import {
 	UPDATE_SMART_LINK_DESCRIPTION_DEFINITION,
 	UPDATE_SMART_LINK_RELEASE_SETTINGS_DEFINITION,
 } from "./smart-link-wire.generated";
-
 export {
 	DynamoiCreateSmartLinkFromSpotifyInputSchema,
 	DynamoiCreateSmartLinksFromSpotifyArtistInputSchema,
@@ -31,7 +38,6 @@ export {
 	DynamoiUpdateSmartLinkInputSchema,
 	DynamoiUpdateSmartLinkReleaseSettingsInputSchema,
 } from "./smart-link-wire.generated";
-
 import {
 	AnyOutputEnvelopeSchema,
 	CreateSmartLinkFromSpotifyOutputEnvelopeSchema,
@@ -40,60 +46,57 @@ import {
 } from "./output-schemas";
 import { SMART_LINK_PROMOTE_CONTRACT } from "./promote-request.generated";
 import { SMART_LINK_ANALYTICS_CONTRACT } from "./smart-link-analytics.generated";
-
 export function parseDynamoiGetSmartLinkInput(rawInput: unknown) {
-	return DynamoiGetSmartLinkInputSchema.parse(rawInput);
+	return parseWire(DynamoiGetSmartLinkInputSchema, rawInput);
 }
-
 /**
  * Handler-side superset: the directory schema stays the public contract for
  * theme/pixel writes and the hub tool adds the hub fields.
  */
-
 export function parseDynamoiCreateSmartLinksFromSpotifyArtistInput(
 	rawInput: unknown,
 ) {
-	return DynamoiCreateSmartLinksFromSpotifyArtistInputSchema.parse(rawInput);
+	return parseWire(
+		DynamoiCreateSmartLinksFromSpotifyArtistInputSchema,
+		rawInput,
+	);
 }
-
 export function parseDynamoiGetSmartLinkAnalyticsInput(rawInput: unknown) {
-	return DynamoiGetSmartLinkAnalyticsInputSchema.parse(rawInput);
+	return parseWire(DynamoiGetSmartLinkAnalyticsInputSchema, rawInput);
 }
-
 export function parseDynamoiCreateSmartLinkFromSpotifyInput(rawInput: unknown) {
-	return DynamoiCreateSmartLinkFromSpotifyInputSchema.parse(rawInput);
+	return parseWire(DynamoiCreateSmartLinkFromSpotifyInputSchema, rawInput);
 }
-
 export function parseDynamoiListSmartLinksInput(rawInput: unknown) {
-	return DynamoiListSmartLinksInputSchema.parse(rawInput);
+	return parseWire(DynamoiListSmartLinksInputSchema, rawInput);
 }
-
 export function parseDynamoiGetSmartLinkArtistSettingsInput(rawInput: unknown) {
-	return DynamoiGetSmartLinkArtistSettingsInputSchema.parse(rawInput);
+	return parseWire(DynamoiGetSmartLinkArtistSettingsInputSchema, rawInput);
 }
-
 export function parseDynamoiUpdateSmartLinkInput(rawInput: unknown) {
-	return DynamoiUpdateSmartLinkInputSchema.parse(rawInput);
+	return parseWire(DynamoiUpdateSmartLinkInputSchema, rawInput);
 }
-
 export function parseDynamoiUpdateSmartLinkArtistSettingsInput(
 	rawInput: unknown,
 ) {
-	return DynamoiUpdateSmartLinkArtistHubSettingsInputSchema.parse(rawInput);
+	return parseWire(
+		DynamoiUpdateSmartLinkArtistHubSettingsInputSchema,
+		rawInput,
+	);
 }
-
 export function parseDynamoiUpdateSmartLinkArtistHubSettingsInput(
 	rawInput: unknown,
 ) {
-	return DynamoiUpdateSmartLinkArtistHubSettingsInputSchema.parse(rawInput);
+	return parseWire(
+		DynamoiUpdateSmartLinkArtistHubSettingsInputSchema,
+		rawInput,
+	);
 }
-
 export function parseDynamoiUpdateSmartLinkReleaseSettingsInput(
 	rawInput: unknown,
 ) {
-	return DynamoiUpdateSmartLinkReleaseSettingsInputSchema.parse(rawInput);
+	return parseWire(DynamoiUpdateSmartLinkReleaseSettingsInputSchema, rawInput);
 }
-
 export const PHASE_4_TOOL_DEFINITIONS = [
 	{
 		...CREATE_SMART_LINK_FROM_SPOTIFY_DEFINITION,
@@ -113,7 +116,6 @@ export const PHASE_4_TOOL_DEFINITIONS = [
 	},
 	{ ...UPDATE_SMART_LINK_DEFINITION, outputSchema: AnyOutputEnvelopeSchema },
 ] as const;
-
 /** Directory-facing operation-specific replacements for the legacy dispatcher. */
 export const SMART_LINK_UPDATE_OPERATION_TOOL_DEFINITIONS = [
 	{
@@ -125,10 +127,8 @@ export const SMART_LINK_UPDATE_OPERATION_TOOL_DEFINITIONS = [
 		outputSchema: AnyOutputEnvelopeSchema,
 	},
 ] as const;
-
 export const DynamoiSmartLinkControlsInputSchema =
 	SMART_LINK_PROMOTE_CONTRACT.mcp.definition.schema;
-
 /** Full-profile-only Smart Link writes; the directory contract never lists them. */
 export const FULL_SMART_LINK_STUDIO_TOOL_DEFINITIONS = [
 	{
@@ -144,15 +144,14 @@ export const FULL_SMART_LINK_STUDIO_TOOL_DEFINITIONS = [
 		outputSchema: AnyOutputEnvelopeSchema,
 	},
 ] as const;
-
 const SmartLinkAnalyticsDateRangeSchema =
 	SMART_LINK_ANALYTICS_CONTRACT.analyticsDateRangeSchema;
-export const DynamoiGetSmartLinkAnalyticsInputSchema = z
-	.object({
-		dateRange: SmartLinkAnalyticsDateRangeSchema.optional(),
-		format: ToolFormatSchema.optional(),
-		granularity: z.enum(["TOTAL", "DAILY"]).optional(),
-		includeBreakdowns: z.boolean().optional(),
-		playLinkId: z.string().uuid(),
-	})
-	.strict();
+export const DynamoiGetSmartLinkAnalyticsInputSchema = strictWire(
+	Schema.Struct({
+		dateRange: optionalWire(SmartLinkAnalyticsDateRangeSchema),
+		format: optionalWire(ToolFormatSchema),
+		granularity: optionalWire(enumWire(["TOTAL", "DAILY"])),
+		includeBreakdowns: optionalWire(Schema.Boolean),
+		playLinkId: formatWire(Schema.String, WireUuid),
+	}),
+);

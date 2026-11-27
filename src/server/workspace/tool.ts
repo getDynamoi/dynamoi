@@ -1,6 +1,15 @@
+import { Schema } from "effect";
+import {
+	WireUuid,
+	maxWire,
+	minWire,
+	optionalWire,
+	strictWire,
+	superRefineWire,
+	enumWire,
+} from "../wire-schema.generated";
 import { ARTIST_WORKSPACE_CONTRACT } from "../context.generated";
 import type { McpServer } from "@modelcontextprotocol/server";
-import * as z from "zod/v4";
 import type { ResultEnvelope } from "../../types";
 import {
 	addRecoverySafetyIssues,
@@ -9,43 +18,53 @@ import {
 import { artists, cursor, object, type WorkspaceData } from "./data";
 import { WORKSPACE_STYLE } from "./style";
 import { WORKSPACE_SCRIPT } from "./workspace-script.generated";
-
 const WORKSPACE_RESOURCE_URI = "ui://dynamoi/artist-workspace-v1.html";
 export const WORKSPACE_METADATA = {
 	"openai/ui": { entrypoints: [{ type: "global" }, { type: "thread" }] },
 	ui: { resourceUri: WORKSPACE_RESOURCE_URI },
 } as const;
-const WorkspaceOutputSchema = z
-	.object({
-		data: z
-			.object({
-				artistCount: z.number().int().nonnegative(),
-				artists: z
-					.array(
-						z
-							.object({
-								id: z.uuid(),
-								name: z.string().min(1).max(160),
-								organizationName: z.string().min(1).max(160).optional(),
-							})
-							.strict(),
-					)
-					.max(50),
-				nextCursor: z.string().min(1).max(2048).optional(),
-			})
-			.strict()
-			.optional(),
-		kind: z.enum(["validation", "business", "platform", "unknown"]).optional(),
-		message: z.string().max(200).optional(),
-		...ResultErrorRecoverySchema.shape,
-		status: z.enum(["success", "error"]),
-	})
-	.strict()
-	.superRefine((result, ctx) => {
+const WorkspaceOutputSchema = superRefineWire(
+	strictWire(
+		Schema.Struct({
+			data: optionalWire(
+				strictWire(
+					Schema.Struct({
+						artistCount: Schema.Finite.check(Schema.isInt()).check(
+							Schema.isGreaterThanOrEqualTo(0),
+						),
+						artists: maxWire(
+							Schema.mutable(
+								Schema.Array(
+									strictWire(
+										Schema.Struct({
+											id: WireUuid,
+											name: maxWire(minWire(Schema.String, 1), 160),
+											organizationName: optionalWire(
+												maxWire(minWire(Schema.String, 1), 160),
+											),
+										}),
+									),
+								),
+							),
+							50,
+						),
+						nextCursor: optionalWire(maxWire(minWire(Schema.String, 1), 2048)),
+					}),
+				),
+			),
+			kind: optionalWire(
+				enumWire(["validation", "business", "platform", "unknown"]),
+			),
+			message: optionalWire(maxWire(Schema.String, 200)),
+			...ResultErrorRecoverySchema.fields,
+			status: enumWire(["success", "error"]),
+		}),
+	),
+	(result, ctx) => {
 		if (result.status === "error") {
 			addRecoverySafetyIssues(result, ctx);
 		} else {
-			for (const field of Object.keys(ResultErrorRecoverySchema.shape)) {
+			for (const field of Object.keys(ResultErrorRecoverySchema.fields)) {
 				if ((result as Record<string, unknown>)[field] !== undefined) {
 					ctx.addIssue({
 						code: "custom",
@@ -68,7 +87,8 @@ const WorkspaceOutputSchema = z
 				message: "Error requires a message and no account data",
 			});
 		}
-	});
+	},
+);
 export const WORKSPACE_TOOL_DEFINITION = {
 	...ARTIST_WORKSPACE_CONTRACT.mcp.definition,
 	outputSchema: WorkspaceOutputSchema,
@@ -104,7 +124,6 @@ export async function openWorkspace(
 			status: "error",
 		};
 	}
-
 	const roster = await adapter.listArtists({ format: "json", limit: 50 });
 	if (roster.status === "error") {
 		return roster;

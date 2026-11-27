@@ -1,4 +1,10 @@
-import * as z from "zod/v4";
+import { Schema } from "effect";
+import {
+	minWire,
+	strictWire,
+	superRefineWire,
+	enumWire,
+} from "./wire-schema.generated";
 import {
 	addRecoverySafetyIssues,
 	ResultErrorRecoverySchema,
@@ -32,48 +38,47 @@ export type {
 	DynamoiShopOrdersData,
 } from "./wire-shop-agent-wire.generated";
 export { SHOP_MAX_TARGET_COUNTRY_CODES as DYNAMOI_SHOP_MAX_TARGET_COUNTRY_CODES } from "../shop-limits";
-const ToolErrorEnvelopeSchema = z
-	.object({
-		kind: z.enum(["validation", "business", "platform", "unknown"]),
-		message: z.string().min(1),
-		...ResultErrorRecoverySchema.shape,
-		status: z.literal("error"),
-	})
-	.strict()
-	.superRefine((value, context) => {
+const ToolErrorEnvelopeSchema = superRefineWire(
+	strictWire(
+		Schema.Struct({
+			kind: enumWire(["validation", "business", "platform", "unknown"]),
+			message: minWire(Schema.String, 1),
+			...ResultErrorRecoverySchema.fields,
+			status: Schema.Literal("error"),
+		}),
+	),
+	(value, context) => {
 		addRecoverySafetyIssues(value, context);
-	});
-
-const DynamoiShopQuoteOutputEnvelopeSchema = z.union([
-	z
-		.object({
+	},
+);
+const DynamoiShopQuoteOutputEnvelopeSchema = Schema.Union([
+	strictWire(
+		Schema.Struct({
 			data: DynamoiShopQuoteDataSchema,
-			status: z.literal("success"),
-		})
-		.strict(),
+			status: Schema.Literal("success"),
+		}),
+	),
 	ToolErrorEnvelopeSchema,
 ]);
-
-const DynamoiShopCheckoutOutputEnvelopeSchema = z.union([
-	z
-		.object({
+const DynamoiShopCheckoutOutputEnvelopeSchema = Schema.Union([
+	strictWire(
+		Schema.Struct({
 			data: DynamoiShopCheckoutDataSchema,
-			status: z.literal("success"),
-		})
-		.strict(),
+			status: Schema.Literal("success"),
+		}),
+	),
 	ToolErrorEnvelopeSchema,
 ]);
-
 export const SHOP_TOOL_DEFINITIONS = [
 	{
 		...SHOP_ORDERS_CONTRACT.mcp.definition,
-		outputSchema: z.union([
-			z
-				.object({
+		outputSchema: Schema.Union([
+			strictWire(
+				Schema.Struct({
 					data: DynamoiShopOrdersDataSchema,
-					status: z.literal("success"),
-				})
-				.strict(),
+					status: Schema.Literal("success"),
+				}),
+			),
 			ToolErrorEnvelopeSchema,
 		]),
 	},

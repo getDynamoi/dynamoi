@@ -1,4 +1,5 @@
-import { z } from "zod/v4";
+import { Schema } from "effect";
+import { optionalWire, strictWire } from "./wire-schema.generated";
 import { createOutputEnvelopeSchema } from "./output-schemas";
 import {
 	SHOP_ATTACH_VIDEO_CONTRACT,
@@ -11,14 +12,30 @@ export const DynamoiShopReplaceVideoInputSchema =
 export const SHOP_VIDEO_TOOL_DEFINITIONS = [
 	{
 		...SHOP_ATTACH_VIDEO_CONTRACT.mcp.definition,
-		outputSchema: createOutputEnvelopeSchema(
-			SHOP_ATTACH_VIDEO_CONTRACT.mobile.responseSchema,
-		).safeExtend({ validationCode: z.string().optional() }),
+		outputSchema: strictWire(
+			createOutputEnvelopeSchema(
+				SHOP_ATTACH_VIDEO_CONTRACT.mobile.responseSchema,
+			).mapFields(
+				(fields) => ({
+					...fields,
+					...{ validationCode: optionalWire(Schema.String) },
+				}),
+				{ unsafePreserveChecks: true },
+			),
+		),
 	},
 	{
 		...SHOP_REPLACE_VIDEO_CONTRACT.mcp.definition,
-		outputSchema: createOutputEnvelopeSchema(
-			SHOP_REPLACE_VIDEO_CONTRACT.mobile.responseSchema,
-		).safeExtend({ validationCode: z.string().optional() }),
+		outputSchema: strictWire(
+			createOutputEnvelopeSchema(
+				SHOP_REPLACE_VIDEO_CONTRACT.mobile.responseSchema,
+			).mapFields(
+				(fields) => ({
+					...fields,
+					...{ validationCode: optionalWire(Schema.String) },
+				}),
+				{ unsafePreserveChecks: true },
+			),
+		),
 	},
 ] as const;

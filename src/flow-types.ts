@@ -1,4 +1,4 @@
-import type { z } from "zod/v4";
+import type { WireOutput } from "./server/wire-schema.generated";
 import type {
 	MediaAssetModerationOutputSchema,
 	GetResumeFundingData,
@@ -209,7 +209,7 @@ export type CampaignStatusPreviewData = {
 	};
 };
 
-export type CampaignBudgetPreviewData = z.infer<
+export type CampaignBudgetPreviewData = WireOutput<
 	typeof CampaignBudgetPreviewDataSchema
 >;
 
@@ -250,7 +250,7 @@ export type UpdateCampaignData =
 	  };
 
 export type MediaAssetSummary = {
-	moderation?: z.infer<typeof MediaAssetModerationOutputSchema>;
+	moderation?: WireOutput<typeof MediaAssetModerationOutputSchema>;
 	thumbnailUrl?: string;
 	id: string;
 	url?: string;

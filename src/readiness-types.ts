@@ -1,4 +1,4 @@
-import type { z } from "zod/v4";
+import type { WireOutput } from "./server/wire-schema.generated";
 import type { ProposalReadinessOutputSchema } from "./server/output-schemas";
 import type { CampaignDisplayStatus, CampaignType } from "./types";
 
@@ -49,7 +49,7 @@ export type GetOnboardingStatusSummaryData = {
 	actionRequired?: string[];
 };
 
-type ProposalReadiness = z.infer<typeof ProposalReadinessOutputSchema>;
+type ProposalReadiness = WireOutput<typeof ProposalReadinessOutputSchema>;
 
 export type GetCampaignReadinessData = {
 	proposalReadiness?: ProposalReadiness | null | undefined;

@@ -1,13 +1,10 @@
+import { safeParseWire } from "./wire-schema.generated";
 import { SMART_CAMPAIGN_SUBMISSION_CONTRACT } from "./submission.generated";
-import * as z from "zod/v4";
-
 export const YOUTUBE_CAMPAIGN_STRATEGIES_RESOURCE_URI =
 	SMART_CAMPAIGN_SUBMISSION_CONTRACT.youtubeStrategiesResourceUri;
 export const YouTubeStrategyKeySchema =
 	SMART_CAMPAIGN_SUBMISSION_CONTRACT.youtubeStrategyKeySchema;
-
-export type YouTubeStrategyKey = z.infer<typeof YouTubeStrategyKeySchema>;
-
+export type YouTubeStrategyKey = (typeof YouTubeStrategyKeySchema)["Type"];
 type YouTubeStrategyGuideEntry = {
 	adNetworkOptimizesFor: string;
 	bestFor: string;
@@ -19,7 +16,6 @@ type YouTubeStrategyGuideEntry = {
 	placements: string;
 	requirements: string;
 };
-
 const CAMPAIGN_PERIOD_LIFT_SIGNAL =
 	"Campaign-period lift: channel views above the pre-campaign baseline while the campaign runs. These are mostly ad sessions, because ad click-throughs into the playlist appear as PLAYLIST and SUBSCRIBER traffic.";
 const ORGANIC_LIFT_SIGNAL =
@@ -32,7 +28,6 @@ const CONTINUED_VIEWS_MISLEAD =
 	"Ad network-credited continued views are the organic views directly attributed to the campaign by click date. Do not say whether they include the first watch after the click, and they are not proof of overall organic growth.";
 const TRAFFIC_SOURCE_MISLEAD =
 	"YouTube traffic sources are not organic proof: PLAYLIST and SUBSCRIBER views during the campaign are mostly ad sessions, and only a small share of ad-driven views is tagged ADVERTISING.";
-
 const STRATEGY_ENTRIES = {
 	ADSENSE_ROI: {
 		adNetworkOptimizesFor:
@@ -149,7 +144,6 @@ const STRATEGY_ENTRIES = {
 		requirements: "A playlist entry point is required.",
 	},
 } as const satisfies Record<YouTubeStrategyKey, YouTubeStrategyGuideEntry>;
-
 const VOCABULARY = {
 	adNetwork:
 		"Dynamoi YouTube campaigns run on Google's ad network and serve on YouTube. When reporting to users, say 'the ad network' (you may name Google once); do not repeat 'Google Ads'.",
@@ -168,7 +162,6 @@ const VOCABULARY = {
 	viewsPerAdClick:
 		"Channel views divided by ad clicks from campaign analytics, over the campaign window's days that have both. It is the playlist waterfall signal: how many views each ad click produces once playback continues through the playlist. It is not attributed per viewer.",
 } as const;
-
 const PLAYLIST_WATERFALL = {
 	advice: [
 		"Use long playlists, up to about 10 hours; repeat the catalog when there are not enough videos.",
@@ -185,7 +178,6 @@ const PLAYLIST_WATERFALL = {
 	purpose:
 		"Keep ad-driven and background listeners on the artist's channel. It improves listener quality; it is not a hidden view multiplier.",
 } as const;
-
 const RESULT_TIMING = {
 	baseline:
 		"Compare with the channel's own pre-campaign period of similar length, on complete days only.",
@@ -195,7 +187,6 @@ const RESULT_TIMING = {
 		"The ad network learns for about 7-14 days after launch or a strategy change. Delivery and cost swing during this time; do not give a verdict in the first week.",
 	missingData: "Missing days are unknown, not zero.",
 } as const;
-
 export function buildYouTubeCampaignStrategiesGuide() {
 	return {
 		playlistWaterfall: PLAYLIST_WATERFALL,
@@ -204,16 +195,14 @@ export function buildYouTubeCampaignStrategiesGuide() {
 		vocabulary: VOCABULARY,
 	};
 }
-
 export type YouTubeStrategyGuide = YouTubeStrategyGuideEntry & {
 	moreDetail: string;
 	resultTiming: string;
 };
-
 export function buildYouTubeStrategyGuide(
 	strategy: string,
 ): YouTubeStrategyGuide | null {
-	const parsed = YouTubeStrategyKeySchema.safeParse(strategy);
+	const parsed = safeParseWire(YouTubeStrategyKeySchema, strategy);
 	if (!parsed.success) {
 		return null;
 	}

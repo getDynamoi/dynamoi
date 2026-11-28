@@ -176,7 +176,7 @@ export const REFERRALS_READ_CONTRACT = {
 						export: "getAffiliateDashboardSnapshotForCurrentUser",
 					},
 					{
-						file: "apps/dashboard/app/lib/domains/affiliates/readers/dashboard-snapshot.ts",
+						file: "packages/billing/src/affiliates/readers/dashboard-snapshot.ts",
 						export: "buildDashboardSnapshotFromData",
 					},
 				],

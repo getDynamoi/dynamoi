@@ -238,7 +238,7 @@ export const ACCOUNT_OVERVIEW_CONTRACT = {
 						export: "toolGetCurrentUser",
 					},
 					{
-						file: "apps/dashboard/app/lib/domains/artist/context-read-operations.server.ts",
+						file: "packages/identity/src/artist/service/application/context-read-operations.server.ts",
 						export: "readAccountOverviewData",
 					},
 				],
@@ -308,7 +308,7 @@ export const ARTIST_ROSTER_CONTRACT = {
 						export: "toolListArtists",
 					},
 					{
-						file: "apps/dashboard/app/lib/domains/artist/context-read-operations.server.ts",
+						file: "packages/identity/src/artist/service/application/context-read-operations.server.ts",
 						export: "readArtistRosterListData",
 					},
 				],

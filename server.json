@@ -1,19 +1,19 @@
 {
-  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "io.github.getDynamoi/dynamoi",
-  "title": "Dynamoi",
-  "description": "Promote a song on Spotify or promote a video on YouTube from your AI agent. Free Smart Links.",
-  "version": "1.3.0",
-  "websiteUrl": "https://dynamoi.com",
-  "repository": {
-    "url": "https://github.com/getDynamoi/dynamoi",
-    "source": "github",
-    "subfolder": "packages/mcp"
-  },
-  "remotes": [
-    {
-      "type": "streamable-http",
-      "url": "https://dynamoi.com/mcp"
-    }
-  ]
+	"$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+	"name": "io.github.getDynamoi/dynamoi",
+	"title": "Dynamoi",
+	"description": "Promote a song on Spotify or promote a video on YouTube from your AI agent. Free Smart Links.",
+	"version": "1.3.0",
+	"websiteUrl": "https://dynamoi.com",
+	"repository": {
+		"url": "https://github.com/getDynamoi/dynamoi",
+		"source": "github",
+		"subfolder": "packages/mcp"
+	},
+	"remotes": [
+		{
+			"type": "streamable-http",
+			"url": "https://dynamoi.com/mcp"
+		}
+	]
 }

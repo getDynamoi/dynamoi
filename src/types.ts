@@ -1,11 +1,24 @@
+import type { UpdateCampaignData } from "./flow-types";
 import type { BulkSmartLinkResponse } from "./server/intake-native.generated";
 
 export type * from "./flow-types";
 export type * from "./readiness-types";
 
+/** The frozen campaign replay codec also accepts historical partial receipts without a message.
+ * Limit that compatibility shape to the complete campaign result union; ordinary
+ * generic envelopes and individual result builders retain their required message. */
+type RetainedCampaignPartial<T> = 0 extends 1 & T
+	? never
+	: [T] extends [UpdateCampaignData]
+		? [UpdateCampaignData] extends [T]
+			? { status: "partial_success"; data: T; message?: string | undefined }
+			: never
+		: never;
+
 export type ResultEnvelope<T> =
 	| { status: "success"; data: T }
 	| { status: "partial_success"; data: T; message: string }
+	| RetainedCampaignPartial<T>
 	| {
 			status: "error";
 			reason?: "member_changed" | "invitation_changed";

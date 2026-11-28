@@ -11,9 +11,11 @@ contracts, schemas and types can be proposed here.
 ## Development
 
 Requirements:
+
 - Bun (see `packageManager` in `package.json` for the pinned version)
 
 Common commands:
+
 - Install: `bun install`
 - Build: `bun run build`
 - Typecheck: `bun x tsrs --noEmit -p tsconfig.json`

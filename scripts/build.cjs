@@ -14,7 +14,16 @@ const sourceRoot = path.join(packageRoot, "src");
 const outputRoot = path.join(packageRoot, "dist");
 const worktreeRoot = path.resolve(packageRoot, "../..");
 const watch = process.argv.includes("--watch");
-const { metadata, publicRoots, policy, declarations, inventory, packageInventory, sourceFingerprint, fail } = require("./inputs.cjs");
+const {
+	metadata,
+	publicRoots,
+	policy,
+	declarations,
+	inventory,
+	packageInventory,
+	sourceFingerprint,
+	fail,
+} = require("./inputs.cjs");
 const { buildWorkspace } = require("./build-workspace.cjs");
 
 function replaceOutput(stagingRoot, nextOutputRoot) {
@@ -62,12 +71,26 @@ async function build() {
 
 		try {
 			const types = declarations(nextOutputRoot);
-			const expected = [...publicRoots.map(file => path.relative(sourceRoot, file).replace(/\.ts$/, ".js")), ...types];
+			const expected = [
+				...publicRoots.map((file) =>
+					path.relative(sourceRoot, file).replace(/\.ts$/, ".js"),
+				),
+				...types,
+			];
 			inventory(nextOutputRoot, expected);
-			const docs = ["CAPABILITY_PARITY.md", "server.json", "README.md", "CHANGELOG.md", "LICENSE"];
-			if ([...metadata.files].sort().join() !== [...docs, ...expected.map(file => `dist/${file}`)].sort().join()) fail();
+			const docs = [
+				"CAPABILITY_PARITY.md",
+				"server.json",
+				"README.md",
+				"CHANGELOG.md",
+				"LICENSE",
+			];
+			if (
+				[...metadata.files].sort().join() !==
+				[...docs, ...expected.map((file) => `dist/${file}`)].sort().join()
+			)
+				fail();
 			packageInventory(nextOutputRoot, expected);
-
 		} catch (error) {
 			console.error(error);
 			return false;

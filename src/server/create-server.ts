@@ -449,6 +449,11 @@ export function getDynamoiToolDefinitions(options?: {
 			: !DIRECTORY_EXCLUDED_TOOL_NAMES.has(definition.name),
 	);
 }
+/** Retained campaign receipts follow the frozen wire codec, whose partial message is optional. */
+type WireEnvelope<T> =
+	| Exclude<ResultEnvelope<T>, { status: "partial_success" }>
+	| { status: "partial_success"; data: T; message?: string | undefined };
+
 export type Phase3Adapter = {
 	shopAttachVideo(input: unknown): Promise<ResultEnvelope<unknown>>;
 	shopReplaceVideo(input: unknown): Promise<ResultEnvelope<unknown>>;
@@ -564,7 +569,7 @@ export type Phase3Adapter = {
 	readCampaignDraftMedia(input: unknown): Promise<ResultEnvelope<unknown>>;
 	smartCampaignCreative(input: unknown): Promise<ResultEnvelope<unknown>>;
 	manageYoutubeDraft(input: unknown): Promise<ResultEnvelope<unknown>>;
-	updateCampaign(input: unknown): Promise<ResultEnvelope<UpdateCampaignData>>;
+	updateCampaign(input: unknown): Promise<WireEnvelope<UpdateCampaignData>>;
 	readMediaModeration(
 		input: unknown,
 	): Promise<ResultEnvelope<(typeof MediaModerationResponseSchema)["Type"]>>;
@@ -619,7 +624,7 @@ type DynamoiToolDispatcher = (
 	},
 	input: unknown,
 	toolProfile?: DynamoiMcpToolProfile,
-) => Promise<ResultEnvelope<unknown>>;
+) => Promise<WireEnvelope<unknown>>;
 type ErrorRecoveryMetadata = Partial<
 	Omit<
 		Extract<
@@ -1144,6 +1149,23 @@ function asTextResult(envelope: unknown) {
 	}
 	return result;
 }
+export function invalidToolOutputEnvelope(
+	toolName: string,
+): ResultEnvelope<never> {
+	return {
+		code: "OUTPUT_INVALID",
+		kind: "validation",
+		message: `Tool ${toolName} returned an invalid result shape.`,
+		nextAction: {
+			kind: "read_status",
+			reason: "Inspect the existing operation identity before retrying.",
+		},
+		prerequisite:
+			"The existing operation or resource identity must be inspected before replaying.",
+		retryable: false,
+		status: "error",
+	};
+}
 export function asValidatedTextResult(options: {
 	envelope: unknown;
 	outputSchema: WireSchema;
@@ -1155,19 +1177,7 @@ export function asValidatedTextResult(options: {
 	);
 	const parsed = safeParseWire(options.outputSchema, envelope);
 	if (!parsed.success) {
-		return asTextResult({
-			code: "OUTPUT_INVALID",
-			kind: "validation",
-			message: `Tool ${options.toolName} returned an invalid result shape.`,
-			nextAction: {
-				kind: "read_status",
-				reason: "Inspect the existing operation identity before retrying.",
-			},
-			prerequisite:
-				"The existing operation or resource identity must be inspected before replaying.",
-			retryable: false,
-			status: "error",
-		} satisfies ResultEnvelope<never>);
+		return asTextResult(invalidToolOutputEnvelope(options.toolName));
 	}
 	return asTextResult(envelope);
 }

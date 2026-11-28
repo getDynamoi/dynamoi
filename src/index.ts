@@ -34,6 +34,7 @@ export { createUrlElicitationOptions } from "./server/url-elicitation";
 export { PUBLIC_TRY_TOOL_DEFINITIONS } from "./server/public-tools";
 export {
 	asValidatedTextResult,
+	invalidToolOutputEnvelope,
 	createDynamoiMcpServer,
 	type DynamoiMcpToolProfile,
 	getDynamoiToolDefinitions,
@@ -64,6 +65,7 @@ export {
 	type SendFeedbackData,
 	type SmartCampaignLaunchProjection,
 	SmartCampaignLaunchProjectionSchema,
+	UpdateCampaignOutputEnvelopeSchema,
 	SmartCampaignRecoverySchema,
 	SmartCampaignRecoverySelectionSchema,
 } from "./server/output-schemas";

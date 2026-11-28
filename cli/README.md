@@ -34,15 +34,15 @@ Needs Node 20 or newer. Homebrew installs Node for you.
 
 ## Commands
 
-| Command | What it does |
-| --- | --- |
-| `dynamoi login` | Sign in through your browser |
-| `dynamoi whoami` | Show the signed-in account |
-| `dynamoi logout` | Revoke the session and delete stored tokens |
-| `dynamoi tools` | List every tool your account can use |
+| Command                            | What it does                                                              |
+| ---------------------------------- | ------------------------------------------------------------------------- |
+| `dynamoi login`                    | Sign in through your browser                                              |
+| `dynamoi whoami`                   | Show the signed-in account                                                |
+| `dynamoi logout`                   | Revoke the session and delete stored tokens                               |
+| `dynamoi tools`                    | List every tool your account can use                                      |
 | `dynamoi tools --query "<intent>"` | Find up to ten matching tools; use `--limit 1..10` and `--json` as needed |
-| `dynamoi help <tool>` | Show one tool's flags; `--json` returns its exact catalog definition |
-| `dynamoi <tool> [--flag value]` | Run a tool. Add `--json` for machine-readable output |
+| `dynamoi help <tool>`              | Show one tool's flags; `--json` returns its exact catalog definition      |
+| `dynamoi <tool> [--flag value]`    | Run a tool. Add `--json` for machine-readable output                      |
 
 ```bash
 dynamoi list-artists

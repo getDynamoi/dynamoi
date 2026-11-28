@@ -89,7 +89,6 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-
 - The README, About text and skill copy describe the two-tier model and the approved pricing.
 
 ### Removed
